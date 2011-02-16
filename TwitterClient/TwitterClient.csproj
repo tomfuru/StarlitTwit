@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{938D3FB0-54A0-4151-8692-C58D3E83DF11}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TwitterClient</RootNamespace>
+    <AssemblyName>StarlitTwit</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>StarlitTwit.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Forms\FrmConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmConfig.Designer.cs">
+      <DependentUpon>FrmConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmFollower.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmFollower.Designer.cs">
+      <DependentUpon>FrmFollower.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmMakeTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmMakeTab.Designer.cs">
+      <DependentUpon>FrmMakeTab.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDispTweet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmConversation.Designer.cs">
+      <DependentUpon>FrmDispTweet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmWebBrowser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmWebBrowser.Designer.cs">
+      <DependentUpon>FrmWebBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmGetTweet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmGetTweet.Designer.cs">
+      <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmAuthWebBrowser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmAuthWebBrowser.Designer.cs">
+      <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BaseTools.cs" />
+    <Compile Include="Function\URLShortener.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableClass\SerializableColor.cs" />
+    <Compile Include="SerializableClass\SerializableFont.cs" />
+    <Compile Include="SerializableClass\SerializableDictionary.cs" />
+    <Compile Include="SettingsData.cs" />
+    <Compile Include="Twitter.cs" />
+    <Compile Include="UserControls\NumericUpDownExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\PanelEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\PanelEx.Designer.cs">
+      <DependentUpon>PanelEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PermanentToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\PermanentToolTip.Designer.cs">
+      <DependentUpon>PermanentToolTip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RichTextBoxHash.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\SplitButton.designer.cs">
+      <DependentUpon>SplitButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TabControlEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\ToolTipPicture.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\UctlDispTwit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UctlDispTwit.Designer.cs">
+      <DependentUpon>UctlDispTwit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UctlDispTwitRow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UctlDispTwitRow.Designer.cs">
+      <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UctlLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UctlLine.Designer.cs">
+      <DependentUpon>UctlLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilization.cs" />
+    <EmbeddedResource Include="Forms\FrmConfig.resx">
+      <DependentUpon>FrmConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmFollower.resx">
+      <DependentUpon>FrmFollower.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmMakeTab.resx">
+      <DependentUpon>FrmMakeTab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmConversation.resx">
+      <DependentUpon>FrmDispTweet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmWebBrowser.resx">
+      <DependentUpon>FrmWebBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmGetTweet.resx">
+      <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmAuthWebBrowser.resx">
+      <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="UserControls\NumericUpDownExtended.resx">
+      <DependentUpon>NumericUpDownExtended.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PermanentToolTip.resx">
+      <DependentUpon>PermanentToolTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RichTextBoxHash.resx">
+      <DependentUpon>RichTextBoxHash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ToolTipPicture.resx">
+      <DependentUpon>ToolTipPicture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UctlDispTwit.resx">
+      <DependentUpon>UctlDispTwit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UctlDispTwitRow.resx">
+      <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UctlLine.resx">
+      <DependentUpon>UctlLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\icon.ico" />
+    <None Include="StarlitTwit.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documents\SampleCode.txt" />
+    <Content Include="Documents\URLShortenerAPI.txt" />
+    <Content Include="Documents\問題・課題TODO.txt" />
+    <Content Include="Documents\TwitterAPI.txt" />
+    <Content Include="Documents\仕様.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
