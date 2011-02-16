@@ -1,5 +1,4 @@
-﻿using TwitterClient;
-namespace Test
+﻿namespace Test
 {
     partial class Form1
     {
@@ -41,7 +40,7 @@ namespace Test
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.tabControlEx1 = new TwitterClient.TabControlEx();
+            this.tabControlEx1 = new StarlitTwit.TabControlEx();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -55,8 +54,8 @@ namespace Test
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.toolTip2 = new TwitterClient.ToolTipPicture(this.components);
-            this.toolTip3 = new TwitterClient.PermanentToolTip(this.components);
+            this.toolTip2 = new StarlitTwit.ToolTipPicture(this.components);
+            this.toolTip3 = new StarlitTwit.PermanentToolTip(this.components);
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
@@ -392,8 +391,8 @@ namespace Test
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ToolTip toolTip1;
-        private TwitterClient.ToolTipPicture toolTip2;
-        private TwitterClient.PermanentToolTip toolTip3;
+        private StarlitTwit.ToolTipPicture toolTip2;
+        private StarlitTwit.PermanentToolTip toolTip3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolTip toolTip4;
         private System.Windows.Forms.Label label4;
@@ -405,7 +404,7 @@ namespace Test
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private TwitterClient.TabControlEx tabControlEx1;
+        private StarlitTwit.TabControlEx tabControlEx1;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TabPage tabPage7;

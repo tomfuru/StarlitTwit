@@ -105,9 +105,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TwitterClient\TwitterClient.csproj">
+    <ProjectReference Include="..\StarlitTwit\StarlitTwit.csproj">
       <Project>{938D3FB0-54A0-4151-8692-C58D3E83DF11}</Project>
-      <Name>TwitterClient</Name>
+      <Name>StarlitTwit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

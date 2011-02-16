@@ -1,0 +1,200 @@
+﻿仕様
+
+●friends_timeline
+
+<statuses type="array">
+ <status>
+  <created_at>【時刻(例:Fri Jul 16 16:58:46 +0000 2010)】</created_at>
+  <id>【発言ID】</id>
+  <text>【発言内容】</text>
+  <source>【発言を送信したクライアント】</source>
+  <truncated>【省略されているか】</truncated>
+  <in_reply_to_status_id>【mention先の発言ID】</in_reply_to_status_id>
+  <in_reply_to_user_id>【mention先のユーザーID】</in_reply_to_user_id>
+  <favorited>【(自分の)お気に入りであるか】</favorited>
+  <in_reply_to_screen_name>【mention先のユーザー名】</in_reply_to_screen_name>
+  <user>
+  <id>【ユーザーID】</id>
+   <name>【ユーザー名】</name>
+   <screen_name>【表示名】</screen_name>
+   <location>【場所】</location>
+   <description>【説明】</description>
+   <profile_image_url>【イメージURL】</profile_image_url>
+   <url>【URL】</url>
+   <protected>【許可した人のみUpdateを見れる】</protected>
+   <followers_count>【フォロワー数】</followers_count>
+   <profile_background_color>【プロフィール背景色(RRGGBB)】</profile_background_color>
+   <profile_text_color>【プロフィールテキスト色(RRGGBB)】</profile_text_color>
+   <profile_link_color>【プロフィールリンク色(RRGGBB)】</profile_link_color>
+   <profile_sidebar_fill_color>【サイドバーカラー(RRGGBB)】</profile_sidebar_fill_color>
+   <profile_sidebar_border_color>【サイドバー縁カラー(RRGGBB)】</profile_sidebar_border_color>
+   <friends_count>【フォローされている数】</friends_count>
+   <created_at>【★？★】</created_at>
+   <favourites_count>【お気に入り数】</favourites_count>
+   <utc_offset>【UTCからの時間(例：-28800)】</utc_offset>
+   <time_zone>【タイムゾーン(例：Pacific Time (US &amp; Canada))】</time_zone>
+   <profile_background_image_url>【背景イメージのURL】</profile_background_image_url>
+   <profile_background_tile>【背景がタイルかどうか】</profile_background_tile>
+   <profile_use_background_image>【背景イメージを使っているかどうか】</profile_use_background_image>
+   <notifications>【★？★(bool)】</notifications>
+   <geo_enabled>【位置情報が有効か】</geo_enabled>
+   <verified>【★？★(bool)】</verified>
+   <following>【自分がフォローしているか】</following>
+   <statuses_count>【発言数】</statuses_count>
+   <lang>【使用言語】</lang>
+   <contributors_enabled>【★？★(bool)】</contributors_enabled>
+   <follow_request_sent>【★？★(bool)】</follow_request_sent>
+  </user>
+ </status>
+ <status>
+ ・・・
+ </status>
+ ・・・
+</statuses>
+
+●Retweet
+<status>
+  <created_at>Tue Feb 01 13:58:47 +0000 2011</created_at>
+  <id>32437709620379648</id>
+  <text>RT @RCH_NH2_COOH: 学校の怪談っていう映画知ってる人いたら公式RT　アニメじゃないよ。実写の映画ね。</text>
+  <source>&lt;a href="http://sourceforge.jp/projects/tween/wiki/FrontPage" rel="nofollow"&gt;Tween&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>100+</retweet_count>
+  <retweeted>false</retweeted>
+  <retweeted_status>
+    <created_at>Tue Feb 01 13:26:27 +0000 2011</created_at>
+    <id>32429573064892416</id>
+    <text>学校の怪談っていう映画知ってる人いたら公式RT　アニメじゃないよ。実写の映画ね。</text>
+    <source>web</source>
+    <truncated>false</truncated>
+    <favorited>false</favorited>
+    <in_reply_to_status_id></in_reply_to_status_id>
+    <in_reply_to_user_id></in_reply_to_user_id>
+    <in_reply_to_screen_name></in_reply_to_screen_name>
+    <retweet_count>100+</retweet_count>
+    <retweeted>false</retweeted>
+    <user>
+      <id>115684944</id>
+      <name>網野</name>
+      <screen_name>RCH_NH2_COOH</screen_name>
+      <location>冬にATフィールドが貼られるとこ</location>
+      <description>デュラララの臨也さんが愛されていればそれでいいそんな感じの人です。＾ｐ＾　シズイザ好きです。クソ真面目な発言もしますがその直後に変な発言をしたりします。</description>
+      <profile_image_url>http://a3.twimg.com/profile_images/1146866524/icon_normal.jpg</profile_image_url>
+      <url>http://www.pixiv.net/member.php?id=1971592</url>
+      <protected>false</protected>
+      <followers_count>113</followers_count>
+      <profile_background_color>C0DEED</profile_background_color>
+      <profile_text_color>333333</profile_text_color>
+      <profile_link_color>0084B4</profile_link_color>
+      <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+      <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+      <friends_count>102</friends_count>
+      <created_at>Fri Feb 19 15:05:04 +0000 2010</created_at>
+      <favourites_count>34</favourites_count>
+      <utc_offset>-36000</utc_offset>
+      <time_zone>Hawaii</time_zone>
+      <profile_background_image_url>http://a1.twimg.com/profile_background_images/158434373/omuraiu.jpg</profile_background_image_url>
+      <profile_background_tile>true</profile_background_tile>
+      <profile_use_background_image>true</profile_use_background_image>
+      <notifications>false</notifications>
+      <geo_enabled>false</geo_enabled>
+      <verified>false</verified>
+      <following>false</following>
+      <statuses_count>1342</statuses_count>
+      <lang>ja</lang>
+      <contributors_enabled>false</contributors_enabled>
+      <follow_request_sent>false</follow_request_sent>
+      <listed_count>11</listed_count>
+      <show_all_inline_media>false</show_all_inline_media>
+      <is_translator>false</is_translator>
+    </user>
+    <geo />
+    <coordinates />
+    <place />
+    <contributors />
+  </retweeted_status>
+  <user>
+    <id>70827347</id>
+    <name>シノシノ</name>
+    <screen_name>shinoshinosp</screen_name>
+    <location>大阪府豊中市</location>
+    <description>阪大に通う、多趣味な変人。個人同人サークル「存在確率０％(nothingness)」を運営中。主に虹絵、稀に物書き。東方では幽々子好き。よくおっぱいと呟いたり、Reするのは仕様。リフォローは絡み次第です。[OU,絵描き,イラスト,同人,東方,ラノベ,電撃文庫,川上稔,自作PC,ポケモン,釣り,ピアノ,おっぱい,大食い]</description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1139940468/C78hp_normal.jpg</profile_image_url>
+    <url>http://nothingness.rejec.net/</url>
+    <protected>false</protected>
+    <followers_count>160</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>100</friends_count>
+    <created_at>Wed Sep 02 00:06:39 +0000 2009</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>32400</utc_offset>
+    <time_zone>Osaka</time_zone>
+    <profile_background_image_url>http://a3.twimg.com/a/1296156503/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>11550</statuses_count>
+    <lang>ja</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>17</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <is_translator>false</is_translator>
+  </user>
+  <geo />
+  <coordinates />
+  <place />
+  <contributors />
+</status>
+
+●user_show
+
+<user>
+ <id>1401881</id>
+ <name>Doug Williams</name>
+ <screen_name>dougw</screen_name>
+ <location>San Francisco, CA</location>
+ <description>Twitter API Support. Internet, greed, users, dougw and opportunities are my passions.</description>
+ <profile_image_url>http://s3.amazonaws.com/twitter_production/profile_images/59648642/avatar_normal.png</profile_image_url>
+ <url>http://www.igudo.com</url>
+ <protected>false</protected>
+ <followers_count>1031</followers_count>
+ <profile_background_color>9ae4e8</profile_background_color>
+ <profile_text_color>000000</profile_text_color>
+ <profile_link_color>0000ff</profile_link_color>
+ <profile_sidebar_fill_color>e0ff92</profile_sidebar_fill_color>
+ <profile_sidebar_border_color>87bc44</profile_sidebar_border_color>
+ <friends_count>293</friends_count>
+ <created_at>Sun Mar 18 06:42:26 +0000 2007</created_at>
+ <favourites_count>0</favourites_count>
+ <utc_offset>-18000</utc_offset>
+ <time_zone>Eastern Time (US & Canada)</time_zone>
+ <profile_background_image_url>http://s3.amazonaws.com/twitter_production/profile_background_images/2752608/twitter_bg_grass.jpg</profile_background_image_url>
+ <profile_background_tile>false</profile_background_tile>
+ <statuses_count>3390</statuses_count>
+ <notifications>false</notifications>
+ <following>false</following>
+ <verified>true</verified>
+ <status>
+  <created_at>Tue Apr 07 22:52:51 +0000 2009</created_at>
+  <id>1472669360</id>
+  <text>At least I can get your humor through tweets. RT @abdur: I don't mean this in a bad way, but genetically speaking you're a cul-de-sac.</text>
+  <source><a href="http://www.tweetdeck.com/">TweetDeck</a></source>
+  <truncated>false</truncated>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <favorited>false</favorited>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+ </status>
+</user>
