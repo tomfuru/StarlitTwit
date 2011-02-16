@@ -18,6 +18,7 @@ namespace StarlitTwit
         public FrmFollowType FormType { get; set; }
 
         private List<UserProfile> _profileList = new List<UserProfile>();
+        private long _next_cursor = -1;
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
@@ -101,7 +102,7 @@ namespace StarlitTwit
             sb.AppendLine(p.StatusNum.ToString());
             sb.Append("●お気に入り数：");
             sb.Append(p.FavoriteNum.ToString());
-            
+
             return sb.ToString();
         }
         #endregion (GetToolTipText)
@@ -153,7 +154,6 @@ namespace StarlitTwit
             (new Action<Tuple<ListViewItem, string>[]>(GetImages)).BeginInvoke(urllist.ToArray(), Utilization.InvokeCallback, null);
 
             //lstvList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            btnAppend.Enabled = true;
         }
         #endregion (AddList)
 
@@ -164,16 +164,25 @@ namespace StarlitTwit
         private void GetUsers()
         {
             UserProfile[] profiles = null;
+            Tuple<UserProfile[], long, long> proftpl;
             switch (FormType) {
                 case FrmFollowType.Follower:
-                    profiles = FrmMain.Twitter.statuses_followers();
+                    proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
+                    profiles = proftpl.Item1;
+                    _next_cursor = proftpl.Item2;
                     break;
                 case FrmFollowType.Following:
-                    profiles = FrmMain.Twitter.statuses_friends();
+                    proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
+                    profiles = proftpl.Item1;
+                    _next_cursor = proftpl.Item2;
                     break;
             }
             if (profiles != null) {
-                this.Invoke(new Action(() => AddList(profiles)));
+                this.Invoke(new Action(() =>
+                {
+                    AddList(profiles);
+                    btnAppend.Enabled = (_next_cursor != 0);
+                }));
             }
         }
         #endregion (GetUsers)

@@ -218,14 +218,20 @@ namespace StarlitTwit
                     _listOwner = (string.IsNullOrEmpty(listOwner)) ? _twitter.ScreenName : listOwner;
                     lblListOwner.Text = "ユーザー:" + _listOwner;
 
-                    _listData = _twitter.lists_Get(_listOwner);
-                    if (_listData.Length > 0) {
-                        cmbList.Items.AddRange(_listData.Select((data) => (object)data.Name).ToArray());
-                        cmbList.SelectedIndex = 0;
+                    long next_cursor = -1;
+                    do {
+                        Tuple<ListData[], long, long> lsttpl = _twitter.lists_Get(_listOwner, next_cursor);
+                        _listData = lsttpl.Item1;
+                        next_cursor = lsttpl.Item2;
+                        if (_listData.Length > 0) {
+                            cmbList.Items.AddRange(_listData.Select((data) => (object)data.Name).ToArray());
+                            cmbList.SelectedIndex = 0;
+                        }
                     }
+                    while (next_cursor != 0);
                 }
                 catch (TwitterAPIException ex) {
-                   Message.ShowErrorMessage(Utilization.SubTwitterAPIExceptionStr(ex));
+                    Message.ShowErrorMessage(Utilization.SubTwitterAPIExceptionStr(ex));
                 }
             }
         }

@@ -77,7 +77,7 @@
             // 
             this.btnAppend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAppend.Enabled = false;
-            this.btnAppend.Location = new System.Drawing.Point(-148, 231);
+            this.btnAppend.Location = new System.Drawing.Point(12, 231);
             this.btnAppend.Name = "btnAppend";
             this.btnAppend.Size = new System.Drawing.Size(75, 23);
             this.btnAppend.TabIndex = 1;

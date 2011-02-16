@@ -513,37 +513,55 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region statuses_friends
         //-------------------------------------------------------------------------------
-        //
-        public UserProfile[] statuses_friends(long user_id = -1, string screen_name = null, int cursor = -1, bool include_entities = false)
+        /// <summary>
+        /// フォローしている人を返します。返り値：(ユーザーリスト，next_cursor, previous_cursor）
+        /// </summary>
+        /// <param name="user_id">[option]</param>
+        /// <param name="screen_name">[option]</param>
+        /// <param name="cursor">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public Tuple<UserProfile[], long, long> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id >= 0) { paramdic.Add("user_id", user_id.ToString()); }
                 if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (cursor >= 0) { paramdic.Add("cursor", cursor.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends.xml", GET, paramdic);
-            return ConvertToUserProfileArray(GetByAPI(url));
+
+            XElement el = GetByAPI(url);
+            return new Tuple<UserProfile[], long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_friends)
         //-------------------------------------------------------------------------------
         #region statuses_followers
         //-------------------------------------------------------------------------------
-        //
-        public UserProfile[] statuses_followers(long user_id = -1, string screen_name = null, int cursor = -1, bool include_entities = false)
+        /// <summary>
+        /// フォローされている人を返します。返り値：(ユーザーリスト，next_cursor, previous_cursor）
+        /// </summary>
+        /// <param name="user_id">[option]</param>
+        /// <param name="screen_name">[option]</param>
+        /// <param name="cursor">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public Tuple<UserProfile[], long, long> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id >= 0) { paramdic.Add("user_id", user_id.ToString()); }
                 if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (cursor >= 0) { paramdic.Add("cursor", cursor.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/followers.xml", GET, paramdic);
-            return ConvertToUserProfileArray(GetByAPI(url));
+
+            XElement el = GetByAPI(url);
+            return new Tuple<UserProfile[], long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_followers)
         //-------------------------------------------------------------------------------
@@ -695,12 +713,12 @@ namespace StarlitTwit
         #region lists_Get リストのリスト取得
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// リストのリストを取得します。
+        /// リストのリストを取得します。返り値：(リストのリスト，next_cursor, previous_cursor）
         /// </summary>
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="cursor">[option]データベース上のカーソル</param>
         /// <returns></returns>
-        public ListData[] lists_Get(string screen_name = "", long cursor = -1)
+        public Tuple<ListData[], long, long> lists_Get(string screen_name = "", long cursor = -1)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -713,7 +731,7 @@ namespace StarlitTwit
 
             XElement el = GetByAPI(url);
 
-            return ConvertToListData(el);
+            return new Tuple<ListData[], long, long>(ConvertToListData(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
@@ -1518,7 +1536,7 @@ namespace StarlitTwit
         private ListData[] ConvertToListData(XElement el)
         {
             try {
-                return (from stat in el.Element("lists").Descendants("list")
+                return (from stat in el.Descendants("list")
                         select new ListData() {
                             ID = long.Parse(stat.Element("id").Value),
                             Name = stat.Element("slug").Value,
