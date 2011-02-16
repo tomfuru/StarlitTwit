@@ -1,6 +1,6 @@
 ﻿namespace StarlitTwit
 {
-    partial class FrmDispTweet
+    partial class FrmConversation
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -27,38 +27,67 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.uctlDispTwit = new StarlitTwit.UctlDispTwit();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 244);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(392, 22);
+            this.statusStrip.TabIndex = 1;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // tsslabel
+            // 
+            this.tsslabel.Name = "tsslabel";
+            this.tsslabel.Size = new System.Drawing.Size(377, 17);
+            this.tsslabel.Spring = true;
+            this.tsslabel.Text = "...";
+            this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // uctlDispTwit
             // 
+            this.uctlDispTwit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.uctlDispTwit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.uctlDispTwit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uctlDispTwit.ImageList = null;
             this.uctlDispTwit.Location = new System.Drawing.Point(0, 0);
             this.uctlDispTwit.Name = "uctlDispTwit";
-            this.uctlDispTwit.Size = new System.Drawing.Size(392, 266);
+            this.uctlDispTwit.Size = new System.Drawing.Size(392, 244);
             this.uctlDispTwit.TabIndex = 0;
             // 
-            // FrmReply
+            // FrmConversation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(392, 266);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.uctlDispTwit);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "FrmReply";
+            this.Name = "FrmConversation";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "会話";
             this.Shown += new System.EventHandler(this.FrmReply_Shown);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private UctlDispTwit uctlDispTwit;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel tsslabel;
     }
 }

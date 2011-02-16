@@ -608,7 +608,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_DisplayConversation_Click(object sender, TwitRowMenuEventArgs e)
         {
-            FrmDispTweet frm = new FrmDispTweet(e.TwitData, imageList);
+            FrmConversation frm = new FrmConversation(e.TwitData, imageList);
             frm.UctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
             RegisterUctlDispTwitEvent(frm.UctlDispTwit);
             SetModelessDialogCenter(frm);

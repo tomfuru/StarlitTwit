@@ -10,21 +10,17 @@ using System.Threading;
 
 namespace StarlitTwit
 {
-    public partial class FrmDispTweet : Form
+    public partial class FrmConversation : Form
     {
-        private Thread _getThread = null;
         private readonly TwitData _startTwitdata = null;
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmDispTweet(TwitData data,ImageList imageList)
+        public FrmConversation(TwitData data, ImageList imageList)
         {
             InitializeComponent();
-
-            _getThread = new Thread(new ParameterizedThreadStart(GetReplies));
-            _getThread.IsBackground = true;
 
             _startTwitdata = data;
             uctlDispTwit.ImageList = imageList;
@@ -51,7 +47,8 @@ namespace StarlitTwit
         private void FrmReply_Shown(object sender, EventArgs e)
         {
             uctlDispTwit.AddData(new TwitData[] { _startTwitdata });
-            _getThread.Start(_startTwitdata.Mention_StatusID);
+            tsslabel.Text = "リプライ取得中...";
+            (new Action<long>(GetReplies)).BeginInvoke(_startTwitdata.Mention_StatusID, Utilization.InvokeCallback, null);
         }
         //-------------------------------------------------------------------------------
         #endregion (FrmReply_Shown)
@@ -60,18 +57,23 @@ namespace StarlitTwit
         #region -GetReplies (別スレッド：リプライ取得)
         //-------------------------------------------------------------------------------
         //
-        private void GetReplies(object arg)
+        private void GetReplies(long status_id)
         {
             try {
-                long statusid = (long)arg;
-                while (statusid >= 0) {
-                    TwitData data = FrmMain.Twitter.statuses_show(statusid);
-                    uctlDispTwit.Invoke(new Action(() =>
-                    {
-                        uctlDispTwit.AddData(new TwitData[] { data });
-                    }));
-                    statusid = data.Mention_StatusID;
+                while (status_id >= 0) {
+                    TwitData data = null;
+                    try {
+                        data = FrmMain.Twitter.statuses_show(status_id);
+                    }
+                    catch (TwitterAPIException) {
+                        this.Invoke(new Action(() => tsslabel.Text = "取得できなかった発言があります。"));
+                        return;
+                    }
+
+                    this.Invoke(new Action(() => uctlDispTwit.AddData(new TwitData[] { data })));
+                    status_id = data.Mention_StatusID;
                 }
+                this.Invoke(new Action(() => tsslabel.Text = "会話の取得が完了しました。"));
             }
             catch (InvalidOperationException) { }
         }

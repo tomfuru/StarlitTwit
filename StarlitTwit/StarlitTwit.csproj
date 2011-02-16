@@ -72,11 +72,11 @@
     <Compile Include="Forms\FrmMakeTab.Designer.cs">
       <DependentUpon>FrmMakeTab.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmDispTweet.cs">
+    <Compile Include="Forms\FrmConversation.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FrmConversation.Designer.cs">
-      <DependentUpon>FrmDispTweet.cs</DependentUpon>
+      <DependentUpon>FrmConversation.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FrmWebBrowser.cs">
       <SubType>Form</SubType>
@@ -170,7 +170,7 @@
       <DependentUpon>FrmMakeTab.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmConversation.resx">
-      <DependentUpon>FrmDispTweet.cs</DependentUpon>
+      <DependentUpon>FrmConversation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmWebBrowser.resx">
       <DependentUpon>FrmWebBrowser.cs</DependentUpon>
