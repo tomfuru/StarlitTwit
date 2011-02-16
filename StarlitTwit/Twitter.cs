@@ -1831,6 +1831,30 @@ namespace StarlitTwit
         public bool UserProtected;
 
         //-------------------------------------------------------------------------------
+        #region +IsRT Retweetかどうか
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// この発言がRetweetかどうかを返します。
+        /// </summary>
+        /// <returns></returns>
+        public bool IsRT()
+        {
+            return (this.TwitType == TwitType.Retweet);
+        }
+        #endregion (IsRT)
+        //-------------------------------------------------------------------------------
+        #region +IsDM DirectMessageかどうか
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// この発言がDirectMessageかどうかを返します。
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDM()
+        {
+            return (this.TwitType == TwitType.DirectMessage);
+        }
+        #endregion (IsDM)
+        //-------------------------------------------------------------------------------
         #region +[override]ToString 文字列へ
         //-------------------------------------------------------------------------------
         /// <summary>

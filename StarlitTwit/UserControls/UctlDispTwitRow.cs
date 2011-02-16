@@ -466,7 +466,7 @@ namespace StarlitTwit
         /// </summary>
         public void SetTweetLabel()
         {
-            lblTweet.Text = TwitData.Text;
+            lblTweet.Text = (TwitData.IsRT()) ? TwitData.RTTwitData.Text : TwitData.Text;
             SetControlLocation();
         }
         #endregion (SetTweetLabel)
