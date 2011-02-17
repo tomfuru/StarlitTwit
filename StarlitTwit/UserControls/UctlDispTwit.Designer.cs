@@ -53,7 +53,7 @@
             this.tsmiOlder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSpecifyTime = new System.Windows.Forms.ToolStripMenuItem();
             this.vscrbar = new System.Windows.Forms.VScrollBar();
-            this.pnlflow = new StarlitTwit.PanelEx();
+            this.pnlTweets = new StarlitTwit.PanelEx();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -249,25 +249,25 @@
             this.vscrbar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vscrbar_Scroll);
             this.vscrbar.ValueChanged += new System.EventHandler(this.vscrbar_ValueChanged);
             // 
-            // pnlflow
+            // pnlTweets
             // 
-            this.pnlflow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.pnlTweets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlflow.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlflow.ContextMenuStrip = this.menuRow;
-            this.pnlflow.Location = new System.Drawing.Point(0, 0);
-            this.pnlflow.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlflow.Name = "pnlflow";
-            this.pnlflow.Size = new System.Drawing.Size(348, 281);
-            this.pnlflow.TabIndex = 0;
-            this.pnlflow.TabStop = true;
-            this.pnlflow.SizeChanged += new System.EventHandler(this.UctlDispTwit_ClientSizeChanged);
-            this.pnlflow.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseClick);
-            this.pnlflow.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseDown);
-            this.pnlflow.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseMove);
-            this.pnlflow.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseUp);
-            this.pnlflow.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseWheel);
+            this.pnlTweets.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlTweets.ContextMenuStrip = this.menuRow;
+            this.pnlTweets.Location = new System.Drawing.Point(0, 0);
+            this.pnlTweets.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlTweets.Name = "pnlTweets";
+            this.pnlTweets.Size = new System.Drawing.Size(348, 281);
+            this.pnlTweets.TabIndex = 0;
+            this.pnlTweets.TabStop = true;
+            this.pnlTweets.SizeChanged += new System.EventHandler(this.UctlDispTwit_ClientSizeChanged);
+            this.pnlTweets.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseClick);
+            this.pnlTweets.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseDown);
+            this.pnlTweets.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseMove);
+            this.pnlTweets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseUp);
+            this.pnlTweets.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseWheel);
             // 
             // UctlDispTwit
             // 
@@ -275,7 +275,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.vscrbar);
-            this.Controls.Add(this.pnlflow);
+            this.Controls.Add(this.pnlTweets);
             this.DoubleBuffered = true;
             this.Name = "UctlDispTwit";
             this.Size = new System.Drawing.Size(365, 281);
@@ -287,7 +287,7 @@
 
         #endregion
 
-        private StarlitTwit.PanelEx pnlflow;
+        private StarlitTwit.PanelEx pnlTweets;
         private System.Windows.Forms.ContextMenuStrip menuRow;
         private System.Windows.Forms.ToolStripMenuItem tsmiMoreRecently;
         private System.Windows.Forms.ToolStripMenuItem tsmiOlder;

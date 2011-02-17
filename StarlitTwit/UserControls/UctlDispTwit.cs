@@ -56,7 +56,9 @@ namespace StarlitTwit
         /// <summary>描画抑制フラグ</summary>
         private bool _bSuspendDraw = false;
         /// <summary>一番上の項目が一部見えない時にtrue</summary>
-        private bool _existGapVscr = false;
+        private bool _existNotAllRow_Top = false;
+        /// <summary>一番下の項目が一部見えない時にtrue</summary>
+        private bool _existNotAllRow_Bottom = false;
         /// <summary>[static]long比較用クラス</summary>
         static readonly Longcomp CLONGCOMP = new Longcomp();
         //-------------------------------------------------------------------------------
@@ -130,6 +132,7 @@ namespace StarlitTwit
             get { return _selectedIndex; }
             private set
             {
+                Debug.Assert(value < _rowDataList.Count, "指定インデックスが異常");
                 _selectedIndex = value;
                 OnSelectedIndexChanged();
             }
@@ -145,7 +148,7 @@ namespace StarlitTwit
         [Browsable(false)]
         public TwitData SelectedTwitData
         {
-            get { return (_rowDataList.Values[_selectedIndex]).TwitData; }
+            get { return (_rowDataList.Values[SelectedIndex]).TwitData; }
         }
         #endregion (SelectedTwitData)
         //-------------------------------------------------------------------------------
@@ -213,7 +216,7 @@ namespace StarlitTwit
         private void menuRow_Opening(object sender, CancelEventArgs e)
         {
             // 表示するかどうか
-            if (this._selectedIndex == -1) { e.Cancel = true; return; }
+            if (this.SelectedIndex == -1) { e.Cancel = true; return; }
 
             switch (ContextMenuType) {
                 case MenuType.Default:
@@ -447,8 +450,8 @@ namespace StarlitTwit
         //
         private void pnlflow_MouseDown(object sender, MouseEventArgs e)
         {
-            UctlDispTwitRow row = pnlflow.GetChildAtPoint(e.Location, GetChildAtPointSkip.Invisible) as UctlDispTwitRow;
-            if (row == null) { _selectedIndex = -1; }
+            UctlDispTwitRow row = pnlTweets.GetChildAtPoint(e.Location, GetChildAtPointSkip.Invisible) as UctlDispTwitRow;
+            if (row == null) { SelectedIndex = -1; }
             if (row != SelectedRow) { ChangeSelectRow(row); }
 
             _isMouseDowning = true;
@@ -487,54 +490,77 @@ namespace StarlitTwit
         //
         public void ProcessKey(Keys key)
         {
-            if (pnlflow.Controls.Count == 0) { return; }
+            if (_iVisibleRowNum == 0) { return; }
 
             switch (key) {
                 case Keys.Down:
                 case Keys.Up:
-                    if (_selectedIndex < 0) {
+                    if (SelectedIndex < 0) {
                         // 一番上選択
-                        _selectedIndex = GetAbsoluteRowIntex(0);
+                        SelectedIndex = GetAbsoluteRowIntex(0);
                     }
                     else {
                         int iselected = SelectedIndex;
                         if (key == Keys.Up) {
                             // ↑キー
                             if (iselected == 0) { break; }
-                            _selectedIndex--;
+                            SelectedIndex--;
                         }
                         else {
                             // ↓キー
                             if (iselected == _rowDataList.Count - 1) { break; }
-                            _selectedIndex++;
+                            SelectedIndex++;
                         }
                     }
-                    ChangeSelectRow(_selectedIndex);
-                    ScrollSelectedRowIntoView();
+                    ChangeSelectRow(SelectedIndex);
+                    if (SelectedIndex < vscrbar.Value) { // 選択が上にありすぎる
+                        if (vscrbar.Value - SelectedIndex == 1) {
+                            _suspend_vscrbar_ValueChangeEvent = true;
+                            vscrbar.Value--;
+                            _suspend_vscrbar_ValueChangeEvent = false;
+                            AdjustControll(vscrbar.Value, true, AdjustOption.ShiftLower);
+                        }
+                        else {
+                            AdjustControll(SelectedIndex, true);
+                        }
+                        this.Refresh(); // 押しっぱなしで描画が追いつかないため
+                    }
+                    else if (SelectedIndex >= vscrbar.Value + _iAllVisibleRowNum) { // 選択が下にありすぎる
+                        if (SelectedIndex == vscrbar.Value + _iAllVisibleRowNum) {
+                            _suspend_vscrbar_ValueChangeEvent = true;
+                            vscrbar.Value++;
+                            _suspend_vscrbar_ValueChangeEvent = false;
+                            AdjustControll(SelectedIndex, false, AdjustOption.ShiftUpper);
+                        }
+                        else {
+                            AdjustControll(SelectedIndex, false);
+                        }
+                        this.Refresh(); // 押しっぱなしで描画が追いつかないため
+                    }
                     break;
                 case Keys.PageUp:
                     if (vscrbar.Enabled) {
-                        _selectedIndex = Math.Max(_selectedIndex - vscrbar.LargeChange, 0);
+                        SelectedIndex = Math.Max(SelectedIndex - vscrbar.LargeChange, 0);
                         vscrbar.Value = Math.Max(vscrbar.Value - vscrbar.LargeChange, 0);
                     }
                     else {
-                        vscrbar.Value = _selectedIndex = 0;
+                        vscrbar.Value = SelectedIndex = 0;
                     }
                     break;
                 case Keys.PageDown:
                     if (vscrbar.Enabled) {
-                        _selectedIndex = Math.Min(_selectedIndex + vscrbar.LargeChange, _rowDataList.Count - 1);
+                        SelectedIndex = Math.Min(SelectedIndex + vscrbar.LargeChange, _rowDataList.Count - 1);
                         vscrbar.Value = Math.Min(vscrbar.Value + vscrbar.LargeChange, _rowDataList.Count - 1);
                     }
                     else {
-                        vscrbar.Value = _selectedIndex = _rowDataList.Count - 1;
+                        vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
                     }
                     break;
                 case Keys.Home:
-                    vscrbar.Value = _selectedIndex = 0;
+                    vscrbar.Value = SelectedIndex = 0;
                     break;
                 case Keys.End:
-                    vscrbar.Value = _selectedIndex = _rowDataList.Count - 1;
+                    vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
                     break;
             }
         }
@@ -581,7 +607,8 @@ namespace StarlitTwit
                 if (moveval > 0) {
                     vscrbar.Value = Math.Max(vscrbar.Minimum, vscrbar.Value - moveval);
                 }
-                else {
+                else if (moveval < 0) {
+                    if (vscrbar.Value + vscrbar.LargeChange - 1 == vscrbar.Maximum) { return; }
                     vscrbar.Value = Math.Min(vscrbar.Maximum, vscrbar.Value - moveval);
                 }
             }
@@ -600,16 +627,30 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region vscrbar_ValueChanged 値変化時
         //-------------------------------------------------------------------------------
-        bool _suspend_vscrbar_ValueChangeEvent = false;
+        private bool _suspend_vscrbar_ValueChangeEvent = false;
+        private int _prevValue = 0;
         //
         private void vscrbar_ValueChanged(object sender, EventArgs e)
         {
-            if (_suspend_vscrbar_ValueChangeEvent) { return; }
+            try {
+                if (_suspend_vscrbar_ValueChangeEvent || _prevValue == vscrbar.Value) { return; }
 
-            _suspend_vscrbar_ValueChangeEvent = true;
-            AdjustControll(vscrbar.Value, true);
-            pnlflow.Refresh();
-            _suspend_vscrbar_ValueChangeEvent = false;
+                _suspend_vscrbar_ValueChangeEvent = true;
+                if (vscrbar.Value - _prevValue == 1) {
+                    AdjustControll(vscrbar.Value, true, AdjustOption.ShiftUpper);
+                }
+                else if (vscrbar.Value - _prevValue == -1) {
+                    AdjustControll(vscrbar.Value, true, AdjustOption.ShiftLower);
+                }
+                else {
+                    AdjustControll(vscrbar.Value, true);
+                }
+                pnlTweets.Refresh();
+                _suspend_vscrbar_ValueChangeEvent = false;
+            }
+            finally {
+                _prevValue = vscrbar.Value;
+            }
         }
         #endregion (vscrbar_ValueChanged)
         //-------------------------------------------------------------------------------
@@ -630,10 +671,10 @@ namespace StarlitTwit
             string retText = "";
 
             // 選択保存用
-            long selectedData = (_selectedIndex >= 0) ? _rowDataList.Values[_selectedIndex].TwitData.StatusID : -1;
+            long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ? _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
             ChangeSelectRow(null);
             // 位置保存用
-            long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ? (_existGapVscr) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID : _rowList[0].TwitData.StatusID : -1;
+            long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ? (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID : _rowList[0].TwitData.StatusID : -1;
 
             //-----内部情報設定-----
             List<RowData> addrowList = new List<RowData>();
@@ -678,7 +719,7 @@ namespace StarlitTwit
             // 選択復元
             if (selectedData >= 0) {
                 int newIndex = _rowDataList.IndexOfKey(selectedData);
-                _selectedIndex = newIndex;
+                SelectedIndex = newIndex;
                 ChangeSelectRow(newIndex);
             }
 
@@ -687,7 +728,7 @@ namespace StarlitTwit
             if (locIndex >= 0) {
                 // 位置復元
                 int baseIndex = _rowDataList.IndexOfKey(locIndex);
-                if (_existGapVscr) {
+                if (_existNotAllRow_Top) {
                     AdjustControll(baseIndex, false);
                 }
                 else {
@@ -711,17 +752,6 @@ namespace StarlitTwit
         public void ReConfigAll()
         {
             AdjustControll(vscrbar.Value, true);
-            //foreach (Control ctl in pnlflow.Controls) {
-            //    UctlDispTwitRow row = ctl as UctlDispTwitRow;
-            //    if (row == null) { continue; }
-            //    row.ToolTipChangeInterval = FrmMain.SettingsData.DisplayThumbnailInterval;
-            //    row.SuspendAdjust = true;
-            //    row.SetNameLabel();
-            //    row.SetIconConfig();
-            //    row.SetFontConfig();
-            //    row.SuspendAdjust = false;
-            //    row.SetControlLocation();
-            //}
         }
         //-------------------------------------------------------------------------------
         #endregion (ReConfigAll)
@@ -733,7 +763,7 @@ namespace StarlitTwit
         /// </summary>
         public void ClearAll()
         {
-            MaxTweetID = MinTweetID = _selectedIndex = -1;
+            MaxTweetID = MinTweetID = SelectedIndex = -1;
             SelectedRow = null;
 
             _rowDataList.Clear();
@@ -755,7 +785,7 @@ namespace StarlitTwit
             if (!_rowDataList.ContainsKey(statusid)) { return false; }
 
             _rowDataList.Remove(statusid);
-            if (_selectedIndex == _rowDataList.Keys.IndexOf(statusid)) { SelectedIndex = -1; }
+            if (SelectedIndex == _rowDataList.Keys.IndexOf(statusid)) { SelectedIndex = -1; }
             AdjustControll(vscrbar.Value, true);
             return true;
         }
@@ -763,19 +793,39 @@ namespace StarlitTwit
         //===============================================================================
         #region -AdjustControll コントロールの内容・位置・サイズの調整を行います。
         //-------------------------------------------------------------------------------
+        #region AdjustOption 列挙体：オプション
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 調整に関して設定できるオプションを指定します。
+        /// </summary>
+        private enum AdjustOption
+        {
+            /// <summary>何も指定しない</summary>
+            None,
+            /// <summary>上に1つずつずらす(下に新しい発言が見える)</summary>
+            ShiftUpper,
+            /// <summary>下に1つずつずらす(上に新しい発言が見える)</summary>
+            ShiftLower
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (AdjustOption)
         /// <summary>
         /// コントロールの内容・位置・サイズの調整を行います。
         /// </summary>
-        private void AdjustControll(int startIndex, bool flowDirForward, bool isSuspendLayout = true, bool isSuspendPaint = true)
+        /// <param name="startIndex">一番上(flowDirForward=true)もしくは一番下(flowDirForward=false)のインデックス</param>
+        /// <param name="flowDirForward">上(true)と下(false)のどちらから詰めていくか</param>
+        /// <param name="isSuspendLayout">[option]</param>
+        /// <param name="isSuspendPaint">[option]</param>
+        private void AdjustControll(int startIndex, bool flowDirForward, AdjustOption option = AdjustOption.None)
         {
             if (_rowDataList.Count == 0) { return; }
 
-            //this.Visible = false;
-            if (isSuspendPaint) { SuspendPaint(); }
-            if (isSuspendLayout) { pnlflow.SuspendLayout(); }
+            // 描画・レイアウト抑制
+            SuspendPaint();
+            pnlTweets.SuspendLayout();
 
             // 選択中行発言ID取得
-            long selectedStatusID = (_selectedIndex == -1) ? -1 : _rowDataList.Values[_selectedIndex].TwitData.StatusID;
+            long selectedStatusID = (SelectedIndex == -1) ? -1 : _rowDataList.Values[SelectedIndex].TwitData.StatusID;
             SelectedRow = null;
 
             // 全カラムの位置・幅・高さ調整
@@ -784,13 +834,103 @@ namespace StarlitTwit
             bool existNotAllVisibleRow = false;
             int rowindex = 0;
             int rowdataindex = startIndex;
-            int height = (flowDirForward) ? 0 : pnlflow.Height;
-            while ((isForward && height < pnlflow.Height) || (!isForward && height > 0)) {
+            int height = (flowDirForward) ? 0 : pnlTweets.Height;
+
+            // 1個ずらしの場合
+            if (_iVisibleRowNum > 1) {
+                switch (option) {
+                    case AdjustOption.ShiftUpper:
+                        if (flowDirForward) { // シフトするのみ
+                            for (int i = 1; i < _iVisibleRowNum; i++) {
+                                UctlDispTwitRow row = _rowList[i];
+                                row.Invalidate();
+                                row.Location = new Point(0, height);
+                                ChangeSelectRow(row, selectedStatusID);
+                                height += row.Height;
+                                existNotAllVisibleRow = (height > pnlTweets.Height);
+                            }
+                            rowindex = _iVisibleRowNum - 1;
+                            rowdataindex = startIndex + rowindex;
+                            UctlDispTwitRow exRow = _rowList[0];
+                            _rowList.RemoveAt(0);
+                            _rowList.Insert(_iVisibleRowNum - 1, exRow);
+                        }
+                        else {
+                            UctlDispTwitRow exRow = null;
+                            bool needMove = _existNotAllRow_Bottom;
+                            if (!needMove) {
+                                exRow = _rowList[0];
+                                RowData rowdata = _rowDataList.Values[startIndex];
+                                exRow.TwitData = rowdata.TwitData;
+                                exRow.Visible = true;
+                                ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
+                                exRow.Location = new Point(0, height - exRow.Height);
+                                height -= exRow.Height;
+                                existNotAllVisibleRow = (height < 0);
+                                rowindex = 1;
+                            }
+                            for (int i = _iVisibleRowNum - 1; i >= ((needMove) ? 0 : 1); i--) {
+                                if (height <= 0) { break; }
+                                UctlDispTwitRow row = _rowList[i];
+                                row.Invalidate();
+                                row.Location = new Point(0, height - row.Height);
+                                ChangeSelectRow(row, selectedStatusID);
+                                height -= row.Height;
+                                existNotAllVisibleRow = (height < 0);
+                                rowindex++;
+                            }
+                            rowdataindex = startIndex - rowindex;
+                            if (!needMove) {
+                                _rowList.RemoveAt(0);
+                                _rowList.Insert(_iVisibleRowNum - 1, exRow);
+                            }
+                        }
+
+                        break;
+                    case AdjustOption.ShiftLower:
+                        if (flowDirForward) { // 1個登録，残りシフト
+                            UctlDispTwitRow exRow = null;
+                            bool needMove = _existNotAllRow_Top;
+                            if (!needMove) {
+                                exRow = _rowList[_iVisibleRowNum - 1];
+                                RowData rowdata = _rowDataList.Values[startIndex];
+                                exRow.TwitData = rowdata.TwitData;
+                                exRow.Visible = true;
+                                ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
+                                exRow.Location = new Point(0, 0);
+                                height = exRow.Height;
+                                existNotAllVisibleRow = (height > pnlTweets.Height);
+                                rowindex = 1;
+                            }
+                            for (int i = 0; i < _iVisibleRowNum - ((needMove) ? 0 : 1); i++) {
+                                if (height >= pnlTweets.Height) { break; }
+                                UctlDispTwitRow row = _rowList[i];
+                                row.Invalidate();
+                                row.Location = new Point(0, height);
+                                ChangeSelectRow(row, selectedStatusID);
+                                height += row.Height;
+                                existNotAllVisibleRow = (height > pnlTweets.Height);
+                                rowindex++;
+                            }
+                            rowdataindex = startIndex + rowindex;
+                            if (!needMove) {
+                                _rowList.RemoveAt(_iVisibleRowNum - 1);
+                                _rowList.Insert(0, exRow);
+                            }
+                        }
+                        else {
+                            Debug.Assert(false, "未実装(不要), 現状実装しない");
+                        }
+                        break;
+                }
+            }
+
+            while ((isForward && height < pnlTweets.Height) || (!isForward && height > 0)) {
                 if (_rowDataList.Count <= rowdataindex) {// isForward=trueのみ．一番下までいった
                     if (startIndex == 0) { needScrollbar = false; break; } // 数が少なくてスクロールバーもいらないような時
                     isForward = false;
                     rowdataindex = startIndex - 1;
-                    int dif = pnlflow.Height - height;
+                    int dif = pnlTweets.Height - height;
                     for (int i = 0; i < rowindex; i++) {
                         _rowList[i].Location = new Point(0, _rowList[i].Location.Y + dif);
                     }
@@ -803,15 +943,9 @@ namespace StarlitTwit
 
                 if (_rowList.Count <= rowindex) {
                     // 行作成
-                    row = new UctlDispTwitRow(rowdata.TwitData);
-                    row.MouseDown += pnlflow_MouseDown;
-                    row.MouseUp += pnlflow_MouseUp;
-                    row.MouseMove += pnlflow_MouseMove;
-                    row.MouseClick += pnlflow_MouseClick;
-                    row.TweetItemClick += Row_TweetItemClick;
-                    row.OpenURLRequest += Row_OpenURLRequest;
+                    row = MakeTwitRow(rowdata.TwitData);
                     _rowList.Add(row);
-                    pnlflow.Controls.Add(row);
+                    pnlTweets.Controls.Add(row);
                 }
                 else {
                     row = _rowList[rowindex];
@@ -819,33 +953,12 @@ namespace StarlitTwit
                     row.Visible = true;
                 }
 
-                if (selectedStatusID >= 0) {
-                    if (selectedStatusID == row.TwitData.StatusID) { // 選択中か判別
-                        row.SelectControl();
-                        SelectedRow = row;
-                    }
-                    else { row.UnSelectControl(); }
-                }
+                ConfigRow(row, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
 
-                row.SetBackColor();
-                row.Invalidate();
-
-                row.SetReplyToolTip(rowdata.StrReplyTooltip);
-                row.ResetPicturePopup();
-
-                row.SuspendAdjust = true;
-                row.SetWidth(pnlflow.Width);
-                row.SetIconConfig();
-                row.SetFontConfig();
-                row.SetNameLabel();
-                row.SetTweetLabel();
-                row.SetIcon(ImageList);
-                row.SuspendAdjust = false;
-                row.SetControlLocation();
                 if (isForward) {
                     row.Location = new Point(0, height);
                     height += row.Height;
-                    existNotAllVisibleRow = (height > pnlflow.Height);
+                    existNotAllVisibleRow = (height > pnlTweets.Height);
                 }
                 else {
                     row.Location = new Point(0, height - row.Height);
@@ -855,22 +968,21 @@ namespace StarlitTwit
 
                 if (isForward) { rowdataindex++; }
                 else {
-                    if (height >= pnlflow.Height) { break; } // これ以上入れるとはみ出る
+                    if (height >= pnlTweets.Height) { break; } // これ以上入れるとはみ出る
                     // 現在行を先頭にして移動
                     _rowList.Remove(row);
                     _rowList.Insert(0, row);
-                    pnlflow.Controls.SetChildIndex(row, 0);
-                    
+
                     rowdataindex--;
                 }
                 rowindex++;
             }
 
-            if (isSuspendLayout) {
-                pnlflow.ResumeLayout(false);
-                pnlflow.PerformLayout();
-            }
-            if (isSuspendPaint) { ResumePaint(); }
+
+            // 描画・レイアウト再開
+            pnlTweets.ResumeLayout(false);
+            pnlTweets.PerformLayout();
+            ResumePaint();
 
             _iVisibleRowNum = rowindex;
             _iAllVisibleRowNum = _iVisibleRowNum - ((existNotAllVisibleRow) ? 1 : 0);
@@ -880,41 +992,78 @@ namespace StarlitTwit
                 }
             }
 
-            _existGapVscr = false;
+            _existNotAllRow_Top = !isForward && existNotAllVisibleRow;
+            _existNotAllRow_Bottom = isForward && existNotAllVisibleRow;
             // スクロールバー設定
             _suspend_vscrbar_ValueChangeEvent = true;
             if (vscrbar.Enabled = needScrollbar) {
                 vscrbar.LargeChange = Math.Max(0, _iVisibleRowNum - 1);
                 vscrbar.Maximum = _rowDataList.Count - 1;
 
-                if (!isForward) {
-                    vscrbar.Value = rowdataindex + 2;
-                    //vscrbar.LargeChange++;
-                    //vscrbar.Value = Math.Max(0, vscrbar.Maximum - _iAllVisibleRowNum);
-                    _existGapVscr = existNotAllVisibleRow;
-                }
+                if (isForward) { vscrbar.Value = startIndex; }
+                else { vscrbar.Value = rowdataindex + 2; }
             }
             _suspend_vscrbar_ValueChangeEvent = false;
         }
         //-------------------------------------------------------------------------------
         #endregion (AdjustControll)
         //-------------------------------------------------------------------------------
-        #region -ScrollSelectedRowIntoView 選択行が見えるようにスクロールします。
+        #region -MakeTwitRow 行を作成しイベントを登録して返します。
         //-------------------------------------------------------------------------------
-        //
-        private void ScrollSelectedRowIntoView()
+        /// <summary>
+        /// 行を作成しイベントを登録して返します。
+        /// </summary>
+        /// <param name="twitdata">行の発言データ</param>
+        /// <returns></returns>
+        private UctlDispTwitRow MakeTwitRow(TwitData twitdata)
         {
-            if (SelectedIndex < 0) { return; }
-            if (SelectedIndex < vscrbar.Value) { // 選択が上にありすぎる
-                vscrbar.Value = SelectedIndex;
-                AdjustControll(vscrbar.Value, true);
-            }
-            else if (SelectedIndex >= vscrbar.Value + _iAllVisibleRowNum) { // 選択が下にありすぎる
-                AdjustControll(_selectedIndex, false);//AdjustControllSelectedRowIntoView();
-                this.Refresh(); // 処理が重いからか，下おしっぱで表示がついていかないので必要
-            }
+            UctlDispTwitRow row = new UctlDispTwitRow(twitdata);
+            row.MouseDown += pnlflow_MouseDown;
+            row.MouseUp += pnlflow_MouseUp;
+            row.MouseMove += pnlflow_MouseMove;
+            row.MouseClick += pnlflow_MouseClick;
+            row.TweetItemClick += Row_TweetItemClick;
+            row.OpenURLRequest += Row_OpenURLRequest;
+            return row;
         }
-        #endregion (ScrollSelectedRowIntoView)
+        #endregion (MakeTwitRow)
+        //-------------------------------------------------------------------------------
+        #region -ConfigRow 行に対して一連の設定を行います。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 行に対して一連の設定を行います。
+        /// </summary>
+        /// <param name="row">設定を行う対象の行</param>
+        /// <param name="tooltipStr">ToolTip文字列</param>
+        /// <pparam name="selectedStatusID">選択されている項目のStatusID</pparam>
+        private void ConfigRow(UctlDispTwitRow row, string tooltipStr, long selectedStatusID)
+        {
+            // 選択中か判別
+            if (selectedStatusID >= 0) {
+                if (selectedStatusID == row.TwitData.StatusID) {
+                    row.SelectControl();
+                    SelectedRow = row;
+                }
+                else { row.UnSelectControl(); }
+            }
+
+            row.SetBackColor();
+            row.Invalidate();
+
+            row.SetReplyToolTip(tooltipStr);
+            row.ResetPicturePopup();
+
+            row.SuspendAdjust = true;
+            row.SetWidth(pnlTweets.Width);
+            row.SetIconConfig();
+            row.SetFontConfig();
+            row.SetNameLabel();
+            row.SetTweetLabel();
+            row.SetIcon(ImageList);
+            row.SuspendAdjust = false;
+            row.SetControlLocation();
+        }
+        #endregion (ConfigRow)
         //-------------------------------------------------------------------------------
         #region -GetReplyText リプライ先のテキストを取得します。
         //-------------------------------------------------------------------------------
@@ -963,7 +1112,7 @@ namespace StarlitTwit
 
             if (row != null) {
                 SelectedRow = row;
-                _selectedIndex = GetAbsoluteRowIntex(pnlflow.Controls.IndexOf(row));
+                SelectedIndex = GetAbsoluteRowIntex(_rowList.IndexOf(row));
                 SelectedRow.SelectControl();
             }
         }
@@ -981,6 +1130,19 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion ((int))
+        #region (UctlDispTwitRow, long)
+        //-------------------------------------------------------------------------------
+        //
+        private void ChangeSelectRow(UctlDispTwitRow row, long selectedStatusID)
+        {
+            if (row.TwitData != null && row.TwitData.StatusID == selectedStatusID) {
+                row.SelectControl();
+                SelectedRow = row;
+            }
+            else { row.UnSelectControl(); }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (UctlDispTwitRow, long)
         #endregion (ChangeSelectRow)
         //-------------------------------------------------------------------------------
         #region -OnSelectedIndexChanged 選択インデックス変更時
@@ -988,9 +1150,6 @@ namespace StarlitTwit
         //
         private void OnSelectedIndexChanged()
         {
-            //if (_selectedIndex >= 0) {
-            //    pnlflow.ScrollControlIntoView(pnlflow.Controls[GetLookRowIndex(_selectedIndex)]);
-            //}
             if (SelectedIndexChanged != null) { SelectedIndexChanged.Invoke(this, EventArgs.Empty); }
         }
         #endregion (OnSelectedIndexChanged)
@@ -1005,7 +1164,7 @@ namespace StarlitTwit
         {
             int lookIndex = GetLookRowIndex(absIndex);
             return (lookIndex >= 0 && lookIndex < _iVisibleRowNum)
-                    ? pnlflow.Controls[lookIndex] as UctlDispTwitRow
+                    ? _rowList[lookIndex]
                     : null;
         }
         #endregion (GetRowFromIndex)
@@ -1015,7 +1174,7 @@ namespace StarlitTwit
         //
         private int GetLookRowIndex(int absRowIndex)
         {
-            return absRowIndex - vscrbar.Value + ((_existGapVscr) ? 1 : 0);
+            return absRowIndex - vscrbar.Value + ((_existNotAllRow_Top) ? 1 : 0);
         }
         #endregion (GetLookRowIndex)
         #region -GetAbsoluteRowIntex 絶対行インデックスを取得
@@ -1023,7 +1182,7 @@ namespace StarlitTwit
         //
         private int GetAbsoluteRowIntex(int lookRowIndex)
         {
-            return lookRowIndex + vscrbar.Value - ((_existGapVscr) ? 1 : 0);
+            return lookRowIndex + vscrbar.Value - ((_existNotAllRow_Top) ? 1 : 0);
         }
         #endregion (GetAbsoluteRowIntex)
         //===============================================================================
