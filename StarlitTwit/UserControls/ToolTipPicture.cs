@@ -273,16 +273,8 @@ namespace StarlitTwit
                 }
                 else {
                     // 画像読込
-                    WebClient wc = new WebClient();
-                    Stream stream;
-                    try { stream = wc.OpenRead(ImageURLs[i]); }
-                    catch (WebException) { continue; }
-                    try {
-                        Image img = Image.FromStream(stream, true, false);
-                        if (img != null) { list.Add(img); }
-                    }
-                    catch (Exception) { continue; }
-                    stream.Dispose();
+                    Image img = Utilization.GetImageFromURL(ImageURLs[i]);
+                    if (img != null) { list.Add(img); }
                 }
             }
 
@@ -316,7 +308,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region -GetThumbnailFromTwitpic Twitpicからサムネイルを取得します。
         //-------------------------------------------------------------------------------
-        BackgroundWorker bgWorker = new BackgroundWorker();
         //
         private Image GetThumbnailFromTwitpic(string url)
         {
@@ -324,31 +315,11 @@ namespace StarlitTwit
 
             string thumburl = urlpartials[0] + "//" + urlpartials[1] + "/show/thumb/" + urlpartials[2];
 
-            WebClient wc = new WebClient();
             Image img = null;
-
-            Action<object,DoWorkEventArgs> get = (sender, e) =>
+            Utilization.InvokeTransaction(new Action(() =>
             {
-                try {
-                    using (Stream stream = wc.OpenRead(thumburl)) {
-                        img = Image.FromStream(stream, true, false);
-                    }
-                }
-                catch (WebException) { return; }
-            };
-
-            DoWorkEventHandler h = new DoWorkEventHandler(get);
-
-            bgWorker.DoWork += h;
-            
-            bgWorker.RunWorkerAsync();
-
-            while (bgWorker.IsBusy) {
-                System.Threading.Thread.Sleep(10);
-                Application.DoEvents();
-            }
-
-            bgWorker.DoWork -= h;
+                img = Utilization.GetImageFromURL(thumburl);
+            }));
 
             return img;
         }
@@ -379,11 +350,7 @@ namespace StarlitTwit
                 if (endIndex == -1) { return null; }
                 string picurl = twitpic.Substring(startIndex, endIndex - startIndex);
 
-                WebClient wc = new WebClient();
-                Image img;
-                using (Stream stream2 = wc.OpenRead(picurl)) {
-                    img = Image.FromStream(stream2, true, false);
-                }
+                Image img = Utilization.GetImageFromURL(picurl);
                 return img;
             }
             catch (WebException) {

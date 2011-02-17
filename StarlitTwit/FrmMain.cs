@@ -226,6 +226,9 @@ namespace StarlitTwit
                 Twitter.ID = SettingsData.UserInfoList[0].ID;
                 _isAuthenticated = true;
                 _profileRenew_IsForce = true;
+                lblUserName.Text = "(未取得)";
+                tsmi_プロフィール.Enabled = true;
+                foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
             }
             else {
                 SettingsData.UserInfoList = new List<UserInfo>();
