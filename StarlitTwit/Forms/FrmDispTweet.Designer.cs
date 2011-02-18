@@ -63,7 +63,7 @@
             this.uctlDispTwit.Size = new System.Drawing.Size(392, 244);
             this.uctlDispTwit.TabIndex = 0;
             // 
-            // FrmConversation
+            // FrmDispTweet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -72,10 +72,11 @@
             this.Controls.Add(this.uctlDispTwit);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "FrmConversation";
+            this.Name = "FrmDispTweet";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "会話";
+            this.Text = "...";
+            this.Load += new System.EventHandler(this.FrmDispTweet_Load);
             this.Shown += new System.EventHandler(this.FrmReply_Shown);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();

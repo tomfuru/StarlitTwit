@@ -112,6 +112,8 @@ namespace StarlitTwit
         {
             /// <summary>通常用途</summary>
             Default,
+            /// <summary>一部用途が制限されたユーザー用途</summary>
+            RestrictedUser,
             /// <summary>会話用途</summary>
             Conversation
         }
@@ -222,6 +224,9 @@ namespace StarlitTwit
 
             switch (ContextMenuType) {
                 case MenuType.Default:
+                    break;
+                case MenuType.RestrictedUser:
+                    tsmiDisplayUserTweet.Visible = tsmiSpecifyTime.Visible = false;
                     break;
                 case MenuType.Conversation:
                     tsmiDispConversation.Visible = tsmiSepConversation.Visible = false;
@@ -394,6 +399,16 @@ namespace StarlitTwit
         }
         #endregion (tsmiOpenBrowser_ReplyTweet_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiDisplayUserTweet_Click このユーザーの発言を表示するメニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
+        {
+            if (RowContextMenu_Click != null) {
+                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.DisplayUserTweet, SelectedTwitData));
+            }
+        }
+        #endregion (tsmiDisplayUserTweet_Click)
         #region tsmiMakeUserTab_Click このユーザーのタブを作成メニュークリック時
         //-------------------------------------------------------------------------------
         //
@@ -649,8 +664,9 @@ namespace StarlitTwit
         /// 発言データを追加します。
         /// </summary>
         /// <param name="data">発言データ配列。StatusID降順推奨。</param>
+        /// <param name="suspendSetBoundary">[option]境界セットを抑制する時true</param>
         /// <returns>最初のツイートのデータ</returns>
-        public string AddData(TwitData[] data)
+        public string AddData(TwitData[] data, bool suspendSetBoundary = false)
         {
             string retText = "";
 
@@ -666,13 +682,13 @@ namespace StarlitTwit
             foreach (TwitData t in data) {
                 // 重複排除
                 if (_rowDataList.ContainsKey(t.StatusID)) {
-                    if (_rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastStatusID); }
+                    if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastStatusID); }
                     continue;
                 }
 
                 RowData rowdata = new RowData() {
                     TwitData = t,
-                    IsBoundary = (t.StatusID == lastStatusID)
+                    IsBoundary = (!suspendSetBoundary && t.StatusID == lastStatusID)
                 };
 
                 // 返り値用
@@ -1381,7 +1397,7 @@ namespace StarlitTwit
     #endregion ((Class)SearchInfoEventArgs)
 
     //-------------------------------------------------------------------------------
-    #region RowEventType 列挙体：呟き行データに関するイベントの種類
+    #region +RowEventType 列挙体：呟き行データに関するイベントの種類
     //-------------------------------------------------------------------------------
     /// <summary>
     ///呟き行データに関するイベントの種類
@@ -1404,6 +1420,8 @@ namespace StarlitTwit
         Unfavorite,
         /// <summary>削除 メニュー</summary>
         Delete,
+        /// <summary>このユーザーの発言を表示する メニュー</summary>
+        DisplayUserTweet,
         /// <summary>このユーザーのタブを作成 メニュー</summary>
         MakeUserTab,
         /// <summary>このユーザーのリストのタブを作成 メニュー</summary>

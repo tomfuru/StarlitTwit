@@ -171,7 +171,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (InterpretFormat)
 
-
         //-------------------------------------------------------------------------------
         #region +[static]GetImageFromURL 画像取得
         //-------------------------------------------------------------------------------
@@ -281,7 +280,7 @@ namespace StarlitTwit
             const string TWITPIC = @"twitpic.com";
 
             string hostname = GetHostName(url);
-            if (hostname == null) { return false;}
+            if (hostname == null) { return false; }
 
             IPHostEntry entry = Dns.GetHostEntry(hostname);
             IPHostEntry twitpicentry = Dns.GetHostEntry(TWITPIC);
@@ -336,6 +335,40 @@ namespace StarlitTwit
 
         }
         #endregion (Callback)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]ShowUserTweet ユーザー発言フォームを表示します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ユーザー発言フォームを表示します。
+        /// </summary>
+        /// <param name="parent">最上位フォーム</param>
+        /// <param name="screen_name">ユーザー名</param>
+        public static void ShowUserTweet(FrmMain parent, string screen_name)
+        {
+            FrmDispTweet frm = new FrmDispTweet(parent, parent.ImageList);
+            frm.FormType = FrmDispTweet.EFormType.User;
+            frm.UserScreenName = screen_name;
+            frm.Show(parent);
+        }
+        #endregion (ShowUserTweet)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]SetModelessDialogCenter モードレスダイアログを所有フォームの中央に配置します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 所有フォーム(Owner)があればその中央にダイアログを配置します。
+        /// </summary>
+        /// <param name="dialog">設置するダイアログ</param>
+        public static void SetModelessDialogCenter(Form dialog)
+        {
+            if (dialog.Owner != null) {
+                dialog.StartPosition = FormStartPosition.Manual;
+                dialog.Left = dialog.Owner.Left + (dialog.Owner.Width - dialog.Width) / 2;
+                dialog.Top = dialog.Owner.Top + (dialog.Owner.Height - dialog.Height) / 2;
+            }
+        }
+        #endregion (SetModelessDialogCenter)
 
         //-------------------------------------------------------------------------------
         #region +[static]ExtractURL URL部分を抜き出します

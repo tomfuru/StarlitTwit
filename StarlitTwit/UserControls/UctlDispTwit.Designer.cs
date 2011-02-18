@@ -54,6 +54,7 @@
             this.tsmiSpecifyTime = new System.Windows.Forms.ToolStripMenuItem();
             this.vscrbar = new System.Windows.Forms.VScrollBar();
             this.pnlTweets = new StarlitTwit.PanelEx();
+            this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,6 +75,7 @@
             this.tsmiSepDelete,
             this.tsmiOpenBrowser,
             this.toolStripMenuItem2,
+            this.tsmiDisplayUserTweet,
             this.tsmiMakeUserTab,
             this.tsmiMakeUserListTab,
             this.tsmiSepMoreTweet,
@@ -81,7 +83,7 @@
             this.tsmiOlder,
             this.tsmiSpecifyTime});
             this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(242, 370);
+            this.menuRow.Size = new System.Drawing.Size(242, 392);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiReply
@@ -269,6 +271,13 @@
             this.pnlTweets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseUp);
             this.pnlTweets.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseWheel);
             // 
+            // tsmiDisplayUserTweet
+            // 
+            this.tsmiDisplayUserTweet.Name = "tsmiDisplayUserTweet";
+            this.tsmiDisplayUserTweet.Size = new System.Drawing.Size(241, 22);
+            this.tsmiDisplayUserTweet.Text = "このユーザーの発言を表示する";
+            this.tsmiDisplayUserTweet.Click += new System.EventHandler(this.tsmiDisplayUserTweet_Click);
+            // 
             // UctlDispTwit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -313,5 +322,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiDirectMessage;
         private System.Windows.Forms.ToolStripSeparator tsmiSepConversation;
         private System.Windows.Forms.ToolStripMenuItem tsmiSpecifyTime;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserTweet;
     }
 }

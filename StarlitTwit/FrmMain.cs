@@ -98,6 +98,22 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
+        //-------------------------------------------------------------------------------
+        #region プロパティ
+        //-------------------------------------------------------------------------------
+        #region ImageList プロパティ：
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ImageListを返します。
+        /// </summary>
+        public ImageList ImageList
+        {
+            get { return imageList; }
+        }
+        #endregion (ImageList)
+        //-------------------------------------------------------------------------------
+        #endregion (プロパティ)
+
         //===============================================================================
         #region 定数
         //-------------------------------------------------------------------------------
@@ -508,6 +524,9 @@ namespace StarlitTwit
                     TwitMenu_UnFavorite_Click(sender, e);
                     break;
                 //-------------------------------------------------------------------------------
+                case RowEventType.DisplayUserTweet:
+                    TwitMenu_DisplayUserTweet_Click(sender, e);
+                    break;
                 case RowEventType.MakeUserTab:
                     TwitMenu_MakeUserTab_Click(sender, e);
                     break;
@@ -590,10 +609,9 @@ namespace StarlitTwit
         //
         private void TwitMenu_DisplayConversation_Click(object sender, TwitRowMenuEventArgs e)
         {
-            FrmDispTweet frm = new FrmDispTweet(e.TwitData, imageList);
-            frm.UctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
-            RegisterUctlDispTwitEvent(frm.UctlDispTwit);
-            SetModelessDialogCenter(frm);
+            FrmDispTweet frm = new FrmDispTweet(this, imageList);
+            frm.FormType = FrmDispTweet.EFormType.Conversation;
+            frm.ReplyStartTwitdata = e.TwitData;
             frm.Show(this);
         }
         #endregion (TwitMenu_DisplayConversation_Click)
@@ -623,6 +641,15 @@ namespace StarlitTwit
             }
         }
         #endregion (TwitMenu_UnFavorite_Click)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_DisplayUserTweet_Click ユーザー発言表示
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_DisplayUserTweet_Click(object sender, TwitRowMenuEventArgs e)
+        {
+            Utilization.ShowUserTweet(this, e.TwitData.UserScreenName);
+        }
+        #endregion (TwitMenu_DisplayUserTweet_Click)
         //-------------------------------------------------------------------------------
         #region TwitMenu_MakeUserTab_Click ユーザータブ追加
         //-------------------------------------------------------------------------------
@@ -658,7 +685,10 @@ namespace StarlitTwit
         //
         private void TwitMenu_OlderDataRequest_Click(object sender, TwitRowMenuEventArgs e)
         {
-            InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetOlderTweets), e.TwitData.StatusID, (UctlDispTwit)sender, "より古いデータ取得中...");
+            UctlDispTwit uctldisp = (UctlDispTwit)sender;
+            if (_dispTwitDic.Values.Any((u) => u == uctldisp)) {
+                InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetOlderTweets), e.TwitData.StatusID, (UctlDispTwit)sender, "より古いデータ取得中...");
+            }
         }
         #endregion (TwitMenu_OlderDataRequest_Click)
         //-------------------------------------------------------------------------------
@@ -667,7 +697,10 @@ namespace StarlitTwit
         //
         private void TwitMenu_MoreRecentDataRequest_Click(object sender, TwitRowMenuEventArgs e)
         {
-            InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetMoreRecentTweets), e.TwitData.StatusID, (UctlDispTwit)sender, "より新しいデータ取得中...");
+            UctlDispTwit uctldisp = (UctlDispTwit)sender;
+            if (_dispTwitDic.Values.Any((u) => u == uctldisp)) {
+                InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetMoreRecentTweets), e.TwitData.StatusID, (UctlDispTwit)sender, "より新しいデータ取得中...");
+            }
         }
         #endregion (TwitMenu_MoreRecentDataRequest_Click)
         //-------------------------------------------------------------------------------
@@ -977,6 +1010,20 @@ namespace StarlitTwit
         //===============================================================================
         #region メソッド
         //-------------------------------------------------------------------------------
+        #region +RegisterUctlDispTwitEvent UctlDispTwitのイベントを登録します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// UctlDispTwitのイベントを登録します。
+        /// </summary>
+        /// <param name="uctlDisp"></param>
+        public void RegisterUctlDispTwitEvent(UctlDispTwit uctlDisp)
+        {
+            uctlDisp.RowContextMenu_Click += TwitMenu_RowContextmenu_Click;
+            uctlDisp.TweetItemClick += DispTwit_TweetItemClick;
+            uctlDisp.OpenURLRequest += DispTwit_OpenURLRequest;
+        }
+        #endregion (RegisterUctlDispTwitEvent)
+        //-------------------------------------------------------------------------------
         #region -MakeNewTab 新規タブ作成
         //-------------------------------------------------------------------------------
         #region (TabSearchType,string,[opt]string) Main
@@ -1131,29 +1178,6 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (SetAutoRenewData)
-        //-------------------------------------------------------------------------------
-        #region -RegisterUctlDispTwitEvent UctlDispTwitのイベントを登録します。
-        //-------------------------------------------------------------------------------
-        //
-        private void RegisterUctlDispTwitEvent(UctlDispTwit uctlDisp)
-        {
-            uctlDisp.RowContextMenu_Click += TwitMenu_RowContextmenu_Click;
-            uctlDisp.TweetItemClick += DispTwit_TweetItemClick;
-            uctlDisp.OpenURLRequest += DispTwit_OpenURLRequest;
-        }
-        #endregion (RegisterUctlDispTwitEvent)
-
-        //-------------------------------------------------------------------------------
-        #region -SetModelessDialogCenter モードレスダイアログを中央に設定します。
-        //-------------------------------------------------------------------------------
-        //
-        private void SetModelessDialogCenter(Form dialog)
-        {
-            dialog.StartPosition = FormStartPosition.Manual;
-            dialog.Left = this.Left + (this.Width - dialog.Width) / 2;
-            dialog.Top = this.Top + (this.Height - dialog.Height) / 2;
-        }
-        #endregion (SetModelessDialogCenter)
 
         //===============================================================================
         #region -SetStatusState 発言状態設定
