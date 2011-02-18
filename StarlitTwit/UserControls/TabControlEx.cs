@@ -20,6 +20,8 @@ namespace StarlitTwit
         [Description("このインデックスより左のタブのみ動かせます。")]
         public int MaxMovableIndex { get; set; }
 
+        private bool _bSuspendDraw = false;
+
         public event EventHandler<TabMoveEventArgs> TabExchanged;
 
         public TabControlEx()
@@ -54,24 +56,27 @@ namespace StarlitTwit
                 // 条件
                 if (srcTabIndex > MaxMovableIndex || srcTabIndex < MinMovableIndex
                  || dstTabIndex > MaxMovableIndex || dstTabIndex < MinMovableIndex) {
-                     e.Effect = DragDropEffects.None;
-                    return; 
+                    e.Effect = DragDropEffects.None;
+                    return;
                 }
 
                 if (srcTabIndex != dstTabIndex) {
+                    //SuspendPaint();
                     this.SuspendLayout();//★これ大事
                     //TabPage tmp = TabPages[srcTabIndex];
                     //TabPages[srcTabIndex] = TabPages[dstTabIndex];
                     //TabPages[dstTabIndex] = tmp;
                     TabPage mvtab = TabPages[srcTabIndex];
+                    this.Visible = false;
                     TabPages.Remove(mvtab);
                     TabPages.Insert(dstTabIndex, mvtab);
                     SelectedTab = draggedTab;
-
-                    this.ResumeLayout();//★これも大事
+                    this.Visible = true;
+                    this.ResumeLayout(true);//★これも大事
+                    //ResumePaint();
 
                     if (TabExchanged != null) {
-                        TabExchanged(this, new TabMoveEventArgs(srcTabIndex,dstTabIndex));
+                        TabExchanged(this, new TabMoveEventArgs(srcTabIndex, dstTabIndex));
                     }
                 }
             }
@@ -154,6 +159,37 @@ namespace StarlitTwit
             }
             return -1;
         }
+
+        //-------------------------------------------------------------------------------
+        #region -SuspendPaint 描画抑制
+        //-------------------------------------------------------------------------------
+        /// <summary>描画抑制</summary>
+        public void SuspendPaint()
+        {
+            _bSuspendDraw = true;
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (SuspendPaint)
+        //-------------------------------------------------------------------------------
+        #region -ResumePaint 描画再開
+        //-------------------------------------------------------------------------------
+        /// <summary>描画再開</summary>
+        public void ResumePaint()
+        {
+            _bSuspendDraw = false;
+        }
+        #endregion (ResumePaint)
+        //-------------------------------------------------------------------------------
+        #region #[override]WndProc
+        //-------------------------------------------------------------------------------
+        //
+        protected override void WndProc(ref System.Windows.Forms.Message m)
+        {
+            if (_bSuspendDraw && (m.Msg == 0x000f || m.Msg == 0x0014)) { return; }
+            base.WndProc(ref m);
+        }
+        #endregion (#[override]WndProc)
+        //-------------------------------------------------------------------------------
     }
 
     public class TabMoveEventArgs : EventArgs
