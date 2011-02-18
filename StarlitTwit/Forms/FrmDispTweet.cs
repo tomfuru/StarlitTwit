@@ -79,8 +79,9 @@ namespace StarlitTwit
                     if (!string.IsNullOrEmpty(UserScreenName)) {
                         this.Text = string.Format("{0}の発言", UserScreenName);
                         uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                        uctlDispTwit.RowContextMenu_Click += new EventHandler<TwitRowMenuEventArgs>(TwitMenu_OlderDataRequest_Click);
                         tsslabel.Text = "発言取得中...";
-                        (new Action<string>(GetUserTweets)).BeginInvoke(UserScreenName, Utilization.InvokeCallback, null);
+                        (new Action<string, long>(GetUserTweets)).BeginInvoke(UserScreenName, -1, Utilization.InvokeCallback, null);
                     }
                     else {
                         Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
@@ -106,14 +107,27 @@ namespace StarlitTwit
         #endregion (FrmReply_Shown)
 
         //-------------------------------------------------------------------------------
+        #region TwitMenu_OlderDataRequest_Click より古い発言要求
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_OlderDataRequest_Click(object sender, TwitRowMenuEventArgs e)
+        {
+            if (e.EventType == RowEventType.OlderTweetRequest) {
+                tsslabel.Text = "発言取得中...";
+                Utilization.InvokeTransaction(() => GetUserTweets(UserScreenName, e.TwitData.StatusID));
+            }
+        }
+        #endregion (TwitMenu_OlderDataRequest_Click)
+
+        //-------------------------------------------------------------------------------
         #region -GetUserTweets （別スレッド：発言取得)
         //-------------------------------------------------------------------------------
         //
-        private void GetUserTweets(string screen_name)
+        private void GetUserTweets(string screen_name, long max_id = -1)
         {
             try {
                 try {
-                    TwitData[] d = FrmMain.Twitter.statuses_user_timeline(screen_name: screen_name, count: GET_NUM);
+                    TwitData[] d = FrmMain.Twitter.statuses_user_timeline(screen_name: screen_name, max_id: max_id, count: GET_NUM);
                     this.Invoke(new Action(() => uctlDispTwit.AddData(d)));
                 }
                 catch (TwitterAPIException) {
