@@ -83,6 +83,17 @@ namespace StarlitTwit
         #endregion (NumericUpDown_First_ValueChanged)
 
         //===============================================================================
+        #region txtNameFormat_TextChanged 上段フォーマットテキスト変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void txtNameFormat_TextChanged(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            Label label = (Label)textbox.Tag;
+            label.Text = Utilization.InterpretFormat((TwitData)label.Tag, textbox.Text);
+        }
+        #endregion (txtNameFormat_TextChanged)
+        //-------------------------------------------------------------------------------
         #region btnNameFormatInit_Click 上段フォーマット設定デフォルトクリック時
         //-------------------------------------------------------------------------------
         //
@@ -193,7 +204,7 @@ namespace StarlitTwit
 
             changeControl.Enabled = chb.Checked;
         }
-        #endregion (chbDispIcon_CheckedChanged)  
+        #endregion (chbDispIcon_CheckedChanged)
         //-------------------------------------------------------------------------------
         #region chbUseInternalWebBrowser_CheckedChanged 内部ウェブブラウザ使用有無変更時
         //-------------------------------------------------------------------------------
@@ -243,6 +254,50 @@ namespace StarlitTwit
         //
         private void SetAssociateData()
         {
+            txtNameFormat.Tag = lblNameFormatSample;
+            txtNameFormatRT.Tag = lblNameFormatRTSample;
+            txtNameFormatDM.Tag = lblNameFormatDMSample;
+            txtNameFormatSearch.Tag = lblNameFormatSearchSample;
+
+            DateTime dt = new DateTime(2000, 1, 1, 13, 1, 1);
+
+            lblNameFormatSample.Tag = new TwitData() {
+                TwitType = TwitType.Normal,
+                UserProtected = true,
+                Favorited = true,
+                UserName = "Twitter",
+                UserScreenName = "twitter",
+                Time = dt,
+                Source = "web"
+            };
+            lblNameFormatRTSample.Tag = new TwitData() {
+                TwitType = TwitType.Retweet,
+                UserScreenName = "twitterapi",
+                Time = DateTime.Now,
+                Favorited = true,
+                RTTwitData = new TwitData() {
+                    UserName = "Twitter",
+                    UserScreenName = "twitter",
+                    Source = "web"
+                }
+            };
+            lblNameFormatDMSample.Tag = new TwitData() {
+                TwitType = TwitType.DirectMessage,
+                UserName = "Twitter",
+                UserScreenName = "twitter",
+                DMScreenName = "twitterapi",
+                Time = dt,
+                Source = "web"
+            };
+            lblNameFormatSearchSample.Tag = new TwitData() {
+                TwitType = TwitType.Search,
+                UserScreenName = "twitter",
+                Time = dt,
+                Source = "web"
+            };
+
+            //-------------------------------------------------------------------------------
+
             btnFontNormalTitle.Tag = txtExNormalTitle;
             btnFontNormalText.Tag = txtExNormalText;
             btnFontReplyToMeTitle.Tag = txtExReplyToMeTitle;

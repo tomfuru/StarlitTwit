@@ -62,26 +62,15 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region +[static]InterpretFormat フォーマットを解釈して返します。
         //-------------------------------------------------------------------------------
+        #region (TwitData)
+        //-------------------------------------------------------------------------------
         /// <summary>
-        /// フォーマットを解釈して返します．
+        /// フォーマットを解釈して返します。設定データのフォーマットを使用します。
         /// </summary>
         /// <param name="twitdata">発言データ</param>
-        /// <param name="format">フォーマット</param>
         /// <returns></returns>
         public static string InterpretFormat(TwitData twitdata)
         {
-            const char DOLLER = '$';
-            const char PARENTHESIS_START = '(';
-            const char PARENTHESIS_END = ')';
-            const string LOCKED = "Locked";
-            const string FAVORITED = "Favorited";
-            const string NAME = "Name";
-            const string SCREENNAME = "ScreenName";
-            const string SOURCE = "Source";
-            const string DATETIME = "DateTime";
-            const string RETWEETER = "Retweeter";
-            const string RECIPIENT = "Recipient";
-
             string format;
             switch (twitdata.TwitType) {
                 case TwitType.Normal:
@@ -100,6 +89,31 @@ namespace StarlitTwit
                     format = "";
                     break;
             }
+            return InterpretFormat(twitdata, format);
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((TwitData))
+        #region (TwitData, string)
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォーマットを解釈して返します。
+        /// </summary>
+        /// <param name="twitdata">発言データ</param>
+        /// <param name="format">フォーマット</param>
+        /// <returns></returns>
+        public static string InterpretFormat(TwitData twitdata, string format)
+        {
+            const char DOLLER = '$';
+            const char PARENTHESIS_START = '(';
+            const char PARENTHESIS_END = ')';
+            const string LOCKED = "Locked";
+            const string FAVORITED = "Favorited";
+            const string NAME = "Name";
+            const string SCREENNAME = "ScreenName";
+            const string SOURCE = "Source";
+            const string DATETIME = "DateTime";
+            const string RETWEETER = "Retweeter";
+            const string RECIPIENT = "Recipient";
 
             string formatRep = format.Replace(@"\n", "\n");
             bool bIsRT = (twitdata.TwitType == TwitType.Retweet),
@@ -131,7 +145,7 @@ namespace StarlitTwit
                     sb.Append((bIsRT) ? twitdata.RTTwitData.UserScreenName : twitdata.UserScreenName);
                 }
                 else if (!bIsDM && key.Equals(SOURCE)) {
-                    sb.Append(twitdata.Source);
+                    sb.Append((bIsRT) ? twitdata.RTTwitData.Source : twitdata.Source);
                 }
                 else if (bIsRT && key.Equals(RETWEETER)) {
                     sb.Append(twitdata.UserScreenName);
@@ -153,7 +167,10 @@ namespace StarlitTwit
             return sb.ToString();
         }
         //-------------------------------------------------------------------------------
+        #endregion ((TwitData, string))
+        //-------------------------------------------------------------------------------
         #endregion (InterpretFormat)
+
 
         //-------------------------------------------------------------------------------
         #region +[static]GetImageFromURL 画像取得

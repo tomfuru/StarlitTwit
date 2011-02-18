@@ -29,6 +29,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabpgGet = new System.Windows.Forms.TabPage();
+            this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
             this.label39 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -37,9 +38,29 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_Add = new StarlitTwit.NumericUpDownExtended();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_First = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
             this.tabpgDisp = new System.Windows.Forms.TabPage();
+            this.lblNameFormatSearchSample = new System.Windows.Forms.Label();
+            this.lblNameFormatDMSample = new System.Windows.Forms.Label();
+            this.lblNameFormatRTSample = new System.Windows.Forms.Label();
+            this.lblNameFormatSample = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
             this.grpIcon = new System.Windows.Forms.GroupBox();
             this.chbDispIcon = new System.Windows.Forms.CheckBox();
             this.numIconSize = new System.Windows.Forms.NumericUpDown();
@@ -61,6 +82,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnAllFontColorDefault = new System.Windows.Forms.Button();
             this.btnBCReplyToMeSelected = new System.Windows.Forms.Button();
             this.txtBCReplyToMeSelected = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
@@ -134,32 +156,10 @@
             this.chbDispThumbnail = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.btnAllFontColorDefault = new System.Windows.Forms.Button();
-            this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_First = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tabpgDisp.SuspendLayout();
-            this.grpIcon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).BeginInit();
-            this.grpQuoteType.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).BeginInit();
@@ -172,6 +172,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).BeginInit();
+            this.tabpgDisp.SuspendLayout();
+            this.grpIcon.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).BeginInit();
+            this.grpQuoteType.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -202,6 +210,24 @@
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
+            // 
+            // numProfile_Interval
+            // 
+            this.numProfile_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numProfile_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numProfile_Interval.Location = new System.Drawing.Point(164, 176);
+            this.numProfile_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numProfile_Interval.Name = "numProfile_Interval";
+            this.numProfile_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numProfile_Interval.TabIndex = 1;
             // 
             // label39
             // 
@@ -309,6 +335,169 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "発言履歴";
             // 
+            // numTimeline_Interval
+            // 
+            this.numTimeline_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_Interval.Location = new System.Drawing.Point(293, 34);
+            this.numTimeline_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numTimeline_Interval.Name = "numTimeline_Interval";
+            this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_Interval.TabIndex = 2;
+            this.numTimeline_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_Interval
+            // 
+            this.numReply_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_Interval.Location = new System.Drawing.Point(293, 63);
+            this.numReply_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numReply_Interval.Name = "numReply_Interval";
+            this.numReply_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numReply_Interval.TabIndex = 5;
+            this.numReply_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_Interval
+            // 
+            this.numHistory_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_Interval.Location = new System.Drawing.Point(293, 92);
+            this.numHistory_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numHistory_Interval.Name = "numHistory_Interval";
+            this.numHistory_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_Interval.TabIndex = 8;
+            this.numHistory_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_Interval
+            // 
+            this.numDirect_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_Interval.Location = new System.Drawing.Point(293, 122);
+            this.numDirect_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numDirect_Interval.Name = "numDirect_Interval";
+            this.numDirect_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_Interval.TabIndex = 11;
+            this.numDirect_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numTimeline_Add
+            // 
+            this.numTimeline_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Location = new System.Drawing.Point(197, 34);
+            this.numTimeline_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Name = "numTimeline_Add";
+            this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_Add.TabIndex = 1;
+            this.numTimeline_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_Add
+            // 
+            this.numReply_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_Add.Location = new System.Drawing.Point(197, 63);
+            this.numReply_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numReply_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_Add.Name = "numReply_Add";
+            this.numReply_Add.Size = new System.Drawing.Size(56, 19);
+            this.numReply_Add.TabIndex = 4;
+            this.numReply_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_Add
+            // 
+            this.numHistory_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Location = new System.Drawing.Point(197, 92);
+            this.numHistory_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Name = "numHistory_Add";
+            this.numHistory_Add.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_Add.TabIndex = 7;
+            this.numHistory_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
             // label4
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -329,8 +518,161 @@
             this.label5.TabIndex = 12;
             this.label5.Text = "初期取得数";
             // 
+            // numTimeline_First
+            // 
+            this.numTimeline_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Location = new System.Drawing.Point(101, 34);
+            this.numTimeline_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Name = "numTimeline_First";
+            this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_First.TabIndex = 0;
+            this.numTimeline_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_First
+            // 
+            this.numReply_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_First.Location = new System.Drawing.Point(101, 63);
+            this.numReply_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numReply_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_First.Name = "numReply_First";
+            this.numReply_First.Size = new System.Drawing.Size(56, 19);
+            this.numReply_First.TabIndex = 3;
+            this.numReply_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_Add
+            // 
+            this.numDirect_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Location = new System.Drawing.Point(197, 122);
+            this.numDirect_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Name = "numDirect_Add";
+            this.numDirect_Add.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_Add.TabIndex = 10;
+            this.numDirect_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_First
+            // 
+            this.numHistory_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_First.Location = new System.Drawing.Point(101, 92);
+            this.numHistory_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numHistory_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_First.Name = "numHistory_First";
+            this.numHistory_First.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_First.TabIndex = 6;
+            this.numHistory_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_First
+            // 
+            this.numDirect_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_First.Location = new System.Drawing.Point(101, 122);
+            this.numDirect_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numDirect_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_First.Name = "numDirect_First";
+            this.numDirect_First.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_First.TabIndex = 9;
+            this.numDirect_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
             // tabpgDisp
             // 
+            this.tabpgDisp.Controls.Add(this.lblNameFormatSearchSample);
+            this.tabpgDisp.Controls.Add(this.lblNameFormatDMSample);
+            this.tabpgDisp.Controls.Add(this.lblNameFormatRTSample);
+            this.tabpgDisp.Controls.Add(this.lblNameFormatSample);
+            this.tabpgDisp.Controls.Add(this.label44);
+            this.tabpgDisp.Controls.Add(this.label43);
+            this.tabpgDisp.Controls.Add(this.label42);
+            this.tabpgDisp.Controls.Add(this.label41);
             this.tabpgDisp.Controls.Add(this.grpIcon);
             this.tabpgDisp.Controls.Add(this.btnNameFormatSearchInit);
             this.tabpgDisp.Controls.Add(this.txtNameFormatSearch);
@@ -353,12 +695,84 @@
             this.tabpgDisp.Text = "表示";
             this.tabpgDisp.UseVisualStyleBackColor = true;
             // 
+            // lblNameFormatSearchSample
+            // 
+            this.lblNameFormatSearchSample.AutoSize = true;
+            this.lblNameFormatSearchSample.Location = new System.Drawing.Point(60, 211);
+            this.lblNameFormatSearchSample.Name = "lblNameFormatSearchSample";
+            this.lblNameFormatSearchSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatSearchSample.TabIndex = 18;
+            this.lblNameFormatSearchSample.Text = "...";
+            // 
+            // lblNameFormatDMSample
+            // 
+            this.lblNameFormatDMSample.AutoSize = true;
+            this.lblNameFormatDMSample.Location = new System.Drawing.Point(60, 157);
+            this.lblNameFormatDMSample.Name = "lblNameFormatDMSample";
+            this.lblNameFormatDMSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatDMSample.TabIndex = 17;
+            this.lblNameFormatDMSample.Text = "...";
+            // 
+            // lblNameFormatRTSample
+            // 
+            this.lblNameFormatRTSample.AutoSize = true;
+            this.lblNameFormatRTSample.Location = new System.Drawing.Point(60, 103);
+            this.lblNameFormatRTSample.Name = "lblNameFormatRTSample";
+            this.lblNameFormatRTSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatRTSample.TabIndex = 16;
+            this.lblNameFormatRTSample.Text = "...";
+            // 
+            // lblNameFormatSample
+            // 
+            this.lblNameFormatSample.AutoSize = true;
+            this.lblNameFormatSample.Location = new System.Drawing.Point(60, 49);
+            this.lblNameFormatSample.Name = "lblNameFormatSample";
+            this.lblNameFormatSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatSample.TabIndex = 15;
+            this.lblNameFormatSample.Text = "...";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(12, 211);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(49, 12);
+            this.label44.TabIndex = 14;
+            this.label44.Text = "サンプル：";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(12, 157);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(49, 12);
+            this.label43.TabIndex = 13;
+            this.label43.Text = "サンプル：";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(12, 103);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(49, 12);
+            this.label42.TabIndex = 12;
+            this.label42.Text = "サンプル：";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(12, 49);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(49, 12);
+            this.label41.TabIndex = 11;
+            this.label41.Text = "サンプル：";
+            // 
             // grpIcon
             // 
             this.grpIcon.Controls.Add(this.chbDispIcon);
             this.grpIcon.Controls.Add(this.numIconSize);
             this.grpIcon.Controls.Add(this.label28);
-            this.grpIcon.Location = new System.Drawing.Point(229, 194);
+            this.grpIcon.Location = new System.Drawing.Point(238, 254);
             this.grpIcon.Name = "grpIcon";
             this.grpIcon.Size = new System.Drawing.Size(135, 68);
             this.grpIcon.TabIndex = 9;
@@ -410,7 +824,7 @@
             // btnNameFormatSearchInit
             // 
             this.btnNameFormatSearchInit.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnNameFormatSearchInit.Location = new System.Drawing.Point(328, 165);
+            this.btnNameFormatSearchInit.Location = new System.Drawing.Point(328, 187);
             this.btnNameFormatSearchInit.Name = "btnNameFormatSearchInit";
             this.btnNameFormatSearchInit.Size = new System.Drawing.Size(48, 23);
             this.btnNameFormatSearchInit.TabIndex = 7;
@@ -420,15 +834,16 @@
             // 
             // txtNameFormatSearch
             // 
-            this.txtNameFormatSearch.Location = new System.Drawing.Point(8, 167);
+            this.txtNameFormatSearch.Location = new System.Drawing.Point(8, 189);
             this.txtNameFormatSearch.Name = "txtNameFormatSearch";
             this.txtNameFormatSearch.Size = new System.Drawing.Size(314, 19);
             this.txtNameFormatSearch.TabIndex = 6;
+            this.txtNameFormatSearch.TextChanged += new System.EventHandler(this.txtNameFormat_TextChanged);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 152);
+            this.label12.Location = new System.Drawing.Point(6, 176);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(135, 12);
             this.label12.TabIndex = 10;
@@ -437,7 +852,7 @@
             // btnNameFormatDMInit
             // 
             this.btnNameFormatDMInit.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnNameFormatDMInit.Location = new System.Drawing.Point(328, 119);
+            this.btnNameFormatDMInit.Location = new System.Drawing.Point(328, 133);
             this.btnNameFormatDMInit.Name = "btnNameFormatDMInit";
             this.btnNameFormatDMInit.Size = new System.Drawing.Size(48, 23);
             this.btnNameFormatDMInit.TabIndex = 5;
@@ -447,15 +862,16 @@
             // 
             // txtNameFormatDM
             // 
-            this.txtNameFormatDM.Location = new System.Drawing.Point(8, 121);
+            this.txtNameFormatDM.Location = new System.Drawing.Point(8, 135);
             this.txtNameFormatDM.Name = "txtNameFormatDM";
             this.txtNameFormatDM.Size = new System.Drawing.Size(314, 19);
             this.txtNameFormatDM.TabIndex = 4;
+            this.txtNameFormatDM.TextChanged += new System.EventHandler(this.txtNameFormat_TextChanged);
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 106);
+            this.label11.Location = new System.Drawing.Point(6, 122);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(199, 12);
             this.label11.TabIndex = 7;
@@ -466,7 +882,7 @@
             this.grpQuoteType.Controls.Add(this.rdb引用符);
             this.grpQuoteType.Controls.Add(this.rdbRT);
             this.grpQuoteType.Controls.Add(this.rdbQT);
-            this.grpQuoteType.Location = new System.Drawing.Point(8, 194);
+            this.grpQuoteType.Location = new System.Drawing.Point(17, 254);
             this.grpQuoteType.Name = "grpQuoteType";
             this.grpQuoteType.Size = new System.Drawing.Size(215, 45);
             this.grpQuoteType.TabIndex = 8;
@@ -509,7 +925,7 @@
             // btnNameFormatRTInit
             // 
             this.btnNameFormatRTInit.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnNameFormatRTInit.Location = new System.Drawing.Point(328, 73);
+            this.btnNameFormatRTInit.Location = new System.Drawing.Point(328, 79);
             this.btnNameFormatRTInit.Name = "btnNameFormatRTInit";
             this.btnNameFormatRTInit.Size = new System.Drawing.Size(48, 23);
             this.btnNameFormatRTInit.TabIndex = 3;
@@ -520,7 +936,7 @@
             // btnNameFormatInit
             // 
             this.btnNameFormatInit.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnNameFormatInit.Location = new System.Drawing.Point(328, 27);
+            this.btnNameFormatInit.Location = new System.Drawing.Point(328, 25);
             this.btnNameFormatInit.Name = "btnNameFormatInit";
             this.btnNameFormatInit.Size = new System.Drawing.Size(48, 23);
             this.btnNameFormatInit.TabIndex = 1;
@@ -530,22 +946,24 @@
             // 
             // txtNameFormatRT
             // 
-            this.txtNameFormatRT.Location = new System.Drawing.Point(8, 75);
+            this.txtNameFormatRT.Location = new System.Drawing.Point(8, 81);
             this.txtNameFormatRT.Name = "txtNameFormatRT";
             this.txtNameFormatRT.Size = new System.Drawing.Size(314, 19);
             this.txtNameFormatRT.TabIndex = 2;
+            this.txtNameFormatRT.TextChanged += new System.EventHandler(this.txtNameFormat_TextChanged);
             // 
             // txtNameFormat
             // 
-            this.txtNameFormat.Location = new System.Drawing.Point(8, 29);
+            this.txtNameFormat.Location = new System.Drawing.Point(8, 27);
             this.txtNameFormat.Name = "txtNameFormat";
             this.txtNameFormat.Size = new System.Drawing.Size(314, 19);
             this.txtNameFormat.TabIndex = 0;
+            this.txtNameFormat.TextChanged += new System.EventHandler(this.txtNameFormat_TextChanged);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 60);
+            this.label9.Location = new System.Drawing.Point(6, 68);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(154, 12);
             this.label9.TabIndex = 1;
@@ -623,6 +1041,17 @@
             this.tabPage1.Text = "フォント・色";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnAllFontColorDefault
+            // 
+            this.btnAllFontColorDefault.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnAllFontColorDefault.Location = new System.Drawing.Point(265, 299);
+            this.btnAllFontColorDefault.Name = "btnAllFontColorDefault";
+            this.btnAllFontColorDefault.Size = new System.Drawing.Size(113, 23);
+            this.btnAllFontColorDefault.TabIndex = 59;
+            this.btnAllFontColorDefault.Text = "全てデフォルトに戻す";
+            this.btnAllFontColorDefault.UseVisualStyleBackColor = true;
+            this.btnAllFontColorDefault.Click += new System.EventHandler(this.btnAllFontColorDefault_Click);
+            // 
             // btnBCReplyToMeSelected
             // 
             this.btnBCReplyToMeSelected.Location = new System.Drawing.Point(305, 122);
@@ -685,6 +1114,7 @@
             // 
             this.txtExReplyToMeText.BackColor = System.Drawing.Color.White;
             this.txtExReplyToMeText.Location = new System.Drawing.Point(123, 123);
+            this.txtExReplyToMeText.Multiline = true;
             this.txtExReplyToMeText.Name = "txtExReplyToMeText";
             this.txtExReplyToMeText.ReadOnly = true;
             this.txtExReplyToMeText.Size = new System.Drawing.Size(81, 19);
@@ -706,6 +1136,7 @@
             // 
             this.txtExReplyToMeTitle.BackColor = System.Drawing.Color.White;
             this.txtExReplyToMeTitle.Location = new System.Drawing.Point(123, 100);
+            this.txtExReplyToMeTitle.Multiline = true;
             this.txtExReplyToMeTitle.Name = "txtExReplyToMeTitle";
             this.txtExReplyToMeTitle.ReadOnly = true;
             this.txtExReplyToMeTitle.Size = new System.Drawing.Size(81, 19);
@@ -920,6 +1351,7 @@
             // 
             this.txtExRTText.BackColor = System.Drawing.Color.White;
             this.txtExRTText.Location = new System.Drawing.Point(123, 269);
+            this.txtExRTText.Multiline = true;
             this.txtExRTText.Name = "txtExRTText";
             this.txtExRTText.ReadOnly = true;
             this.txtExRTText.Size = new System.Drawing.Size(81, 19);
@@ -941,6 +1373,7 @@
             // 
             this.txtExRTTitle.BackColor = System.Drawing.Color.White;
             this.txtExRTTitle.Location = new System.Drawing.Point(123, 244);
+            this.txtExRTTitle.Multiline = true;
             this.txtExRTTitle.Name = "txtExRTTitle";
             this.txtExRTTitle.ReadOnly = true;
             this.txtExRTTitle.Size = new System.Drawing.Size(81, 19);
@@ -962,6 +1395,7 @@
             // 
             this.txtExReplyToOtherText.BackColor = System.Drawing.Color.White;
             this.txtExReplyToOtherText.Location = new System.Drawing.Point(123, 197);
+            this.txtExReplyToOtherText.Multiline = true;
             this.txtExReplyToOtherText.Name = "txtExReplyToOtherText";
             this.txtExReplyToOtherText.ReadOnly = true;
             this.txtExReplyToOtherText.Size = new System.Drawing.Size(81, 19);
@@ -983,6 +1417,7 @@
             // 
             this.txtExReplyToOtherTitle.BackColor = System.Drawing.Color.White;
             this.txtExReplyToOtherTitle.Location = new System.Drawing.Point(123, 172);
+            this.txtExReplyToOtherTitle.Multiline = true;
             this.txtExReplyToOtherTitle.Name = "txtExReplyToOtherTitle";
             this.txtExReplyToOtherTitle.ReadOnly = true;
             this.txtExReplyToOtherTitle.Size = new System.Drawing.Size(81, 19);
@@ -1097,6 +1532,7 @@
             // 
             this.txtExNormalText.BackColor = System.Drawing.Color.White;
             this.txtExNormalText.Location = new System.Drawing.Point(123, 52);
+            this.txtExNormalText.Multiline = true;
             this.txtExNormalText.Name = "txtExNormalText";
             this.txtExNormalText.ReadOnly = true;
             this.txtExNormalText.Size = new System.Drawing.Size(81, 19);
@@ -1118,6 +1554,7 @@
             // 
             this.txtExNormalTitle.BackColor = System.Drawing.Color.White;
             this.txtExNormalTitle.Location = new System.Drawing.Point(123, 28);
+            this.txtExNormalTitle.Multiline = true;
             this.txtExNormalTitle.Name = "txtExNormalTitle";
             this.txtExNormalTitle.ReadOnly = true;
             this.txtExNormalTitle.Size = new System.Drawing.Size(81, 19);
@@ -1371,343 +1808,6 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // btnAllFontColorDefault
-            // 
-            this.btnAllFontColorDefault.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnAllFontColorDefault.Location = new System.Drawing.Point(265, 299);
-            this.btnAllFontColorDefault.Name = "btnAllFontColorDefault";
-            this.btnAllFontColorDefault.Size = new System.Drawing.Size(113, 23);
-            this.btnAllFontColorDefault.TabIndex = 59;
-            this.btnAllFontColorDefault.Text = "全てデフォルトに戻す";
-            this.btnAllFontColorDefault.UseVisualStyleBackColor = true;
-            this.btnAllFontColorDefault.Click += new System.EventHandler(this.btnAllFontColorDefault_Click);
-            // 
-            // numProfile_Interval
-            // 
-            this.numProfile_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numProfile_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numProfile_Interval.Location = new System.Drawing.Point(164, 176);
-            this.numProfile_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numProfile_Interval.Name = "numProfile_Interval";
-            this.numProfile_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numProfile_Interval.TabIndex = 1;
-            // 
-            // numTimeline_Interval
-            // 
-            this.numTimeline_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_Interval.Location = new System.Drawing.Point(293, 34);
-            this.numTimeline_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numTimeline_Interval.Name = "numTimeline_Interval";
-            this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Interval.TabIndex = 2;
-            this.numTimeline_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_Interval
-            // 
-            this.numReply_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_Interval.Location = new System.Drawing.Point(293, 63);
-            this.numReply_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numReply_Interval.Name = "numReply_Interval";
-            this.numReply_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numReply_Interval.TabIndex = 5;
-            this.numReply_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_Interval
-            // 
-            this.numHistory_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_Interval.Location = new System.Drawing.Point(293, 92);
-            this.numHistory_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numHistory_Interval.Name = "numHistory_Interval";
-            this.numHistory_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_Interval.TabIndex = 8;
-            this.numHistory_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_Interval
-            // 
-            this.numDirect_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_Interval.Location = new System.Drawing.Point(293, 122);
-            this.numDirect_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numDirect_Interval.Name = "numDirect_Interval";
-            this.numDirect_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_Interval.TabIndex = 11;
-            this.numDirect_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numTimeline_Add
-            // 
-            this.numTimeline_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Location = new System.Drawing.Point(197, 34);
-            this.numTimeline_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Name = "numTimeline_Add";
-            this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Add.TabIndex = 1;
-            this.numTimeline_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_Add
-            // 
-            this.numReply_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_Add.Location = new System.Drawing.Point(197, 63);
-            this.numReply_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numReply_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_Add.Name = "numReply_Add";
-            this.numReply_Add.Size = new System.Drawing.Size(56, 19);
-            this.numReply_Add.TabIndex = 4;
-            this.numReply_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_Add
-            // 
-            this.numHistory_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Location = new System.Drawing.Point(197, 92);
-            this.numHistory_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Name = "numHistory_Add";
-            this.numHistory_Add.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_Add.TabIndex = 7;
-            this.numHistory_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numTimeline_First
-            // 
-            this.numTimeline_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Location = new System.Drawing.Point(101, 34);
-            this.numTimeline_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Name = "numTimeline_First";
-            this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_First.TabIndex = 0;
-            this.numTimeline_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_First
-            // 
-            this.numReply_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_First.Location = new System.Drawing.Point(101, 63);
-            this.numReply_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numReply_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_First.Name = "numReply_First";
-            this.numReply_First.Size = new System.Drawing.Size(56, 19);
-            this.numReply_First.TabIndex = 3;
-            this.numReply_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_Add
-            // 
-            this.numDirect_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Location = new System.Drawing.Point(197, 122);
-            this.numDirect_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Name = "numDirect_Add";
-            this.numDirect_Add.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_Add.TabIndex = 10;
-            this.numDirect_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_First
-            // 
-            this.numHistory_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_First.Location = new System.Drawing.Point(101, 92);
-            this.numHistory_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numHistory_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_First.Name = "numHistory_First";
-            this.numHistory_First.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_First.TabIndex = 6;
-            this.numHistory_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_First
-            // 
-            this.numDirect_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_First.Location = new System.Drawing.Point(101, 122);
-            this.numDirect_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numDirect_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_First.Name = "numDirect_First";
-            this.numDirect_First.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_First.TabIndex = 9;
-            this.numDirect_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
             // FrmConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1726,8 +1826,21 @@
             this.tabControl1.ResumeLayout(false);
             this.tabpgGet.ResumeLayout(false);
             this.tabpgGet.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_First)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_First)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).EndInit();
             this.tabpgDisp.ResumeLayout(false);
             this.tabpgDisp.PerformLayout();
             this.grpIcon.ResumeLayout(false);
@@ -1741,19 +1854,6 @@
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_First)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_First)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1881,5 +1981,13 @@
         private System.Windows.Forms.ComboBox cmbURLShortenType;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Button btnAllFontColorDefault;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label lblNameFormatSearchSample;
+        private System.Windows.Forms.Label lblNameFormatDMSample;
+        private System.Windows.Forms.Label lblNameFormatRTSample;
+        private System.Windows.Forms.Label lblNameFormatSample;
     }
 }
