@@ -83,6 +83,8 @@ namespace StarlitTwit
             public TwitData TwitData;
             /// <summary>リプライツールチップの文字列</summary>
             public string StrReplyTooltip;
+            /// <summary>発言の境界か</summary>
+            public bool IsBoundary;
         }
         //-------------------------------------------------------------------------------
         #endregion (内部データ)
@@ -660,11 +662,18 @@ namespace StarlitTwit
 
             //-----内部情報設定-----
             List<RowData> addrowList = new List<RowData>();
+            long lastStatusID = (data.Length > 0) ? data[data.Length - 1].StatusID : -1;
             foreach (TwitData t in data) {
                 // 重複排除
-                if (_rowDataList.ContainsKey(t.StatusID)) { continue; }
+                if (_rowDataList.ContainsKey(t.StatusID)) {
+                    if (_rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastStatusID); }
+                    continue;
+                }
 
-                RowData rowdata = new RowData() { TwitData = t };
+                RowData rowdata = new RowData() {
+                    TwitData = t,
+                    IsBoundary = (t.StatusID == lastStatusID)
+                };
 
                 // 返り値用
                 if (string.IsNullOrEmpty(retText)) {
@@ -831,7 +840,7 @@ namespace StarlitTwit
                             RowData rowdata = _rowDataList.Values[rowdataindex];
                             exRow.TwitData = rowdata.TwitData;
                             exRow.Visible = true;
-                            ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
+                            ConfigRow(exRow, rowdata.StrReplyTooltip, rowdata.IsBoundary, selectedStatusID); // 行設定
                             exRow.Location = new Point(0, height - exRow.Height);
                             height -= exRow.Height;
                             existNotAllVisibleRow = (height < 0);
@@ -870,7 +879,7 @@ namespace StarlitTwit
                                 RowData rowdata = _rowDataList.Values[rowdataindex];
                                 exRow.TwitData = rowdata.TwitData;
                                 exRow.Visible = true;
-                                ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
+                                ConfigRow(exRow, rowdata.StrReplyTooltip, rowdata.IsBoundary, selectedStatusID); // 行設定
                                 exRow.Location = new Point(0, height);
                                 height += exRow.Height;
                                 existNotAllVisibleRow = (height > pnlTweets.Height);
@@ -928,7 +937,7 @@ namespace StarlitTwit
                     row.Visible = true;
                 }
 
-                ConfigRow(row, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
+                ConfigRow(row, rowdata.StrReplyTooltip, rowdata.IsBoundary, selectedStatusID); // 行設定
 
                 if (isForward) {
                     row.Location = new Point(0, height);
@@ -1010,7 +1019,7 @@ namespace StarlitTwit
         /// <param name="row">設定を行う対象の行</param>
         /// <param name="tooltipStr">ToolTip文字列</param>
         /// <pparam name="selectedStatusID">選択されている項目のStatusID</pparam>
-        private void ConfigRow(UctlDispTwitRow row, string tooltipStr, long selectedStatusID)
+        private void ConfigRow(UctlDispTwitRow row, string tooltipStr, bool isBoundary, long selectedStatusID)
         {
             // 選択中か判別
             if (selectedStatusID >= 0) {
@@ -1023,6 +1032,8 @@ namespace StarlitTwit
 
             row.SetBackColor();
             row.Invalidate();
+
+            row.SetLineColor(!isBoundary);
 
             row.SetReplyToolTip(tooltipStr);
             row.ResetPicturePopup();
