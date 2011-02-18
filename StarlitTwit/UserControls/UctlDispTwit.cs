@@ -860,11 +860,11 @@ namespace StarlitTwit
                 else { // if shiftvalue > 0
                     int shiftnum = shiftvalue;
                     if (shiftnum < _iVisibleRowNum) {
-                        if (flowDirForward) { // 1個登録，残りシフト
+                        if (flowDirForward) {
                             UctlDispTwitRow exRow = null;
                             shiftnum -= (_existNotAllRow_Top) ? 1 : 0;
                             bool needMove = _existNotAllRow_Top;
-                            for (int i = 0; i < shiftnum; i++) {
+                            for (int i = 0; i < shiftnum; i++) { // 新しい部分
                                 if (height >= pnlTweets.Height) { break; }
                                 exRow = _rowList[_iVisibleRowNum - 1];
                                 RowData rowdata = _rowDataList.Values[rowdataindex];
@@ -876,11 +876,11 @@ namespace StarlitTwit
                                 existNotAllVisibleRow = (height > pnlTweets.Height);
 
                                 _rowList.RemoveAt(_iVisibleRowNum - 1);
-                                _rowList.Insert(0, exRow);
+                                _rowList.Insert(i, exRow);
                                 rowindex++;
                                 rowdataindex++;
                             }
-                            for (int i = shiftnum; i < _iVisibleRowNum; i++) {
+                            for (int i = shiftnum; i < _iVisibleRowNum; i++) { // シフト
                                 if (height >= pnlTweets.Height) { break; }
                                 UctlDispTwitRow row = _rowList[i];
                                 row.Invalidate();
