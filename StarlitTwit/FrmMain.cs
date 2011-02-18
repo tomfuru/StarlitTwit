@@ -363,49 +363,28 @@ namespace StarlitTwit
         }
         #endregion (btnStateReset_Click)
         //-------------------------------------------------------------------------------
-        #region tabTwitDisp_TabExchanged タブ交換時
+        #region tabTwitDisp_TabMoved タブ移動時
         //-------------------------------------------------------------------------------
         //
-        private void tabTwitDisp_TabExchanged(object sender, TabExchangeEventArgs e)
+        private void tabTwitDisp_TabMoved(object sender, TabMoveEventArgs e)
         {
-            TabPage tabpg1 = tabTwitDisp.TabPages[e.ChangedTabIndex1],
-                    tabpg2 = tabTwitDisp.TabPages[e.ChangedTabIndex2];
+            TabControlEx tab = (TabControlEx)sender;
+            int movableMinIndex = tab.MinMovableIndex;
 
-            string tag1 = (string)tabpg1.Tag,
-                   tag2 = (string)tabpg2.Tag;
             lock (SettingsData.TabDataDic) {
                 List<KeyValuePair<string, TabData>> list = new List<KeyValuePair<string, TabData>>(SettingsData.TabDataDic);
-                int i1 = -1, i2 = -1;
-                for (int i = 0; i < list.Count; i++) {
-                    if (list[i].Key == tag1) { i1 = i; }
-                    else if (list[i].Key == tag2) { i2 = i; }
-                    if (i1 >= 0 && i2 >= 0) { break; }
-                }
-                if (i1 < 0 || i2 < 0) { return; }
-
-                KeyValuePair<string, TabData> kvp1 = list[i1],
-                                              kvp2 = list[i2];
-                if (i1 > i2) {
-                    list.RemoveAt(i1);
-                    list.RemoveAt(i2);
-                    list.Insert(i2, kvp1);
-                    list.Insert(i1, kvp2);
-                }
-                else {
-                    list.RemoveAt(i2);
-                    list.RemoveAt(i1);
-                    list.Insert(i1, kvp2);
-                    list.Insert(i2, kvp1);
-                }
+                var val = list[e.MoveSrcIndex - movableMinIndex];
+                list.Remove(val);
+                list.Insert(e.MoveDstIndex - movableMinIndex, val);
 
                 SettingsData.TabDataDic = new SerializableDictionary<string, TabData>();
-                foreach (KeyValuePair<string, TabData> kvp in list) {
+                foreach (var kvp in list) {
                     SettingsData.TabDataDic.Add(kvp.Key, kvp.Value);
                 }
                 SettingsData.Save();
             }
         }
-        #endregion (tabTwitDisp_TabExchanged)
+        #endregion (tabTwitDisp_TabMoved)
         //-------------------------------------------------------------------------------
         #region DispTwit_TweetItemClick 特殊項目クリック時
         //-------------------------------------------------------------------------------

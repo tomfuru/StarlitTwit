@@ -20,7 +20,7 @@ namespace StarlitTwit
         [Description("このインデックスより左のタブのみ動かせます。")]
         public int MaxMovableIndex { get; set; }
 
-        public event EventHandler<TabExchangeEventArgs> TabExchanged;
+        public event EventHandler<TabMoveEventArgs> TabExchanged;
 
         public TabControlEx()
         {
@@ -60,16 +60,18 @@ namespace StarlitTwit
 
                 if (srcTabIndex != dstTabIndex) {
                     this.SuspendLayout();//★これ大事
-                    TabPage tmp = TabPages[srcTabIndex];
-                    TabPages[srcTabIndex] = TabPages[dstTabIndex];
-                    TabPages[dstTabIndex] = tmp;
-
+                    //TabPage tmp = TabPages[srcTabIndex];
+                    //TabPages[srcTabIndex] = TabPages[dstTabIndex];
+                    //TabPages[dstTabIndex] = tmp;
+                    TabPage mvtab = TabPages[srcTabIndex];
+                    TabPages.Remove(mvtab);
+                    TabPages.Insert(dstTabIndex, mvtab);
                     SelectedTab = draggedTab;
 
                     this.ResumeLayout();//★これも大事
 
                     if (TabExchanged != null) {
-                        TabExchanged(this, new TabExchangeEventArgs(srcTabIndex,dstTabIndex));
+                        TabExchanged(this, new TabMoveEventArgs(srcTabIndex,dstTabIndex));
                     }
                 }
             }
@@ -154,15 +156,15 @@ namespace StarlitTwit
         }
     }
 
-    public class TabExchangeEventArgs : EventArgs
+    public class TabMoveEventArgs : EventArgs
     {
-        public int ChangedTabIndex1 { get; private set; }
-        public int ChangedTabIndex2 { get; private set; }
+        public int MoveSrcIndex { get; private set; }
+        public int MoveDstIndex { get; private set; }
 
-        public TabExchangeEventArgs(int i, int j)
+        public TabMoveEventArgs(int i, int j)
         {
-            ChangedTabIndex1 = i;
-            ChangedTabIndex2 = j;
+            MoveSrcIndex = i;
+            MoveDstIndex = j;
         }
     }
 }

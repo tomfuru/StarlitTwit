@@ -560,7 +560,7 @@
             this.tabTwitDisp.ShowToolTips = true;
             this.tabTwitDisp.Size = new System.Drawing.Size(448, 328);
             this.tabTwitDisp.TabIndex = 0;
-            this.tabTwitDisp.TabExchanged += new System.EventHandler<StarlitTwit.TabExchangeEventArgs>(this.tabTwitDisp_TabExchanged);
+            this.tabTwitDisp.TabExchanged += new System.EventHandler<StarlitTwit.TabMoveEventArgs>(this.tabTwitDisp_TabMoved);
             this.tabTwitDisp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabTwitDisp_MouseDown);
             // 
             // tabpgHome

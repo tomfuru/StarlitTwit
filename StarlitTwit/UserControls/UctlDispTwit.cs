@@ -750,7 +750,7 @@ namespace StarlitTwit
 
             _rowDataList.Clear();
             _rowList.ForEach((row) => row.Visible = false);
-            vscrbar.Value = 0;
+            vscrbar.Value = vscrbar.Minimum;
             vscrbar.Enabled = false;
         }
         #endregion (ClearAll)
