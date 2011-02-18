@@ -802,10 +802,11 @@ namespace StarlitTwit
             int height = (flowDirForward) ? 0 : pnlTweets.Height;
 
             // 1個ずらしの場合
-            if (_iVisibleRowNum > 1) {
-                if (shiftvalue == -1) {
+            if (shiftvalue != 0 && Math.Abs(shiftvalue) < _iVisibleRowNum) {
+                if (shiftvalue < 0) {
+                    int shiftnum = -shiftvalue;
                     if (flowDirForward) { // シフトするのみ
-                        for (int i = 1; i < _iVisibleRowNum; i++) {
+                        for (int i = shiftnum; i < _iVisibleRowNum; i++) { // シフト
                             UctlDispTwitRow row = _rowList[i];
                             row.Invalidate();
                             row.Location = new Point(0, height);
@@ -813,74 +814,87 @@ namespace StarlitTwit
                             height += row.Height;
                             existNotAllVisibleRow = (height > pnlTweets.Height);
                         }
-                        rowindex = _iVisibleRowNum - 1;
+                        for (int i = 0; i < shiftnum; i++) { // ずらす
+                            UctlDispTwitRow exRow = _rowList[0];
+                            _rowList.RemoveAt(0);
+                            _rowList.Insert(_iVisibleRowNum - 1, exRow);
+                        }
+                        rowindex = _iVisibleRowNum - shiftnum;
                         rowdataindex = startIndex + rowindex;
-                        UctlDispTwitRow exRow = _rowList[0];
-                        _rowList.RemoveAt(0);
-                        _rowList.Insert(_iVisibleRowNum - 1, exRow);
                     }
-                    else {
+                    else { // flowDirForward = false
                         UctlDispTwitRow exRow = null;
-                        bool needMove = _existNotAllRow_Bottom;
-                        if (!needMove) {
-                            exRow = _rowList[0];
-                            RowData rowdata = _rowDataList.Values[startIndex];
+                        shiftnum -= (_existNotAllRow_Bottom) ? 1 : 0;
+                        for (int i = 0; i < shiftnum; i++) { // 新しく見える部分
+                            if (height <= 0) { break; }
+                            exRow = _rowList[i];
+                            RowData rowdata = _rowDataList.Values[rowdataindex];
                             exRow.TwitData = rowdata.TwitData;
                             exRow.Visible = true;
                             ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
                             exRow.Location = new Point(0, height - exRow.Height);
                             height -= exRow.Height;
                             existNotAllVisibleRow = (height < 0);
-                            rowindex = 1;
 
-                            _rowList.RemoveAt(0);
-                            _rowList.Insert(_iVisibleRowNum - 1, exRow);
+                            _rowList.RemoveAt(i);
+                            _rowList.Insert(0, exRow);
+                            rowindex++;
+                            rowdataindex--;
                         }
-                        for (int i = _iVisibleRowNum - ((needMove) ? 1 : 2); i >= 0; i--) {
+                        for (int i = _iVisibleRowNum - 1; i >= shiftnum; i--) { // シフト
                             if (height <= 0) { break; }
-                            UctlDispTwitRow row = _rowList[i];
+                            UctlDispTwitRow row = _rowList[_iVisibleRowNum - 1];
                             row.Invalidate();
                             row.Location = new Point(0, height - row.Height);
                             ChangeSelectRow(row, selectedStatusID);
                             height -= row.Height;
                             existNotAllVisibleRow = (height < 0);
+
+                            _rowList.RemoveAt(_iVisibleRowNum - 1);
+                            _rowList.Insert(0, row);
                             rowindex++;
                         }
                         rowdataindex = startIndex - rowindex;
                     }
                 }
-                else if (shiftvalue == 1) {
-                    if (flowDirForward) { // 1個登録，残りシフト
-                        UctlDispTwitRow exRow = null;
-                        bool needMove = _existNotAllRow_Top;
-                        if (!needMove) {
-                            exRow = _rowList[_iVisibleRowNum - 1];
-                            RowData rowdata = _rowDataList.Values[startIndex];
-                            exRow.TwitData = rowdata.TwitData;
-                            exRow.Visible = true;
-                            ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
-                            exRow.Location = new Point(0, 0);
-                            height = exRow.Height;
-                            existNotAllVisibleRow = (height > pnlTweets.Height);
-                            rowindex = 1;
+                else { // if shiftvalue > 0
+                    int shiftnum = shiftvalue;
+                    if (shiftnum < _iVisibleRowNum) {
+                        if (flowDirForward) { // 1個登録，残りシフト
+                            UctlDispTwitRow exRow = null;
+                            shiftnum -= (_existNotAllRow_Top) ? 1 : 0;
+                            bool needMove = _existNotAllRow_Top;
+                            for (int i = 0; i < shiftnum; i++) {
+                                if (height >= pnlTweets.Height) { break; }
+                                exRow = _rowList[_iVisibleRowNum - 1];
+                                RowData rowdata = _rowDataList.Values[rowdataindex];
+                                exRow.TwitData = rowdata.TwitData;
+                                exRow.Visible = true;
+                                ConfigRow(exRow, rowdata.StrReplyTooltip, selectedStatusID); // 行設定
+                                exRow.Location = new Point(0, height);
+                                height += exRow.Height;
+                                existNotAllVisibleRow = (height > pnlTweets.Height);
 
-                            _rowList.RemoveAt(_iVisibleRowNum - 1);
-                            _rowList.Insert(0, exRow);
+                                _rowList.RemoveAt(_iVisibleRowNum - 1);
+                                _rowList.Insert(0, exRow);
+                                rowindex++;
+                                rowdataindex++;
+                            }
+                            for (int i = shiftnum; i < _iVisibleRowNum; i++) {
+                                if (height >= pnlTweets.Height) { break; }
+                                UctlDispTwitRow row = _rowList[i];
+                                row.Invalidate();
+                                row.Location = new Point(0, height);
+                                ChangeSelectRow(row, selectedStatusID);
+                                height += row.Height;
+                                existNotAllVisibleRow = (height > pnlTweets.Height);
+                                rowindex++;
+                            }
+                            rowdataindex = startIndex + rowindex;
                         }
-                        for (int i = ((needMove) ? 0 : 1); i < _iVisibleRowNum - 1; i++) {
-                            if (height >= pnlTweets.Height) { break; }
-                            UctlDispTwitRow row = _rowList[i];
-                            row.Invalidate();
-                            row.Location = new Point(0, height);
-                            ChangeSelectRow(row, selectedStatusID);
-                            height += row.Height;
-                            existNotAllVisibleRow = (height > pnlTweets.Height);
-                            rowindex++;
+                        else { // flowDirForward = false
+                            Debug.Assert(false, "未実装(不要), 現状実装しない");
                         }
-                        rowdataindex = startIndex + rowindex;
-                    }
-                    else {
-                        Debug.Assert(false, "未実装(不要), 現状実装しない");
                     }
                 }
             }
@@ -945,8 +959,8 @@ namespace StarlitTwit
             _iVisibleRowNum = rowindex;
             _iAllVisibleRowNum = _iVisibleRowNum - ((existNotAllVisibleRow) ? 1 : 0);
             _existNotAllRow_Top = !isForward && existNotAllVisibleRow;
-            _existNotAllRow_Bottom = isForward && existNotAllVisibleRow; 
-            
+            _existNotAllRow_Bottom = isForward && existNotAllVisibleRow;
+
             if (_rowList.Count > _iVisibleRowNum) {
                 // 不要な行のVisibleをfalseに
                 for (int i = _iVisibleRowNum; i < _rowList.Count; i++) {
