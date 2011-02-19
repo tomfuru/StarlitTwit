@@ -852,6 +852,57 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (tsmiプロフィール更新_Click)
         //-------------------------------------------------------------------------------
+        #region tsmi_子画面_DropDownOpening 子画面メニューオープン時
+        //-------------------------------------------------------------------------------
+        private Dictionary<Form, ToolStripMenuItem> _formMenuDic = null;
+        //
+        private void tsmi_子画面_DropDownOpening(object sender, EventArgs e)
+        {
+            tsmi_子画面.DropDownItems.Clear();
+
+            var menuDic = _formMenuDic;
+            _formMenuDic = new Dictionary<Form, ToolStripMenuItem>();
+
+            int count = 0;
+            foreach (Form form in Application.OpenForms) {
+                if (form == this) { continue; }
+                ToolStripMenuItem tsmi;
+                if (menuDic != null && menuDic.ContainsKey(form)) {
+                    tsmi = menuDic[form];
+                    menuDic.Remove(form);
+                }
+                else {
+                    tsmi = new ToolStripMenuItem() {
+                        Text = form.Text,
+                        Tag = form,
+                    };
+                    tsmi.Click += tsmi小画面_Dialog_Click;
+                }
+                _formMenuDic.Add(form, tsmi);
+                tsmi_子画面.DropDownItems.Add(tsmi);
+                count++;
+            }
+
+            if (menuDic != null && menuDic.Count > 0) { 
+                foreach (var tsmi in menuDic.Values) { tsmi.Dispose(); } 
+                menuDic.Clear();
+            }
+
+            if (count == 0) { tsmi_子画面.DropDownItems.Add(tsmi子画面_nothing); }
+        }
+        #endregion (tsmi_子画面_DropDownOpening)
+        //-------------------------------------------------------------------------------
+        #region tsmi小画面_Dialog_Click 小画面ダイアログメニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi小画面_Dialog_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            Form form = (Form)tsmi.Tag;
+            form.BringToFront();
+        }
+        #endregion (tsmi小画面_Dialog_Click)
+        //-------------------------------------------------------------------------------
         #endregion (メニュー)
         //===============================================================================
         #region ↓タブ右クリックメニュー
