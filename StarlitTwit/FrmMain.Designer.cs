@@ -60,7 +60,10 @@
             this.menuContainer2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiCon2_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
             this.splContainer = new System.Windows.Forms.SplitContainer();
+            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.menuShortenType = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.lblStatuses = new System.Windows.Forms.Label();
             this.lblStatusesl = new System.Windows.Forms.Label();
             this.llblFollower = new System.Windows.Forms.LinkLabel();
@@ -73,8 +76,6 @@
             this.lblRest = new System.Windows.Forms.Label();
             this.btnTwit = new System.Windows.Forms.Button();
             this.txtTwit = new System.Windows.Forms.TextBox();
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
-            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.tabTwitDisp = new StarlitTwit.TabControlEx();
             this.tabpgHome = new System.Windows.Forms.TabPage();
             this.uctlDispHome = new StarlitTwit.UctlDispTwit();
@@ -84,8 +85,7 @@
             this.uctlDispHistory = new StarlitTwit.UctlDispTwit();
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
-            this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -370,6 +370,27 @@
             this.splContainer.TabIndex = 0;
             this.splContainer.TabStop = false;
             // 
+            // btnURLShorten
+            // 
+            this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnURLShorten.ClickedImage = "Clicked";
+            this.btnURLShorten.ContextMenuStrip = this.menuShortenType;
+            this.btnURLShorten.DisabledImage = "Disabled";
+            this.btnURLShorten.Enabled = false;
+            this.btnURLShorten.FocusedImage = "Focused";
+            this.btnURLShorten.HoverImage = "Hover";
+            this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnURLShorten.ImageKey = "Normal";
+            this.btnURLShorten.Location = new System.Drawing.Point(369, 58);
+            this.btnURLShorten.Name = "btnURLShorten";
+            this.btnURLShorten.NormalImage = "Normal";
+            this.btnURLShorten.Size = new System.Drawing.Size(75, 20);
+            this.btnURLShorten.TabIndex = 4;
+            this.btnURLShorten.Text = "URL短縮";
+            this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnURLShorten.UseVisualStyleBackColor = true;
+            this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
+            // 
             // menuShortenType
             // 
             this.menuShortenType.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -380,6 +401,22 @@
             this.menuShortenType.ShowImageMargin = false;
             this.menuShortenType.Size = new System.Drawing.Size(95, 48);
             this.menuShortenType.Opening += new System.ComponentModel.CancelEventHandler(this.menuShortenType_Opening);
+            // 
+            // tsmibit_ly
+            // 
+            this.tsmibit_ly.Name = "tsmibit_ly";
+            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
+            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
+            this.tsmibit_ly.Text = "bit.ly";
+            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
+            // 
+            // tsmij_mp
+            // 
+            this.tsmij_mp.Name = "tsmij_mp";
+            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
+            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
+            this.tsmij_mp.Text = "j.mp";
+            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
             // 
             // lblStatuses
             // 
@@ -515,33 +552,6 @@
             this.txtTwit.TextChanged += new System.EventHandler(this.txtTwit_TextChanged);
             this.txtTwit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTwit_KeyDown);
             // 
-            // imageList
-            // 
-            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.imageList.ImageSize = new System.Drawing.Size(48, 48);
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // btnURLShorten
-            // 
-            this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnURLShorten.ClickedImage = "Clicked";
-            this.btnURLShorten.ContextMenuStrip = this.menuShortenType;
-            this.btnURLShorten.DisabledImage = "Disabled";
-            this.btnURLShorten.Enabled = false;
-            this.btnURLShorten.FocusedImage = "Focused";
-            this.btnURLShorten.HoverImage = "Hover";
-            this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnURLShorten.ImageKey = "Normal";
-            this.btnURLShorten.Location = new System.Drawing.Point(369, 58);
-            this.btnURLShorten.Name = "btnURLShorten";
-            this.btnURLShorten.NormalImage = "Normal";
-            this.btnURLShorten.Size = new System.Drawing.Size(75, 20);
-            this.btnURLShorten.TabIndex = 4;
-            this.btnURLShorten.Text = "URL短縮";
-            this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnURLShorten.UseVisualStyleBackColor = true;
-            this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
-            // 
             // tabTwitDisp
             // 
             this.tabTwitDisp.AllowDrop = true;
@@ -624,7 +634,7 @@
             this.uctlDispHistory.ImageList = null;
             this.uctlDispHistory.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHistory.Name = "uctlDispHistory";
-            this.uctlDispHistory.Size = new System.Drawing.Size(440, 307);
+            this.uctlDispHistory.Size = new System.Drawing.Size(440, 303);
             this.uctlDispHistory.TabIndex = 0;
             // 
             // tabpgDirect
@@ -648,21 +658,11 @@
             this.uctlDispDirect.Size = new System.Drawing.Size(440, 307);
             this.uctlDispDirect.TabIndex = 2;
             // 
-            // tsmibit_ly
+            // imageList
             // 
-            this.tsmibit_ly.Name = "tsmibit_ly";
-            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
-            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
-            this.tsmibit_ly.Text = "bit.ly";
-            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
-            // 
-            // tsmij_mp
-            // 
-            this.tsmij_mp.Name = "tsmij_mp";
-            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
-            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
-            this.tsmij_mp.Text = "j.mp";
-            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
+            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imageList.ImageSize = new System.Drawing.Size(48, 48);
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // FrmMain
             // 

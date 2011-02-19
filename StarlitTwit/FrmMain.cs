@@ -1116,7 +1116,6 @@ namespace StarlitTwit
                 AutoScroll = true,
                 BorderStyle = BorderStyle.FixedSingle,
                 Dock = DockStyle.Fill,
-                Padding = new Padding(3),
                 Tag = tabdata.TabName
             };
             newtabpg.Controls.Add(newDispTwit);
