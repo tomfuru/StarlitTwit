@@ -467,9 +467,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public UserProfile users_show(long user_id = -1, string screen_name = null, bool include_entities = false)
         {
-            if (user_id == -1 && screen_name == null) {
-                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
-            }
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -823,6 +821,63 @@ namespace StarlitTwit
         #endregion (lists_subscriptions)
         //-------------------------------------------------------------------------------
         #endregion (list)
+
+        //-------------------------------------------------------------------------------
+        #region friendships/ (フレンド関連)
+        //-------------------------------------------------------------------------------
+        #region friendships_create フォロー
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// friendships/create メソッド
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <param name="follow">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = false, bool include_entities = false)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (follow) { paramdic.Add("follow", follow.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/create.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (friendships_create)
+        //-------------------------------------------------------------------------------
+        #region friendships_destroy フォロー解除
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// friendships/destroy メソッド
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile friendships_destroy(long user_id = -1, string screen_name = null, bool include_entities = false)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/destroy.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (friendships_destroy)
+        //-------------------------------------------------------------------------------
+        #endregion (friendships/ (フレンド関連))
 
         //-------------------------------------------------------------------------------
         #region favorites/ (お気に入り関連)
@@ -1641,6 +1696,7 @@ namespace StarlitTwit
                     ScreenName = el.Element("screen_name").Value,
                     IconURL = el.Element("profile_image_url").Value,
                     Protected = bool.Parse(el.Element("protected").Value),
+                    FolllowRequestSent = bool.Parse(el.Element("follow_request_sent").Value),
                     Location = el.Element("location").Value,
                     Description = el.Element("description").Value,
                     Following = TryParseBool(el.Element("following").Value),
@@ -1956,6 +2012,8 @@ namespace StarlitTwit
         public int FavoriteNum;
         /// <summary>プロテクト中か</summary>
         public bool Protected;
+        /// <summary>フォロー要求を送ったかどうか</summary>
+        public bool FolllowRequestSent;
         /// <summary>フォローしているか</summary>
         public bool Following;
         /// <summary>アイコンURL</summary>

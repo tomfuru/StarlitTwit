@@ -15,7 +15,7 @@ namespace StarlitTwit
     /// </summary>
     public partial class FrmFollower : Form
     {
-        public FrmFollowType FormType { get; set; }
+        public EFormType FormType { get; set; }
 
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
@@ -33,18 +33,36 @@ namespace StarlitTwit
         #endregion (コンストラクタ)
 
         //-------------------------------------------------------------------------------
+        #region FormType 列挙体：タイプ
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォームの表示タイプを指定します。
+        /// </summary>
+        public enum EFormType : byte
+        {
+            /// <summary>フォローされているユーザー</summary>
+            Follower,
+            /// <summary>フォローしているユーザー</summary>
+            Following
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (FrmFollowType)
+
+        //-------------------------------------------------------------------------------
+        #region イベント
+        //-------------------------------------------------------------------------------
         #region FrmFollower_Load ロード時
         //-------------------------------------------------------------------------------
         //
         private void FrmFollower_Load(object sender, EventArgs e)
         {
-            if (FormType == FrmFollowType.Follower) {
+            if (FormType == EFormType.Follower) {
                 lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 100 });
             }
+            tsslabel.Text = "取得中...";
             (new Action(GetUsers)).BeginInvoke(Utilization.InvokeCallback, null);
         }
         #endregion (FrmFollower_Load)
-
         //-------------------------------------------------------------------------------
         #region lstvList_MouseMove マウスオーバー時
         //-------------------------------------------------------------------------------
@@ -73,7 +91,97 @@ namespace StarlitTwit
             }
         }
         #endregion (lstvList_MouseMove)
+        //-------------------------------------------------------------------------------
+        #region menuRow_Opening メニューオープン時
+        //-------------------------------------------------------------------------------
+        //
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            if (lstvList.SelectedItems.Count == 0) { e.Cancel = true; return; }
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
 
+            tsmiFollow.Visible = !prof.FolllowRequestSent && !prof.Following;
+            tsmiRemove.Visible = !prof.FolllowRequestSent && prof.Following;
+
+            toolStripMenuItem1.Visible = !prof.FolllowRequestSent;
+        }
+        #endregion (menuRow_Opening)
+        //-------------------------------------------------------------------------------
+        #region tsmiFollow_Click フォロークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiFollow_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            bool? ret = Follow(prof.ScreenName);
+            if (!ret.HasValue) {
+                lstvList.SelectedItems[0].SubItems[3].Text = "リクエスト済";
+                ((UserProfile)lstvList.SelectedItems[0].Tag).FolllowRequestSent = true;
+            }
+            else if (ret.Value) {
+                //Debug.Assert(FormType == FrmFollowType.Follower, "異常な値");
+                lstvList.SelectedItems[0].SubItems[3].Text = "フォロー中";
+                ((UserProfile)lstvList.SelectedItems[0].Tag).Following = true;
+            }
+        }
+        #endregion (tsmiFollow_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiRemove_Click フォロー解除クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiRemove_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            if (RemoveFollow(prof.ScreenName)) {
+                switch (FormType) {
+                    case EFormType.Follower:
+                        lstvList.SelectedItems[0].SubItems[3].Text = "";
+                        ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
+                        break;
+                    case EFormType.Following:
+                        lstvList.Items.Remove(lstvList.SelectedItems[0]);
+                        break;
+                }
+            }
+        }
+        #endregion (tsmiRemove_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplayUserTweet_Click 発言表示クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowUserTweet((FrmMain)this.Owner, prof.ScreenName);
+        }
+        #endregion (tsmiDisplayUserTweet_Click)
+        //-------------------------------------------------------------------------------
+        #region btnAppend_Click 追加取得ボタンクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void btnAppend_Click(object sender, EventArgs e)
+        {
+            tsslabel.Text = "取得中...";
+            (new Action(GetUsers)).BeginInvoke(Utilization.InvokeCallback, null);
+        }
+        #endregion (btnAppend_Click)
+        //-------------------------------------------------------------------------------
+        #region lstvList_ColumnWidthChanging 列サイズ変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void lstvList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            if (e.ColumnIndex == 0) { // 画像部分は動かせないようにする
+                e.NewWidth = 52;
+                e.Cancel = true;
+            }
+        }
+        #endregion (lstvList_ColumnWidthChanging)
+        //-------------------------------------------------------------------------------
+        #endregion (イベント)
+
+        //-------------------------------------------------------------------------------
+        #region メソッド
         //-------------------------------------------------------------------------------
         #region -GetToolTipText ツールチップのテキストを取得します。
         //-------------------------------------------------------------------------------
@@ -106,30 +214,6 @@ namespace StarlitTwit
             return sb.ToString();
         }
         #endregion (GetToolTipText)
-
-        //-------------------------------------------------------------------------------
-        #region btnAppend_Click 追加取得ボタンクリック時
-        //-------------------------------------------------------------------------------
-        //
-        private void btnAppend_Click(object sender, EventArgs e)
-        {
-
-        }
-        #endregion (btnAppend_Click)
-
-        //-------------------------------------------------------------------------------
-        #region lstvList_ColumnWidthChanging 列サイズ変更時
-        //-------------------------------------------------------------------------------
-        //
-        private void lstvList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-            if (e.ColumnIndex == 0) { // 画像部分は動かせないようにする
-                e.NewWidth = 52;
-                e.Cancel = true;
-            }
-        }
-        #endregion (lstvList_ColumnWidthChanging)
-
         //-------------------------------------------------------------------------------
         #region -AddList リストに追加
         //-------------------------------------------------------------------------------
@@ -140,12 +224,14 @@ namespace StarlitTwit
             List<ListViewItem> items = new List<ListViewItem>();
             foreach (var p in profiles) {
                 ListViewItem item = new ListViewItem();
+                item.Tag = p;
                 item.ImageKey = p.IconURL;
                 if (!lstvList.SmallImageList.Images.ContainsKey(p.IconURL)) { urllist.Add(new Tuple<ListViewItem, string>(item, p.IconURL)); }
                 ListViewItem.ListViewSubItem si = new ListViewItem.ListViewSubItem();
                 item.SubItems.Add(p.ScreenName);
                 item.SubItems.Add(p.UserName);
-                item.SubItems.Add((p.Following) ? "フォロー中" : "");
+                if (p.FolllowRequestSent) { item.SubItems.Add("リクエスト済"); }
+                else { item.SubItems.Add((p.Following) ? "フォロー中" : ""); }
                 items.Add(item);
             }
             lstvList.Items.AddRange(items.ToArray());
@@ -156,37 +242,43 @@ namespace StarlitTwit
             //lstvList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
         #endregion (AddList)
-
         //-------------------------------------------------------------------------------
-        #region -GetUsers ユーザー取得
+        #region -GetUsers ユーザー取得 using TwitterAPI
         //-------------------------------------------------------------------------------
         //
         private void GetUsers()
         {
-            UserProfile[] profiles = null;
-            Tuple<UserProfile[], long, long> proftpl;
-            switch (FormType) {
-                case FrmFollowType.Follower:
-                    proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
-                    profiles = proftpl.Item1;
-                    _next_cursor = proftpl.Item2;
-                    break;
-                case FrmFollowType.Following:
-                    proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
-                    profiles = proftpl.Item1;
-                    _next_cursor = proftpl.Item2;
-                    break;
+            try {
+                UserProfile[] profiles = null;
+                Tuple<UserProfile[], long, long> proftpl;
+                switch (FormType) {
+                    case EFormType.Follower:
+                        proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
+                        profiles = proftpl.Item1;
+                        _next_cursor = proftpl.Item2;
+                        break;
+                    case EFormType.Following:
+                        proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
+                        profiles = proftpl.Item1;
+                        _next_cursor = proftpl.Item2;
+                        break;
+                }
+                if (profiles != null) {
+                    this.Invoke(new Action(() =>
+                    {
+                        AddList(profiles);
+                        tsslabel.Text = "取得完了しました。";
+                    }));
+                }
             }
-            if (profiles != null) {
-                this.Invoke(new Action(() =>
-                {
-                    AddList(profiles);
-                    btnAppend.Enabled = (_next_cursor != 0);
-                }));
+            catch (TwitterAPIException) {
+                this.Invoke(new Action(() => tsslabel.Text = "取得に失敗しました。"));
+            }
+            finally {
+                this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
             }
         }
         #endregion (GetUsers)
-
         //-------------------------------------------------------------------------------
         #region -GetImages 画像取得と追加 (別スレッド処理)
         //-------------------------------------------------------------------------------
@@ -205,7 +297,6 @@ namespace StarlitTwit
             catch (InvalidOperationException) { }
         }
         #endregion (GetImages)
-
         //-------------------------------------------------------------------------------
         #region -ResetImageKey 画像キーを再設定して画像を表示させます
         //-------------------------------------------------------------------------------
@@ -215,21 +306,34 @@ namespace StarlitTwit
             item.ImageKey = item.ImageKey;
         }
         #endregion (ResetImageKey)
+        //-------------------------------------------------------------------------------
+        #region -Follow フォローを行います using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private bool? Follow(string screen_name)
+        {
+            try {
+                UserProfile ret = FrmMain.Twitter.friendships_create(screen_name: screen_name);
+                if (ret.Protected && !ret.Following) { return null; }
+            }
+            catch (TwitterAPIException) { return false; }
+            return true;
+        }
+        #endregion (Follow)
+        //-------------------------------------------------------------------------------
+        #region -RemoveFollow フォロー解除を行います using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private bool RemoveFollow(string screen_name)
+        {
+            try { FrmMain.Twitter.friendships_destroy(screen_name: screen_name); }
+            catch (TwitterAPIException) { return false; }
+            return true;
+        }
+        #endregion (RemoveFollow)
+        //-------------------------------------------------------------------------------
+        #endregion (メソッド)
     }
 
-    //-------------------------------------------------------------------------------
-    #region FrmFollowType 列挙体：タイプ
-    //-------------------------------------------------------------------------------
-    /// <summary>
-    /// フォームの表示タイプを指定します。
-    /// </summary>
-    public enum FrmFollowType : byte
-    {
-        /// <summary>フォローされているユーザー</summary>
-        Follower,
-        /// <summary>フォローしているユーザー</summary>
-        Following
-    }
-    //-------------------------------------------------------------------------------
-    #endregion (FrmFollowType)
+
 }

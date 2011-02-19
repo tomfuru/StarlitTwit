@@ -417,7 +417,7 @@ namespace StarlitTwit
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FrmFollower frm = new FrmFollower(imageList) {
-                FormType = FrmFollowType.Following,
+                FormType = FrmFollower.EFormType.Following,
                 Text = "フォローしている人"
             };
             frm.ShowDialog(this);
@@ -430,7 +430,7 @@ namespace StarlitTwit
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FrmFollower frm = new FrmFollower(imageList) {
-                FormType = FrmFollowType.Follower,
+                FormType = FrmFollower.EFormType.Follower,
                 Text = "フォローされている人"
             };
             frm.ShowDialog(this);

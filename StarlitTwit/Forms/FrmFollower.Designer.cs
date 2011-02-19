@@ -34,6 +34,15 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAppend = new System.Windows.Forms.Button();
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsmiFollow = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.statusStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lstvList
@@ -45,13 +54,14 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
+            this.lstvList.ContextMenuStrip = this.contextMenuStrip1;
             this.lstvList.FullRowSelect = true;
             this.lstvList.GridLines = true;
             this.lstvList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lstvList.Location = new System.Drawing.Point(12, 12);
             this.lstvList.MultiSelect = false;
             this.lstvList.Name = "lstvList";
-            this.lstvList.Size = new System.Drawing.Size(387, 210);
+            this.lstvList.Size = new System.Drawing.Size(387, 225);
             this.lstvList.TabIndex = 0;
             this.lstvList.UseCompatibleStateImageBehavior = false;
             this.lstvList.View = System.Windows.Forms.View.Details;
@@ -77,7 +87,7 @@
             // 
             this.btnAppend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAppend.Enabled = false;
-            this.btnAppend.Location = new System.Drawing.Point(12, 231);
+            this.btnAppend.Location = new System.Drawing.Point(12, 243);
             this.btnAppend.Name = "btnAppend";
             this.btnAppend.Size = new System.Drawing.Size(75, 23);
             this.btnAppend.TabIndex = 1;
@@ -91,18 +101,81 @@
             this.ttInfo.InitialDelay = 500;
             this.ttInfo.ReshowDelay = 100;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 269);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(411, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiFollow,
+            this.tsmiRemove,
+            this.toolStripMenuItem1,
+            this.tsmiDisplayUserTweet});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(215, 76);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // tsslabel
+            // 
+            this.tsslabel.Name = "tsslabel";
+            this.tsslabel.Size = new System.Drawing.Size(396, 17);
+            this.tsslabel.Spring = true;
+            this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tsmiFollow
+            // 
+            this.tsmiFollow.Name = "tsmiFollow";
+            this.tsmiFollow.Size = new System.Drawing.Size(214, 22);
+            this.tsmiFollow.Text = "フォローする";
+            this.tsmiFollow.Click += new System.EventHandler(this.tsmiFollow_Click);
+            // 
+            // tsmiRemove
+            // 
+            this.tsmiRemove.Name = "tsmiRemove";
+            this.tsmiRemove.Size = new System.Drawing.Size(214, 22);
+            this.tsmiRemove.Text = "フォローを解除する";
+            this.tsmiRemove.Click += new System.EventHandler(this.tsmiRemove_Click);
+            // 
+            // tsmiDisplayUserTweet
+            // 
+            this.tsmiDisplayUserTweet.Name = "tsmiDisplayUserTweet";
+            this.tsmiDisplayUserTweet.Size = new System.Drawing.Size(214, 22);
+            this.tsmiDisplayUserTweet.Text = "このユーザーの発言を表示する";
+            this.tsmiDisplayUserTweet.Click += new System.EventHandler(this.tsmiDisplayUserTweet_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(211, 6);
+            // 
             // FrmFollower
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(411, 266);
-            this.Controls.Add(this.btnAppend);
+            this.ClientSize = new System.Drawing.Size(411, 291);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lstvList);
+            this.Controls.Add(this.btnAppend);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmFollower";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "...";
             this.Load += new System.EventHandler(this.FrmFollower_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -114,5 +187,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ToolTip ttInfo;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel tsslabel;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFollow;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRemove;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserTweet;
     }
 }
