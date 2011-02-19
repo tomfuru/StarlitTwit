@@ -61,6 +61,8 @@ namespace StarlitTwit
         private bool _existNotAllRow_Bottom = false;
         /// <summary>[static]long比較用クラス</summary>
         static readonly Longcomp CLONGCOMP = new Longcomp();
+        /// <summary>調整時ロックオブジェクト</summary>
+        private object _lockObj = new object();
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -468,9 +470,10 @@ namespace StarlitTwit
         private void pnlflow_MouseDown(object sender, MouseEventArgs e)
         {
             UctlDispTwitRow row = pnlTweets.GetChildAtPoint(e.Location, GetChildAtPointSkip.Invisible) as UctlDispTwitRow;
-            if (row == null) { SelectedIndex = -1; }
-            if (row != SelectedRow) { ChangeSelectRow(row); }
-
+            lock (_lockObj) {
+                if (row == null) { SelectedIndex = -1; }
+                if (row != SelectedRow) { ChangeSelectRow(row); }
+            }
             _isMouseDowning = true;
         }
         #endregion (UctlDispTwit_MouseDown)
@@ -512,64 +515,70 @@ namespace StarlitTwit
             switch (key) {
                 case Keys.Down:
                 case Keys.Up:
-                    if (SelectedIndex < 0) {
-                        // 一番上選択
-                        SelectedIndex = GetAbsoluteRowIntex(0);
-                    }
-                    else {
-                        int iselected = SelectedIndex;
-                        if (key == Keys.Up) {
-                            // ↑キー
-                            if (iselected == 0) { break; }
-                            SelectedIndex--;
+                    lock (_lockObj) {
+                        if (SelectedIndex < 0) {
+                            // 一番上選択
+                            SelectedIndex = GetAbsoluteRowIntex(0);
                         }
                         else {
-                            // ↓キー
-                            if (iselected == _rowDataList.Count - 1) { break; }
-                            SelectedIndex++;
+                            int iselected = SelectedIndex;
+                            if (key == Keys.Up) {
+                                // ↑キー
+                                if (iselected == 0) { break; }
+                                SelectedIndex--;
+                            }
+                            else {
+                                // ↓キー
+                                if (iselected == _rowDataList.Count - 1) { break; }
+                                SelectedIndex++;
+                            }
                         }
-                    }
-                    ChangeSelectRow(SelectedIndex);
-                    if (SelectedIndex < vscrbar.Value) { // 選択が上にありすぎる
-                        int diff = vscrbar.Value - SelectedIndex;
-                        _suspend_vscrbar_ValueChangeEvent = true;
-                        vscrbar.Value -= diff;
-                        _suspend_vscrbar_ValueChangeEvent = false;
-                        AdjustControll(vscrbar.Value, true, diff);
-                        pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
-                    }
-                    else if (SelectedIndex >= vscrbar.Value + _iAllVisibleRowNum) { // 選択が下にありすぎる
-                        int diff = vscrbar.Value + _iAllVisibleRowNum - SelectedIndex - 1;
-                        _suspend_vscrbar_ValueChangeEvent = true;
-                        vscrbar.Value -= diff;
-                        _suspend_vscrbar_ValueChangeEvent = false;
-                        AdjustControll(SelectedIndex, false, diff);
-                        pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
+                        ChangeSelectRow(SelectedIndex);
+                        if (SelectedIndex < vscrbar.Value) { // 選択が上にありすぎる
+                            int diff = vscrbar.Value - SelectedIndex;
+                            _suspend_vscrbar_ValueChangeEvent = true;
+                            vscrbar.Value -= diff;
+                            _suspend_vscrbar_ValueChangeEvent = false;
+                            AdjustControll(vscrbar.Value, true, diff);
+                            pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
+                        }
+                        else if (SelectedIndex >= vscrbar.Value + _iAllVisibleRowNum) { // 選択が下にありすぎる
+                            int diff = vscrbar.Value + _iAllVisibleRowNum - SelectedIndex - 1;
+                            _suspend_vscrbar_ValueChangeEvent = true;
+                            vscrbar.Value -= diff;
+                            _suspend_vscrbar_ValueChangeEvent = false;
+                            AdjustControll(SelectedIndex, false, diff);
+                            pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
+                        }
                     }
                     break;
                 case Keys.PageUp:
-                    if (vscrbar.Enabled) {
-                        SelectedIndex = Math.Max(SelectedIndex - vscrbar.LargeChange, 0);
-                        vscrbar.Value = Math.Max(vscrbar.Value - vscrbar.LargeChange, 0);
-                    }
-                    else {
-                        vscrbar.Value = SelectedIndex = 0;
+                    lock (_lockObj) {
+                        if (vscrbar.Enabled) {
+                            SelectedIndex = Math.Max(SelectedIndex - vscrbar.LargeChange, 0);
+                            vscrbar.Value = Math.Max(vscrbar.Value - vscrbar.LargeChange, 0);
+                        }
+                        else {
+                            vscrbar.Value = SelectedIndex = 0;
+                        }
                     }
                     break;
                 case Keys.PageDown:
-                    if (vscrbar.Enabled) {
-                        SelectedIndex = Math.Min(SelectedIndex + vscrbar.LargeChange, _rowDataList.Count - 1);
-                        vscrbar.Value = Math.Min(vscrbar.Value + vscrbar.LargeChange, _rowDataList.Count - 1);
-                    }
-                    else {
-                        vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
+                    lock (_lockObj) {
+                        if (vscrbar.Enabled) {
+                            SelectedIndex = Math.Min(SelectedIndex + vscrbar.LargeChange, _rowDataList.Count - 1);
+                            vscrbar.Value = Math.Min(vscrbar.Value + vscrbar.LargeChange, _rowDataList.Count - 1);
+                        }
+                        else {
+                            vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
+                        }
                     }
                     break;
                 case Keys.Home:
-                    vscrbar.Value = SelectedIndex = 0;
+                    lock (_lockObj) { vscrbar.Value = SelectedIndex = 0; }
                     break;
                 case Keys.End:
-                    vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
+                    lock (_lockObj) { vscrbar.Value = SelectedIndex = _rowDataList.Count - 1; }
                     break;
             }
         }
@@ -579,7 +588,9 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private void UctlDispTwit_ClientSizeChanged(object sender, EventArgs e)
         {
-            AdjustControll(vscrbar.Value, true);
+            lock (_lockObj) {
+                AdjustControll(vscrbar.Value, true);
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion (UctlDispTwit_ClientSizeChanged クライアントサイズ変更)
@@ -612,13 +623,15 @@ namespace StarlitTwit
         private void pnlflow_MouseWheel(object sender, MouseEventArgs e)
         {
             if (vscrbar.Enabled) {
-                int moveval = e.Delta / 120;
-                if (moveval > 0) {
-                    vscrbar.Value = Math.Max(vscrbar.Minimum, vscrbar.Value - moveval);
-                }
-                else if (moveval < 0) {
-                    if (vscrbar.Value + vscrbar.LargeChange - 1 == vscrbar.Maximum) { return; }
-                    vscrbar.Value = Math.Min(vscrbar.Maximum, vscrbar.Value - moveval);
+                lock (_lockObj) {
+                    int moveval = e.Delta / 120;
+                    if (moveval > 0) {
+                        vscrbar.Value = Math.Max(vscrbar.Minimum, vscrbar.Value - moveval);
+                    }
+                    else if (moveval < 0) {
+                        if (vscrbar.Value + vscrbar.LargeChange - 1 == vscrbar.Maximum) { return; }
+                        vscrbar.Value = Math.Min(vscrbar.Maximum, vscrbar.Value - moveval);
+                    }
                 }
             }
         }
@@ -629,8 +642,10 @@ namespace StarlitTwit
         //
         private void vscrbar_Scroll(object sender, ScrollEventArgs e)
         {
-            if (e.NewValue == e.OldValue) { return; }
-            vscrbar.Value = e.NewValue;
+            lock (_lockObj) {
+                if (e.NewValue == e.OldValue) { return; }
+                vscrbar.Value = e.NewValue;
+            }
         }
         #endregion (vscrbar_Scroll)
         //-------------------------------------------------------------------------------
@@ -641,14 +656,16 @@ namespace StarlitTwit
         //
         private void vscrbar_ValueChanged(object sender, EventArgs e)
         {
-            try {
-                if (_suspend_vscrbar_ValueChangeEvent || _prevValue == vscrbar.Value) { return; }
+            lock (_lockObj) {
+                try {
+                    if (_suspend_vscrbar_ValueChangeEvent || _prevValue == vscrbar.Value) { return; }
 
-                AdjustControll(vscrbar.Value, true, _prevValue - vscrbar.Value);
-                pnlTweets.Refresh();
-            }
-            finally {
-                _prevValue = vscrbar.Value;
+                    AdjustControll(vscrbar.Value, true, _prevValue - vscrbar.Value);
+                    pnlTweets.Refresh();
+                }
+                finally {
+                    _prevValue = vscrbar.Value;
+                }
             }
         }
         #endregion (vscrbar_ValueChanged)
@@ -668,86 +685,88 @@ namespace StarlitTwit
         /// <returns>最初のツイートのデータ</returns>
         public string AddData(TwitData[] data, bool suspendSetBoundary = false)
         {
-            string retText = "";
+            lock (_lockObj) {
+                string retText = "";
 
-            // 選択保存用
-            long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ? _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
-            ChangeSelectRow(null);
-            // 位置保存用
-            long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ? (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID : _rowList[0].TwitData.StatusID : -1;
+                // 選択保存用
+                long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ? _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
+                ChangeSelectRow(null);
+                // 位置保存用
+                long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ? (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID : _rowList[0].TwitData.StatusID : -1;
 
-            //-----内部情報設定-----
-            List<RowData> addrowList = new List<RowData>();
-            long lastStatusID = (data.Length > 0) ? data[data.Length - 1].StatusID : -1;
-            foreach (TwitData t in data) {
-                // 重複排除
-                if (_rowDataList.ContainsKey(t.StatusID)) {
-                    if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastStatusID); }
-                    continue;
-                }
+                //-----内部情報設定-----
+                List<RowData> addrowList = new List<RowData>();
+                long lastStatusID = (data.Length > 0) ? data[data.Length - 1].StatusID : -1;
+                foreach (TwitData t in data) {
+                    // 重複排除
+                    if (_rowDataList.ContainsKey(t.StatusID)) {
+                        if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastStatusID); }
+                        continue;
+                    }
 
-                RowData rowdata = new RowData() {
-                    TwitData = t,
-                    IsBoundary = (!suspendSetBoundary && t.StatusID == lastStatusID)
-                };
+                    RowData rowdata = new RowData() {
+                        TwitData = t,
+                        IsBoundary = (!suspendSetBoundary && t.StatusID == lastStatusID)
+                    };
 
-                // 返り値用
-                if (string.IsNullOrEmpty(retText)) {
-                    retText = Utilization.InterpretFormat(t) + '\n' + t.Text;
-                }
+                    // 返り値用
+                    if (string.IsNullOrEmpty(retText)) {
+                        retText = Utilization.InterpretFormat(t) + '\n' + t.Text;
+                    }
 
-                addrowList.Add(rowdata);
-                _rowDataList.Add(t.StatusID, rowdata);
+                    addrowList.Add(rowdata);
+                    _rowDataList.Add(t.StatusID, rowdata);
 
-                //Console.WriteLine(t.StatusID);
+                    //Console.WriteLine(t.StatusID);
 
-                // 最小・最大ID更新
-                if (MaxTweetID == -1) { MaxTweetID = MinTweetID = t.StatusID; } // 最初
-                else {
-                    MaxTweetID = Math.Max(MaxTweetID, t.StatusID);
-                    MinTweetID = Math.Min(MinTweetID, t.StatusID);
-                }
-            }
-
-            // 追加分Replyツールチップ設定
-            if (FrmMain.SettingsData.DisplayReplyToolTip) {
-                foreach (RowData row in addrowList) {
-                    if (row.TwitData.Mention_StatusID > 0) {
-                        int depth;
-                        if ((depth = FrmMain.SettingsData.DisplayReplyToolTipDepth) == 0) { depth = int.MaxValue; }
-                        string replytext = GetReplyText(row.TwitData.Mention_StatusID, depth);
-                        row.StrReplyTooltip = replytext;
+                    // 最小・最大ID更新
+                    if (MaxTweetID == -1) { MaxTweetID = MinTweetID = t.StatusID; } // 最初
+                    else {
+                        MaxTweetID = Math.Max(MaxTweetID, t.StatusID);
+                        MinTweetID = Math.Min(MinTweetID, t.StatusID);
                     }
                 }
-            }
 
-            //-----コントロール設定-----
-
-            // 選択復元
-            if (selectedData >= 0) {
-                int newIndex = _rowDataList.IndexOfKey(selectedData);
-                SelectedIndex = newIndex;
-                ChangeSelectRow(newIndex);
-            }
-
-            vscrbar.Maximum = _rowDataList.Count - 1;
-
-            if (locIndex >= 0) {
-                // 位置復元
-                int baseIndex = _rowDataList.IndexOfKey(locIndex);
-                if (_existNotAllRow_Top) {
-                    AdjustControll(baseIndex, false);
+                // 追加分Replyツールチップ設定
+                if (FrmMain.SettingsData.DisplayReplyToolTip) {
+                    foreach (RowData row in addrowList) {
+                        if (row.TwitData.Mention_StatusID > 0) {
+                            int depth;
+                            if ((depth = FrmMain.SettingsData.DisplayReplyToolTipDepth) == 0) { depth = int.MaxValue; }
+                            string replytext = GetReplyText(row.TwitData.Mention_StatusID, depth);
+                            row.StrReplyTooltip = replytext;
+                        }
+                    }
                 }
-                else {
-                    _suspend_vscrbar_ValueChangeEvent = true;
-                    vscrbar.Value = baseIndex;
-                    _suspend_vscrbar_ValueChangeEvent = false;
-                    AdjustControll(vscrbar.Value, true); // コントロール位置調整
-                }
-            }
-            else { AdjustControll(vscrbar.Value, true); } // コントロール位置調整
 
-            return retText;
+                //-----コントロール設定-----
+
+                // 選択復元
+                if (selectedData >= 0) {
+                    int newIndex = _rowDataList.IndexOfKey(selectedData);
+                    SelectedIndex = newIndex;
+                    ChangeSelectRow(newIndex);
+                }
+
+                vscrbar.Maximum = _rowDataList.Count - 1;
+
+                if (locIndex >= 0) {
+                    // 位置復元
+                    int baseIndex = _rowDataList.IndexOfKey(locIndex);
+                    if (_existNotAllRow_Top) {
+                        AdjustControll(baseIndex, false);
+                    }
+                    else {
+                        _suspend_vscrbar_ValueChangeEvent = true;
+                        vscrbar.Value = baseIndex;
+                        _suspend_vscrbar_ValueChangeEvent = false;
+                        AdjustControll(vscrbar.Value, true); // コントロール位置調整
+                    }
+                }
+                else { AdjustControll(vscrbar.Value, true); } // コントロール位置調整
+
+                return retText;
+            }
         }
         #endregion (AddData)
         //-------------------------------------------------------------------------------
@@ -758,7 +777,7 @@ namespace StarlitTwit
         /// </summary>
         public void ReConfigAll()
         {
-            AdjustControll(vscrbar.Value, true);
+            lock (_lockObj) { AdjustControll(vscrbar.Value, true); }
         }
         //-------------------------------------------------------------------------------
         #endregion (ReConfigAll)
@@ -770,13 +789,15 @@ namespace StarlitTwit
         /// </summary>
         public void ClearAll()
         {
-            MaxTweetID = MinTweetID = SelectedIndex = -1;
-            SelectedRow = null;
+            lock (_lockObj) {
+                MaxTweetID = MinTweetID = SelectedIndex = -1;
+                SelectedRow = null;
 
-            _rowDataList.Clear();
-            _rowList.ForEach((row) => row.Visible = false);
-            vscrbar.Value = vscrbar.Minimum;
-            vscrbar.Enabled = false;
+                _rowDataList.Clear();
+                _rowList.ForEach((row) => row.Visible = false);
+                vscrbar.Value = vscrbar.Minimum;
+                vscrbar.Enabled = false;
+            }
         }
         #endregion (ClearAll)
         //-------------------------------------------------------------------------------
@@ -791,9 +812,11 @@ namespace StarlitTwit
         {
             if (!_rowDataList.ContainsKey(statusid)) { return false; }
 
-            _rowDataList.Remove(statusid);
-            if (SelectedIndex == _rowDataList.Keys.IndexOf(statusid)) { SelectedIndex = -1; }
-            AdjustControll(vscrbar.Value, true);
+            lock (_lockObj) {
+                _rowDataList.Remove(statusid);
+                if (SelectedIndex == _rowDataList.Keys.IndexOf(statusid)) { SelectedIndex = -1; }
+                AdjustControll(vscrbar.Value, true);
+            }
             return true;
         }
         #endregion (RemoveTweet)
