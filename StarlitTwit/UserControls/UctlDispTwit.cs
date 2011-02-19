@@ -683,7 +683,7 @@ namespace StarlitTwit
         /// <param name="data">発言データ配列。StatusID降順推奨。</param>
         /// <param name="suspendSetBoundary">[option]境界セットを抑制する時true</param>
         /// <returns>最初のツイートのデータ</returns>
-        public string AddData(TwitData[] data, bool suspendSetBoundary = false)
+        public string AddData(IEnumerable<TwitData> data, bool suspendSetBoundary = false)
         {
             lock (_lockObj) {
                 string retText = "";
@@ -696,7 +696,7 @@ namespace StarlitTwit
 
                 //-----内部情報設定-----
                 List<RowData> addrowList = new List<RowData>();
-                long lastStatusID = (data.Length > 0) ? data[data.Length - 1].StatusID : -1;
+                long lastStatusID = (data.Count() > 0) ? data.Last().StatusID : -1;
                 foreach (TwitData t in data) {
                     // 重複排除
                     if (_rowDataList.ContainsKey(t.StatusID)) {

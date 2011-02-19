@@ -127,7 +127,7 @@ namespace StarlitTwit
         {
             try {
                 try {
-                    TwitData[] d = FrmMain.Twitter.statuses_user_timeline(screen_name: screen_name, max_id: max_id, count: GET_NUM);
+                    IEnumerable<TwitData> d = FrmMain.Twitter.statuses_user_timeline(screen_name: screen_name, max_id: max_id, count: GET_NUM);
                     this.Invoke(new Action(() => uctlDispTwit.AddData(d)));
                 }
                 catch (TwitterAPIException) {

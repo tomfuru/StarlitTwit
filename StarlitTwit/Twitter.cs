@@ -79,7 +79,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public TwitData[] statuses_public_timeline(bool trim_user = false, bool include_entities = false)
+        public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -105,7 +105,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public TwitData[] statuses_home_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_home_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                                  bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -137,7 +137,7 @@ namespace StarlitTwit
         /// <param name="include_rts">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public TwitData[] statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                                     bool trim_user = false, bool include_rts = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -171,7 +171,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_rts">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] statuses_user_timeline(long user_id = -1, string screen_name = "", long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                            bool trim_user = false, bool include_rts = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -205,7 +205,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_rts">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] statuses_mentions(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_mentions(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                             bool trim_user = false, bool include_rts = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -236,7 +236,7 @@ namespace StarlitTwit
         /// <param name="page">[option]</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] statuses_retweeted_by_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_by_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                                    bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -266,7 +266,7 @@ namespace StarlitTwit
         /// <param name="page">[option]</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] statuses_retweeted_to_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_to_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                                    bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -296,7 +296,7 @@ namespace StarlitTwit
         /// <param name="page">[option]</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] statuses_retweets_of_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweets_of_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
                                                   bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -415,7 +415,7 @@ namespace StarlitTwit
         /// <param name="count">[option] &lt;100</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = false)
+        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -491,7 +491,7 @@ namespace StarlitTwit
         /// <param name="screen_names">[select]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile[] users_lookup(long[] user_ids = null, string[] screen_names = null, bool include_entities = false)
+        public IEnumerable<UserProfile> users_lookup(long[] user_ids = null, string[] screen_names = null, bool include_entities = false)
         {
             if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
                 throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
@@ -519,7 +519,7 @@ namespace StarlitTwit
         /// <param name="cursor">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public Tuple<UserProfile[], long, long> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
+        public Tuple<IEnumerable<UserProfile>, long, long> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -532,7 +532,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
-            return new Tuple<UserProfile[], long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_friends)
         //-------------------------------------------------------------------------------
@@ -546,7 +546,7 @@ namespace StarlitTwit
         /// <param name="cursor">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public Tuple<UserProfile[], long, long> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
+        public Tuple<IEnumerable<UserProfile>, long, long> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -559,7 +559,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/followers.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
-            return new Tuple<UserProfile[], long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_followers)
         //-------------------------------------------------------------------------------
@@ -578,7 +578,7 @@ namespace StarlitTwit
         /// <param name="count">[option]</param>
         /// <param name="page">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = false)
+        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -605,7 +605,7 @@ namespace StarlitTwit
         /// <param name="count">[option]</param>
         /// <param name="page">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData[] direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = false)
+        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -716,7 +716,7 @@ namespace StarlitTwit
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="cursor">[option]データベース上のカーソル</param>
         /// <returns></returns>
-        public Tuple<ListData[], long, long> lists_Get(string screen_name = "", long cursor = -1)
+        public Tuple<IEnumerable<ListData>, long, long> lists_Get(string screen_name = "", long cursor = -1)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -729,7 +729,7 @@ namespace StarlitTwit
 
             XElement el = GetByAPI(url);
 
-            return new Tuple<ListData[], long, long>(ConvertToListData(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListData(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
@@ -779,7 +779,7 @@ namespace StarlitTwit
         /// <param name="per_page">[option]</param>
         /// <param name="page">[option]</param>
         /// <returns></returns>
-        public TwitData[] lists_statuses(string list_id, string screen_name = "", long since_id = -1, long max_id = -1, int per_page = -1, int page = -1)
+        public IEnumerable<TwitData> lists_statuses(string list_id, string screen_name = "", long since_id = -1, long max_id = -1, int per_page = -1, int page = -1)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -963,7 +963,7 @@ namespace StarlitTwit
         /// <param name="show_user"></param>
         /// <param name="result_type">[recent/popular/mixed]</param>
         /// <returns></returns>
-        public TwitData[] search(string q = "", string phrase = "", string lang = "jp",
+        public IEnumerable<TwitData> search(string q = "", string phrase = "", string lang = "jp",
             int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
             string until = "", object geocode = null, bool show_user = false, string result_type = "")
         {
@@ -989,7 +989,7 @@ namespace StarlitTwit
 
             XElement el = GetByAPIJson(url);
 
-            TwitData[] data = ConvertToTwitDataJson(el);
+            IEnumerable<TwitData> data = ConvertToTwitDataJson(el);
             //string[] user_names = data
             //    .Where((tdata) => !tdata.UserProtected)
             //    .Select((tdata) => tdata.UserScreenName)
@@ -1521,11 +1521,10 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
-        private TwitData[] ConvertToTwitDataArray(XElement el)
+        private IEnumerable<TwitData> ConvertToTwitDataArray(XElement el)
         {
-            return (from stat in el.Descendants("status")
-                    select ConvertToTwitData(stat))
-                    .ToArray();
+            return from stat in el.Descendants("status")
+                   select ConvertToTwitData(stat);
         }
         #endregion (GetTwitData)
         //-------------------------------------------------------------------------------
@@ -1573,11 +1572,10 @@ namespace StarlitTwit
         /// <para>DirectMessageデータ用です。</para>
         /// </summary>
         /// <returns></returns>
-        private TwitData[] ConvertToTwitDataArrayDM(XElement el)
+        private IEnumerable<TwitData> ConvertToTwitDataArrayDM(XElement el)
         {
-            return (from stat in el.Descendants("direct_message")
-                    select ConvertToTwitDataDM(stat))
-                    .ToArray();
+            return from stat in el.Descendants("direct_message")
+                   select ConvertToTwitDataDM(stat);
         }
         #endregion (ConvertToTwitDataArrayDM)
         //-------------------------------------------------------------------------------
@@ -1588,21 +1586,20 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
-        private ListData[] ConvertToListData(XElement el)
+        private IEnumerable<ListData> ConvertToListData(XElement el)
         {
             try {
-                return (from stat in el.Descendants("list")
-                        select new ListData() {
-                            ID = long.Parse(stat.Element("id").Value),
-                            Name = stat.Element("slug").Value,
-                            Description = stat.Element("description").Value,
-                            SubscriberCount = int.Parse(stat.Element("subscriber_count").Value),
-                            MemberCount = int.Parse(stat.Element("member_count").Value),
-                            Public = stat.Element("mode").Value.Equals("public"),
-                            OwnerID = long.Parse(stat.Element("user").Element("id").Value),
-                            OwnerScreenName = stat.Element("user").Element("screen_name").Value
-                        })
-                        .ToArray();
+                return from stat in el.Descendants("list")
+                       select new ListData() {
+                           ID = long.Parse(stat.Element("id").Value),
+                           Name = stat.Element("slug").Value,
+                           Description = stat.Element("description").Value,
+                           SubscriberCount = int.Parse(stat.Element("subscriber_count").Value),
+                           MemberCount = int.Parse(stat.Element("member_count").Value),
+                           Public = stat.Element("mode").Value.Equals("public"),
+                           OwnerID = long.Parse(stat.Element("user").Element("id").Value),
+                           OwnerScreenName = stat.Element("user").Element("screen_name").Value
+                       };
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
@@ -1615,72 +1612,32 @@ namespace StarlitTwit
         #region -ConvertToTwitDataJson XElementからTwitDataの配列型に変換します。
         //-------------------------------------------------------------------------------
         //
-        private TwitData[] ConvertToTwitDataJson(XElement el)
+        private IEnumerable<TwitData> ConvertToTwitDataJson(XElement el)
         {
-            List<TwitData> list = new List<TwitData>();
             try {
-                var b = el.Element("results").Descendants("item");
-                foreach (var item in b) {
-                    list.Add(new TwitData() {
-                        TwitType = StarlitTwit.TwitType.Search,
-                        DMScreenName = "",
-                        StatusID = long.Parse(item.Element("id").Value),
-                        Time = StringToDateTime(item.Element("created_at").Value),
-                        Favorited = false,
-                        Mention_StatusID = TryParseLong(item.Element("to_user_id").Value),
-                        Mention_UserID = -1,
-                        Text = ConvertSpecialChar(item.Element("text").Value),
-                        Source = CutSourceString(ConvertSpecialChar(item.Element("source").Value)),
-                        UserID = long.Parse(item.Element("from_user_id").Value),
-                        UserName = "",
-                        IconURL = item.Element("profile_image_url").Value,
-                        UserScreenName = item.Element("from_user").Value,
-                        UserProtected = false,
-                        RTTwitData = null
-                    });
-                }
+                return from stat in el.Element("results").Descendants("item")
+                       select new TwitData() {
+                           TwitType = StarlitTwit.TwitType.Search,
+                           DMScreenName = "",
+                           StatusID = long.Parse(stat.Element("id").Value),
+                           Time = StringToDateTime(stat.Element("created_at").Value),
+                           Favorited = false,
+                           Mention_StatusID = TryParseLong(stat.Element("to_user_id").Value),
+                           Mention_UserID = -1,
+                           Text = ConvertSpecialChar(stat.Element("text").Value),
+                           Source = CutSourceString(ConvertSpecialChar(stat.Element("source").Value)),
+                           UserID = long.Parse(stat.Element("from_user_id").Value),
+                           UserName = "",
+                           IconURL = stat.Element("profile_image_url").Value,
+                           UserScreenName = stat.Element("from_user").Value,
+                           UserProtected = false,
+                           RTTwitData = null
+                       };
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
                 throw new TwitterAPIException(1001, "予期しないXmlです。");
             }
-
-            return list.ToArray();
-
-            //var a = el.Element("results").Descendants("item")
-            //        .Select((stat) =>
-            //        {
-            //            return new TwitData() {
-            //                TwitType = StarlitTwit.TwitType.Normal,
-            //                RTorDMScreenName = "",
-            //                StatusID = long.Parse(stat.Element("id").Value),
-            //                Time = StringToDateTime(stat.Element("created_at").Value),
-            //                Mention_StatusID = TryParseLong(stat.Element("in_reply_to_status_id").Value),
-            //                Text = ConvertSpecialChar(stat.Element("text").Value),
-            //                Source = CutSourceString(stat.Element("source").Value),
-            //                UserID = long.Parse(stat.Element("user").Element("id").Value),
-            //                UserName = stat.Element("user").Element("name").Value,
-            //                IconURL = stat.Element("user").Element("profile_image_url").Value,
-            //                UserScreenName = stat.Element("user").Element("screen_name").Value,
-            //                UserProtected = bool.Parse(stat.Element("user").Element("protected").Value)
-            //            };
-            //        });
-
-            //var a = from stat in el.Element("results").Descendants("item")
-            //        select new TwitData() {
-            //            TwitType = StarlitTwit.TwitType.Normal,
-            //            RTorDMScreenName = "",
-            //            StatusID = long.Parse(el.Element("id").Value),
-            //            Time = StringToDateTime(el.Element("created_at").Value),
-            //            Mention_StatusID = TryParseLong(el.Element("in_reply_to_status_id").Value),
-            //            Text = ConvertSpecialChar(el.Element("text").Value),
-            //            Source = CutSourceString(el.Element("source").Value),
-            //            UserID = long.Parse(el.Element("user").Element("id").Value),
-            //            UserName = el.Element("user").Element("name").Value,
-            //            IconURL = el.Element("user").Element("profile_image_url").Value,
-            //            UserScreenName = el.Element("user").Element("screen_name").Value,
-            //            UserProtected = bool.Parse(el.Element("user").Element("protected").Value)
-            //        };
         }
         #endregion (ConvertToTwitDataJson)
         //-------------------------------------------------------------------------------
@@ -1723,11 +1680,10 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="xElement"></param>
         /// <returns></returns>
-        private UserProfile[] ConvertToUserProfileArray(XElement el)
+        private IEnumerable<UserProfile> ConvertToUserProfileArray(XElement el)
         {
-            return (from stat in el.Descendants("user")
-                    select ConvertToUserProfile(stat))
-                    .ToArray();
+            return from stat in el.Descendants("user")
+                   select ConvertToUserProfile(stat);
         }
         #endregion (ConvertToUserProfileArray)
         //===============================================================================
@@ -1967,27 +1923,6 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (ListData)
-    //-----------------------------------------------------------------------------------
-    #region UserData 構造体：1ユーザーに関する情報
-    //-------------------------------------------------------------------------------
-    /// <summary>
-    /// 1ユーザーに関する情報を表します。
-    /// </summary>
-    public struct UserData
-    {
-        /// <summary>ユーザーID</summary>
-        public long UserID;
-        /// <summary>ユーザー名</summary>
-        public string UserName;
-        /// <summary>ユーザー表示名</summary>
-        public string UserScreenName;
-        /// <summary>アイコンURL</summary>
-        public string IconURL;
-        /// <summary>ユーザーがプロテクトか</summary>
-        public bool UserProtected;
-    }
-    //-------------------------------------------------------------------------------
-    #endregion (UserData)
     //-----------------------------------------------------------------------------------
     #region UserProfile 構造体：1ユーザーのプロフィールデータ
     //-------------------------------------------------------------------------------

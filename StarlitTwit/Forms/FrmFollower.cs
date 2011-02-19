@@ -237,7 +237,7 @@ namespace StarlitTwit
         #region -AddList リストに追加
         //-------------------------------------------------------------------------------
         //
-        private void AddList(UserProfile[] profiles)
+        private void AddList(IEnumerable<UserProfile> profiles)
         {
             List<Tuple<ListViewItem, string>> urllist = new List<Tuple<ListViewItem, string>>();
             List<ListViewItem> items = new List<ListViewItem>();
@@ -268,8 +268,8 @@ namespace StarlitTwit
         private void GetUsers()
         {
             try {
-                UserProfile[] profiles = null;
-                Tuple<UserProfile[], long, long> proftpl;
+                IEnumerable<UserProfile> profiles = null;
+                Tuple<IEnumerable<UserProfile>, long, long> proftpl;
                 switch (FormType) {
                     case EFormType.Follower:
                         proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);

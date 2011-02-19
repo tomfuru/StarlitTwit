@@ -1318,7 +1318,7 @@ namespace StarlitTwit
         /// <returns>取得に成功したか</returns>
         private bool GetMostRecentTweets(UctlDispTwit uctldisp)
         {
-            TwitData[] d;
+            IEnumerable<TwitData> d;
             bool isFirst = (uctldisp.MaxTweetID == -1);
 
             try {
@@ -1405,7 +1405,7 @@ namespace StarlitTwit
         /// <returns>取得に成功したか</returns>
         private bool GetMoreRecentTweets(UctlDispTwit uctldisp, long since_id)
         {
-            TwitData[] d;
+            IEnumerable<TwitData> d;
             try {
                 if (uctldisp == uctlDispHome) {
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, since_id: since_id);
@@ -1464,7 +1464,7 @@ namespace StarlitTwit
         /// <returns>取得に成功したか</returns>
         private bool GetOlderTweets(UctlDispTwit uctldisp, long max_id)
         {
-            TwitData[] d;
+            IEnumerable<TwitData> d;
             try {
                 if (uctldisp == uctlDispHome) {
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, max_id: max_id);
@@ -1544,7 +1544,7 @@ namespace StarlitTwit
                 bool findStart = false;
                 int i = 1;
                 while (true) {
-                    TwitData[] d = null;
+                    IEnumerable<TwitData> d = null;
                     if (uctldisp == uctlDispHome) {
                         if (i == MAX_HOME / 200 + 1) { break; } // 800まで
                         d = Twitter.statuses_home_timeline(count: 200, page: i);
@@ -1589,10 +1589,10 @@ namespace StarlitTwit
                         }
                         if (isBreak) { break; }
                     }
-                    if (d.Length == 0) { break; }
-                    if (!findStart) { findStart = !useToDateTime || dtbetween(dtTo, d[d.Length - 1].Time, d[0].Time); }
+                    if (d.Count() == 0) { break; }
+                    if (!findStart) { findStart = !useToDateTime || dtbetween(dtTo, d.Last().Time, d.First().Time); }
                     datalist.AddRange(d);
-                    if (findStart && useFromDateTime && dtbetween(dtFrom, d[d.Length - 1].Time, d[0].Time)) { break; }
+                    if (findStart && useFromDateTime && dtbetween(dtFrom, d.Last().Time, d.First().Time)) { break; }
                     i++;
                     this.Invoke(new Action(() => tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max)));
                 }

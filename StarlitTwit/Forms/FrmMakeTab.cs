@@ -15,7 +15,7 @@ namespace StarlitTwit
         #region 変数
         //-------------------------------------------------------------------------------
         /// <summary>リストデータ</summary>
-        private ListData[] _listData = null;
+        private IEnumerable<ListData> _listData = null;
         /// <summary>API呼び出しクラス</summary>
         private Twitter _twitter;
         /// <summary>リストオーナー</summary>
@@ -208,7 +208,7 @@ namespace StarlitTwit
         }
         #endregion (InitItems)
         //-------------------------------------------------------------------------------
-        #region -ConfigListList リストのリストを取得し設定します。
+        #region -ConfigListList リストのリストを取得し設定します。 using TwitterAPI
         //-------------------------------------------------------------------------------
         //
         private void ConfigListList(string listOwner = null)
@@ -220,10 +220,10 @@ namespace StarlitTwit
 
                     long next_cursor = -1;
                     do {
-                        Tuple<ListData[], long, long> lsttpl = _twitter.lists_Get(_listOwner, next_cursor);
+                        Tuple<IEnumerable<ListData>, long, long> lsttpl = _twitter.lists_Get(_listOwner, next_cursor);
                         _listData = lsttpl.Item1;
                         next_cursor = lsttpl.Item2;
-                        if (_listData.Length > 0) {
+                        if (_listData.Count() > 0) {
                             cmbList.Items.AddRange(_listData.Select((data) => (object)data.Name).ToArray());
                             cmbList.SelectedIndex = 0;
                         }
