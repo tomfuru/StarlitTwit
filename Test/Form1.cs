@@ -8,14 +8,42 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Threading;
 
 namespace Test
 {
     public partial class Form1 : Form
     {
+        object _obj = new object();
+        private void test1()
+        {
+            Thread.Sleep(500);
+            int j = 0;
+            lock (_obj) {
+                j++;
+                lock (_obj) {
+                    j++;
+                }
+                j++;
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
+
+            Thread t = new Thread(test1);
+            t.Start();
+
+            int i = 0;
+            lock (_obj) {
+                i++;
+                lock (_obj) {
+                    i++;
+                }
+                i++;
+            }
+
 
             TimeSpan ts1 = new TimeSpan(0, 1, 0);
             TimeSpan ts2 = new TimeSpan(0, 1, 1);
