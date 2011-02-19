@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -352,6 +353,31 @@ namespace StarlitTwit
             frm.Show(parent);
         }
         #endregion (ShowUserTweet)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]OpenBrowser URLを開きます。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// URLを開きます。
+        /// </summary>
+        /// <param name="url">URL</param>
+        /// <param name="useInternalBrowser">内部ブラウザを使用するかどうか</param>
+        public static void OpenBrowser(string url, bool useInternalBrowser)
+        {
+            if (useInternalBrowser) {
+                var browserFrm = new FrmWebBrowser();
+                browserFrm.SetURL(url);
+                browserFrm.Show();
+                browserFrm.Activate();
+            }
+            else {
+                if (File.Exists(FrmMain.SettingsData.WebBrowserPath)) {
+                    Process.Start(FrmMain.SettingsData.WebBrowserPath, url);
+                }
+                else { Process.Start(url); }
+            }
+        }
+        #endregion (OpenBrowser)
 
         //-------------------------------------------------------------------------------
         #region +[static]SetModelessDialogCenter モードレスダイアログを所有フォームの中央に配置します。

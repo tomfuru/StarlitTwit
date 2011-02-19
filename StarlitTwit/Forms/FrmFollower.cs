@@ -112,16 +112,18 @@ namespace StarlitTwit
         //
         private void tsmiFollow_Click(object sender, EventArgs e)
         {
-            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            bool? ret = Follow(prof.ScreenName);
-            if (!ret.HasValue) {
-                lstvList.SelectedItems[0].SubItems[3].Text = "リクエスト済";
-                ((UserProfile)lstvList.SelectedItems[0].Tag).FolllowRequestSent = true;
-            }
-            else if (ret.Value) {
-                //Debug.Assert(FormType == FrmFollowType.Follower, "異常な値");
-                lstvList.SelectedItems[0].SubItems[3].Text = "フォロー中";
-                ((UserProfile)lstvList.SelectedItems[0].Tag).Following = true;
+            if (Message.ShowQuestionMessage("フォローします。よろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
+                UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+                bool? ret = Follow(prof.ScreenName);
+                if (!ret.HasValue) {
+                    lstvList.SelectedItems[0].SubItems[3].Text = "リクエスト済";
+                    ((UserProfile)lstvList.SelectedItems[0].Tag).FolllowRequestSent = true;
+                }
+                else if (ret.Value) {
+                    //Debug.Assert(FormType == FrmFollowType.Follower, "異常な値");
+                    lstvList.SelectedItems[0].SubItems[3].Text = "フォロー中";
+                    ((UserProfile)lstvList.SelectedItems[0].Tag).Following = true;
+                }
             }
         }
         #endregion (tsmiFollow_Click)
@@ -131,16 +133,18 @@ namespace StarlitTwit
         //
         private void tsmiRemove_Click(object sender, EventArgs e)
         {
-            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            if (RemoveFollow(prof.ScreenName)) {
-                switch (FormType) {
-                    case EFormType.Follower:
-                        lstvList.SelectedItems[0].SubItems[3].Text = "";
-                        ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
-                        break;
-                    case EFormType.Following:
-                        lstvList.Items.Remove(lstvList.SelectedItems[0]);
-                        break;
+            if (Message.ShowQuestionMessage("フォローを解除します。よろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
+                UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+                if (RemoveFollow(prof.ScreenName)) {
+                    switch (FormType) {
+                        case EFormType.Follower:
+                            lstvList.SelectedItems[0].SubItems[3].Text = "";
+                            ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
+                            break;
+                        case EFormType.Following:
+                            lstvList.Items.Remove(lstvList.SelectedItems[0]);
+                            break;
+                    }
                 }
             }
         }
@@ -155,6 +159,21 @@ namespace StarlitTwit
             Utilization.ShowUserTweet((FrmMain)this.Owner, prof.ScreenName);
         }
         #endregion (tsmiDisplayUserTweet_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiOpenBrowserUserHome_Click ホームをブラウザで開くクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOpenBrowserUserHome_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+
+            StringBuilder sbUrl = new StringBuilder();
+            sbUrl.Append(Twitter.URLtwi);
+            sbUrl.Append(prof.ScreenName);
+
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
+        }
+        #endregion (tsmiOpenBrowserUserHome_Click)
         //-------------------------------------------------------------------------------
         #region btnAppend_Click 追加取得ボタンクリック時
         //-------------------------------------------------------------------------------

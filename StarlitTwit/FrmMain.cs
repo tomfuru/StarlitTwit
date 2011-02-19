@@ -442,18 +442,7 @@ namespace StarlitTwit
         //
         private void DispTwit_OpenURLRequest(object sender, OpenURLEventArgs e)
         {
-            if (e.useInternalBrowser) {
-                var browserFrm = new FrmWebBrowser();
-                browserFrm.SetURL(e.url);
-                browserFrm.Show();
-                browserFrm.Activate();
-            }
-            else {
-                if (File.Exists(SettingsData.WebBrowserPath)) {
-                    Process.Start(SettingsData.WebBrowserPath, e.url);
-                }
-                else { Process.Start(e.url); }
-            }
+            Utilization.OpenBrowser(e.url, e.useInternalBrowser);
         }
         #endregion (OpenURLRequest)
         //-------------------------------------------------------------------------------
