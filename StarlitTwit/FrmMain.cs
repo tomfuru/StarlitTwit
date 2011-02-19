@@ -731,6 +731,15 @@ namespace StarlitTwit
 
                         foreach (TabPage tabpage in DEFAULT_TABPAGES) {
                             tabpage.ToolTipText = DefaultTabToString(tabpage);
+                            UctlDispTwit dispTwit = _dispTwitDic[tabpage];
+                            lock (_autoRenewDic) {
+                                var data = _autoRenewDic[dispTwit];
+                                int sec = (dispTwit == uctlDispHome) ? SettingsData.GetInterval_Home :
+                                          (dispTwit == uctlDispReply) ? SettingsData.GetInterval_Reply :
+                                          (dispTwit == uctlDispHistory) ? SettingsData.GetInterval_History :
+                                          (dispTwit == uctlDispDirect) ? SettingsData.GetInterval_Direct : 0;
+                                data.Interval = new TimeSpan(0, 0, sec);
+                            }
                         }
 
                         foreach (UctlDispTwit uctldisp in _dispTwitDic.Values) {
@@ -1202,7 +1211,7 @@ namespace StarlitTwit
             else if (dispTwit == uctlDispDirect) { data.Interval = new TimeSpan(0, 0, SettingsData.GetInterval_Direct); }
             else {
                 lock (SettingsData.TabDataDic) {
-                    data.Interval = data.Interval = new TimeSpan(0, 0, SettingsData.TabDataDic[(string)dispTwit.Tag].GetInterval);
+                    data.Interval = new TimeSpan(0, 0, SettingsData.TabDataDic[(string)dispTwit.Tag].GetInterval);
                 }
             }
 
