@@ -35,8 +35,7 @@ namespace StarlitTwit
         public UctlDispTwitRow SelectedRow { get; private set; }
         /// <summary>画像辞書(KeyはURL)</summary>
         [Browsable(false)]
-        //public Dictionary<string, Image> ImageDic { get; set; }
-        public ImageList ImageList { get; set; }
+        public ImageListWrapper ImageListWrapper { get; set; }
         /// <summary>最大発言ID</summary>
         [Browsable(false)]
         public long MaxTweetID { get; private set; }
@@ -124,6 +123,17 @@ namespace StarlitTwit
 
         //===============================================================================
         #region プロパティ
+        //-------------------------------------------------------------------------------
+        #region ImageList プロパティ：ImageListの取得
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 関連付けられているImageListを取得します。
+        /// </summary>
+        public ImageList ImageList
+        {
+            get { return ImageListWrapper.ImageList; }
+        }
+        #endregion (ImageList)
         //-------------------------------------------------------------------------------
         #region SelectedIndex プロパティ：選択インデックス変更
         //-------------------------------------------------------------------------------
@@ -694,24 +704,31 @@ namespace StarlitTwit
                 // 位置保存用
                 long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ? (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID : _rowList[0].TwitData.StatusID : -1;
 
+                List<string> imageURLList = new List<string>();
                 //-----内部情報設定-----
                 List<RowData> addrowList = new List<RowData>();
-                long lastStatusID = (data.Count() > 0) ? data.Last().StatusID : -1;
+                TwitData lastdata = data.LastOrDefault();
                 foreach (TwitData t in data) {
                     // 重複排除
                     if (_rowDataList.ContainsKey(t.StatusID)) {
-                        if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastStatusID); }
+                        if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastdata.StatusID); }
                         continue;
                     }
 
                     RowData rowdata = new RowData() {
                         TwitData = t,
-                        IsBoundary = (!suspendSetBoundary && t.StatusID == lastStatusID)
+                        IsBoundary = (!suspendSetBoundary && t.StatusID == lastdata.StatusID)
                     };
 
                     // 返り値用
                     if (string.IsNullOrEmpty(retText)) {
                         retText = Utilization.InterpretFormat(t) + '\n' + t.Text;
+                    }
+
+                    // 画像URL登録
+                    string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
+                    if (!ImageList.Images.ContainsKey(iconURL) && !imageURLList.Contains(iconURL)) { 
+                        imageURLList.Add(iconURL); 
                     }
 
                     addrowList.Add(rowdata);
@@ -739,8 +756,10 @@ namespace StarlitTwit
                     }
                 }
 
-                //-----コントロール設定-----
+                // アイコン取得要請
+                ImageListWrapper.RequestAddImages(imageURLList);
 
+                //-----コントロール設定-----
                 // 選択復元
                 if (selectedData >= 0) {
                     int newIndex = _rowDataList.IndexOfKey(selectedData);
@@ -1040,6 +1059,7 @@ namespace StarlitTwit
         private UctlDispTwitRow MakeTwitRow(TwitData twitdata)
         {
             UctlDispTwitRow row = new UctlDispTwitRow(twitdata);
+            row.ImageList = ImageList;
             row.MouseDown += pnlflow_MouseDown;
             row.MouseUp += pnlflow_MouseUp;
             row.MouseMove += pnlflow_MouseMove;
@@ -1083,7 +1103,7 @@ namespace StarlitTwit
             row.SetFontConfig();
             row.SetNameLabel();
             row.SetTweetLabel();
-            row.SetIcon(ImageList);
+            row.SetIcon();
             row.SuspendAdjust = false;
             row.SetControlLocation();
         }
@@ -1238,6 +1258,22 @@ namespace StarlitTwit
             base.WndProc(ref m);
         }
         #endregion (#[override]WndProc)
+        //===============================================================================
+        #region -GetIcons 画像取得（別スレッド）
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 画像を取得します。
+        /// </summary>
+        private void GetIcons(IEnumerable<string> iconURLs)
+        {
+            foreach (var url in iconURLs) {
+                Image img = Utilization.GetImageFromURL(url);
+                if (img != null) {
+                    this.Invoke(new Action(() => ImageList.Images.Add(url, img)));
+                }
+            }
+        }
+        #endregion (GetIcons)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
 

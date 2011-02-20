@@ -31,12 +31,12 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmDispTweet(FrmMain parent, ImageList imageList)
+        public FrmDispTweet(FrmMain parent, ImageListWrapper imageListWrapper)
         {
             InitializeComponent();
             ReplyStartTwitdata = null;
             FormType = EFormType.User;
-            uctlDispTwit.ImageList = imageList;
+            uctlDispTwit.ImageListWrapper = imageListWrapper;
             parent.RegisterUctlDispTwitEvent(uctlDispTwit);
         }
         //-------------------------------------------------------------------------------

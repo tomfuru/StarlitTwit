@@ -42,6 +42,8 @@
             this.tsmi認証 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_プロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiプロフィール更新 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -85,9 +87,7 @@
             this.uctlDispHistory = new StarlitTwit.UctlDispTwit();
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
-            this.imageList = new System.Windows.Forms.ImageList(this.components);
-            this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageListWrapper = new StarlitTwit.ImageListWrapper();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -131,19 +131,19 @@
             // tsmiファイル_設定
             // 
             this.tsmiファイル_設定.Name = "tsmiファイル_設定";
-            this.tsmiファイル_設定.Size = new System.Drawing.Size(152, 22);
+            this.tsmiファイル_設定.Size = new System.Drawing.Size(110, 22);
             this.tsmiファイル_設定.Text = "設定(&C)";
             this.tsmiファイル_設定.Click += new System.EventHandler(this.tsmiファイル_設定_Click);
             // 
             // tsmiファイル_Sep
             // 
             this.tsmiファイル_Sep.Name = "tsmiファイル_Sep";
-            this.tsmiファイル_Sep.Size = new System.Drawing.Size(149, 6);
+            this.tsmiファイル_Sep.Size = new System.Drawing.Size(107, 6);
             // 
             // tsmiファイル_終了
             // 
             this.tsmiファイル_終了.Name = "tsmiファイル_終了";
-            this.tsmiファイル_終了.Size = new System.Drawing.Size(152, 22);
+            this.tsmiファイル_終了.Size = new System.Drawing.Size(110, 22);
             this.tsmiファイル_終了.Text = "終了(&Q)";
             this.tsmiファイル_終了.Click += new System.EventHandler(this.tsmiファイル_終了_Click);
             // 
@@ -209,6 +209,22 @@
             this.tsmiプロフィール更新.Size = new System.Drawing.Size(226, 22);
             this.tsmiプロフィール更新.Text = "フォロー数・発言数を更新する(&P)";
             this.tsmiプロフィール更新.Click += new System.EventHandler(this.tsmiプロフィール更新_Click);
+            // 
+            // tsmi_子画面
+            // 
+            this.tsmi_子画面.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi子画面_nothing});
+            this.tsmi_子画面.Name = "tsmi_子画面";
+            this.tsmi_子画面.Size = new System.Drawing.Size(69, 20);
+            this.tsmi_子画面.Text = "子画面(&C)";
+            this.tsmi_子画面.DropDownOpening += new System.EventHandler(this.tsmi_子画面_DropDownOpening);
+            // 
+            // tsmi子画面_nothing
+            // 
+            this.tsmi子画面_nothing.Enabled = false;
+            this.tsmi子画面_nothing.Name = "tsmi子画面_nothing";
+            this.tsmi子画面_nothing.Size = new System.Drawing.Size(97, 22);
+            this.tsmi子画面_nothing.Text = "(なし)";
             // 
             // statusStrip
             // 
@@ -591,7 +607,7 @@
             this.uctlDispHome.AutoScroll = true;
             this.uctlDispHome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.uctlDispHome.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uctlDispHome.ImageList = null;
+            this.uctlDispHome.ImageListWrapper = null;
             this.uctlDispHome.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHome.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHome.Name = "uctlDispHome";
@@ -613,7 +629,7 @@
             this.uctlDispReply.AutoScroll = true;
             this.uctlDispReply.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.uctlDispReply.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uctlDispReply.ImageList = null;
+            this.uctlDispReply.ImageListWrapper = null;
             this.uctlDispReply.Location = new System.Drawing.Point(0, 0);
             this.uctlDispReply.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispReply.Name = "uctlDispReply";
@@ -635,7 +651,7 @@
             this.uctlDispHistory.AutoScroll = true;
             this.uctlDispHistory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.uctlDispHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uctlDispHistory.ImageList = null;
+            this.uctlDispHistory.ImageListWrapper = null;
             this.uctlDispHistory.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHistory.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHistory.Name = "uctlDispHistory";
@@ -657,34 +673,21 @@
             this.uctlDispDirect.AutoScroll = true;
             this.uctlDispDirect.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.uctlDispDirect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uctlDispDirect.ImageList = null;
+            this.uctlDispDirect.ImageListWrapper = null;
             this.uctlDispDirect.Location = new System.Drawing.Point(0, 0);
             this.uctlDispDirect.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispDirect.Name = "uctlDispDirect";
             this.uctlDispDirect.Size = new System.Drawing.Size(440, 303);
             this.uctlDispDirect.TabIndex = 2;
             // 
-            // imageList
+            // imageListWrapper
             // 
-            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.imageList.ImageSize = new System.Drawing.Size(48, 48);
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // tsmi_子画面
             // 
-            this.tsmi_子画面.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmi子画面_nothing});
-            this.tsmi_子画面.Name = "tsmi_子画面";
-            this.tsmi_子画面.Size = new System.Drawing.Size(69, 20);
-            this.tsmi_子画面.Text = "子画面(&C)";
-            this.tsmi_子画面.DropDownOpening += new System.EventHandler(this.tsmi_子画面_DropDownOpening);
             // 
-            // tsmi子画面_nothing
-            // 
-            this.tsmi子画面_nothing.Enabled = false;
-            this.tsmi子画面_nothing.Name = "tsmi子画面_nothing";
-            this.tsmi子画面_nothing.Size = new System.Drawing.Size(152, 22);
-            this.tsmi子画面_nothing.Text = "(なし)";
+            this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
+            this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // FrmMain
             // 
@@ -784,9 +787,9 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiSpecifyTime;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem tsmiClearTweets;
-        private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.ToolStripMenuItem tsmi_子画面;
         private System.Windows.Forms.ToolStripMenuItem tsmi子画面_nothing;
+        private ImageListWrapper imageListWrapper;
 
     }
 }

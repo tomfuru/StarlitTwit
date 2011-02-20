@@ -35,6 +35,7 @@
             this.rtxtGet = new StarlitTwit.RichTextBoxHash();
             this.tooltipReply = new StarlitTwit.PermanentToolTip(this.components);
             this.tooltipPicture = new StarlitTwit.ToolTipPicture(this.components);
+            this.timerSetPicture = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -122,6 +123,10 @@
             this.tooltipPicture.SwitchInterval = 2000;
             this.tooltipPicture.PrePopup += new System.EventHandler<System.ComponentModel.CancelEventArgs>(this.tooltipPicture_PrePopup);
             // 
+            // timerSetPicture
+            // 
+            this.timerSetPicture.Tick += new System.EventHandler(this.timerSetPicture_Tick);
+            // 
             // UctlDispTwitRow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -152,5 +157,6 @@
         private UctlLine uctlline;
         private ToolTipPicture tooltipPicture;
         private PermanentToolTip tooltipReply;
+        private System.Windows.Forms.Timer timerSetPicture;
     }
 }

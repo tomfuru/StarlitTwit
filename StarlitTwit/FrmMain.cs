@@ -41,6 +41,8 @@ namespace StarlitTwit
 
             DEFAULT_TABPAGES = new TabPage[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
 
+            imageListWrapper.ImageList.Images.Add(STR_IMGLIST_CROSS, StarlitTwit.Properties.Resources.cross);
+
             tssLabel.Text = "";
             tsslRestAPI.Text = "";
             lblTweetStatus.Text = "";
@@ -101,14 +103,25 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region プロパティ
         //-------------------------------------------------------------------------------
-        #region ImageList プロパティ：
+        #region ImageListWrapper プロパティ
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ImageListWrapperを取得します。
+        /// </summary>
+        public ImageListWrapper ImageListWrapper
+        {
+            get { return imageListWrapper; }
+        }
+        #endregion (ImageListWrapper)
+        //-------------------------------------------------------------------------------
+        #region ImageList プロパティ
         //-------------------------------------------------------------------------------
         /// <summary>
         /// ImageListを返します。
         /// </summary>
         public ImageList ImageList
         {
-            get { return imageList; }
+            get { return imageListWrapper.ImageList; }
         }
         #endregion (ImageList)
         //-------------------------------------------------------------------------------
@@ -117,6 +130,8 @@ namespace StarlitTwit
         //===============================================================================
         #region 定数
         //-------------------------------------------------------------------------------
+        /// <summary>×マークの画像のKey</summary>
+        public const string STR_IMGLIST_CROSS = "CROSS";
         /// <summary>発言可能な長さ</summary>
         private const int MAX_LENGTH = 140;
         /// <summary>デフォルトである(消せない)タブページ</summary>
@@ -131,7 +146,6 @@ namespace StarlitTwit
         private const string STR_NOT_AUTOGET = "自動取得無し";
         private const string STR_SECOND = "秒";
         private const string STR_NUM = "件";
-
         private readonly SystemSound SYSTEMSOUND = SystemSounds.Question;
         const int BALOON_DURATION = 10000;
         //-------------------------------------------------------------------------------
@@ -416,7 +430,7 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower frm = new FrmFollower(imageList) {
+            FrmFollower frm = new FrmFollower(ImageList) {
                 FormType = FrmFollower.EFormType.Following,
                 Text = "フォローしている人"
             };
@@ -429,7 +443,7 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower frm = new FrmFollower(imageList) {
+            FrmFollower frm = new FrmFollower(ImageList) {
                 FormType = FrmFollower.EFormType.Follower,
                 Text = "フォローされている人"
             };
@@ -598,7 +612,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_DisplayConversation_Click(object sender, TwitRowMenuEventArgs e)
         {
-            FrmDispTweet frm = new FrmDispTweet(this, imageList);
+            FrmDispTweet frm = new FrmDispTweet(this, imageListWrapper);
             frm.FormType = FrmDispTweet.EFormType.Conversation;
             frm.ReplyStartTwitdata = e.TwitData;
             frm.Show(this);
@@ -1187,7 +1201,7 @@ namespace StarlitTwit
         /// <param name="uctlDisp"></param>
         private void ConfigTabAndUserDispControl(TabPage tabpage, UctlDispTwit uctlDisp)
         {
-            uctlDisp.ImageList = imageList;
+            uctlDisp.ImageListWrapper= imageListWrapper;
             _dispTwitDic.Add(tabpage, uctlDisp);
             RegisterUctlDispTwitEvent(uctlDisp);
             SetAutoRenewData(uctlDisp);

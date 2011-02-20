@@ -57,7 +57,6 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.uctlDispTwit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.uctlDispTwit.ImageList = null;
             this.uctlDispTwit.Location = new System.Drawing.Point(0, 0);
             this.uctlDispTwit.Name = "uctlDispTwit";
             this.uctlDispTwit.Size = new System.Drawing.Size(392, 244);

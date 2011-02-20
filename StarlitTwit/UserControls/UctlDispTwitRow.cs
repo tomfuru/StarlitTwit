@@ -60,17 +60,36 @@ namespace StarlitTwit
         //===============================================================================
         #region 変数
         //-------------------------------------------------------------------------------
-        /// <summary>発言情報</summary>
-        public TwitData TwitData { get; set; }
         /// <summary>選択されているかどうか。</summary>
         public new bool Focused { get; private set; }
         /// <summary>[static]読み込み可能な画像の拡張子</summary>
         private static readonly string[] IMAGE_EXTENSIONS;
+        /// <summary>再読込回数カウントダウン</summary>
+        private int _iReRead_RestTime = 0;
+        /// <summary>画像辞書(KeyはURL)</summary>
+        public ImageList ImageList { get; set; }
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
         //===============================================================================
         #region プロパティ
+        //-------------------------------------------------------------------------------
+        #region TwitData プロパティ：発言データ
+        //-------------------------------------------------------------------------------
+        private TwitData _twitData;
+        /// <summary>
+        /// 発言データ
+        /// </summary>
+        public TwitData TwitData
+        {
+            get { return _twitData; }
+            set 
+            {
+                timerSetPicture.Enabled = false;
+                _twitData = value; 
+            }
+        }
+        #endregion (TwitData)
         //-------------------------------------------------------------------------------
         #region Text_NameLabel プロパティ：名前ラベルのテキストを取得
         //-------------------------------------------------------------------------------
@@ -167,6 +186,8 @@ namespace StarlitTwit
         // テキストボックスとラベルの位置補正
         private const int REVISION_TEXTBOX_LEFT = 2;
         private const int REVISION_TEXTBOX_RIGHT = 3;
+        // 画像取得時間
+        private const int PICTURE_REREAD_TIME = 10000;
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -365,10 +386,33 @@ namespace StarlitTwit
         private void rtxtGet_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             if (OpenURLRequest != null) {
-                OpenURLRequest.Invoke(this, new OpenURLEventArgs(e.LinkText,FrmMain.SettingsData.UseInternalWebBrowser));
+                OpenURLRequest.Invoke(this, new OpenURLEventArgs(e.LinkText, FrmMain.SettingsData.UseInternalWebBrowser));
             }
         }
         #endregion (rtxtGet_LinkClicked)
+        //-------------------------------------------------------------------------------
+        #region timerSetPicture_Tick 画像取得タイマ
+        //-------------------------------------------------------------------------------
+        //
+        private void timerSetPicture_Tick(object sender, EventArgs e)
+        {
+            string IconURL = (TwitData.TwitType == TwitType.Retweet) ? TwitData.RTTwitData.IconURL : TwitData.IconURL;
+            // 画像読み込み
+            if (ImageList.Images.ContainsKey(IconURL)) {
+                picbIcon.Image = ImageList.Images[IconURL];
+                picbIcon.Visible = true;
+                timerSetPicture.Enabled = false;
+            }
+
+            _iReRead_RestTime -= timerSetPicture.Interval;
+            if (_iReRead_RestTime <= 0) {
+                // 終了
+                picbIcon.Image = ImageList.Images[FrmMain.STR_IMGLIST_CROSS];
+                picbIcon.Visible = true; 
+                timerSetPicture.Enabled = false;
+            }
+        }
+        #endregion (timerSetPicture_Tick)
         //-------------------------------------------------------------------------------
         #endregion (イベント)
 
@@ -479,27 +523,24 @@ namespace StarlitTwit
         /// <para>アイコンが正しく設定されたらピクチャーボックスが表示されます。</para>
         /// </summary>
         /// <param name="imageList">[option]画像辞書</param>
-        /// <returns>アイコンが正しく設定されたかどうか(ピクチャーボックスのVisible)</returns>
-        public bool SetIcon(ImageList imageList = null)
+        /// <returns>アイコンが正しく設定されたかどうか</returns>
+        public bool SetIcon()
         {
-            if (!IconVisible) { return false; }
+            if (!IconVisible || ImageList == null) { return false; }
 
             string IconURL = (TwitData.TwitType == TwitType.Retweet) ? TwitData.RTTwitData.IconURL : TwitData.IconURL;
 
-            if (string.IsNullOrEmpty(IconURL)) {
-                return IconVisible = false;
+            if (string.IsNullOrEmpty(IconURL)) { 
+                picbIcon.Image = ImageList.Images[FrmMain.STR_IMGLIST_CROSS]; 
             }
-
-            if (imageList != null && imageList.Images.ContainsKey(IconURL)) {
-                picbIcon.Image = imageList.Images[IconURL];
+            else if (ImageList.Images.ContainsKey(IconURL)) {
+                picbIcon.Image = ImageList.Images[IconURL];
             }
             else {
-                // 登録
-                Image img = Utilization.GetImageFromURL(IconURL);
-                if (img != null) {
-                    if (imageList != null) { imageList.Images.Add(IconURL, img); }
-                    picbIcon.Image = img;
-                }
+                picbIcon.Image = null;
+                // タイマーON
+                _iReRead_RestTime = PICTURE_REREAD_TIME;
+                timerSetPicture.Enabled = true;
             }
             return IconVisible = true;
         }
@@ -802,7 +843,8 @@ namespace StarlitTwit
 
         public bool useInternalBrowser { get; private set; }
 
-        public OpenURLEventArgs(string url,bool useInternalBrowser) {
+        public OpenURLEventArgs(string url, bool useInternalBrowser)
+        {
             this.url = url;
             this.useInternalBrowser = useInternalBrowser;
         }
