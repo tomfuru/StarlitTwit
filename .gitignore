@@ -1,7 +1,5 @@
 bin/
 obj/
-Test/
-ConsoleApp/
 *.txt
 *.suo
 *.csproj.user
