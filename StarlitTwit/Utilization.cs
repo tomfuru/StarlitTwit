@@ -328,12 +328,10 @@ namespace StarlitTwit
         public static void InvokeCallback(IAsyncResult ar)
         {
             AsyncResult asyncResult = (AsyncResult)ar;
-            object delg = asyncResult.AsyncDelegate;
-            Type type = delg.GetType();
 
-            MethodInfo minfo = type.GetMethod("EndInvoke");
+            dynamic delg = asyncResult.AsyncDelegate;
             try {
-                minfo.Invoke(delg, new object[] { ar });
+                delg.EndInvoke(ar);
             }
             catch (TargetInvocationException ex) {
                 throw ex.InnerException;
