@@ -1523,7 +1523,7 @@ namespace StarlitTwit
         /// <returns></returns>
         private IEnumerable<TwitData> ConvertToTwitDataArray(XElement el)
         {
-            return from stat in el.Elements("status")
+            return from stat in el.Descendants("status")
                    select ConvertToTwitData(stat);
         }
         #endregion (GetTwitData)
@@ -1574,7 +1574,7 @@ namespace StarlitTwit
         /// <returns></returns>
         private IEnumerable<TwitData> ConvertToTwitDataArrayDM(XElement el)
         {
-            return from stat in el.Elements("direct_message")
+            return from stat in el.Descendants("direct_message")
                    select ConvertToTwitDataDM(stat);
         }
         #endregion (ConvertToTwitDataArrayDM)
@@ -1589,7 +1589,7 @@ namespace StarlitTwit
         private IEnumerable<ListData> ConvertToListData(XElement el)
         {
             try {
-                return from stat in el.Elements("list")
+                return from stat in el.Descendants("list")
                        select new ListData() {
                            ID = long.Parse(stat.Element("id").Value),
                            Name = stat.Element("slug").Value,
@@ -1615,7 +1615,7 @@ namespace StarlitTwit
         private IEnumerable<TwitData> ConvertToTwitDataJson(XElement el)
         {
             try {
-                return from stat in el.Element("results").Elements("item")
+                return from stat in el.Element("results").Descendants("item")
                        select new TwitData() {
                            TwitType = StarlitTwit.TwitType.Search,
                            DMScreenName = "",
@@ -1636,7 +1636,6 @@ namespace StarlitTwit
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
-                Log.DebugLog(el.ToString());
                 throw new TwitterAPIException(1001, "予期しないXmlです。");
             }
         }
@@ -1683,7 +1682,7 @@ namespace StarlitTwit
         /// <returns></returns>
         private IEnumerable<UserProfile> ConvertToUserProfileArray(XElement el)
         {
-            return from stat in el.Elements("user")
+            return from stat in el.Descendants("user")
                    select ConvertToUserProfile(stat);
         }
         #endregion (ConvertToUserProfileArray)
