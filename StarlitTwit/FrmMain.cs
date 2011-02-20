@@ -1368,6 +1368,7 @@ namespace StarlitTwit
                             d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: iCount);
                             break;
                         default:
+                            Debug.Assert(false, "異常な検索タイプ");
                             d = new TwitData[0];
                             break;
                     }
@@ -1444,6 +1445,7 @@ namespace StarlitTwit
                             d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: tabdata.RenewGetNum, since_id: since_id);
                             break;
                         default:
+                            Debug.Assert(false, "異常な検索タイプ");
                             d = new TwitData[0];
                             break;
                     }
@@ -1503,6 +1505,7 @@ namespace StarlitTwit
                             d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: tabdata.RenewGetNum, max_id: max_id);
                             break;
                         default:
+                            Debug.Assert(false, "異常な検索タイプ");
                             d = new TwitData[0];
                             break;
                     }
@@ -1593,6 +1596,7 @@ namespace StarlitTwit
                                 d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: 200, page: i);
                                 break;
                             default:
+                                Debug.Assert(false, "異常な検索タイプ");
                                 isBreak = true;
                                 break;
                         }
