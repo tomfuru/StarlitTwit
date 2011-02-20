@@ -105,15 +105,18 @@
     </Compile>
     <Compile Include="BaseTools.cs" />
     <Compile Include="Function\URLShortener.cs" />
-    <Compile Include="ImageListWrapper.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializableClass\SerializableColor.cs" />
     <Compile Include="SerializableClass\SerializableFont.cs" />
     <Compile Include="SerializableClass\SerializableDictionary.cs" />
     <Compile Include="SettingsData.cs" />
+    <Compile Include="UserControls\ImageListWrapper.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\ToolStripStatusLabelEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Twitter.cs" />
     <Compile Include="UserControls\NumericUpDownExtended.cs">
       <SubType>Component</SubType>
