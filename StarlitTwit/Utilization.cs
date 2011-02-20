@@ -332,8 +332,12 @@ namespace StarlitTwit
             Type type = delg.GetType();
 
             MethodInfo minfo = type.GetMethod("EndInvoke");
-            minfo.Invoke(delg, new object[] { ar });
-
+            try {
+                minfo.Invoke(delg, new object[] { ar });
+            }
+            catch (TargetInvocationException ex) {
+                throw ex.InnerException;
+            }
         }
         #endregion (Callback)
 
