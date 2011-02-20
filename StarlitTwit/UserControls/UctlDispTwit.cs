@@ -539,7 +539,7 @@ namespace StarlitTwit
                             _suspend_vscrbar_ValueChangeEvent = true;
                             vscrbar.Value -= diff;
                             _suspend_vscrbar_ValueChangeEvent = false;
-                            AdjustControll(vscrbar.Value, true, diff);
+                            AdjustControl(vscrbar.Value, true, diff);
                             pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
                         }
                         else if (SelectedIndex >= vscrbar.Value + _iAllVisibleRowNum) { // 選択が下にありすぎる
@@ -547,7 +547,7 @@ namespace StarlitTwit
                             _suspend_vscrbar_ValueChangeEvent = true;
                             vscrbar.Value -= diff;
                             _suspend_vscrbar_ValueChangeEvent = false;
-                            AdjustControll(SelectedIndex, false, diff);
+                            AdjustControl(SelectedIndex, false, diff);
                             pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
                         }
                     }
@@ -589,7 +589,7 @@ namespace StarlitTwit
         private void UctlDispTwit_ClientSizeChanged(object sender, EventArgs e)
         {
             lock (_lockObj) {
-                AdjustControll(vscrbar.Value, true);
+                AdjustControl(vscrbar.Value, true);
             }
         }
         //-------------------------------------------------------------------------------
@@ -660,7 +660,7 @@ namespace StarlitTwit
                 try {
                     if (_suspend_vscrbar_ValueChangeEvent || _prevValue == vscrbar.Value) { return; }
 
-                    AdjustControll(vscrbar.Value, true, _prevValue - vscrbar.Value);
+                    AdjustControl(vscrbar.Value, true, _prevValue - vscrbar.Value);
                     pnlTweets.Refresh();
                 }
                 finally {
@@ -754,16 +754,16 @@ namespace StarlitTwit
                     // 位置復元
                     int baseIndex = _rowDataList.IndexOfKey(locIndex);
                     if (_existNotAllRow_Top) {
-                        AdjustControll(baseIndex, false);
+                        AdjustControl(baseIndex, false);
                     }
                     else {
                         _suspend_vscrbar_ValueChangeEvent = true;
                         vscrbar.Value = baseIndex;
                         _suspend_vscrbar_ValueChangeEvent = false;
-                        AdjustControll(vscrbar.Value, true); // コントロール位置調整
+                        AdjustControl(vscrbar.Value, true); // コントロール位置調整
                     }
                 }
-                else { AdjustControll(vscrbar.Value, true); } // コントロール位置調整
+                else { AdjustControl(vscrbar.Value, true); } // コントロール位置調整
 
                 return retText;
             }
@@ -777,7 +777,7 @@ namespace StarlitTwit
         /// </summary>
         public void ReConfigAll()
         {
-            lock (_lockObj) { AdjustControll(vscrbar.Value, true); }
+            lock (_lockObj) { AdjustControl(vscrbar.Value, true); }
         }
         //-------------------------------------------------------------------------------
         #endregion (ReConfigAll)
@@ -815,13 +815,13 @@ namespace StarlitTwit
             lock (_lockObj) {
                 _rowDataList.Remove(statusid);
                 if (SelectedIndex == _rowDataList.Keys.IndexOf(statusid)) { SelectedIndex = -1; }
-                AdjustControll(vscrbar.Value, true);
+                AdjustControl(vscrbar.Value, true);
             }
             return true;
         }
         #endregion (RemoveTweet)
         //===============================================================================
-        #region -AdjustControll コントロールの内容・位置・サイズの調整を行います。
+        #region -AdjustControl コントロールの内容・位置・サイズの調整を行います。
         //-------------------------------------------------------------------------------
         /// <summary>
         /// コントロールの内容・位置・サイズの調整を行います。
@@ -829,7 +829,7 @@ namespace StarlitTwit
         /// <param name="startIndex">一番上(flowDirForward=true)もしくは一番下(flowDirForward=false)のインデックス</param>
         /// <param name="flowDirForward">上(true)と下(false)のどちらから詰めていくか</param>
         /// <param name="shiftvalue">上向き正とするシフト量。0の時は無効</param>
-        private void AdjustControll(int startIndex, bool flowDirForward, int shiftvalue = 0)
+        private void AdjustControl(int startIndex, bool flowDirForward, int shiftvalue = 0)
         {
             if (_rowDataList.Count == 0) { return; }
 
@@ -1028,7 +1028,7 @@ namespace StarlitTwit
             _suspend_vscrbar_ValueChangeEvent = false;
         }
         //-------------------------------------------------------------------------------
-        #endregion (AdjustControll)
+        #endregion (AdjustControl)
         //-------------------------------------------------------------------------------
         #region -MakeTwitRow 行を作成しイベントを登録して返します。
         //-------------------------------------------------------------------------------
