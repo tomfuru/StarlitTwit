@@ -273,7 +273,8 @@ namespace StarlitTwit
                 }
                 else {
                     // 画像読込
-                    Image img = Utilization.GetImageFromURL(ImageURLs[i]);
+                    Image img = null;
+                    Utilization.InvokeTransaction(() => img = Utilization.GetImageFromURL(ImageURLs[i]));
                     if (img != null) { list.Add(img); }
                 }
             }
@@ -316,16 +317,15 @@ namespace StarlitTwit
             string thumburl = urlpartials[0] + "//" + urlpartials[1] + "/show/thumb/" + urlpartials[2];
 
             Image img = null;
-            Utilization.InvokeTransaction(new Action(() =>
-            {
-                img = Utilization.GetImageFromURL(thumburl);
-            }));
+            Utilization.InvokeTransaction(() => img = Utilization.GetImageFromURL(thumburl));
 
             return img;
         }
         #endregion (GetThumbnailFromTwitpic)
 
         //-------------------------------------------------------------------------------
+        #region 未使用
+        /*-------------------------------------------------------------------------------
         #region -GetImageFromTwitpic Twitpicから画像を取得します。
         //-------------------------------------------------------------------------------
         //
@@ -359,5 +359,7 @@ namespace StarlitTwit
             throw new NotImplementedException();
         }
         #endregion (GetImageFromTwitpic)
+        */
+        #endregion
     }
 }
