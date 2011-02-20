@@ -1652,8 +1652,8 @@ namespace StarlitTwit
                     UserName = el.Element("name").Value,
                     ScreenName = el.Element("screen_name").Value,
                     IconURL = el.Element("profile_image_url").Value,
-                    Protected = bool.Parse(el.Element("protected").Value),
-                    FolllowRequestSent = bool.Parse(el.Element("follow_request_sent").Value),
+                    Protected = TryParseBool(el.Element("protected").Value),
+                    FolllowRequestSent = TryParseBool(el.Element("follow_request_sent").Value), //TryParseBool(el.Element("follow_request_sent").Value),
                     Location = el.Element("location").Value,
                     Description = el.Element("description").Value,
                     Following = TryParseBool(el.Element("following").Value),
@@ -1694,13 +1694,13 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="str">変換する文字列</param>
         /// <returns></returns>
-        private long TryParseLong(string str)
+        private long TryParseLong(string str,long defaultValue = -1)
         {
             long l;
             if (long.TryParse(str, out l)) {
                 return l;
             }
-            return -1;
+            return defaultValue;
         }
         #endregion (TryParseLong)
         //-------------------------------------------------------------------------------
@@ -1711,12 +1711,12 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        private bool TryParseBool(string str)
+        private bool TryParseBool(string str, bool defaultValue = false)
         {
-            if (string.IsNullOrEmpty(str)) { return false; }
+            if (string.IsNullOrEmpty(str)) { return defaultValue; }
             bool b;
             if (bool.TryParse(str, out b)) { return b; }
-            return false;
+            return defaultValue;
         }
         #endregion (TryParseBool)
         //-------------------------------------------------------------------------------
