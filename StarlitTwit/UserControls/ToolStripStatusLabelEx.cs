@@ -21,8 +21,12 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         /// <summary>複数ラベルがある時の切り替え間隔(ミリ秒)</summary>
         [Category("動作")]
-        [DefaultValue(1000)]
+        [DefaultValue(DEFAULT_SWITCHINTERVAL)]
         public int SwitchInterval { get; set; }
+        /// <summary>永久でない時の最大表示時間(ミリ秒)</summary>
+        [Category("動作")]
+        [DefaultValue(DEFAULT_MAXDISPLAYTIME)]
+        public int MaxDisplay { get; set; }
         /// <summary>最初のキュー</summary>
         private Queue<string> _firstQueue = new Queue<string>();
         /// <summary>テキストデータリスト</summary>
@@ -51,6 +55,8 @@ namespace StarlitTwit
         #region Constants
         //-------------------------------------------------------------------------------
         private const int SLEEP_TIME = 20;
+        private const int DEFAULT_SWITCHINTERVAL = 1500;
+        private const int DEFAULT_MAXDISPLAYTIME = 5000;
         //-------------------------------------------------------------------------------
         #endregion (Constants)
 
@@ -94,7 +100,9 @@ namespace StarlitTwit
         public ToolStripStatusLabelEx()
             : base()
         {
-            SwitchInterval = 1000;
+            SwitchInterval = DEFAULT_SWITCHINTERVAL;
+            MaxDisplay = DEFAULT_MAXDISPLAYTIME;
+            base.Text = "";
         }
         #endregion (コンストラクタ)
 
@@ -123,7 +131,7 @@ namespace StarlitTwit
         public void SetText(string text, int times)
         {
             TextData data = new TextData() {
-                type = TextDataType.Permanent,
+                type = (times > 0) ? TextDataType.Some_Times : TextDataType.Permanent,
                 restNum = times
             };
 
@@ -174,34 +182,38 @@ namespace StarlitTwit
             string text;
             TextData textdata;
             while (true) {
-                bool isFirst;
                 lock (_objSync) {
                     if (_firstQueue.Count > 0) {
-                        isFirst = true;
                         text = _firstQueue.Dequeue();
                     }
                     else if (_textQueue.Count > 0) {
-                        isFirst = false;
                         text = _textQueue.Dequeue();
                     }
-                    else {                                          // 要素もう無し，終了
-                        base.Text = "";
-                        return;
-                    }
+                    else { break; }                 // 要素もう無し，終了
 
                     if (!_textDic.ContainsKey(text)) { continue; }  // 削除済みの時
                     textdata = _textDic[text];
                 }
 
-                base.Text = text;
+                SetTextToLabel(text);
 
                 int standard = Environment.TickCount;
                 int now = standard;
-                do {
-                    if (!isFirst && _firstQueue.Count > 0) { break; } // 初めての項目がきた場合は優先
+                while (true) {
+                    if (_firstQueue.Count > 0) { break; }       // 初めての項目がきた場合は優先
                     Thread.Sleep(SLEEP_TIME);
                     now = Environment.TickCount;
-                } while (now - standard < SwitchInterval);
+                    if (now - standard >= SwitchInterval && _textQueue.Count > 0) { break; } // データがある場合はSwitchIntervalたったら抜ける
+                    else if (textdata.type == TextDataType.Permanent) {    // Permanentの時にデータが消えてたら終わり
+                        lock (_objSync) {
+                            if (!_textDic.ContainsKey(text)) { break; }
+                        }
+                    }
+                    else if (now - standard >= MaxDisplay) {               // Permanentでない時にMaxDisplay時間たったら終わり
+                        textdata.restNum = 0;
+                        break;
+                    }
+                } ;
 
                 if (textdata.type == TextDataType.Permanent || --textdata.restNum >= 0) {
                     _textQueue.Enqueue(text);
@@ -212,8 +224,21 @@ namespace StarlitTwit
                     }
                 }
             }
+            SetTextToLabel("");
         }
         #endregion (SwitchText)
 
+        //-------------------------------------------------------------------------------
+        #region -SetTextToLabel テキストを設定
+        //-------------------------------------------------------------------------------
+        //
+        private void SetTextToLabel(string text)
+        {
+            if (this.Parent.InvokeRequired) {
+                this.Parent.Invoke(new Action(() => base.Text = text));
+            }
+            else { base.Text = text; }
+        }
+        #endregion (SetTextToLabel)
     }
 }

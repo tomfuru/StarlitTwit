@@ -45,9 +45,7 @@
             this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.tssllbl2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsslRestAPI = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuTab = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -230,8 +228,6 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssLabel,
-            this.tsSeparator,
-            this.tssllbl2,
             this.toolStripSeparator1,
             this.tsslRestAPI});
             this.statusStrip.Location = new System.Drawing.Point(0, 458);
@@ -244,21 +240,9 @@
             // 
             this.tssLabel.AutoSize = false;
             this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(170, 18);
-            this.tssLabel.Text = "...";
+            this.tssLabel.Size = new System.Drawing.Size(320, 18);
+            this.tssLabel.Spring = true;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tsSeparator
-            // 
-            this.tsSeparator.Name = "tsSeparator";
-            this.tsSeparator.Size = new System.Drawing.Size(6, 23);
-            // 
-            // tssllbl2
-            // 
-            this.tssllbl2.Name = "tssllbl2";
-            this.tssllbl2.Size = new System.Drawing.Size(175, 18);
-            this.tssllbl2.Spring = true;
-            this.tssllbl2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripSeparator1
             // 
@@ -733,24 +717,24 @@
 
         private System.Windows.Forms.Button btnTwit;
         private System.Windows.Forms.TextBox txtTwit;
-        private StarlitTwit.TabControlEx tabTwitDisp;
+        private TabControlEx tabTwitDisp;
         private System.Windows.Forms.TabPage tabpgHistory;
         private System.Windows.Forms.SplitContainer splContainer;
-        private StarlitTwit.UctlDispTwit uctlDispHistory;
+        private UctlDispTwit uctlDispHistory;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem tsmi_ファイル;
         private System.Windows.Forms.ToolStripMenuItem tsmi_機能;
         private System.Windows.Forms.ToolStripMenuItem tsmi認証;
         private System.Windows.Forms.TabPage tabpgReply;
-        private StarlitTwit.UctlDispTwit uctlDispReply;
+        private UctlDispTwit uctlDispReply;
         private System.Windows.Forms.TabPage tabpgHome;
-        private StarlitTwit.UctlDispTwit uctlDispHome;
+        private UctlDispTwit uctlDispHome;
         private System.Windows.Forms.ToolStripMenuItem tsmiファイル_終了;
         private System.Windows.Forms.ToolStripMenuItem tsmiファイル_設定;
         private System.Windows.Forms.ToolStripSeparator tsmiファイル_Sep;
         private System.Windows.Forms.Label lblRest;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel tssLabel;
+        private ToolStripStatusLabelEx tssLabel;
         private System.Windows.Forms.ToolStripMenuItem tsmi更新;
         private System.Windows.Forms.Label lblTweetStatus;
         private System.Windows.Forms.TabPage tabpgDirect;
@@ -759,9 +743,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTab_MakeTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiTab_DeleteTab;
         private System.Windows.Forms.Button btnStateReset;
-        private System.Windows.Forms.ToolStripStatusLabel tssllbl2;
         private System.Windows.Forms.ToolStripStatusLabel tsslRestAPI;
-        private System.Windows.Forms.ToolStripSeparator tsSeparator;
         private System.Windows.Forms.ToolStripMenuItem tsmiTab_EditTab;
         internal System.Windows.Forms.NotifyIcon tasktray;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

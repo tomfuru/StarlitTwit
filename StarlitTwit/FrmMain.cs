@@ -43,7 +43,6 @@ namespace StarlitTwit
 
             imageListWrapper.ImageList.Images.Add(STR_IMGLIST_CROSS, StarlitTwit.Properties.Resources.cross);
 
-            tssLabel.Text = "";
             tsslRestAPI.Text = "";
             lblTweetStatus.Text = "";
 
@@ -148,6 +147,23 @@ namespace StarlitTwit
         private const string STR_NUM = "件";
         private readonly SystemSound SYSTEMSOUND = SystemSounds.Question;
         const int BALOON_DURATION = 10000;
+
+        private const string STR_POSTING = "投稿中...";
+
+        private const string STR_WAITING_CONFIGFORM = "設定画面待機中...";
+        private const string STR_WAITING_RENEW = "更新待機中...";
+        private const string STR_WAITING_MAKETAB = "タブ作成待機中...";
+        private const string STR_WAITING_RENEWTABCONFIG = "タブ設定更新待機中...";
+        private const string STR_WAITING_DELETETAB = "タブ削除待機中...";
+        private const string STR_WAITING_AUTORENEWDATA = "自動更新データ追加待機中...";
+        private const string STR_WAITING_AUTHFORM = "認証画面待機中...";
+        private const string STR_WAITING_TABEDIT = "タブ編集画面待機中...";
+        private const string STR_GETTING_STATUS = "発言取得中...";
+        private const string STR_GETING_OLDERSTATUS = "より古いデータ取得中...";
+        private const string STR_GETING_NEWERSTATUS = "より新しいデータ取得中...";
+
+        private const int ERROR_STATUSBAR_DISM_TIMES = 1;
+
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -690,7 +706,7 @@ namespace StarlitTwit
         {
             UctlDispTwit uctldisp = (UctlDispTwit)sender;
             if (_dispTwitDic.Values.Any((u) => u == uctldisp)) {
-                InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetOlderTweets), e.TwitData.StatusID, (UctlDispTwit)sender, "より古いデータ取得中...");
+                InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetOlderTweets), e.TwitData.StatusID, (UctlDispTwit)sender, STR_GETING_OLDERSTATUS);
             }
         }
         #endregion (TwitMenu_OlderDataRequest_Click)
@@ -702,7 +718,7 @@ namespace StarlitTwit
         {
             UctlDispTwit uctldisp = (UctlDispTwit)sender;
             if (_dispTwitDic.Values.Any((u) => u == uctldisp)) {
-                InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetMoreRecentTweets), e.TwitData.StatusID, (UctlDispTwit)sender, "より新しいデータ取得中...");
+                InvokeTweetGet(new Func<UctlDispTwit, long, bool>(GetMoreRecentTweets), e.TwitData.StatusID, (UctlDispTwit)sender, STR_GETING_NEWERSTATUS);
             }
         }
         #endregion (TwitMenu_MoreRecentDataRequest_Click)
@@ -716,11 +732,9 @@ namespace StarlitTwit
                 frm.EnableDateTimeTo = true;
                 frm.DateTimeTo = e.TwitData.Time;
                 if (frm.ShowDialog() == DialogResult.OK) {
-                    Utilization.InvokeTransaction(() =>
-                      GetSpecifyTimeTweets((UctlDispTwit)sender, frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo),
-                    () => this.Invoke(new Action(() => tssLabel.Text = "発言取得中..."))
-                    );
-                    this.Invoke(new Action(() => tssLabel.Text = ""));
+                    tssLabel.SetText(STR_GETTING_STATUS);
+                    Utilization.InvokeTransaction(() => GetSpecifyTimeTweets((UctlDispTwit)sender, frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo));
+                    tssLabel.RemoveText(STR_GETTING_STATUS);
                 }
             }
         }
@@ -735,8 +749,10 @@ namespace StarlitTwit
         //
         private void tsmiファイル_設定_Click(object sender, EventArgs e)
         {
-            LockAndProcess("設定画面待機中...", _mreThreadConfirm, _mreThreadRun, new Action(() =>
+            tssLabel.SetText(STR_WAITING_CONFIGFORM);
+            LockAndProcess(_mreThreadConfirm, _mreThreadRun, () =>
             {
+                tssLabel.RemoveText(STR_WAITING_CONFIGFORM);
                 using (FrmConfig frmconf = new FrmConfig()) {
                     frmconf.SettingsData = SettingsData;
                     if (frmconf.ShowDialog() == DialogResult.OK) {
@@ -749,9 +765,9 @@ namespace StarlitTwit
                             lock (_autoRenewDic) {
                                 var data = _autoRenewDic[dispTwit];
                                 int sec = (dispTwit == uctlDispHome) ? SettingsData.GetInterval_Home :
-                                          (dispTwit == uctlDispReply) ? SettingsData.GetInterval_Reply :
-                                          (dispTwit == uctlDispHistory) ? SettingsData.GetInterval_History :
-                                          (dispTwit == uctlDispDirect) ? SettingsData.GetInterval_Direct : 0;
+                                            (dispTwit == uctlDispReply) ? SettingsData.GetInterval_Reply :
+                                            (dispTwit == uctlDispHistory) ? SettingsData.GetInterval_History :
+                                            (dispTwit == uctlDispDirect) ? SettingsData.GetInterval_Direct : 0;
                                 data.Interval = new TimeSpan(0, 0, sec);
                             }
                         }
@@ -763,8 +779,7 @@ namespace StarlitTwit
                         txtTwit_TextChanged(txtTwit, EventArgs.Empty); // 長さ再設定
                     }
                 }
-
-            }));
+            });
         }
         #endregion (tsmiファイル_設定_Click)
         //-------------------------------------------------------------------------------
@@ -782,8 +797,10 @@ namespace StarlitTwit
         //
         private void tsmi認証_Click(object sender, EventArgs e)
         {
-            LockAndProcess("認証画面待機中...", _mreThreadConfirm, _mreThreadRun, new Action(() =>
+            tssLabel.SetText(STR_WAITING_AUTHFORM);
+            LockAndProcess(_mreThreadConfirm, _mreThreadRun, new Action(() =>
             {
+                tssLabel.RemoveText(STR_WAITING_AUTHFORM);
                 UserInfo userdata;
                 if (Twitter.OAuth(out userdata)) {
 
@@ -820,16 +837,12 @@ namespace StarlitTwit
         {
             UctlDispTwit uctldisp = SelectedUctlDispTwit();
 
-            while (!Monitor.TryEnter(_autoRenewDic)) {
-                tssllbl2.Text = "更新待機中...";
-                Thread.Sleep(10);
-                Application.DoEvents();
-            }
-
-            _autoRenewDic[uctldisp].IsForce = true;
-
-            tssllbl2.Text = "";
-            Monitor.Exit(_autoRenewDic);
+            tssLabel.SetText(STR_WAITING_RENEW);
+            LockAndProcess(_autoRenewDic, () =>
+            {
+                tssLabel.RemoveText(STR_WAITING_RENEW);
+                _autoRenewDic[uctldisp].IsForce = true;
+            });
         }
         #endregion (tsmi更新_Click)
         //-------------------------------------------------------------------------------
@@ -840,11 +853,9 @@ namespace StarlitTwit
         {
             using (FrmGetTweet frm = new FrmGetTweet()) {
                 if (frm.ShowDialog() == DialogResult.OK) {
-                    Utilization.InvokeTransaction(() =>
-                      GetSpecifyTimeTweets(SelectedUctlDispTwit(), frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo),
-                    () => this.Invoke(new Action(() => tssLabel.Text = "発言取得中..."))
-                    );
-                    this.Invoke(new Action(() => tssLabel.Text = ""));
+                    tssLabel.SetText(STR_GETTING_STATUS);
+                    Utilization.InvokeTransaction(() => GetSpecifyTimeTweets(SelectedUctlDispTwit(), frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo));
+                    tssLabel.RemoveText(STR_GETTING_STATUS);
                 }
             }
         }
@@ -906,8 +917,8 @@ namespace StarlitTwit
                 count++;
             }
 
-            if (menuDic != null && menuDic.Count > 0) { 
-                foreach (var tsmi in menuDic.Values) { tsmi.Dispose(); } 
+            if (menuDic != null && menuDic.Count > 0) {
+                foreach (var tsmi in menuDic.Values) { tsmi.Dispose(); }
                 menuDic.Clear();
             }
 
@@ -971,8 +982,10 @@ namespace StarlitTwit
         //
         private void tsmiTab_EditTab_Click(object sender, EventArgs e)
         {
-            LockAndProcess("タブ編集画面待機中...", _mreThreadConfirm, _mreThreadRun, new Action(() =>
+            tssLabel.SetText(STR_WAITING_TABEDIT);
+            LockAndProcess(_mreThreadConfirm, _mreThreadRun, () =>
             {
+                tssLabel.RemoveText(STR_WAITING_TABEDIT);
                 TabPage tabpg = tabTwitDisp.SelectedTab;
                 TabData tabdata;
                 lock (SettingsData.TabDataDic) { tabdata = SettingsData.TabDataDic[(string)tabpg.Tag]; }
@@ -987,15 +1000,12 @@ namespace StarlitTwit
                         SettingsData.Save();
                         tabpg.ToolTipText = TabDataToString(frm.TabData);
 
-                        while (!Monitor.TryEnter(_autoRenewDic)) {
-                            tssllbl2.Text = "タブ設定更新待機中...";
-                            Thread.Sleep(10);
-                            Application.DoEvents();
-                        }
-
-                        tssllbl2.Text = "";
-
-                        _autoRenewDic[_dispTwitDic[tabpg]].Interval = new TimeSpan(0, 0, frm.TabData.GetInterval);
+                        tssLabel.SetText(STR_WAITING_RENEWTABCONFIG);
+                        LockAndProcess(_autoRenewDic, () =>
+                        {
+                            tssLabel.RemoveText(STR_WAITING_RENEWTABCONFIG);
+                            _autoRenewDic[_dispTwitDic[tabpg]].Interval = new TimeSpan(0, 0, frm.TabData.GetInterval);
+                        });
 
                         // 変化があった時
                         if (tabdata.SearchType != frm.TabData.SearchType || tabdata.SearchWord != frm.TabData.SearchWord) {
@@ -1007,7 +1017,7 @@ namespace StarlitTwit
                     }
                     else { return; }
                 }
-            }));
+            });
         }
         #endregion (tsmiTab_EditTab_Click)
         //-------------------------------------------------------------------------------
@@ -1017,19 +1027,17 @@ namespace StarlitTwit
         private void tsmiTab_DeleteTab_Click(object sender, EventArgs e)
         {
             if (Message.ShowQuestionMessage("本当に削除してよろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
-                LockAndProcess("タブ削除待機中...", _mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
+                tssLabel.SetText(STR_WAITING_DELETETAB);
+                LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
                 {
                     TabPage tabpg = tabTwitDisp.SelectedTab;
                     tabTwitDisp.TabPages.Remove(tabpg);
 
-                    while (!Monitor.TryEnter(_autoRenewDic)) {
-                        tssllbl2.Text = "タブ削除待機中...";
-                        Thread.Sleep(1);
-                        Application.DoEvents();
-                    }
-                    tssllbl2.Text = "";
-                    _autoRenewDic.Remove(_dispTwitDic[tabpg]);
-                    Monitor.Exit(_autoRenewDic);
+                    LockAndProcess(_autoRenewDic, () =>
+                    {
+                        tssLabel.RemoveText(STR_WAITING_DELETETAB);
+                        _autoRenewDic.Remove(_dispTwitDic[tabpg]);
+                    });
 
                     _dispTwitDic.Remove(tabpg);
                     lock (SettingsData.TabDataDic) { SettingsData.TabDataDic.Remove((string)tabpg.Tag); }
@@ -1099,8 +1107,10 @@ namespace StarlitTwit
         /// <param name="listowner">[opt]リストのオーナー</param>
         private void MakeNewTab(TabSearchType type, string data, string listowner = null)
         {
-            LockAndProcess("タブ作成待機中...", _mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
+            tssLabel.SetText(STR_WAITING_MAKETAB);
+            LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
             {
+                tssLabel.RemoveText(STR_WAITING_MAKETAB);
                 TabData tabdata = new TabData() {
                     TabName = data,
                     SearchWord = data,
@@ -1201,7 +1211,7 @@ namespace StarlitTwit
         /// <param name="uctlDisp"></param>
         private void ConfigTabAndUserDispControl(TabPage tabpage, UctlDispTwit uctlDisp)
         {
-            uctlDisp.ImageListWrapper= imageListWrapper;
+            uctlDisp.ImageListWrapper = imageListWrapper;
             _dispTwitDic.Add(tabpage, uctlDisp);
             RegisterUctlDispTwitEvent(uctlDisp);
             SetAutoRenewData(uctlDisp);
@@ -1229,12 +1239,12 @@ namespace StarlitTwit
                 }
             }
 
+            tssLabel.SetText(STR_WAITING_AUTORENEWDATA);
             while (!Monitor.TryEnter(_autoRenewDic)) {
-                tssllbl2.Text = "自動更新データ追加待機中...";
                 Thread.Sleep(10);
                 Application.DoEvents();
             }
-            tssllbl2.Text = "";
+            tssLabel.RemoveText(STR_WAITING_AUTORENEWDATA);
             _autoRenewDic.Add(dispTwit, data);
             Monitor.Exit(_autoRenewDic);
         }
@@ -1389,7 +1399,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex)));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1466,7 +1476,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1526,7 +1536,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1625,7 +1635,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex)));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1649,12 +1659,12 @@ namespace StarlitTwit
             if (text.Length == 0 /*|| text.Length > MAX_LENGTH*/) { return; }
 
             try {
+                tssLabel.SetText(STR_POSTING);
                 this.Invoke(new Action(() =>
                 {
                     this.ActiveControl = null;
                     txtTwit.Enabled = false;
                     btnTwit.Enabled = false;
-                    tssLabel.Text = "投稿中...";
                 }));
 
                 switch (_stateStatusState) {
@@ -1677,7 +1687,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => { tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex); }));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return;
             }
@@ -1688,6 +1698,7 @@ namespace StarlitTwit
                     btnTwit.Enabled = true;
                     txtTwit.Focus();
                 }));
+                tssLabel.RemoveText(STR_POSTING);
             }
 
             this.Invoke(new Action(() =>
@@ -1707,12 +1718,12 @@ namespace StarlitTwit
                 Twitter.statuses_destroy(statusid);
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => { tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex); }));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return;
             }
 
-            ForAllUctlDispTwit(new Action<UctlDispTwit>((uctl) => uctl.RemoveTweet(statusid)));
+            ForAllUctlDispTwit((uctl) => uctl.RemoveTweet(statusid));
 
             Message.ShowInfoMessage("削除しました。");
         }
@@ -1732,7 +1743,7 @@ namespace StarlitTwit
                 Twitter.favorites_create(id);
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => { tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex); }));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1753,7 +1764,7 @@ namespace StarlitTwit
                 Twitter.favorites_destroy(id);
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => { tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex); }));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1775,7 +1786,7 @@ namespace StarlitTwit
                 return Twitter.users_show(screen_name: screen_name);
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() => { tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex); }));
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                 return null;
             }
         }
@@ -1937,6 +1948,8 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region -LockAndProcess ロックを行って処理を行います。
         //-------------------------------------------------------------------------------
+        #region (ManualResetEventSlim, ManualResetEventSlim, Action)
+        //-------------------------------------------------------------------------------
         /// <summary>
         /// ロックを行って処理を行います。
         /// </summary>
@@ -1944,8 +1957,7 @@ namespace StarlitTwit
         /// <param name="mreThreadConfirm">スレッドが止まったということを知らせるシグナル</param>
         /// <param name="mreThreadRun">スレッドを止めるためのシグナル</param>
         /// <param name="action">行う処理</param>
-        private void LockAndProcess(string lockingMsg, ManualResetEventSlim mreThreadConfirm,
-                                                       ManualResetEventSlim mreThreadRun, Action action)
+        private void LockAndProcess(ManualResetEventSlim mreThreadConfirm, ManualResetEventSlim mreThreadRun, Action action)
         {
             if (_isAuthenticated) {
                 lock (_objKeyProcessStart) {
@@ -1956,11 +1968,9 @@ namespace StarlitTwit
                 mreThreadRun.Reset();
 
                 while (!mreThreadConfirm.IsSet) { // スレッドが止まるまで待つ
-                    tssllbl2.Text = lockingMsg;
-                    Thread.Sleep(1);
+                    Thread.Sleep(10);
                     Application.DoEvents();
                 }
-                tssllbl2.Text = "";
             }
 
             action();
@@ -1970,6 +1980,28 @@ namespace StarlitTwit
                 mreThreadRun.Set();
             }
         }
+        //-------------------------------------------------------------------------------
+        #endregion ((ManualResetEventSlim, ManualResetEventSlim, Action))
+        #region (object, Action)
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ロックを行って処理を行います。ロックできるまで待機します。
+        /// </summary>
+        /// <param name="lockObj">ロックしようとするオブジェクト</param>
+        /// <param name="action">行う処理</param>
+        private void LockAndProcess(object lockObj, Action action)
+        {
+            while (!Monitor.TryEnter(lockObj)) {
+                Thread.Sleep(10);
+                Application.DoEvents();
+            }
+
+            action();
+
+            Monitor.Exit(lockObj);
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((object, Action))
         #endregion (LockAndProcess)
         //-------------------------------------------------------------------------------
         #region -InvokeTweetGet 発言取得を別スレッドで行います。
@@ -1982,7 +2014,7 @@ namespace StarlitTwit
         /// <param name="invokingMsg">処理中表示メッセージ</param>
         private void InvokeTweetGet(Func<UctlDispTwit, long, bool> getFunc, long standard_id, UctlDispTwit uctlDisp, string invokingMsg)
         {
-            this.Invoke(new Action(() => tssLabel.Text = invokingMsg));
+            tssLabel.SetText(invokingMsg);
             Utilization.InvokeTransaction(
                 () =>
                 {
@@ -1990,13 +2022,13 @@ namespace StarlitTwit
                         getFunc(uctlDisp, standard_id);
                     }
                     catch (TwitterAPIException ex) {
-                        this.Invoke(new Action(() => tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex)));
+                        tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
                         SYSTEMSOUND.Play();
                         return;
                     }
                 }
             );
-            this.Invoke(new Action(() => tssLabel.Text = ""));
+            tssLabel.RemoveText(invokingMsg);
         }
         #endregion (InvokeTweetGet)
 
@@ -2078,7 +2110,8 @@ namespace StarlitTwit
                                 if (ts.CompareTo(renewData.Interval) < 0) { continue; }
                             }
                             // 更新
-                            this.Invoke(new Action(() => tssLabel.Text = string.Format(GETTING_FORMAT, tabpage.Text)));
+                            string labelText = string.Format(GETTING_FORMAT, tabpage.Text);
+                            tssLabel.SetText(labelText);
                             switch (renewData.GetTweetType) {
                                 case GetTweetType.MostRecent:
                                     GetMostRecentTweets(uctlDisp);
@@ -2092,8 +2125,8 @@ namespace StarlitTwit
                             }
                             renewData.IsForce = false;
                             renewData.Standard = DateTime.Now;
+                            tssLabel.RemoveText(labelText);
                         }
-                        this.Invoke(new Action(() => tssLabel.Text = ""));
                     }
                     Thread.Sleep(100);
                 }
