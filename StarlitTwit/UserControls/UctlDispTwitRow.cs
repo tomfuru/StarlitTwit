@@ -37,13 +37,6 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// 静的コンストラクタ
-        /// </summary>
-        static UctlDispTwitRow()
-        {
-            IMAGE_EXTENSIONS = GetImageCodecInfo();
-        }
-        /// <summary>
         /// 初期化。
         /// </summary>
         public UctlDispTwitRow(TwitData twitdata)
@@ -62,8 +55,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         /// <summary>選択されているかどうか。</summary>
         public new bool Focused { get; private set; }
-        /// <summary>[static]読み込み可能な画像の拡張子</summary>
-        private static readonly string[] IMAGE_EXTENSIONS;
         /// <summary>再読込回数カウントダウン</summary>
         private int _iReRead_RestTime = 0;
         /// <summary>画像辞書(KeyはURL)</summary>
@@ -365,8 +356,8 @@ namespace StarlitTwit
 
             if (tooltipPicture.ImageURLs == null) {
                 // URL設定
-                string[] urls = ExtractImageURL(TwitData.Text);
-                tooltipPicture.ImageURLs = (urls.Length == 0) ? null : urls;
+                IEnumerable<string> urls = Utilization.ExtractURL(TwitData.Text);
+                tooltipPicture.ImageURLs = urls;
             }
         }
         #endregion (tooltipPicture_PrePopup)
@@ -763,44 +754,8 @@ namespace StarlitTwit
             }
         }
         #endregion (GetForeColor)
-        //-------------------------------------------------------------------------------
-        #region -ExtractImageURL 画像URLを抜き出します。
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// テキスト内のURLを抜き出し，画像拡張子に合致するものを返します。
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        private string[] ExtractImageURL(string text)
-        {
-            List<string> list = new List<string>();
-            foreach (string url in Utilization.ExtractURL(text)) {
-                foreach (string extension in IMAGE_EXTENSIONS) {
-                    if (Utilization.IsTwitpic(url) || url.EndsWith(extension, true, null)) {
-                        list.Add(url);
-                        break;
-                    }
-                }
-            }
-            return list.ToArray();
-        }
-        #endregion (ExtractImageURL)
         //===============================================================================
-        #region -[static]GetImageCodecInfo 画像コーデック情報取得
-        //-------------------------------------------------------------------------------
-        //
-        private static string[] GetImageCodecInfo()
-        {
-            List<string> extensionList = new List<string>();
-            ImageCodecInfo[] infoarray = ImageCodecInfo.GetImageDecoders();
 
-            foreach (ImageCodecInfo info in infoarray) {
-                extensionList.AddRange(info.FilenameExtension.Split(';').Select((s) => s.Remove(0, 2)));
-            }
-            return extensionList.ToArray();
-        }
-        //-------------------------------------------------------------------------------
-        #endregion (GetImageCodecInfo)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
 

@@ -104,6 +104,9 @@
       <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseTools.cs" />
+    <Compile Include="Function\Picture\IThumbnailConverter.cs" />
+    <Compile Include="Function\Picture\PictureGetter.cs" />
+    <Compile Include="Function\Picture\TwitpicConverter.cs" />
     <Compile Include="Function\URLShortener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

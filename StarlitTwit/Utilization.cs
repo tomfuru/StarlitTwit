@@ -269,27 +269,6 @@ namespace StarlitTwit
         #endregion (GetHostName)
 
         //-------------------------------------------------------------------------------
-        #region +[static]IncludeTwitpic Twitpic.comのドメインかどうか判断します。
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// twitpic.comのドメインかどうか判断します。
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static bool IsTwitpic(string url)
-        {
-            const string TWITPIC = @"twitpic.com";
-
-            string hostname = GetHostName(url);
-            if (hostname == null) { return false; }
-
-            IPHostEntry entry = Dns.GetHostEntry(hostname);
-            IPHostEntry twitpicentry = Dns.GetHostEntry(TWITPIC);
-            return (entry.AddressList.Except(twitpicentry.AddressList).Count() == 0);
-        }
-        #endregion (IncludeTwitpic)
-
-        //-------------------------------------------------------------------------------
         #region +[static]InvokeTransaction 処理を別スレッドで行います。
         //-------------------------------------------------------------------------------
         /// <summary>
@@ -406,13 +385,12 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="text">抜き出すテキスト</param>
         /// <returns>URLの配列。</returns>
-        public static string[] ExtractURL(string text)
+        public static IEnumerable<string> ExtractURL(string text)
         {
             const string HTTP = @"http://";
             const string ENDCHARS = " 　";
 
             int index = 0;
-            List<string> list = new List<string>();
 
             while (true) {
                 int start = (index < text.Length) ? text.IndexOf(HTTP, index) : -1;
@@ -421,11 +399,9 @@ namespace StarlitTwit
                 if (end == -1) { end = text.Length; }
 
                 string url = text.Substring(start, end - start);
-                list.Add(url);
+                yield return url;
                 index = end + 1;
             }
-
-            return list.ToArray();
         }
         #endregion (ExtractURL)
 

@@ -375,7 +375,7 @@ namespace StarlitTwit
 
             // URL短縮可否
             if (!_bURLShortening) {
-                string[] urls = Utilization.ExtractURL(txtTwit.Text);
+                string[] urls = Utilization.ExtractURL(txtTwit.Text).ToArray();
                 btnURLShorten.Enabled = (urls.Length > 0) && URLShortener.ExistShortenableURL(urls);
             }
         }

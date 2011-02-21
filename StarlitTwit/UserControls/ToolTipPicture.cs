@@ -26,24 +26,28 @@ namespace StarlitTwit
         private Timer timer;
         private IContainer components;
         private object _lockimg = new object();
+        /// <summary>四角を描くためのペン</summary>
+        private readonly Pen PEN = new Pen(new SolidBrush(Color.Black));
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
         //-------------------------------------------------------------------------------
         #region +ImageURLs プロパティ：
         //-------------------------------------------------------------------------------
-        private string[] _imageURLs;
+        private IEnumerable<string> _imageURLs;
         /// <summary>
         /// 画像表示URL配列
         /// </summary>
         [Browsable(false)]
-        public string[] ImageURLs
+        public IEnumerable<string> ImageURLs
         {
             get { return _imageURLs; }
             set
             {
-                _imageURLs = value;
-                lock (_lockimg) { DisposeImages(); }
+                lock (_lockimg) {
+                    _imageURLs = value;
+                    DisposeImages();
+                }
             }
         }
         //-------------------------------------------------------------------------------
@@ -160,9 +164,8 @@ namespace StarlitTwit
                 lock (_lockimg) {
                     if (_control == null || _imageURLs == null) { e.Cancel = true; return; }
 
-                    if (_img == null) { GetImage(); }
-
-                    if (_img == null) { e.Cancel = true; return; }
+                    if (_img == null) { GetImages(); }
+                    if (_imageURLs == null) { e.Cancel = true; return; }
 
                     Size ttSize = _img[_imgIndex].Size;
                     double multW = ttSize.Width / (double)_maxSize.Width,
@@ -203,7 +206,7 @@ namespace StarlitTwit
                 Graphics g = e.Graphics;
                 if (_img[_imgIndex] != null) {
                     Rectangle drawrect = e.Bounds;
-                    g.DrawRectangle(new Pen(new SolidBrush(Color.Black)), 0, 0, drawrect.Width - 1, drawrect.Height - 1);
+                    g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
                     g.DrawImage(_img[_imgIndex], PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
                 }
             }
@@ -261,22 +264,13 @@ namespace StarlitTwit
         /// <summary>
         /// 画像を取得します。
         /// </summary>
-        public void GetImage()
+        public void GetImages()
         {
             List<Image> list = new List<Image>();
-            for (int i = 0; i < ImageURLs.Length; i++) {
-                if (string.IsNullOrEmpty(ImageURLs[i])) { continue; }
-
-                if (Utilization.IsTwitpic(ImageURLs[i])) {
-                    Image img = GetThumbnailFromTwitpic(ImageURLs[i]);
-                    if (img != null) { list.Add(img); }
-                }
-                else {
-                    // 画像読込
-                    Image img = null;
-                    Utilization.InvokeTransaction(() => img = Utilization.GetImageFromURL(ImageURLs[i]));
-                    if (img != null) { list.Add(img); }
-                }
+            foreach (var url in PictureGetter.ConvertURLs(ImageURLs)) {
+                Image img = null;
+                Utilization.InvokeTransaction(() => img = Utilization.GetImageFromURL(url));
+                if (img != null) { list.Add(img); }
             }
 
             if (list.Count > 0) {
@@ -287,7 +281,7 @@ namespace StarlitTwit
             }
         }
         //-------------------------------------------------------------------------------
-        #endregion (GetImage)
+        #endregion (GetImages)
         //-------------------------------------------------------------------------------
         #region -DisposeImages 画像を初期化します。
         //-------------------------------------------------------------------------------
@@ -305,23 +299,6 @@ namespace StarlitTwit
             }
         }
         #endregion (DisposeImages)
-
-        //-------------------------------------------------------------------------------
-        #region -GetThumbnailFromTwitpic Twitpicからサムネイルを取得します。
-        //-------------------------------------------------------------------------------
-        //
-        private Image GetThumbnailFromTwitpic(string url)
-        {
-            string[] urlpartials = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-            string thumburl = urlpartials[0] + "//" + urlpartials[1] + "/show/thumb/" + urlpartials[2];
-
-            Image img = null;
-            Utilization.InvokeTransaction(() => img = Utilization.GetImageFromURL(thumburl));
-
-            return img;
-        }
-        #endregion (GetThumbnailFromTwitpic)
 
         //-------------------------------------------------------------------------------
         #region 未使用
