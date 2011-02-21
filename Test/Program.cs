@@ -17,11 +17,9 @@ namespace Test
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new FormFlowTest());
-            //Application.Run(new Form1());
+            Application.Run(new Form1());
 
-
-            TestClass c = new TestClass();
-            c.testMain();
+            //new TestClass().testMain();
         }
     }
 

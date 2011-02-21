@@ -145,6 +145,20 @@ namespace Test
             Point p4 = Point.Add(p1,new Size(p2));
             label6.Text = "Form:" + p4.ToString();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(Transaction);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void Transaction()
+        {
+            //toolStripStatusLabel1.Text = "あｓだ";
+            toolStripStatusLabelEx1.SetText("あｄさだ");
+            toolStripStatusLabelEx1.SetText("ｓだじょ");
+        }
     }
 }
 
