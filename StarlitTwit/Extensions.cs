@@ -75,5 +75,26 @@ namespace StarlitTwit
             foreach (T item in collection) { act(item); }
         }
         #endregion (ForEach<T>)
+
+        //-------------------------------------------------------------------------------
+        #region +[extension]SaveRemove 項目がある場合のみ消去
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 項目がある場合のみ消去を行います。
+        /// </summary>
+        /// <typeparam name="TKey">キータイプ</typeparam>
+        /// <typeparam name="TValue">値タイプ</typeparam>
+        /// <param name="dic">this</param>
+        /// <param name="keyitem">削除する項目</param>
+        /// <returns></returns>
+        public static bool SaveRemove<TKey,TValue>(this Dictionary<TKey,TValue> dic, TKey keyitem)
+        {
+            if (dic.ContainsKey(keyitem)) {
+                dic.Remove(keyitem);
+                return true;
+            }
+            return false;
+        }
+        #endregion (SaveRemove)
     }
 }
