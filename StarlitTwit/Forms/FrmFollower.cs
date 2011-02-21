@@ -267,6 +267,7 @@ namespace StarlitTwit
         //
         private void GetUsers()
         {
+            bool canFinalize = true;
             try {
                 IEnumerable<UserProfile> profiles = null;
                 Tuple<IEnumerable<UserProfile>, long, long> proftpl;
@@ -290,11 +291,16 @@ namespace StarlitTwit
                     }));
                 }
             }
+            catch (InvalidOperationException) {
+                canFinalize = false;
+            }
             catch (TwitterAPIException) {
                 this.Invoke(new Action(() => tsslabel.Text = "取得に失敗しました。"));
             }
             finally {
-                this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
+                if (canFinalize) {
+                    this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
+                }
             }
         }
         #endregion (GetUsers)
