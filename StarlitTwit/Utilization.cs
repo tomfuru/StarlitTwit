@@ -279,21 +279,9 @@ namespace StarlitTwit
         /// <param name="doingAct">[option]処理中に繰り返し行われる処理</param>
         /// <param name="endAct">[option]処理終了時に1回だけ行う処理</param>
         /// <param name="sleep_ms">[option]処理終了を確認する間のスレッド休止時間(ミリ秒)</param>
-        public static void InvokeTransaction(Action act, Action doingAct = null, int sleep_ms = 1)
+        public static void InvokeTransaction(Action act, int sleep_ms = 1)
         {
-            IAsyncResult res = null;
-            try {
-                res = act.BeginInvoke(null, null);
-
-                while (!res.IsCompleted) {
-                    Thread.Sleep(sleep_ms);
-                    if (doingAct != null) { doingAct(); }
-                    Application.DoEvents();
-                }
-            }
-            finally {
-                if (res != null) { act.EndInvoke(res); }
-            }
+            act.BeginInvoke(Utilization.InvokeCallback, null);
         }
         #endregion (InvokeTransaction)
 

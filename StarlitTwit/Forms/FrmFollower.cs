@@ -60,7 +60,7 @@ namespace StarlitTwit
                 lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 100 });
             }
             tsslabel.Text = "取得中...";
-            (new Action(GetUsers)).BeginInvoke(Utilization.InvokeCallback, null);
+            Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (FrmFollower_Load)
         //-------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ namespace StarlitTwit
         private void btnAppend_Click(object sender, EventArgs e)
         {
             tsslabel.Text = "取得中...";
-            (new Action(GetUsers)).BeginInvoke(Utilization.InvokeCallback, null);
+            Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)
         //-------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ namespace StarlitTwit
             lstvList.Items.AddRange(items.ToArray());
             _profileList.AddRange(profiles);
 
-            (new Action<Tuple<ListViewItem, string>[]>(GetImages)).BeginInvoke(urllist.ToArray(), Utilization.InvokeCallback, null);
+            Utilization.InvokeTransaction(() => GetImages(urllist));
 
             //lstvList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
@@ -308,7 +308,7 @@ namespace StarlitTwit
         #region -GetImages 画像取得と追加 (別スレッド処理)
         //-------------------------------------------------------------------------------
         //
-        private void GetImages(Tuple<ListViewItem, string>[] data)
+        private void GetImages(IEnumerable<Tuple<ListViewItem, string>> data)
         {
             try {
                 foreach (var d in data) {

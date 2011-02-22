@@ -81,7 +81,7 @@ namespace StarlitTwit
                         uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
                         uctlDispTwit.RowContextMenu_Click += new EventHandler<TwitRowMenuEventArgs>(TwitMenu_OlderDataRequest_Click);
                         tsslabel.Text = "発言取得中...";
-                        (new Action<string, long>(GetUserTweets)).BeginInvoke(UserScreenName, -1, Utilization.InvokeCallback, null);
+                        Utilization.InvokeTransaction(() => GetUserTweets(UserScreenName, -1));
                     }
                     else {
                         Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
@@ -94,7 +94,7 @@ namespace StarlitTwit
                         uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
                         uctlDispTwit.AddData(new TwitData[] { ReplyStartTwitdata }, true);
                         tsslabel.Text = "リプライ取得中...";
-                        (new Action<long>(GetReplies)).BeginInvoke(ReplyStartTwitdata.Mention_StatusID, Utilization.InvokeCallback, null);
+                        Utilization.InvokeTransaction(() => GetReplies(ReplyStartTwitdata.Mention_StatusID));
                     }
                     else {
                         Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
@@ -105,6 +105,16 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (FrmReply_Shown)
+
+        //-------------------------------------------------------------------------------
+        #region FrmDispTweet_FormClosed フォームクローズ時
+        //-------------------------------------------------------------------------------
+        //
+        private void FrmDispTweet_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+        #endregion (FrmDispTweet_FormClosed)
 
         //-------------------------------------------------------------------------------
         #region TwitMenu_OlderDataRequest_Click より古い発言要求

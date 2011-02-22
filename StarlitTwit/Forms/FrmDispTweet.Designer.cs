@@ -57,7 +57,9 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.uctlDispTwit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.uctlDispTwit.ImageListWrapper = null;
             this.uctlDispTwit.Location = new System.Drawing.Point(0, 0);
+            this.uctlDispTwit.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispTwit.Name = "uctlDispTwit";
             this.uctlDispTwit.Size = new System.Drawing.Size(392, 244);
             this.uctlDispTwit.TabIndex = 0;
@@ -75,6 +77,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "...";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmDispTweet_FormClosed);
             this.Load += new System.EventHandler(this.FrmDispTweet_Load);
             this.Shown += new System.EventHandler(this.FrmReply_Shown);
             this.statusStrip.ResumeLayout(false);
