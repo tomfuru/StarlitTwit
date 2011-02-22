@@ -107,7 +107,9 @@
     <Compile Include="Function\Picture\IThumbnailConverter.cs" />
     <Compile Include="Function\Picture\PictureGetter.cs" />
     <Compile Include="Function\Picture\TwitpicConverter.cs" />
-    <Compile Include="Function\URLShortener.cs" />
+    <Compile Include="Function\URLShortening\Shortener_bit_ly.cs" />
+    <Compile Include="Function\URLShortening\IURLShortenInfo.cs" />
+    <Compile Include="Function\URLShortening\URLShortener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializableClass\SerializableColor.cs" />
