@@ -276,12 +276,16 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="act">別スレッドで行いたい処理</param>
         /// <param name="startAct">[option]処理開始時に1回だけ行う処理</param>
-        /// <param name="doingAct">[option]処理中に繰り返し行われる処理</param>
         /// <param name="endAct">[option]処理終了時に1回だけ行う処理</param>
         /// <param name="sleep_ms">[option]処理終了を確認する間のスレッド休止時間(ミリ秒)</param>
-        public static void InvokeTransaction(Action act, int sleep_ms = 1)
+        public static void InvokeTransaction(Action act, Action endAct = null, int sleep_ms = 1)
         {
-            act.BeginInvoke(Utilization.InvokeCallback, null);
+            act.BeginInvoke((ar) =>
+            {
+                Utilization.InvokeCallback(ar);
+                if (endAct != null) { endAct();}
+            }
+            , null);
         }
         #endregion (InvokeTransaction)
 
