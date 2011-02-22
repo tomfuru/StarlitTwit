@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Net;
+using System.Threading;
 
 namespace Test
 {
@@ -17,9 +20,9 @@ namespace Test
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new FormFlowTest());
-            Application.Run(new Form1());
+            //Application.Run(new Form1());
 
-            //new TestClass().testMain();
+            new TestClass().testMain();
         }
     }
 
@@ -27,6 +30,35 @@ namespace Test
     {
         public void testMain()
         {
+            //TaskCompletionSource<Tuple<IEnumerable<TwitData>>> tcs2 = new TaskCompletionSource<Tuple<IEnumerable<TwitData>>>();
+            //tcs2.
+            //TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+            //t = Task.Factory.StartNew(() => GetUserTweets(UserScreenName, -1), cts.Token);
+            //var t2 = Task<Tuple<IEnumerable<TwitData>, string>>.Factory.StartNew(null);
+
+            //-------------------------------------------------------------------------------
+
+            //WindowsFormsSynchronizationContext.Current;
+            SynchronizationContext sc = SynchronizationContext.Current;
+            
+            
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            tcs.Task.Start();
+
+            //tcs.SetException(
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+            //cts.Token.
+
+
+            Task t = Task.Factory.StartNew(() => enum1());
+            
+            
+            
+
+            
+
+            //-------------------------------------------------------------------------------
             IEnumerable<int> enumerable = enum1();
 
             foreach (var item in enumerable) {
