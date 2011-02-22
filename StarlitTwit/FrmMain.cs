@@ -733,8 +733,10 @@ namespace StarlitTwit
                 frm.DateTimeTo = e.TwitData.Time;
                 if (frm.ShowDialog() == DialogResult.OK) {
                     tssLabel.SetText(STR_GETTING_STATUS);
-                    Utilization.InvokeTransaction(() => GetSpecifyTimeTweets((UctlDispTwit)sender, frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo));
-                    tssLabel.RemoveText(STR_GETTING_STATUS);
+                    Utilization.InvokeTransaction(
+                        () => GetSpecifyTimeTweets((UctlDispTwit)sender, frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo),
+                        () => tssLabel.RemoveText(STR_GETTING_STATUS)
+                    );
                 }
             }
         }
@@ -854,8 +856,11 @@ namespace StarlitTwit
             using (FrmGetTweet frm = new FrmGetTweet()) {
                 if (frm.ShowDialog() == DialogResult.OK) {
                     tssLabel.SetText(STR_GETTING_STATUS);
-                    Utilization.InvokeTransaction(() => GetSpecifyTimeTweets(SelectedUctlDispTwit(), frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo));
-                    tssLabel.RemoveText(STR_GETTING_STATUS);
+                    Utilization.InvokeTransaction(
+                        () => GetSpecifyTimeTweets(SelectedUctlDispTwit(), frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo),
+                        () => tssLabel.RemoveText(STR_GETTING_STATUS)
+                    );
+                    
                 }
             }
         }
@@ -1282,7 +1287,7 @@ namespace StarlitTwit
                 llblFollower.Enabled = llblFollowing.Enabled = true;
             }
             StringBuilder namesb = new StringBuilder();
-            if (profile.Protected) { namesb.Append('◆'); }
+            if (profile.Protected) { namesb.Append(Utilization.CHR_FAVORITED); }
             namesb.Append(profile.ScreenName);
             namesb.Append('/');
             namesb.Append(profile.UserName);
@@ -2064,9 +2069,9 @@ namespace StarlitTwit
                     DateTime now = DateTime.Now;
                     // プロフィール更新
                     if (_profileRenew_IsForce) {
+                        UserProfile profile = GetProfile(Twitter.ScreenName);
                         this.Invoke(new Action(() =>
                         {
-                            UserProfile profile = GetProfile(Twitter.ScreenName);
                             if (profile != null) { SetProfileData(profile); }
                             tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
                         }));
