@@ -1005,15 +1005,12 @@ namespace StarlitTwit
                         {
                             tssLabel.RemoveText(STR_WAITING_RENEWTABCONFIG);
                             _autoRenewDic[_dispTwitDic[tabpg]].Interval = new TimeSpan(0, 0, frm.TabData.GetInterval);
+                            // 変化があった時
+                            if (tabdata.SearchType != frm.TabData.SearchType || tabdata.SearchWord != frm.TabData.SearchWord) {
+                                _autoRenewDic[_dispTwitDic[tabpg]].IsForce = true;
+                                _dispTwitDic[tabpg].ClearAll();
+                            }
                         });
-
-                        // 変化があった時
-                        if (tabdata.SearchType != frm.TabData.SearchType || tabdata.SearchWord != frm.TabData.SearchWord) {
-                            _autoRenewDic[_dispTwitDic[tabpg]].IsForce = true;
-                            _dispTwitDic[tabpg].ClearAll();
-                        }
-
-                        Monitor.Exit(_autoRenewDic);
                     }
                     else { return; }
                 }
@@ -1240,13 +1237,11 @@ namespace StarlitTwit
             }
 
             tssLabel.SetText(STR_WAITING_AUTORENEWDATA);
-            while (!Monitor.TryEnter(_autoRenewDic)) {
-                Thread.Sleep(10);
-                Application.DoEvents();
-            }
-            tssLabel.RemoveText(STR_WAITING_AUTORENEWDATA);
-            _autoRenewDic.Add(dispTwit, data);
-            Monitor.Exit(_autoRenewDic);
+            LockAndProcess(_autoRenewDic, () =>
+            {
+                tssLabel.RemoveText(STR_WAITING_AUTORENEWDATA);
+                _autoRenewDic.Add(dispTwit, data);
+            });
         }
         //-------------------------------------------------------------------------------
         #endregion (SetAutoRenewData)
@@ -2109,20 +2104,22 @@ namespace StarlitTwit
                                 TimeSpan ts = now.Subtract(renewData.Standard);
                                 if (ts.CompareTo(renewData.Interval) < 0) { continue; }
                             }
-                            // 更新
-                            string labelText = string.Format(GETTING_FORMAT, tabpage.Text);
-                            tssLabel.SetText(labelText);
-                            switch (renewData.GetTweetType) {
-                                case GetTweetType.MostRecent:
-                                    GetMostRecentTweets(uctlDisp);
-                                    break;
-                                case GetTweetType.MoreRecent:
-                                    //GetMoreRecentTweets(uctlDisp);
-                                    break;
-                                case GetTweetType.Older:
-                                    //GetOlderTweets(uctlDisp);
-                                    break;
-                            }
+                        }
+                        // 更新
+                        string labelText = string.Format(GETTING_FORMAT, tabpage.Text);
+                        tssLabel.SetText(labelText);
+                        switch (renewData.GetTweetType) {
+                            case GetTweetType.MostRecent:
+                                GetMostRecentTweets(uctlDisp);
+                                break;
+                            case GetTweetType.MoreRecent:
+                                //GetMoreRecentTweets(uctlDisp);
+                                break;
+                            case GetTweetType.Older:
+                                //GetOlderTweets(uctlDisp);
+                                break;
+                        }
+                        lock (_autoRenewDic) {
                             renewData.IsForce = false;
                             renewData.Standard = DateTime.Now;
                             tssLabel.RemoveText(labelText);
