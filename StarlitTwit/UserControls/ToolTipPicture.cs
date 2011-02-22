@@ -268,8 +268,7 @@ namespace StarlitTwit
         {
             List<Image> list = new List<Image>();
             foreach (var url in PictureGetter.ConvertURLs(ImageURLs)) {
-                Image img = null;
-                Utilization.InvokeTransaction(() => img = Utilization.GetImageFromURL(url));
+                Image img = Utilization.GetImageFromURL(url);
                 if (img != null) { list.Add(img); }
             }
 
