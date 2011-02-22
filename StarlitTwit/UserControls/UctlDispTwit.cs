@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Net;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace StarlitTwit
 {
@@ -693,6 +694,7 @@ namespace StarlitTwit
         /// <param name="data">発言データ配列。StatusID降順推奨。</param>
         /// <param name="suspendSetBoundary">[option]境界セットを抑制する時true</param>
         /// <returns>最初のツイートのデータ</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public string AddData(IEnumerable<TwitData> data, bool suspendSetBoundary = false)
         {
             lock (_lockObj) {
@@ -848,8 +850,11 @@ namespace StarlitTwit
         /// <param name="startIndex">一番上(flowDirForward=true)もしくは一番下(flowDirForward=false)のインデックス</param>
         /// <param name="flowDirForward">上(true)と下(false)のどちらから詰めていくか</param>
         /// <param name="shiftvalue">上向き正とするシフト量。0の時は無効</param>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void AdjustControl(int startIndex, bool flowDirForward, int shiftvalue = 0)
         {
+            //DateTime dt = DateTime.Now;
+
             if (_rowDataList.Count == 0) { return; }
 
             // 描画・レイアウト抑制
@@ -1045,6 +1050,8 @@ namespace StarlitTwit
                 else { vscrbar.Value = rowdataindex + 2; }
             }
             _suspend_vscrbar_ValueChangeEvent = false;
+
+            //Console.WriteLine(DateTime.Now.Subtract(dt));
         }
         //-------------------------------------------------------------------------------
         #endregion (AdjustControl)
