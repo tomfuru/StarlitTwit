@@ -183,15 +183,19 @@ namespace StarlitTwit
         public static Image GetImageFromURL(string url)
         {
             WebClient wc = new WebClient();
-            Stream stream;
-            try { stream = wc.OpenRead(url); }
-            catch (WebException) { return null; }
-            Image img = null;
-            try { img = Image.FromStream(stream); } // TODO:とまる
-            catch (Exception) { return null; }
-            stream.Dispose();
 
-            return img;
+            Bitmap bmp = null;
+
+            try {
+                using (Stream stream = wc.OpenRead(url))
+                using (Image img = Image.FromStream(stream)) {
+                    bmp = new Bitmap(img);
+                }
+            }
+            catch (WebException) { return null; }
+            catch (ArgumentException) { return null; }
+
+            return bmp;
         }
         #endregion (GetImageFromURL)
 
@@ -283,7 +287,7 @@ namespace StarlitTwit
             return act.BeginInvoke((ar) =>
             {
                 Utilization.InvokeCallback(ar);
-                if (endAct != null) { endAct();}
+                if (endAct != null) { endAct(); }
             }
             , null);
         }
