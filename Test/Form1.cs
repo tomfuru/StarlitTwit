@@ -32,6 +32,11 @@ namespace Test
         {
             InitializeComponent();
 
+            imageList1.Images.Add("abc", new Bitmap(16, 16));
+            imageList1.Images.Add("abc", new Bitmap(16, 16));
+
+            imageList1.Images.ContainsKey("abc");
+
             Thread t = new Thread(test1);
             t.Start();
 
