@@ -72,8 +72,10 @@ namespace StarlitTwit
                     url = _urlList[0];
                     _urlList.RemoveAt(0);
                 }
-                Image img = Utilization.GetImageFromURL(url);
-                if (img != null) { ImageList.Images.Add(url, img); }
+                if (!ImageList.Images.ContainsKey(url)) {
+                    Image img = Utilization.GetImageFromURL(url);
+                    if (img != null) { ImageList.Images.Add(url, img); }
+                }
             }
         }
         #endregion (GetImages)
