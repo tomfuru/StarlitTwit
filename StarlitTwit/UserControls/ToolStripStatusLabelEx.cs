@@ -227,6 +227,7 @@ namespace StarlitTwit
                 }
                 SetTextToLabel("");
             }
+            catch (NullReferenceException) { }
             catch (InvalidOperationException) { }
         }
         #endregion (SwitchText)
