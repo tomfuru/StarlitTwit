@@ -142,6 +142,25 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (img.ly Converter)
         //-------------------------------------------------------------------------------
+        #region (class)movapic Converter
+        //-------------------------------------------------------------------------------
+        private class movapicConverter : IThumbnailConverter
+        {
+            private const string DOMAIN = @"http://movapic.com/";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return url.StartsWith(DOMAIN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                return string.Format("http://image.movapic.com/pic/s_{0}.jpeg", url.Split('/').Last());
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)movapic Converter)
+        //-------------------------------------------------------------------------------
         #endregion ((classes)実装コンバータ)
 
         //-------------------------------------------------------------------------------
@@ -157,7 +176,8 @@ namespace StarlitTwit
                             new TwitpicConverter(),
                             new PhotozouConverter(),
                             new yFrogConverter(),
-                            new img_lyConverter()
+                            new img_lyConverter(),
+                            new movapicConverter()
                         };
         }
         //-------------------------------------------------------------------------------
