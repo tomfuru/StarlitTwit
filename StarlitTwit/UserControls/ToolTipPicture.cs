@@ -26,8 +26,7 @@ namespace StarlitTwit
         private Timer timer;
         private IContainer components;
         private object _lockimg = new object();
-        /// <summary>四角を描くためのペン</summary>
-        private readonly Pen PEN = new Pen(new SolidBrush(Color.Black));
+        private bool _displayUpper = false;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -87,6 +86,8 @@ namespace StarlitTwit
         #region 定数
         //-------------------------------------------------------------------------------
         private const int PADDING = 1;
+        /// <summary>四角を描くためのペン</summary>
+        private static readonly Pen PEN = new Pen(new SolidBrush(Color.Black));
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -128,7 +129,6 @@ namespace StarlitTwit
             // timer
             // 
             this.timer.Interval = 2000;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // ToolTipPicture
             // 
@@ -168,6 +168,13 @@ namespace StarlitTwit
                     if (_imageURLs == null) { e.Cancel = true; return; }
 
                     Size ttSize = _img[_imgIndex].Size;
+                    if (!JutOutSize(ttSize).IsEmpty && !_displayUpper) {
+                        e.Cancel = true;
+                        bSuspendPopupEvent = false;
+                        Display();
+                        return;
+                    }
+
                     double multW = ttSize.Width / (double)_maxSize.Width,
                            multH = ttSize.Height / (double)_maxSize.Height;
                     bool needScale = (Math.Max(multW, multH) > 1);
@@ -214,10 +221,10 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (ToolTipPicture_Draw)
         //-------------------------------------------------------------------------------
-        #region timer_Tick 時間経過時
+        #region OnTimerTick 時間経過時
         //-------------------------------------------------------------------------------
         //
-        private void timer_Tick(object sender, EventArgs e)
+        protected override void OnTimerTick()
         {
             lock (_lockimg) {
                 if (_img == null) { return; } // 保険
@@ -225,7 +232,9 @@ namespace StarlitTwit
                 _imgIndex++;
                 _imgIndex %= _img.Length;
             }
-            this.Show("show", _control);
+
+            // Point計算
+            Display();
         }
         //-------------------------------------------------------------------------------
         #endregion (timer_Tick)
@@ -241,6 +250,49 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (Parent_MouseLeave)
+
+        //-------------------------------------------------------------------------------
+        #region -Display 表示
+        //-------------------------------------------------------------------------------
+        //
+        private void Display()
+        {
+            Size imgSize = _img[_imgIndex].Size;
+            Size size = JutOutSize(imgSize);
+            _displayUpper = true;
+            try {
+                Point p = _control.PointToClient(Cursor.Position);
+                int x = p.X;
+                int y = p.Y;
+                if (size.Width > 0) { x -= imgSize.Width + 2;}
+                if (size.Height > 0) { y -= imgSize.Height + 2; }
+                this.Show("show", _control, x, y, this.AutoPopDelay);
+            }
+            finally {
+                _displayUpper = false;
+            }
+        }
+        #endregion (Display)
+        //-------------------------------------------------------------------------------
+        #region -JutOutSize 画面からはみ出るサイズ
+        //-------------------------------------------------------------------------------
+        //
+        private Size JutOutSize(Size dispSize)
+        {
+            Rectangle rect = new Rectangle(Point.Add(Cursor.Position, new Size(0, Cursor.Current.Size.Height)), dispSize);
+            Screen currentScr = null;
+            foreach (Screen scr in Screen.AllScreens) { // 現在スクリーン取得
+                if (scr.Bounds.Contains(Cursor.Position)) {
+                    currentScr = scr;
+                    break;
+                }
+            }
+            if (currentScr == null) { return Size.Empty; }
+
+            Rectangle cross = Rectangle.Intersect(currentScr.Bounds, rect);
+            return new Size(rect.Width - cross.Width, rect.Height - cross.Height);
+        }
+        #endregion (JutOutSize)
 
         //-------------------------------------------------------------------------------
         #region +SetToolTip ツールチップ表示セット

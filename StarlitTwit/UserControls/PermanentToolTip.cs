@@ -34,8 +34,18 @@ namespace StarlitTwit
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            OnTimerTick();
+        }
+
+        //-------------------------------------------------------------------------------
+        #region OnTimerTick タイマーが経過した時
+        //-------------------------------------------------------------------------------
+        //
+        protected virtual void OnTimerTick()
+        {
             this.Show(_text, _control, DURATION);
         }
+        #endregion (OnTimerTick)
 
         //-------------------------------------------------------------------------------
         #region Parent_MouseLeave 親コントロールから離れた時
