@@ -16,7 +16,6 @@ using System.Media;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 namespace StarlitTwit
 {
@@ -256,11 +255,8 @@ namespace StarlitTwit
                 Twitter.AccessTokenSecret = SettingsData.UserInfoList[0].AccessTokenSecret;
                 Twitter.ScreenName = SettingsData.UserInfoList[0].ScreenName;
                 Twitter.ID = SettingsData.UserInfoList[0].ID;
-                _isAuthenticated = true;
-                _profileRenew_IsForce = true;
-                lblUserName.Text = "(未取得)";
-                tsmi_プロフィール.Enabled = true;
-                foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
+                
+                TransitToAuthenticatedMode();
             }
             else {
                 SettingsData.UserInfoList = new List<UserInfo>();
@@ -810,7 +806,7 @@ namespace StarlitTwit
                     Message.ShowInfoMessage("認証に成功しました");
 
                     _mreThreadRun.Set();
-                    _isAuthenticated = true;
+                    TransitToAuthenticatedMode();
                 }
                 else {
                     Message.ShowInfoMessage("認証ができませんでした");
@@ -1238,6 +1234,22 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (SetAutoRenewData)
+        //-------------------------------------------------------------------------------
+        #region -TransitToAuthenticatedMode 認証完了モードに移行
+        //-------------------------------------------------------------------------------
+        //
+        private void TransitToAuthenticatedMode()
+        {
+            _isAuthenticated = true;
+            lblUserName.Text = "(未取得)";
+            _profileRenew_IsForce = true;
+
+            tsmi_プロフィール.Enabled = true;
+            foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
+            tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
+            tsmi_子画面.Enabled = true;
+        }
+        #endregion (TransitToAuthenticatedMode)
 
         //===============================================================================
         #region -SetStatusState 発言状態設定
@@ -1275,7 +1287,7 @@ namespace StarlitTwit
                 llblFollower.Enabled = llblFollowing.Enabled = true;
             }
             StringBuilder namesb = new StringBuilder();
-            if (profile.Protected) { namesb.Append(Utilization.CHR_FAVORITED); }
+            if (profile.Protected) { namesb.Append(Utilization.CHR_LOCKED); }
             namesb.Append(profile.ScreenName);
             namesb.Append('/');
             namesb.Append(profile.UserName);
@@ -1283,11 +1295,6 @@ namespace StarlitTwit
             llblFollower.Text = profile.FollowerNum.ToString();
             llblFollowing.Text = profile.FollowingNum.ToString();
             lblStatuses.Text = profile.StatusNum.ToString();
-
-            if (!tsmi_プロフィール.Enabled) {
-                tsmi_プロフィール.Enabled = true;
-                foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
-            }
         }
         //-------------------------------------------------------------------------------
         #endregion (SetProfileData)
@@ -1363,7 +1370,7 @@ namespace StarlitTwit
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Direct : SettingsData.RenewGetNum_Direct;
                     d = Twitter.direct_messages(count: iCount)
                         .Concat(Twitter.direct_messages_sent(count: iCount))
-                        .ToArray();
+                        .OrderByDescending(twdata => twdata.StatusID);
                 }
                 else {
                     TabData tabdata;
@@ -1441,7 +1448,7 @@ namespace StarlitTwit
                 else if (uctldisp == uctlDispDirect) {
                     d = Twitter.direct_messages(count: SettingsData.RenewGetNum_Direct, since_id: since_id)
                         .Concat(Twitter.direct_messages_sent(count: SettingsData.RenewGetNum_Direct, since_id: since_id))
-                        .ToArray();
+                        .OrderByDescending(twdata => twdata.StatusID);
                 }
                 else {
                     TabData tabdata;
@@ -1501,7 +1508,7 @@ namespace StarlitTwit
                 else if (uctldisp == uctlDispDirect) {
                     d = Twitter.direct_messages(count: SettingsData.RenewGetNum_Direct, max_id: max_id)
                         .Concat(Twitter.direct_messages_sent(count: SettingsData.RenewGetNum_Direct, max_id: max_id))
-                        .ToArray();
+                        .OrderByDescending(twdata => twdata.StatusID);
                 }
                 else {
                     TabData tabdata;
@@ -1583,11 +1590,9 @@ namespace StarlitTwit
                     }
                     else if (uctldisp == uctlDispDirect) {
                         // ?まで(暫定200)
-                        d = Twitter.direct_messages(count: 200, page: i);
-                        datalist.AddRange(d);
-                        // ?まで(暫定200)
-                        d = Twitter.direct_messages_sent(count: 200, page: i);
-                        datalist.AddRange(d);
+                        d = Twitter.direct_messages(count: 200, page: i)
+                           .Concat(Twitter.direct_messages_sent(count: 200, page: i))
+                           .OrderByDescending(twdata => twdata.StatusID);
                         break;
                     }
                     else {
@@ -1614,7 +1619,7 @@ namespace StarlitTwit
                         }
                         if (isBreak) { break; }
                     }
-                    if (d.Count() == 0) { break; }
+                    if (d.DefaultIfEmpty() == default(TwitData)) { break; }
                     if (!findStart) { findStart = !useToDateTime || dtbetween(dtTo, d.Last().Time, d.First().Time); }
                     datalist.AddRange(d);
                     if (findStart && useFromDateTime && dtbetween(dtFrom, d.Last().Time, d.First().Time)) { break; }
@@ -2014,9 +2019,9 @@ namespace StarlitTwit
                         SYSTEMSOUND.Play();
                         return;
                     }
-                }
+                },
+                () => tssLabel.RemoveText(invokingMsg)
             );
-            tssLabel.RemoveText(invokingMsg);
         }
         #endregion (InvokeTweetGet)
 
