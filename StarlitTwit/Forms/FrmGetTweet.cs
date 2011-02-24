@@ -83,13 +83,13 @@ namespace StarlitTwit
         private void FrmGetTweet_Load(object sender, EventArgs e)
         {
             if (chbFromEnable.Checked = EnableDateTimeFrom) {
-                dtpFromDate.Value = dtpFromTime.Value = this.DateTimeFrom;
+                dtpFrom.Value = this.DateTimeFrom;
             }
-            dtpFromDate.Enabled = dtpFromTime.Enabled = chbFromEnable.Checked;
+            dtpFrom.Enabled = chbFromEnable.Checked;
             if (chbToEnable.Checked = EnableDateTimeTo) {
-                dtpToDate.Value = dtpToTime.Value = this.DateTimeTo;
+                dtpTo.Value = this.DateTimeTo;
             }
-            dtpToDate.Enabled = dtpToTime.Enabled = chbToEnable.Checked;
+            dtpTo.Enabled = chbToEnable.Checked;
         }
         #endregion (FrmGetTweet_Load)
 
@@ -99,7 +99,7 @@ namespace StarlitTwit
         //
         private void chbFromEnable_CheckedChanged(object sender, EventArgs e)
         {
-            dtpFromDate.Enabled = dtpFromTime.Enabled = chbFromEnable.Checked;
+            dtpFrom.Enabled = chbFromEnable.Checked;
         }
         #endregion (chbFromEnable_CheckedChanged)
         //-------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace StarlitTwit
         //
         private void chbToEnable_CheckedChanged(object sender, EventArgs e)
         {
-            dtpToDate.Enabled = dtpToTime.Enabled = chbToEnable.Checked;
+            dtpTo.Enabled = chbToEnable.Checked;
         }
         #endregion (chbToEnable_CheckedChanged)
 
@@ -124,16 +124,10 @@ namespace StarlitTwit
                 chbToEnable.Checked = tmp;
             }
 
-            { // 日付交換
-                DateTime tmp = dtpFromDate.Value;
-                dtpFromDate.Value = dtpToDate.Value;
-                dtpToDate.Value = tmp;
-            }
-
-            { // 時刻交換
-                DateTime tmp = dtpFromTime.Value;
-                dtpFromTime.Value = dtpToTime.Value;
-                dtpToTime.Value = tmp;
+            { // 交換
+                DateTime tmp = dtpFrom.Value;
+                dtpFrom.Value = dtpTo.Value;
+                dtpTo.Value = tmp;
             }
         }
         #endregion (btnReverse_Click)
@@ -146,10 +140,8 @@ namespace StarlitTwit
         {
             this.EnableDateTimeFrom = chbFromEnable.Checked;
             this.EnableDateTimeTo = chbToEnable.Checked;
-            this.DateTimeFrom = new DateTime(dtpFromDate.Value.Year, dtpFromDate.Value.Month, dtpFromDate.Value.Day,
-                                             dtpFromTime.Value.Hour, dtpFromTime.Value.Minute, dtpFromTime.Value.Second);
-            this.DateTimeTo = new DateTime(dtpToDate.Value.Year, dtpToDate.Value.Month, dtpToDate.Value.Day,
-                                             dtpToTime.Value.Hour, dtpToTime.Value.Minute, dtpToTime.Value.Second);
+            this.DateTimeFrom = dtpFrom.Value;
+            this.DateTimeTo = dtpTo.Value;
             this.DialogResult = DialogResult.OK;
         }
         #endregion (btnGet_Click)

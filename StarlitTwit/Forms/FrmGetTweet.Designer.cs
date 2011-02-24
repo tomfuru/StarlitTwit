@@ -27,10 +27,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dtpFromDate = new System.Windows.Forms.DateTimePicker();
-            this.dtpToDate = new System.Windows.Forms.DateTimePicker();
-            this.dtpFromTime = new System.Windows.Forms.DateTimePicker();
-            this.dtpToTime = new System.Windows.Forms.DateTimePicker();
+            this.dtpFrom = new System.Windows.Forms.DateTimePicker();
+            this.dtpTo = new System.Windows.Forms.DateTimePicker();
             this.btnReverse = new System.Windows.Forms.Button();
             this.chbToEnable = new System.Windows.Forms.CheckBox();
             this.chbFromEnable = new System.Windows.Forms.CheckBox();
@@ -41,45 +39,27 @@
             this.btnCansel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // dtpFromDate
+            // dtpFrom
             // 
-            this.dtpFromDate.CustomFormat = "";
-            this.dtpFromDate.Location = new System.Drawing.Point(32, 6);
-            this.dtpFromDate.Name = "dtpFromDate";
-            this.dtpFromDate.Size = new System.Drawing.Size(114, 19);
-            this.dtpFromDate.TabIndex = 0;
+            this.dtpFrom.CustomFormat = "yyyy年MM月dd日 HH:mm:ss";
+            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFrom.Location = new System.Drawing.Point(32, 6);
+            this.dtpFrom.Name = "dtpFrom";
+            this.dtpFrom.Size = new System.Drawing.Size(159, 19);
+            this.dtpFrom.TabIndex = 0;
             // 
-            // dtpToDate
+            // dtpTo
             // 
-            this.dtpToDate.CustomFormat = "";
-            this.dtpToDate.Location = new System.Drawing.Point(32, 67);
-            this.dtpToDate.Name = "dtpToDate";
-            this.dtpToDate.Size = new System.Drawing.Size(114, 19);
-            this.dtpToDate.TabIndex = 1;
-            // 
-            // dtpFromTime
-            // 
-            this.dtpFromTime.CustomFormat = "";
-            this.dtpFromTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtpFromTime.Location = new System.Drawing.Point(164, 6);
-            this.dtpFromTime.Name = "dtpFromTime";
-            this.dtpFromTime.ShowUpDown = true;
-            this.dtpFromTime.Size = new System.Drawing.Size(74, 19);
-            this.dtpFromTime.TabIndex = 2;
-            // 
-            // dtpToTime
-            // 
-            this.dtpToTime.CustomFormat = "";
-            this.dtpToTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dtpToTime.Location = new System.Drawing.Point(164, 67);
-            this.dtpToTime.Name = "dtpToTime";
-            this.dtpToTime.ShowUpDown = true;
-            this.dtpToTime.Size = new System.Drawing.Size(74, 19);
-            this.dtpToTime.TabIndex = 3;
+            this.dtpTo.CustomFormat = "yyyy年MM月dd日 HH:mm:ss";
+            this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpTo.Location = new System.Drawing.Point(32, 67);
+            this.dtpTo.Name = "dtpTo";
+            this.dtpTo.Size = new System.Drawing.Size(159, 19);
+            this.dtpTo.TabIndex = 1;
             // 
             // btnReverse
             // 
-            this.btnReverse.Location = new System.Drawing.Point(174, 35);
+            this.btnReverse.Location = new System.Drawing.Point(139, 35);
             this.btnReverse.Name = "btnReverse";
             this.btnReverse.Size = new System.Drawing.Size(52, 23);
             this.btnReverse.TabIndex = 4;
@@ -132,7 +112,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(244, 10);
+            this.label3.Location = new System.Drawing.Point(197, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(235, 84);
             this.label3.TabIndex = 9;
@@ -142,7 +122,7 @@
             // 
             // btnGet
             // 
-            this.btnGet.Location = new System.Drawing.Point(77, 95);
+            this.btnGet.Location = new System.Drawing.Point(30, 95);
             this.btnGet.Name = "btnGet";
             this.btnGet.Size = new System.Drawing.Size(69, 23);
             this.btnGet.TabIndex = 10;
@@ -153,7 +133,7 @@
             // btnCansel
             // 
             this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCansel.Location = new System.Drawing.Point(169, 95);
+            this.btnCansel.Location = new System.Drawing.Point(122, 95);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(69, 23);
             this.btnCansel.TabIndex = 11;
@@ -166,7 +146,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCansel;
-            this.ClientSize = new System.Drawing.Size(479, 130);
+            this.ClientSize = new System.Drawing.Size(433, 130);
             this.ControlBox = false;
             this.Controls.Add(this.btnCansel);
             this.Controls.Add(this.btnGet);
@@ -175,10 +155,8 @@
             this.Controls.Add(this.chbFromEnable);
             this.Controls.Add(this.chbToEnable);
             this.Controls.Add(this.btnReverse);
-            this.Controls.Add(this.dtpToTime);
-            this.Controls.Add(this.dtpFromTime);
-            this.Controls.Add(this.dtpToDate);
-            this.Controls.Add(this.dtpFromDate);
+            this.Controls.Add(this.dtpTo);
+            this.Controls.Add(this.dtpFrom);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmGetTweet";
             this.ShowInTaskbar = false;
@@ -192,10 +170,8 @@
 
         #endregion
 
-        private System.Windows.Forms.DateTimePicker dtpFromDate;
-        private System.Windows.Forms.DateTimePicker dtpToDate;
-        private System.Windows.Forms.DateTimePicker dtpFromTime;
-        private System.Windows.Forms.DateTimePicker dtpToTime;
+        private System.Windows.Forms.DateTimePicker dtpFrom;
+        private System.Windows.Forms.DateTimePicker dtpTo;
         private System.Windows.Forms.Button btnReverse;
         private System.Windows.Forms.CheckBox chbToEnable;
         private System.Windows.Forms.CheckBox chbFromEnable;
