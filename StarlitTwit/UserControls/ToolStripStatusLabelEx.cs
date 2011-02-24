@@ -137,7 +137,10 @@ namespace StarlitTwit
 
             lock (_objSync) {
                 _firstQueue.Enqueue(text);
-                _textDic.Add(text, data);
+                if (_textDic.ContainsKey(text)) {
+                    _textDic.Remove(text);
+                }
+                else { _textDic.Add(text, data); }
                 StartThreadIfNotActive();
             }
         }
