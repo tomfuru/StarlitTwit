@@ -125,17 +125,6 @@ namespace StarlitTwit
         //===============================================================================
         #region プロパティ
         //-------------------------------------------------------------------------------
-        #region ImageList プロパティ：ImageListの取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// 関連付けられているImageListを取得します。
-        /// </summary>
-        public ImageList ImageList
-        {
-            get { return ImageListWrapper.ImageList; }
-        }
-        #endregion (ImageList)
-        //-------------------------------------------------------------------------------
         #region SelectedIndex プロパティ：選択インデックス変更
         //-------------------------------------------------------------------------------
         /// <summary>選択中行インデックス</summary>
@@ -729,7 +718,7 @@ namespace StarlitTwit
 
                     // 画像URL登録
                     string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
-                    if (!ImageList.Images.ContainsKey(iconURL) && !imageURLList.Contains(iconURL)) { 
+                    if (!ImageListWrapper.ImageContainsKey(iconURL) && !imageURLList.Contains(iconURL)) { 
                         imageURLList.Add(iconURL); 
                     }
 
@@ -1276,7 +1265,7 @@ namespace StarlitTwit
             foreach (var url in iconURLs) {
                 Image img = Utilization.GetImageFromURL(url);
                 if (img != null) {
-                    this.Invoke(new Action(() => ImageList.Images.Add(url, img)));
+                    this.Invoke(new Action(() => ImageListWrapper.ImageAdd(url, img)));
                 }
             }
         }
