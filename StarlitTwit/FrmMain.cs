@@ -288,24 +288,6 @@ namespace StarlitTwit
         }
         #endregion (FrmMain_FormClosed)
         //-------------------------------------------------------------------------------
-        #region FrmMain_ResizeBegin サイズ変更開始時
-        //-------------------------------------------------------------------------------
-        //
-        private void FrmMain_ResizeBegin(object sender, EventArgs e)
-        {
-
-        }
-        #endregion (FrmMain_ResizeBegin)
-        //-------------------------------------------------------------------------------
-        #region FrmMain_ResizeEnd サイズ変更終了時
-        //-------------------------------------------------------------------------------
-        //
-        private void FrmMain_ResizeEnd(object sender, EventArgs e)
-        {
-
-        }
-        #endregion (FrmMain_ResizeEnd)
-        //-------------------------------------------------------------------------------
         #region ↓諸コントロール
         //-------------------------------------------------------------------------------
         #region btnTwit_Click つぶやくボタン
@@ -313,7 +295,12 @@ namespace StarlitTwit
         //
         private void btnTwit_Click(object sender, EventArgs e)
         {
-            string text = SettingsData.Header + rtxtTwit.Text + SettingsData.Footer;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(SettingsData.Header);
+            sb.Append(rtxtTwit.Text);
+            sb.Append(SettingsData.Footer);
+            string text = sb.ToString();
+            if (text.Length == 0 || text.Length > MAX_LENGTH) { return; }
             Utilization.InvokeTransaction(() => Update(text));
         }
         #endregion (btnTwit_Click)
@@ -1649,8 +1636,6 @@ namespace StarlitTwit
         //
         private void Update(string text)
         {
-            if (text.Length == 0 /*|| text.Length > MAX_LENGTH*/) { return; }
-
             try {
                 tssLabel.SetText(STR_POSTING);
                 this.Invoke(new Action(() =>

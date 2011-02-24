@@ -112,7 +112,7 @@
             this.tsmi_子画面});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(452, 24);
+            this.menuStrip.Size = new System.Drawing.Size(492, 24);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -225,7 +225,7 @@
             // 
             this.tsmi子画面_nothing.Enabled = false;
             this.tsmi子画面_nothing.Name = "tsmi子画面_nothing";
-            this.tsmi子画面_nothing.Size = new System.Drawing.Size(152, 22);
+            this.tsmi子画面_nothing.Size = new System.Drawing.Size(97, 22);
             this.tsmi子画面_nothing.Text = "(なし)";
             // 
             // statusStrip
@@ -234,9 +234,9 @@
             this.tssLabel,
             this.toolStripSeparator1,
             this.tsslRestAPI});
-            this.statusStrip.Location = new System.Drawing.Point(0, 458);
+            this.statusStrip.Location = new System.Drawing.Point(0, 643);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(452, 23);
+            this.statusStrip.Size = new System.Drawing.Size(492, 23);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -244,7 +244,7 @@
             // 
             this.tssLabel.AutoSize = false;
             this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(351, 18);
+            this.tssLabel.Size = new System.Drawing.Size(391, 18);
             this.tssLabel.Spring = true;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -371,7 +371,7 @@
             // splContainer.Panel2
             // 
             this.splContainer.Panel2.Controls.Add(this.tabTwitDisp);
-            this.splContainer.Size = new System.Drawing.Size(452, 434);
+            this.splContainer.Size = new System.Drawing.Size(492, 619);
             this.splContainer.SplitterDistance = 106;
             this.splContainer.SplitterWidth = 2;
             this.splContainer.TabIndex = 0;
@@ -388,7 +388,7 @@
             this.btnURLShorten.HoverImage = "Hover";
             this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnURLShorten.ImageKey = "Normal";
-            this.btnURLShorten.Location = new System.Drawing.Point(369, 58);
+            this.btnURLShorten.Location = new System.Drawing.Point(409, 58);
             this.btnURLShorten.Name = "btnURLShorten";
             this.btnURLShorten.NormalImage = "Normal";
             this.btnURLShorten.Size = new System.Drawing.Size(75, 20);
@@ -528,7 +528,7 @@
             // 
             this.lblRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblRest.AutoSize = true;
-            this.lblRest.Location = new System.Drawing.Point(340, 87);
+            this.lblRest.Location = new System.Drawing.Point(380, 87);
             this.lblRest.Name = "lblRest";
             this.lblRest.Size = new System.Drawing.Size(23, 12);
             this.lblRest.TabIndex = 2;
@@ -537,7 +537,7 @@
             // btnTwit
             // 
             this.btnTwit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTwit.Location = new System.Drawing.Point(369, 37);
+            this.btnTwit.Location = new System.Drawing.Point(409, 37);
             this.btnTwit.Name = "btnTwit";
             this.btnTwit.Size = new System.Drawing.Size(75, 20);
             this.btnTwit.TabIndex = 3;
@@ -554,7 +554,7 @@
             this.rtxtTwit.Location = new System.Drawing.Point(3, 37);
             this.rtxtTwit.Name = "rtxtTwit";
             this.rtxtTwit.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtxtTwit.Size = new System.Drawing.Size(360, 47);
+            this.rtxtTwit.Size = new System.Drawing.Size(400, 47);
             this.rtxtTwit.TabIndex = 2;
             this.rtxtTwit.Text = "";
             this.rtxtTwit.TextChanged += new System.EventHandler(this.rtxtTwit_TextChanged);
@@ -576,7 +576,7 @@
             this.tabTwitDisp.Padding = new System.Drawing.Point(0, 0);
             this.tabTwitDisp.SelectedIndex = 0;
             this.tabTwitDisp.ShowToolTips = true;
-            this.tabTwitDisp.Size = new System.Drawing.Size(448, 322);
+            this.tabTwitDisp.Size = new System.Drawing.Size(488, 507);
             this.tabTwitDisp.TabIndex = 0;
             this.tabTwitDisp.TabExchanged += new System.EventHandler<StarlitTwit.TabMoveEventArgs>(this.tabTwitDisp_TabMoved);
             this.tabTwitDisp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabTwitDisp_MouseDown);
@@ -586,7 +586,7 @@
             this.tabpgHome.Controls.Add(this.uctlDispHome);
             this.tabpgHome.Location = new System.Drawing.Point(4, 21);
             this.tabpgHome.Name = "tabpgHome";
-            this.tabpgHome.Size = new System.Drawing.Size(440, 297);
+            this.tabpgHome.Size = new System.Drawing.Size(480, 482);
             this.tabpgHome.TabIndex = 3;
             this.tabpgHome.Text = "Home";
             this.tabpgHome.UseVisualStyleBackColor = true;
@@ -600,7 +600,7 @@
             this.uctlDispHome.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHome.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHome.Name = "uctlDispHome";
-            this.uctlDispHome.Size = new System.Drawing.Size(440, 297);
+            this.uctlDispHome.Size = new System.Drawing.Size(480, 482);
             this.uctlDispHome.TabIndex = 2;
             // 
             // tabpgReply
@@ -682,7 +682,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 481);
+            this.ClientSize = new System.Drawing.Size(492, 666);
             this.Controls.Add(this.splContainer);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.statusStrip);
@@ -693,8 +693,6 @@
             this.Text = "StarlitTwit";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmMain_FormClosed);
             this.Load += new System.EventHandler(this.FrmMain_Load);
-            this.ResizeBegin += new System.EventHandler(this.FrmMain_ResizeBegin);
-            this.ResizeEnd += new System.EventHandler(this.FrmMain_ResizeEnd);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
