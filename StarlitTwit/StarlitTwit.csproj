@@ -115,6 +115,18 @@
     <Compile Include="UserControls\ImageListWrapper.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\RichTextBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\RichTextBoxEx.Designer.cs">
+      <DependentUpon>RichTextBoxEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RichTextBoxHash.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\RichTextBoxHash.Designer.cs">
+      <DependentUpon>RichTextBoxHash.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ToolStripStatusLabelEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -133,9 +145,6 @@
     </Compile>
     <Compile Include="UserControls\PermanentToolTip.Designer.cs">
       <DependentUpon>PermanentToolTip.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\RichTextBoxHash.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\SplitButton.cs">
       <SubType>Component</SubType>
@@ -207,6 +216,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PermanentToolTip.resx">
       <DependentUpon>PermanentToolTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RichTextBoxEx.resx">
+      <DependentUpon>RichTextBoxEx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RichTextBoxHash.resx">
       <DependentUpon>RichTextBoxHash.cs</DependentUpon>

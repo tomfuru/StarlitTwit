@@ -231,7 +231,7 @@ namespace StarlitTwit
             }
             if (SettingsData.WindowMaximized) { this.WindowState = FormWindowState.Maximized; }
 
-            txtTwit.Text = "";
+            rtxtTwit.Text = "";
 
             // ↓設定を復元↓
 
@@ -317,15 +317,15 @@ namespace StarlitTwit
         private void btnTwit_Click(object sender, EventArgs e)
         {
             Action<string> act = new Action<string>(Update);
-            string text = SettingsData.Header + txtTwit.Text + SettingsData.Footer;
+            string text = SettingsData.Header + rtxtTwit.Text + SettingsData.Footer;
             act.BeginInvoke(text, Utilization.InvokeCallback, null);
         }
         #endregion (btnTwit_Click)
         //-------------------------------------------------------------------------------
-        #region txtTwit_TextChanged テキスト変更時
+        #region rtxtTwit_TextChanged テキスト変更時
         //-------------------------------------------------------------------------------
         //
-        private void txtTwit_TextChanged(object sender, EventArgs e)
+        private void rtxtTwit_TextChanged(object sender, EventArgs e)
         {
             TextBox txtbox = (TextBox)sender;
 
@@ -360,28 +360,28 @@ namespace StarlitTwit
 
             // URL短縮可否
             if (!_bURLShortening) {
-                string[] urls = Utilization.ExtractURL(txtTwit.Text).ToArray();
+                string[] urls = Utilization.ExtractURL(rtxtTwit.Text).ToArray();
                 btnURLShorten.Enabled = (urls.Length > 0) && URLShortener.ExistShortenableURL(urls);
             }
         }
         #endregion (txtTwit_TextChanged)
         //-------------------------------------------------------------------------------
-        #region txtTwit_KeyDown キー押下時
+        #region rtxtTwit_KeyDown キー押下時
         //-------------------------------------------------------------------------------
         //
-        private void txtTwit_KeyDown(object sender, KeyEventArgs e)
+        private void rtxtTwit_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter) {
                 if (!e.Shift || !e.Control) {
                     e.SuppressKeyPress = true;
                     Action<string> act = new Action<string>(Update);
-                    string text = SettingsData.Header + txtTwit.Text + SettingsData.Footer;
+                    string text = SettingsData.Header + rtxtTwit.Text + SettingsData.Footer;
                     act.BeginInvoke(text, Utilization.InvokeCallback, null);
                 }
             }
         }
         //-------------------------------------------------------------------------------
-        #endregion (txtTwit_KeyDown)
+        #endregion (rtxtTwit_KeyDown)
         //-------------------------------------------------------------------------------
         #region btnStateReset_Click ×ボタン(状態リセットボタン)クリック時
         //-------------------------------------------------------------------------------
@@ -560,13 +560,13 @@ namespace StarlitTwit
         //
         private void TwitMenu_Reply_Click(object sender, TwitRowMenuEventArgs e)
         {
-            txtTwit.Text = '@' + e.TwitData.UserScreenName + ' ';
+            rtxtTwit.Text = '@' + e.TwitData.UserScreenName + ' ';
 
-            txtTwit.Focus();
-            txtTwit.Select(txtTwit.Text.Length, 0);
+            rtxtTwit.Focus();
+            rtxtTwit.Select(rtxtTwit.Text.Length, 0);
 
             _statlID = e.TwitData.StatusID;
-            _statsName = txtTwit.Text;
+            _statsName = rtxtTwit.Text;
             SetStatusState(StatusState.Reply, e.TwitData.UserScreenName + "宛のリプライ");
         }
         #endregion (TwitMenu_Reply_Click)
@@ -576,10 +576,10 @@ namespace StarlitTwit
         //
         private void TwitMenu_Quote_Click(object sender, TwitRowMenuEventArgs e)
         {
-            txtTwit.Text = GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+            rtxtTwit.Text = GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
 
-            txtTwit.Focus();
-            txtTwit.Select(0, 0);
+            rtxtTwit.Focus();
+            rtxtTwit.Select(0, 0);
         }
         #endregion (TwitMenu_Quote_Click)
         //-------------------------------------------------------------------------------
@@ -599,8 +599,8 @@ namespace StarlitTwit
         //
         private void TwitMenu_DirectMessage_Click(object sender, TwitRowMenuEventArgs e)
         {
-            txtTwit.Focus();
-            txtTwit.Select(0, 0);
+            rtxtTwit.Focus();
+            rtxtTwit.Select(0, 0);
 
             _statlID = e.TwitData.UserID;
             _statsName = e.TwitData.UserScreenName;
@@ -764,7 +764,7 @@ namespace StarlitTwit
                             uctldisp.ReConfigAll();
                         }
 
-                        txtTwit_TextChanged(txtTwit, EventArgs.Empty); // 長さ再設定
+                        rtxtTwit_TextChanged(rtxtTwit, EventArgs.Empty); // 長さ再設定
                     }
                 }
             });
@@ -1301,7 +1301,7 @@ namespace StarlitTwit
         {
             _bURLShortening = true;
             btnURLShorten.Enabled = false;
-            string[] urls = Utilization.ExtractURL(txtTwit.Text)
+            string[] urls = Utilization.ExtractURL(rtxtTwit.Text)
                            .Distinct()
                            .Where((url) => !URLShortener.IsShortenURL(url))
                            .ToArray();
@@ -1317,11 +1317,11 @@ namespace StarlitTwit
                 }
             );
 
-            string text = txtTwit.Text;
+            string text = rtxtTwit.Text;
             foreach (var tuple in valList) {
                 text = text.Replace(tuple.Item1, tuple.Item2);
             }
-            txtTwit.Text = text;
+            rtxtTwit.Text = text;
 
             _bURLShortening = false;
         }
@@ -1649,7 +1649,7 @@ namespace StarlitTwit
                 this.Invoke(new Action(() =>
                 {
                     this.ActiveControl = null;
-                    txtTwit.Enabled = false;
+                    rtxtTwit.Enabled = false;
                     btnTwit.Enabled = false;
                 }));
 
@@ -1680,9 +1680,9 @@ namespace StarlitTwit
             finally {
                 this.Invoke(new Action(() =>
                 {
-                    txtTwit.Enabled = true;
+                    rtxtTwit.Enabled = true;
                     btnTwit.Enabled = true;
-                    txtTwit.Focus();
+                    rtxtTwit.Focus();
                 }));
                 tssLabel.RemoveText(STR_POSTING);
             }
@@ -1690,7 +1690,7 @@ namespace StarlitTwit
             this.Invoke(new Action(() =>
             {
                 ReSetStatusState();
-                txtTwit.Text = "";
+                rtxtTwit.Text = "";
             }));
         }
         #endregion (Update)
@@ -2024,7 +2024,7 @@ namespace StarlitTwit
         //
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
         {
-            if (!txtTwit.Focused) {
+            if (!rtxtTwit.Focused) {
                 SelectedUctlDispTwit().ProcessKey(keyData);
             }
             return base.ProcessCmdKey(ref msg, keyData);

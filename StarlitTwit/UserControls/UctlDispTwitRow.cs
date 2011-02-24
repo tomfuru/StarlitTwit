@@ -316,6 +316,7 @@ namespace StarlitTwit
                 rtxtGet.Size = new Size(lbl.Width, lbl.Height);
                 rtxtGet.Font = lbl.Font;
                 rtxtGet.Text = lbl.Text;
+                rtxtGet.ChangeFonts();
 
                 lbl.Visible = false;
                 rtxtGet.Visible = true;
@@ -415,7 +416,6 @@ namespace StarlitTwit
         //
         private void Initialize()
         {
-            rtxtGet.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
             this.TabStop = false;
 
             this.BackColor = GetColor(false);

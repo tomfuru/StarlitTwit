@@ -5,11 +5,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace StarlitTwit
 {
-    public partial class RichTextBoxHash : RichTextBoxEx
+    public partial class RichTextBoxHaash : RichTextBoxEx
     {
         //-------------------------------------------------------------------------------
         #region コンストラクタ
@@ -17,17 +16,7 @@ namespace StarlitTwit
         public RichTextBoxHash()
         {
             InitializeComponent();
-            SetComponent();
         }
-        //-------------------------------------------------------------------------------
-        #region SetComponent 新規コンポーネントセット
-        //-------------------------------------------------------------------------------
-        //
-        private void SetComponent()
-        {
-
-        }
-        #endregion (SetComponent)
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
 
@@ -44,7 +33,7 @@ namespace StarlitTwit
         public new string Text
         {
             get { return base.Text; }
-            set { base.Text = value; /*OnTextChanged(EventArgs.Empty);*/ }
+            set { base.Text = value; /*OnTextChanged(EventArgs.Empty); */}
         }
         //-------------------------------------------------------------------------------
         #endregion (Text プロパティ：)
@@ -58,17 +47,16 @@ namespace StarlitTwit
             if (_suspendTextChanged) { return; }
 
             //Stopwatch sw = Stopwatch.StartNew();
-            //if (_hashList != null) { _hashList.Clear(); }
-            //_hashList = GetHashRanges();
+            if (_hashList != null) { _hashList.Clear(); }
+            _hashList = GetHashRanges();
 
-            //foreach (Range r in _hashList) {
-            //    Select(r.start, r.length);
-            //    _suspendTextChanged = true;
-            //    SelectionFont = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold | FontStyle.Underline);
-            //    SelectionColor = Color.Blue;
-            //    _suspendTextChanged = false;
-                
-            //}
+            foreach (Range r in _hashList) {
+                Select(r.start, r.length);
+                _suspendTextChanged = true;
+                SelectionFont = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold | FontStyle.Underline);
+                SelectionColor = Color.Blue;
+                _suspendTextChanged = false;
+            }
 
             //Console.WriteLine(sw.ElapsedMilliseconds.ToString() + "ms");
             // 選択解除？
@@ -144,37 +132,54 @@ namespace StarlitTwit
         #endregion (RichTextBoxHash_MouseClick)
 
         //-------------------------------------------------------------------------------
-        #region ChangeFonts フォントを変更
+        #region -GetHashRanges レンジを返し続けます。
         //-------------------------------------------------------------------------------
         //
-        public void ChangeFonts()
-        {
-            if (_hashList != null) { _hashList.Clear(); }
-            //_hashList = GetHashRanges();
-            _hashList = GetHashRangesByRegex();
-
-            foreach (Range r in _hashList) {
-                Select(r.start, r.length);
-                SelectionFont = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold | FontStyle.Underline);
-                SelectionColor = Color.Blue;
-            }
-        }
-        #endregion (ChangeFonts)
-        //-------------------------------------------------------------------------------
-        #region GetHashRangesByRegex 正規表現を利用してハッシュを抽出します。
-        //-------------------------------------------------------------------------------
-        //
-        private List<Range> GetHashRangesByRegex()
+        private List<Range> GetHashRanges()
         {
             List<Range> list = new List<Range>();
-            Regex r = new Regex(@"(?<hash>[@#][a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])");
-            foreach (Match m in r.Matches(this.Text)) {
-                Group g = m.Groups["hash"];
-                list.Add(new Range(g.Index, g.Length));
+            int index = 0;
+            while (true) {
+                int len,
+                    start = GetHashRange(index, out len);
+                if (start == -1) { break; }
+                index = start + len;
+                list.Add(new Range(start, len));
             }
             return list;
         }
-        #endregion (GetHashRangesByRegex)
+        #endregion (GetHashRanges)
+        //-------------------------------------------------------------------------------
+        #region -GetHashRange ハッシュの範囲を求めます.
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ハッシュの範囲("#～～")を求めます。
+        /// </summary>
+        /// <param name="searchstartindex"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private int GetHashRange(int searchstartindex, out int length)
+        {
+            string text = this.Text;
+            const string AVAILABLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+            
+
+            int start = text.IndexOfAny(new char[]{'#','@'}, searchstartindex);
+
+            // [#,@がない],[#,@が最後]の時はもう#がないので-1を返す
+            if (start == -1 || start == text.Length - 1) { length = 0; return -1; }
+
+            // [#,@の次の文字が半角英数じゃない]の時は続きを探す
+            if (!AVAILABLE_CHARS.Contains(text[start + 1])) { return GetHashRange(start + 1, out length); }
+
+            // [#,@の後に続きがある]時は空白を探す
+            int end = text.IndexOfAny(new char[] { ' ', '　' }, start + 2);
+            if (end == -1) { end = this.TextLength; } // 空白がなかったら後ろは最後
+
+            length = end - start;
+            return start;
+        }
+        #endregion (GetHashRange)
     }
 
     //-------------------------------------------------------------------------------
