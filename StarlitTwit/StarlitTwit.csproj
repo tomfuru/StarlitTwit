@@ -105,8 +105,6 @@
     </Compile>
     <Compile Include="BaseTools.cs" />
     <Compile Include="Function\PictureGetter.cs" />
-    <Compile Include="Function\ThumbnailConverters.cs" />
-    <Compile Include="Function\URLShortenInfos.cs" />
     <Compile Include="Function\URLShortener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
