@@ -104,9 +104,12 @@
       <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseTools.cs" />
+    <Compile Include="Function\Picture\img_lyConverter.cs" />
     <Compile Include="Function\Picture\IThumbnailConverter.cs" />
+    <Compile Include="Function\Picture\PhotozouConverter.cs" />
     <Compile Include="Function\Picture\PictureGetter.cs" />
     <Compile Include="Function\Picture\TwitpicConverter.cs" />
+    <Compile Include="Function\Picture\yFrogConverter.cs" />
     <Compile Include="Function\URLShortening\Shortener_bit_ly.cs" />
     <Compile Include="Function\URLShortening\IURLShortenInfo.cs" />
     <Compile Include="Function\URLShortening\URLShortener.cs" />

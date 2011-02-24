@@ -14,7 +14,7 @@ namespace StarlitTwit
         private static readonly IThumbnailConverter[] CONVERTERS;
 
         //-------------------------------------------------------------------------------
-        #region コンストラクタ
+        #region static コンストラクタ
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 静的コンストラクタ
@@ -22,7 +22,12 @@ namespace StarlitTwit
         static PictureGetter()
         {
             IMAGE_EXTENSIONS = GetImageCodecInfo();
-            CONVERTERS = new IThumbnailConverter[] { new TwitpicConverter() };
+            CONVERTERS = new IThumbnailConverter[] { 
+                            new TwitpicConverter(),
+                            new PhotozouConverter(),
+                            new yFrogConverter(),
+                            new img_lyConverter()
+                        };
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
