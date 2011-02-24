@@ -1,6 +1,4 @@
 bin/
-!/StarlitTwit/bin/Release/StarlitTwit.exe
-!/StarlitTwit/bin/Release/StarlitTwit.exe.config
 obj/
 *.txt
 *.suo
