@@ -16,6 +16,7 @@ using System.Media;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace StarlitTwit
 {
@@ -316,53 +317,56 @@ namespace StarlitTwit
         //
         private void btnTwit_Click(object sender, EventArgs e)
         {
-            Action<string> act = new Action<string>(Update);
             string text = SettingsData.Header + rtxtTwit.Text + SettingsData.Footer;
-            act.BeginInvoke(text, Utilization.InvokeCallback, null);
+            Utilization.InvokeTransaction(() => Update(text));
         }
         #endregion (btnTwit_Click)
         //-------------------------------------------------------------------------------
         #region rtxtTwit_TextChanged テキスト変更時
         //-------------------------------------------------------------------------------
+        private bool _suspend_rtxtTwit_TextChanged = false;
         //
         private void rtxtTwit_TextChanged(object sender, EventArgs e)
         {
-            TextBox txtbox = (TextBox)sender;
+            if (_suspend_rtxtTwit_TextChanged) { return; }
+            _suspend_rtxtTwit_TextChanged = true;
+            try {
+                RichTextBox txtbox = (RichTextBox)sender;
 
-            int combinedlength = SettingsData.Header.Length + txtbox.Text.Length + SettingsData.Footer.Length;
+                int combinedlength = SettingsData.Header.Length + txtbox.Text.Length + SettingsData.Footer.Length;
+                // 残り文字数
+                int restLen = MAX_LENGTH - combinedlength;
 
-            // 残り文字数表示処理
-            int restLen = MAX_LENGTH - combinedlength;
-            //int restLen = MAX_LENGTH - _twitter.UrlEncode(txtbox.Text).Length;
+                if (restLen < 0) {
+                    lblRest.ForeColor = Color.Red;
+                    lblRest.Font = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold);
+                }
+                else {
+                    lblRest.ForeColor = SystemColors.WindowText;
+                    lblRest.Font = new Font(this.Font.FontFamily, this.Font.Size);
+                }
+                lblRest.Text = restLen.ToString();
 
-            if (restLen < 0) {
-                lblRest.ForeColor = Color.Red;
-                lblRest.Font = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold);
+                // 返信処理
+                switch (_stateStatusState) {
+                    case StatusState.Reply:
+                        if (!txtbox.Text.StartsWith(_statsName)) { ReSetStatusState(); }
+                        break;
+                    case StatusState.Quote:
+                        break;
+                    case StatusState.DirectMessage:
+                        break;
+                    default:
+                        break;
+                }
+
+                // URL短縮可否
+                if (!_bURLShortening) {
+                    string[] urls = Utilization.ExtractURL(rtxtTwit.Text).ToArray();
+                    btnURLShorten.Enabled = (urls.Length > 0) && URLShortener.ExistShortenableURL(urls);
+                }
             }
-            else {
-                lblRest.ForeColor = SystemColors.WindowText;
-                lblRest.Font = new Font(this.Font.FontFamily, this.Font.Size);
-            }
-            lblRest.Text = restLen.ToString();
-
-            // 返信処理
-            switch (_stateStatusState) {
-                case StatusState.Reply:
-                    if (!txtbox.Text.StartsWith(_statsName)) { ReSetStatusState(); }
-                    break;
-                case StatusState.Quote:
-                    break;
-                case StatusState.DirectMessage:
-                    break;
-                default:
-                    break;
-            }
-
-            // URL短縮可否
-            if (!_bURLShortening) {
-                string[] urls = Utilization.ExtractURL(rtxtTwit.Text).ToArray();
-                btnURLShorten.Enabled = (urls.Length > 0) && URLShortener.ExistShortenableURL(urls);
-            }
+            finally { _suspend_rtxtTwit_TextChanged = false; }
         }
         #endregion (txtTwit_TextChanged)
         //-------------------------------------------------------------------------------
@@ -374,9 +378,7 @@ namespace StarlitTwit
             if (e.KeyData == Keys.Enter) {
                 if (!e.Shift || !e.Control) {
                     e.SuppressKeyPress = true;
-                    Action<string> act = new Action<string>(Update);
-                    string text = SettingsData.Header + rtxtTwit.Text + SettingsData.Footer;
-                    act.BeginInvoke(text, Utilization.InvokeCallback, null);
+                    btnTwit_Click(sender, e);
                 }
             }
         }

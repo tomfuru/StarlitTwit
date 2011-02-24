@@ -83,6 +83,22 @@ namespace StarlitTwit
         #endregion (Event)
 
         //-------------------------------------------------------------------------------
+        #region %[override]OnKeyDown キーダウン時
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Control) {
+                if (e.KeyCode == Keys.V) {
+                    this.Paste(DataFormats.GetFormat(DataFormats.Text));
+                    e.Handled = true;
+                }
+            }
+        }
+        #endregion (%[override]OnKeyDown)
+
+        //-------------------------------------------------------------------------------
         #region %CanPaste 貼り付け可能か
         //-------------------------------------------------------------------------------
         //

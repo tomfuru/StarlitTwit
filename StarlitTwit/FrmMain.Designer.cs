@@ -71,7 +71,7 @@
             this.lblTweetStatus = new System.Windows.Forms.Label();
             this.lblRest = new System.Windows.Forms.Label();
             this.btnTwit = new System.Windows.Forms.Button();
-            this.rtxtTwit = new System.Windows.Forms.TextBox();
+            this.rtxtTwit = new StarlitTwit.RichTextBoxEx();
             this.btnURLShorten = new StarlitTwit.SplitButton();
             this.tabTwitDisp = new StarlitTwit.TabControlEx();
             this.tabpgHome = new System.Windows.Forms.TabPage();
@@ -504,7 +504,7 @@
             this.rtxtTwit.Location = new System.Drawing.Point(3, 37);
             this.rtxtTwit.Multiline = true;
             this.rtxtTwit.Name = "rtxtTwit";
-            this.rtxtTwit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.rtxtTwit.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.rtxtTwit.Size = new System.Drawing.Size(360, 47);
             this.rtxtTwit.TabIndex = 2;
             this.rtxtTwit.TextChanged += new System.EventHandler(this.rtxtTwit_TextChanged);
@@ -771,7 +771,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmi_子画面;
         private System.Windows.Forms.ToolStripMenuItem tsmi子画面_nothing;
         private ImageListWrapper imageListWrapper;
-        private System.Windows.Forms.TextBox rtxtTwit;
+        private StarlitTwit.RichTextBoxEx rtxtTwit;
 
     }
 }
