@@ -1,4 +1,5 @@
 bin/
+!*/StarlitTwit.exe*
 obj/
 *.txt
 *.suo
