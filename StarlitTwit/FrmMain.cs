@@ -760,6 +760,7 @@ namespace StarlitTwit
                         }
 
                         foreach (UctlDispTwit uctldisp in _dispTwitDic.Values) {
+                            uctldisp.SetAllRowReplyText(false);
                             uctldisp.ReConfigAll();
                         }
 

@@ -718,8 +718,8 @@ namespace StarlitTwit
 
                     // 画像URL登録
                     string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
-                    if (!ImageListWrapper.ImageContainsKey(iconURL) && !imageURLList.Contains(iconURL)) { 
-                        imageURLList.Add(iconURL); 
+                    if (!ImageListWrapper.ImageContainsKey(iconURL) && !imageURLList.Contains(iconURL)) {
+                        imageURLList.Add(iconURL);
                     }
 
                     addrowList.Add(rowdata);
@@ -736,16 +736,7 @@ namespace StarlitTwit
                 }
 
                 // 追加分Replyツールチップ設定
-                if (FrmMain.SettingsData.DisplayReplyToolTip) {
-                    foreach (RowData row in addrowList) {
-                        if (row.TwitData.Mention_StatusID > 0) {
-                            int depth;
-                            if ((depth = FrmMain.SettingsData.DisplayReplyToolTipDepth) == 0) { depth = int.MaxValue; }
-                            string replytext = GetReplyText(row.TwitData.Mention_StatusID, depth);
-                            row.StrReplyTooltip = replytext;
-                        }
-                    }
-                }
+                SetRowReplyText(addrowList);
 
                 // アイコン取得要請
                 ImageListWrapper.RequestAddImages(imageURLList);
@@ -830,6 +821,23 @@ namespace StarlitTwit
             return true;
         }
         #endregion (RemoveTweet)
+        //-------------------------------------------------------------------------------
+        #region +SetAllRowReplyText 全行リプライ先テキストを表示します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 全ての行のリプライ先テキストを設定します。
+        /// </summary>
+        /// <param name="renew">falseだと表示はすぐには更新されません。</param>
+        public void SetAllRowReplyText(bool renew)
+        {
+            SetRowReplyText(_rowDataList.Values);
+            if (renew) {
+                foreach (var row in _rowList) {
+                    row.SetReplyToolTip(_rowDataList[row.TwitData.StatusID].StrReplyTooltip);
+                }
+            }
+        }
+        #endregion (SetAllRowReplyText)
         //===============================================================================
         #region -AdjustControl コントロールの内容・位置・サイズの調整を行います。
         //-------------------------------------------------------------------------------
@@ -1104,6 +1112,23 @@ namespace StarlitTwit
             row.SetControlLocation();
         }
         #endregion (ConfigRow)
+        //-------------------------------------------------------------------------------
+        #region -SetRowReplyText 行リプライ先テキストを表示します。
+        //-------------------------------------------------------------------------------
+        //
+        private void SetRowReplyText(IEnumerable<RowData> rowdata)
+        {
+            foreach (RowData row in rowdata) {
+                if (FrmMain.SettingsData.DisplayReplyToolTip && row.TwitData.Mention_StatusID > 0) {
+                    int depth;
+                    if ((depth = FrmMain.SettingsData.DisplayReplyToolTipDepth) == 0) { depth = int.MaxValue; }
+                    string replytext = GetReplyText(row.TwitData.Mention_StatusID, depth);
+                    row.StrReplyTooltip = replytext;
+                }
+                else { row.StrReplyTooltip = ""; }
+            }
+        }
+        #endregion (SetRowReplyText)
         //-------------------------------------------------------------------------------
         #region -GetReplyText リプライ先のテキストを取得します。
         //-------------------------------------------------------------------------------
