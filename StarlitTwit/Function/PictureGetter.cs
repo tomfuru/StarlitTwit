@@ -6,12 +6,36 @@ using System.Drawing.Imaging;
 
 namespace StarlitTwit
 {
-    public static class PictureGetter
+    public static partial class PictureGetter
     {
         /// <summary>[static]読み込み可能な画像の拡張子</summary>
         private static readonly string[] IMAGE_EXTENSIONS;
         /// <summary>Thumbnailへのコンバータ</summary>
         private static readonly IThumbnailConverter[] CONVERTERS;
+
+        //-------------------------------------------------------------------------------
+        #region -(interface)IThumbnailConverter 画像サムネイルへのコンバータのインタフェース
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 画像へのURLをThumbnailに変換するためのメソッドを定義するクラスのインタフェースです。
+        /// </summary>
+        private interface IThumbnailConverter
+        {
+            /// <summary>
+            /// URLをThumbnailURLに変換できるかどうか
+            /// </summary>
+            /// <returns>できるかどうか</returns>
+            bool IsEffectiveURL(string url);
+
+            /// <summary>
+            /// URLをThumbailのURLに変換します。
+            /// </summary>
+            /// <param name="url">URL</param>
+            /// <returns>ThumbnailのURL</returns>
+            string ConvertToThumbnailURL(string url);
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (-(interface)IThumbnailConverter)
 
         //-------------------------------------------------------------------------------
         #region static コンストラクタ

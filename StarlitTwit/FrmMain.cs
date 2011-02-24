@@ -8,18 +8,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace StarlitTwit
 {
@@ -41,7 +37,7 @@ namespace StarlitTwit
 
             DEFAULT_TABPAGES = new TabPage[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
 
-            imageListWrapper.ImageList.Images.Add(STR_IMGLIST_CROSS, StarlitTwit.Properties.Resources.cross);
+            imageListWrapper.ImageAdd(STR_IMGLIST_CROSS, StarlitTwit.Properties.Resources.cross);
 
             tsslRestAPI.Text = "";
             lblTweetStatus.Text = "";
@@ -112,17 +108,6 @@ namespace StarlitTwit
             get { return imageListWrapper; }
         }
         #endregion (ImageListWrapper)
-        //-------------------------------------------------------------------------------
-        #region ImageList プロパティ
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// ImageListを返します。
-        /// </summary>
-        public ImageList ImageList
-        {
-            get { return imageListWrapper.ImageList; }
-        }
-        #endregion (ImageList)
         //-------------------------------------------------------------------------------
         #endregion (プロパティ)
 
