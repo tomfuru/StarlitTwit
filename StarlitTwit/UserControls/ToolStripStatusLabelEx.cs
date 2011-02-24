@@ -179,52 +179,55 @@ namespace StarlitTwit
         //
         private void SwitchText()
         {
-            string text;
-            TextData textdata;
-            while (true) {
-                lock (_objSync) {
-                    if (_firstQueue.Count > 0) {
-                        text = _firstQueue.Dequeue();
-                    }
-                    else if (_textQueue.Count > 0) {
-                        text = _textQueue.Dequeue();
-                    }
-                    else { break; }                 // 要素もう無し，終了
-
-                    if (!_textDic.ContainsKey(text)) { continue; }  // 削除済みの時
-                    textdata = _textDic[text];
-                }
-
-                SetTextToLabel(text);
-
-                int standard = Environment.TickCount;
-                int now = standard;
+            try {
+                string text;
+                TextData textdata;
                 while (true) {
-                    if (_firstQueue.Count > 0) { break; }       // 初めての項目がきた場合は優先
-                    Thread.Sleep(SLEEP_TIME);
-                    now = Environment.TickCount;
-                    if (now - standard >= SwitchInterval && _textQueue.Count > 0) { break; } // データがある場合はSwitchIntervalたったら抜ける
-                    else if (textdata.type == TextDataType.Permanent) {    // Permanentの時にデータが消えてたら終わり
+                    lock (_objSync) {
+                        if (_firstQueue.Count > 0) {
+                            text = _firstQueue.Dequeue();
+                        }
+                        else if (_textQueue.Count > 0) {
+                            text = _textQueue.Dequeue();
+                        }
+                        else { break; }                 // 要素もう無し，終了
+
+                        if (!_textDic.ContainsKey(text)) { continue; }  // 削除済みの時
+                        textdata = _textDic[text];
+                    }
+
+                    SetTextToLabel(text);
+
+                    int standard = Environment.TickCount;
+                    int now = standard;
+                    while (true) {
+                        if (_firstQueue.Count > 0) { break; }       // 初めての項目がきた場合は優先
+                        Thread.Sleep(SLEEP_TIME);
+                        now = Environment.TickCount;
+                        if (now - standard >= SwitchInterval && _textQueue.Count > 0) { break; } // データがある場合はSwitchIntervalたったら抜ける
+                        else if (textdata.type == TextDataType.Permanent) {    // Permanentの時にデータが消えてたら終わり
+                            lock (_objSync) {
+                                if (!_textDic.ContainsKey(text)) { break; }
+                            }
+                        }
+                        else if (now - standard >= MaxDisplay) {               // Permanentでない時にMaxDisplay時間たったら終わり
+                            textdata.restNum = 0;
+                            break;
+                        }
+                    };
+
+                    if (textdata.type == TextDataType.Permanent || --textdata.restNum >= 0) {
+                        _textQueue.Enqueue(text);
+                    }
+                    else {
                         lock (_objSync) {
-                            if (!_textDic.ContainsKey(text)) { break; }
+                            _textDic.SaveRemove(text);
                         }
                     }
-                    else if (now - standard >= MaxDisplay) {               // Permanentでない時にMaxDisplay時間たったら終わり
-                        textdata.restNum = 0;
-                        break;
-                    }
-                } ;
-
-                if (textdata.type == TextDataType.Permanent || --textdata.restNum >= 0) {
-                    _textQueue.Enqueue(text);
                 }
-                else {
-                    lock (_objSync) {
-                        _textDic.SaveRemove(text);
-                    }
-                }
+                SetTextToLabel("");
             }
-            SetTextToLabel("");
+            catch (InvalidOperationException) { }
         }
         #endregion (SwitchText)
 
