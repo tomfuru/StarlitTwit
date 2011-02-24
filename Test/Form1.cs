@@ -31,6 +31,7 @@ namespace Test
         public Form1()
         {
             InitializeComponent();
+            propertyGrid1.SelectedObject = richTextBox2;
             richTextBox2.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
 
             imageList1.Images.Add("abc", new Bitmap(16, 16));

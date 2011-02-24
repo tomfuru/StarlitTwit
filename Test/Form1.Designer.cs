@@ -65,6 +65,7 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
             this.tabControlEx1.SuspendLayout();
@@ -387,7 +388,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(841, 497);
+            this.button2.Location = new System.Drawing.Point(204, 509);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 13;
@@ -405,18 +406,25 @@
             // 
             this.dateTimePicker1.CustomFormat = "yyyy/MM/dd hh:mm:ss";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(666, 325);
+            this.dateTimePicker1.Location = new System.Drawing.Point(754, 162);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(200, 19);
             this.dateTimePicker1.TabIndex = 14;
             // 
             // richTextBox2
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(320, 411);
+            this.richTextBox2.Location = new System.Drawing.Point(369, 423);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Size = new System.Drawing.Size(306, 96);
             this.richTextBox2.TabIndex = 15;
             this.richTextBox2.Text = "";
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(681, 311);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(298, 208);
+            this.propertyGrid1.TabIndex = 16;
             // 
             // Form1
             // 
@@ -425,6 +433,7 @@
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.ClientSize = new System.Drawing.Size(991, 557);
+            this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.button2);
@@ -500,6 +509,7 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }
 
