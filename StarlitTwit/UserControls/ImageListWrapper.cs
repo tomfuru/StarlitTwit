@@ -10,20 +10,25 @@ using System.Drawing;
 namespace StarlitTwit
 {
     /// <summary>
-    /// ImageListのWrapperです
+    /// ImageListのWrapperです。画像取得・参照等はこのクラスのインスタンスのメソッドを利用し，ImageListプロパティを通じて行ってはならない。
     /// </summary>
     public class ImageListWrapper : Component
     {
         //-------------------------------------------------------------------------------
         #region Variables
         //-------------------------------------------------------------------------------
-        /// <summary>内部のImageListを取得します。</summary>
+        /// <summary>
+        /// <para>内部のImageListを取得します。</para>
+        /// <para>【注意】画像の追加・参照等はこのインスタンスを通して行わない。</para>
+        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public ImageList ImageList { get; private set; }
         /// <summary>画像取得スレッド</summary>
         private Thread _thread = null;
         /// <summary>URLキュー</summary>
         private List<string> _urlList = new List<string>();
+        /// <summary>ImageList操作時ロックする</summary>
+        private object _objLock = new object();
         //-------------------------------------------------------------------------------
         #endregion (Variables)
 
@@ -37,6 +42,44 @@ namespace StarlitTwit
             ImageList = new ImageList();
         }
         #endregion (コンストラクタ)
+
+        //-------------------------------------------------------------------------------
+        #region +GetImage 画像取得
+        //-------------------------------------------------------------------------------
+        //
+        public Image GetImage(string key)
+        {
+            lock (_objLock) {
+                return ImageList.Images[key];
+            }
+        }
+        #endregion (GetImage)
+        //-------------------------------------------------------------------------------
+        #region +ImageAdd 画像追加
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 画像を追加します。
+        /// </summary>
+        /// <param name="key">キー</param>
+        /// <param name="image">画像</param>
+        public void ImageAdd(string key, Image image)
+        {
+            lock (_objLock) {
+                ImageList.Images.Add(key, image);
+            }
+        }
+        #endregion (ImageAdd)
+        //-------------------------------------------------------------------------------
+        #region +ImageContainsKey 画像リストに指定キー項目があるか
+        //-------------------------------------------------------------------------------
+        //
+        public bool ImageContainsKey(string key)
+        {
+            lock (_objLock) {
+                return ImageList.Images.ContainsKey(key);
+            }
+        }
+        #endregion (ImageContainsKey)
 
         //-------------------------------------------------------------------------------
         #region +RequestAddImages イメージの取得要請
@@ -72,9 +115,10 @@ namespace StarlitTwit
                     url = _urlList[0];
                     _urlList.RemoveAt(0);
                 }
-                if (!ImageList.Images.ContainsKey(url)) {
+                if (!ImageContainsKey(url)) {
                     Image img = Utilization.GetImageFromURL(url);
-                    if (img != null) { ImageList.Images.Add(url, img); }
+                    
+                    if (img != null) { ImageAdd(url, img); }
                 }
             }
         }

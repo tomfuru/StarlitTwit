@@ -1066,7 +1066,7 @@ namespace StarlitTwit
         private UctlDispTwitRow MakeTwitRow(TwitData twitdata)
         {
             UctlDispTwitRow row = new UctlDispTwitRow(twitdata);
-            row.ImageList = ImageList;
+            row.ImageListWrapper = ImageListWrapper;
             row.MouseDown += pnlflow_MouseDown;
             row.MouseUp += pnlflow_MouseUp;
             row.MouseMove += pnlflow_MouseMove;

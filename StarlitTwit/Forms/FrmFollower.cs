@@ -19,15 +19,17 @@ namespace StarlitTwit
 
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
+        private ImageListWrapper _imageListWrapper = null;
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmFollower(ImageList imgList = null)
+        public FrmFollower(ImageListWrapper imgListWrapper)
         {
             InitializeComponent();
-            lstvList.SmallImageList = imgList;
+            _imageListWrapper = imgListWrapper;
+            lstvList.SmallImageList = imgListWrapper.ImageList;
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -314,7 +316,7 @@ namespace StarlitTwit
                 foreach (var d in data) {
                     Image img = Utilization.GetImageFromURL(d.Item2);
                     if (img != null) {
-                        lstvList.SmallImageList.Images.Add(d.Item2, img);
+                        _imageListWrapper.ImageAdd(d.Item2, img);
                         this.Invoke(new Action(() => ResetImageKey(d.Item1)));
                     }
                 }

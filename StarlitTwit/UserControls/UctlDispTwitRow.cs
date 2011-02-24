@@ -58,7 +58,7 @@ namespace StarlitTwit
         /// <summary>再読込回数カウントダウン</summary>
         private int _iReRead_RestTime = 0;
         /// <summary>画像辞書(KeyはURL)</summary>
-        public ImageList ImageList { get; set; }
+        public ImageListWrapper ImageListWrapper { get; set; }
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -389,8 +389,8 @@ namespace StarlitTwit
         {
             string IconURL = (TwitData.TwitType == TwitType.Retweet) ? TwitData.RTTwitData.IconURL : TwitData.IconURL;
             // 画像読み込み
-            if (ImageList.Images.ContainsKey(IconURL)) {
-                picbIcon.Image = ImageList.Images[IconURL];
+            if (ImageListWrapper.ImageContainsKey(IconURL)) {
+                picbIcon.Image = ImageListWrapper.GetImage(IconURL);
                 picbIcon.Visible = true;
                 timerSetPicture.Enabled = false;
             }
@@ -398,7 +398,7 @@ namespace StarlitTwit
             _iReRead_RestTime -= timerSetPicture.Interval;
             if (_iReRead_RestTime <= 0) {
                 // 終了
-                picbIcon.Image = ImageList.Images[FrmMain.STR_IMGLIST_CROSS];
+                picbIcon.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
                 picbIcon.Visible = true; 
                 timerSetPicture.Enabled = false;
             }
@@ -517,15 +517,15 @@ namespace StarlitTwit
         /// <returns>アイコンが正しく設定されたかどうか</returns>
         public bool SetIcon()
         {
-            if (!IconVisible || ImageList == null) { return false; }
+            if (!IconVisible || ImageListWrapper == null) { return false; }
 
             string IconURL = (TwitData.TwitType == TwitType.Retweet) ? TwitData.RTTwitData.IconURL : TwitData.IconURL;
 
             if (string.IsNullOrEmpty(IconURL)) { 
-                picbIcon.Image = ImageList.Images[FrmMain.STR_IMGLIST_CROSS]; 
+                picbIcon.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
             }
-            else if (ImageList.Images.ContainsKey(IconURL)) {
-                picbIcon.Image = ImageList.Images[IconURL];
+            else if (ImageListWrapper.ImageContainsKey(IconURL)) {
+                picbIcon.Image = ImageListWrapper.GetImage(IconURL);
             }
             else {
                 picbIcon.Image = null;
