@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Xml.Linq;
 using System.IO;
+using System.Net.Sockets;
 
 namespace StarlitTwit
 {
@@ -55,9 +56,12 @@ namespace StarlitTwit
                 string hostname = Utilization.GetHostName(url);
                 if (hostname == null) { return false; }
 
-                IPHostEntry entry = Dns.GetHostEntry(hostname);
-                IPHostEntry twitpicentry = Dns.GetHostEntry(TWITPIC);
-                return (entry.AddressList.Except(twitpicentry.AddressList).Count() == 0);
+                try {
+                    IPHostEntry entry = Dns.GetHostEntry(hostname);
+                    IPHostEntry twitpicentry = Dns.GetHostEntry(TWITPIC);
+                    return (entry.AddressList.Except(twitpicentry.AddressList).Count() == 0);
+                }
+                catch (SocketException) { return false; }
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
