@@ -1125,6 +1125,7 @@ namespace StarlitTwit
             WebRequest req = WebRequest.Create(uri);
             req.Method = GET;
             req.ContentType = "application/x-www-form-urlencoded";
+            req.Timeout = 10000;
 
             WebResponse res;
             try {
@@ -1184,6 +1185,8 @@ namespace StarlitTwit
             WebRequest req = WebRequest.Create(uri);
             req.Method = POST;
             req.ContentType = "application/x-www-form-urlencoded";
+            req.Timeout = 10000;
+
             WebResponse res;
             try {
                 res = req.GetResponse();
@@ -1231,6 +1234,8 @@ namespace StarlitTwit
             WebRequest req = WebRequest.Create(uri);
             req.Method = GET;
             req.ContentType = "application/x-www-form-urlencoded";
+            req.Timeout = 10000;
+
             WebResponse res;
             try {
                 res = req.GetResponse();
@@ -1471,9 +1476,9 @@ namespace StarlitTwit
         private TwitData ConvertToTwitData(XElement el)
         {
             try {
-                bool isRT = (el.Element("retweeted_status") == null);
+                bool notRT = (el.Element("retweeted_status") == null);
                 return new TwitData() {
-                    TwitType = (isRT) ? TwitType.Normal : TwitType.Retweet,
+                    TwitType = (notRT) ? TwitType.Normal : TwitType.Retweet,
                     DMScreenName = "",
                     StatusID = long.Parse(el.Element("id").Value),
                     Time = StringToDateTime(el.Element("created_at").Value),
@@ -1487,7 +1492,7 @@ namespace StarlitTwit
                     IconURL = el.Element("user").Element("profile_image_url").Value,
                     UserScreenName = el.Element("user").Element("screen_name").Value,
                     UserProtected = bool.Parse(el.Element("user").Element("protected").Value),
-                    RTTwitData = (isRT) ? null
+                    RTTwitData = (notRT) ? null
                         : new TwitData() {
                             TwitType = StarlitTwit.TwitType.Normal,
                             DMScreenName = "",
