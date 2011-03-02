@@ -766,6 +766,7 @@ namespace StarlitTwit
                 }
                 else { AdjustControl(vscrbar.Value, true); } // コントロール位置調整
 
+
                 return retText;
             }
         }
@@ -850,6 +851,7 @@ namespace StarlitTwit
         [MethodImpl(MethodImplOptions.Synchronized)]
         private void AdjustControl(int startIndex, bool flowDirForward, int shiftvalue = 0)
         {
+            //Console.WriteLine("AdjustControl start");
             //DateTime dt = DateTime.Now;
 
             if (_rowDataList.Count == 0) { return; }
@@ -875,6 +877,7 @@ namespace StarlitTwit
                 if (shiftvalue < 0) {
                     int shiftnum = -shiftvalue;
                     if (flowDirForward) { // シフトするのみ
+                        startIndex -= (_existNotAllRow_Top) ? 1 : 0;
                         for (int i = shiftnum; i < _iVisibleRowNum; i++) { // シフト
                             UctlDispTwitRow row = _rowList[i];
                             row.Invalidate();
@@ -1047,6 +1050,8 @@ namespace StarlitTwit
                 else { vscrbar.Value = rowdataindex + 2; }
             }
             _suspend_vscrbar_ValueChangeEvent = false;
+
+            //Console.WriteLine("AdjustControl end");
 
             //Console.WriteLine(DateTime.Now.Subtract(dt));
         }
