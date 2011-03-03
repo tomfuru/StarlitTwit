@@ -54,7 +54,10 @@ namespace StarlitTwit
         //
         private void tsmiCopy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(this.SelectedText);
+            if (this.SelectionLength > 0) {
+                this.Copy();
+                Clipboard.SetText(Clipboard.GetText(TextDataFormat.Text));
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion (tsmiCopy_Click)
@@ -64,8 +67,10 @@ namespace StarlitTwit
         //
         private void tsmiCut_Click(object sender, EventArgs e)
         {
-            this.Cut();
-            Clipboard.SetText(Clipboard.GetText(TextDataFormat.Text));
+            if (this.SelectionLength > 0) {
+                this.Cut();
+                Clipboard.SetText(Clipboard.GetText(TextDataFormat.Text));
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion (tsmiCut_Click)
