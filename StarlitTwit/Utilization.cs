@@ -45,13 +45,28 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region +[static]GetTwitDataFromID IDから呟きに関するデータを取得します
         //-------------------------------------------------------------------------------
-        //
+        /// <summary>
+        /// IDから呟きデータを取得します。Forbiddenで取得できなかった場合は認証をつけてもう一度リトライします。
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="twitData"></param>
+        /// <returns></returns>
         public static bool GetTwitDataFromID(long id, out TwitData twitData)
         {
             try {
-                twitData = FrmMain.Twitter.statuses_show(id);
+                twitData = FrmMain.Twitter.statuses_show(false, id);
             }
-            catch (TwitterAPIException) {
+            catch (TwitterAPIException ex) {
+                if (ex.ErrorStatusCode == 403) {
+                    try {
+                        twitData = FrmMain.Twitter.statuses_show(true, id);
+                    }
+                    catch (TwitterAPIException) {
+                        twitData = default(TwitData);
+                        return false;
+                    }
+                    return true;
+                }
                 twitData = default(TwitData);
                 return false;
             }

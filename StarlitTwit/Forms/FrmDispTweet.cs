@@ -158,15 +158,11 @@ namespace StarlitTwit
         {
             try {
                 while (status_id >= 0) {
-                    TwitData data = null;
-                    try {
-                        data = FrmMain.Twitter.statuses_show(status_id);
-                    }
-                    catch (TwitterAPIException) {
+                    TwitData data ;
+                    if (!Utilization.GetTwitDataFromID(status_id, out data)) {
                         this.Invoke(new Action(() => tsslabel.Text = "取得できなかった発言があります。"));
                         return;
                     }
-
                     this.Invoke(new Action(() => uctlDispTwit.AddData(new TwitData[] { data }, true)));
                     status_id = data.Mention_StatusID;
                 }

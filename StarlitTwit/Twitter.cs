@@ -328,7 +328,7 @@ namespace StarlitTwit
         /// <param name="id">取得する発言ID</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData statuses_show(long id, bool trim_user = false, bool include_entities = false)
+        public TwitData statuses_show(bool withAuthParam, long id, bool trim_user = false, bool include_entities = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -336,7 +336,19 @@ namespace StarlitTwit
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = URLapi + @"statuses/show/" + id.ToString() + ".xml" + JoinParameters(paramdic);
+            StringBuilder sburl = new StringBuilder();
+            sburl.Append(URLapi);
+            sburl.Append(@"statuses/show/");
+            sburl.Append(id);
+            sburl.Append(".xml");
+            string url;
+            if (withAuthParam) {
+                url = GetUrlWithOAuthParameters(sburl.ToString(), GET, paramdic);
+            }
+            else {
+                sburl.Append(JoinParameters(paramdic));
+                url = sburl.ToString();
+            }
 
             return ConvertToTwitData(GetByAPI(url));
         }
