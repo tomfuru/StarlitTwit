@@ -1303,7 +1303,7 @@ namespace StarlitTwit
                            .ToArray();
             List<Tuple<string, string>> valList = new List<Tuple<string, string>>();
 
-            Utilization.InvokeTransaction(
+            Utilization.InvokeTransactionDoingEvents(
                 () =>
                 {
                     foreach (string url in urls) {

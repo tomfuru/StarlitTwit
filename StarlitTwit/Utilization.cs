@@ -288,16 +288,33 @@ namespace StarlitTwit
         #endregion (GetHostName)
 
         //-------------------------------------------------------------------------------
+        #region +[static]InvokeTransactionDoingEvents イベント処理をしながら処理を行います。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// イベント処理を行いつつ処理を行います。
+        /// </summary>
+        /// <param name="act">行う処理</param>
+        /// <param name="endAct">[option]処理終了時に1回だけ行う処理</param>
+        public static void InvokeTransactionDoingEvents(Action act, Action endAct = null)
+        {
+            IAsyncResult res = InvokeTransaction(act, endAct);
+
+            while (!res.IsCompleted) {
+                Thread.Sleep(10);
+                Application.DoEvents();
+            }
+        }
+        #endregion (InvokeTransactionDoingEvents)
+
+        //-------------------------------------------------------------------------------
         #region +[static]InvokeTransaction 処理を別スレッドで行います。
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 処理を別スレッドで行います。
         /// </summary>
         /// <param name="act">別スレッドで行いたい処理</param>
-        /// <param name="startAct">[option]処理開始時に1回だけ行う処理</param>
         /// <param name="endAct">[option]処理終了時に1回だけ行う処理</param>
-        /// <param name="sleep_ms">[option]処理終了を確認する間のスレッド休止時間(ミリ秒)</param>
-        public static IAsyncResult InvokeTransaction(Action act, Action endAct = null, int sleep_ms = 1)
+        public static IAsyncResult InvokeTransaction(Action act, Action endAct = null)
         {
             return act.BeginInvoke((ar) =>
             {

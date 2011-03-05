@@ -1127,6 +1127,29 @@ namespace StarlitTwit
         #endregion (oauth/)
 
         //===============================================================================
+        #region UserStream
+        //-------------------------------------------------------------------------------
+        //
+        public void userstream_statuses_sample()
+        {
+            const string URL_SAMPLE = @"http://stream.twitter.com/1/statuses/sample.json";
+            string url = GetUrlWithOAuthParameters(URL_SAMPLE,GET,null);
+
+            WebRequest req = WebRequest.Create(url);
+
+            WebResponse res = req.GetResponse();
+            using (Stream stream = res.GetResponseStream())
+            using (StreamReader sr = new StreamReader(stream)) {
+                while (!sr.EndOfStream) {
+                    string line = sr.ReadLine();
+                    Console.WriteLine(line);
+                }
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (UserStream)
+
+        //===============================================================================
         #region Private Methods
         //-------------------------------------------------------------------------------
         #region -GetByAPI APIから取得
