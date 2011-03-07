@@ -31,11 +31,11 @@
             this.lblName = new System.Windows.Forms.Label();
             this.picbIcon = new System.Windows.Forms.PictureBox();
             this.lblTweet = new System.Windows.Forms.Label();
+            this.timerSetPicture = new System.Windows.Forms.Timer(this.components);
             this.uctlline = new StarlitTwit.UctlLine();
             this.rtxtGet = new StarlitTwit.RichTextBoxHash();
-            this.tooltipReply = new StarlitTwit.PermanentToolTip(this.components);
             this.tooltipPicture = new StarlitTwit.ToolTipPicture(this.components);
-            this.timerSetPicture = new System.Windows.Forms.Timer(this.components);
+            this.myToolTip1 = new StarlitTwit.MyToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,6 +77,10 @@
             this.lblTweet.UseMnemonic = false;
             this.lblTweet.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Label_DoubleClick);
             // 
+            // timerSetPicture
+            // 
+            this.timerSetPicture.Tick += new System.EventHandler(this.timerSetPicture_Tick);
+            // 
             // uctlline
             // 
             this.uctlline.BackColor = System.Drawing.Color.Black;
@@ -105,13 +109,6 @@
             this.rtxtGet.Leave += new System.EventHandler(this.rtxtGet_Leave);
             this.rtxtGet.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.rtxtGet_MouseWheel);
             // 
-            // tooltipReply
-            // 
-            this.tooltipReply.AutoPopDelay = 99999;
-            this.tooltipReply.InitialDelay = 100;
-            this.tooltipReply.ReshowDelay = 100;
-            this.tooltipReply.Popup += new System.Windows.Forms.PopupEventHandler(this.tooltipReply_Popup);
-            // 
             // tooltipPicture
             // 
             this.tooltipPicture.AutoPopDelay = 5000;
@@ -123,9 +120,12 @@
             this.tooltipPicture.SwitchInterval = 2000;
             this.tooltipPicture.PrePopup += new System.EventHandler<System.ComponentModel.CancelEventArgs>(this.tooltipPicture_PrePopup);
             // 
-            // timerSetPicture
+            // myToolTip1
             // 
-            this.timerSetPicture.Tick += new System.EventHandler(this.timerSetPicture_Tick);
+            this.myToolTip1.BackColor = System.Drawing.SystemColors.Info;
+            this.myToolTip1.DisplayControl = this.lblTweet;
+            this.myToolTip1.DisplayDuration = 0;
+            this.myToolTip1.Font = new System.Drawing.Font("MS UI Gothic", 9F);
             // 
             // UctlDispTwitRow
             // 
@@ -156,7 +156,7 @@
         private StarlitTwit.RichTextBoxHash rtxtGet;
         private UctlLine uctlline;
         private ToolTipPicture tooltipPicture;
-        private PermanentToolTip tooltipReply;
         private System.Windows.Forms.Timer timerSetPicture;
+        private MyToolTip myToolTip1;
     }
 }

@@ -543,12 +543,7 @@ namespace StarlitTwit
         //
         public void SetReplyToolTip(string text)
         {
-            if (string.IsNullOrEmpty(text)) {
-                tooltipReply.RemoveAll();
-            }
-            else {
-                tooltipReply.SetToolTip(lblTweet, text);
-            }
+            myToolTip1.ToolTipText = text;
         }
         #endregion (SetReplyToolTip)
         //-------------------------------------------------------------------------------

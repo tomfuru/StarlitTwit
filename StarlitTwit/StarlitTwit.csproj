@@ -115,6 +115,12 @@
     <Compile Include="UserControls\ImageListWrapper.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\MyToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\MyToolTipBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\RichTextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>

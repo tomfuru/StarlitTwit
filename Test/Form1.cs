@@ -69,15 +69,21 @@ namespace Test
             Font f2 = new Font("MS UI Gothic", 10);
             Font f3 = new Font("MS UI Gothic", 11);
 
-            TwitterClient.MyToolTip tt = new TwitterClient.MyToolTip(this, this.components) {
+            var tt = new StarlitTwit.MyToolTip(this.components) {
                 DisplayControl = label4,
-                 ToolTipText = "aweaweaw\n4343343"
+                ToolTipText = "aweaweaw\n4343343",
+                 InitialDelay = 500,
+                DisplayDuration = 0
             };
 
 
             ScrollBarConfig();
 
             toolTip4.SetToolTip(label2, "aaaaaaaaa\naffdfd");
+
+            toolTip3.SetToolTip(label3, "adsadasdasda\n\nadasd");
+
+            //testPermanentToolTip1.SetToolTip(label4, "sadad\nawdas");
 
             //toolTip1.SetToolTip(label3, "aaaaaa");
 
@@ -149,7 +155,7 @@ namespace Test
             Point p1 = label5.PointToClient(Control.MousePosition);
             Point p2 = label5.Location;
             Point p3 = new Point(p1.X + p2.X, p1.Y + p2.Y);
-            Point p4 = Point.Add(p1,new Size(p2));
+            Point p4 = Point.Add(p1, new Size(p2));
             label6.Text = "Form:" + p4.ToString();
         }
 
