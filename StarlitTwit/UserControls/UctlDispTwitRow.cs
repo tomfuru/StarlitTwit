@@ -157,8 +157,8 @@ namespace StarlitTwit
         /// </summary>
         public int ToolTipChangeInterval
         {
-            get { return myToolTipImage1.SwitchInterval; }
-            set { myToolTipImage1.SwitchInterval = value; }
+            get { return myToolTipImage.SwitchInterval; }
+            set { myToolTipImage.SwitchInterval = value; }
         }
         #endregion (ToolTipChangeInterval)
         //-------------------------------------------------------------------------------
@@ -411,11 +411,11 @@ namespace StarlitTwit
             this.BackColor = GetColor(true);
             this.Focused = true;
 
-            if (myToolTipImage1.ImageURLs == null) {
+            if (myToolTipImage.ImageURLs == null) {
                 IEnumerable<string> urls = Utilization.ExtractURL(TwitData.Text);
-                myToolTipImage1.SetImageURLs(urls);
+                myToolTipImage.SetImageURLs(urls);
             }
-            myToolTipImage1.Active = true;
+            myToolTipImage.Active = true;
         }
         #endregion (SelectControl)
         //-------------------------------------------------------------------------------
@@ -430,7 +430,7 @@ namespace StarlitTwit
             this.BackColor = GetColor(false);
             this.Focused = false;
 
-            myToolTipImage1.Active = false;
+            myToolTipImage.Active = false;
         }
         #endregion (UnSelectControl)
         //-------------------------------------------------------------------------------
@@ -514,7 +514,7 @@ namespace StarlitTwit
         //
         public void SetReplyToolTip(string text)
         {
-            myToolTip1.ToolTipText = text;
+            myToolTipReply.ToolTipText = text;
         }
         #endregion (SetReplyToolTip)
         //-------------------------------------------------------------------------------
@@ -562,7 +562,7 @@ namespace StarlitTwit
         //
         public void ResetPicturePopup()
         {
-            myToolTipImage1.ClearImageURLs();
+            myToolTipImage.ClearImageURLs();
         }
         #endregion (ResetPicturePopup)
         //===============================================================================
