@@ -34,8 +34,8 @@
             this.timerSetPicture = new System.Windows.Forms.Timer(this.components);
             this.uctlline = new StarlitTwit.UctlLine();
             this.rtxtGet = new StarlitTwit.RichTextBoxHash();
-            this.tooltipPicture = new StarlitTwit.ToolTipPicture(this.components);
             this.myToolTip1 = new StarlitTwit.MyToolTip(this.components);
+            this.myToolTipImage1 = new StarlitTwit.UserControls.MyToolTipImage(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -109,23 +109,20 @@
             this.rtxtGet.Leave += new System.EventHandler(this.rtxtGet_Leave);
             this.rtxtGet.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.rtxtGet_MouseWheel);
             // 
-            // tooltipPicture
-            // 
-            this.tooltipPicture.AutoPopDelay = 5000;
-            this.tooltipPicture.ImageURLs = null;
-            this.tooltipPicture.InitialDelay = 1000;
-            this.tooltipPicture.MaximumSize = new System.Drawing.Size(500, 500);
-            this.tooltipPicture.OwnerDraw = true;
-            this.tooltipPicture.ReshowDelay = 100;
-            this.tooltipPicture.SwitchInterval = 2000;
-            this.tooltipPicture.PrePopup += new System.EventHandler<System.ComponentModel.CancelEventArgs>(this.tooltipPicture_PrePopup);
-            // 
             // myToolTip1
             // 
             this.myToolTip1.BackColor = System.Drawing.SystemColors.Info;
             this.myToolTip1.DisplayControl = this.lblTweet;
             this.myToolTip1.DisplayDuration = 0;
             this.myToolTip1.Font = new System.Drawing.Font("MS UI Gothic", 9F);
+            // 
+            // myToolTipImage1
+            // 
+            this.myToolTipImage1.Active = false;
+            this.myToolTipImage1.BackColor = System.Drawing.SystemColors.Info;
+            this.myToolTipImage1.DisplayControl = this.lblTweet;
+            this.myToolTipImage1.DisplayDuration = 0;
+            this.myToolTipImage1.MaximumSize = new System.Drawing.Size(500, 500);
             // 
             // UctlDispTwitRow
             // 
@@ -155,8 +152,8 @@
         private System.Windows.Forms.Label lblTweet;
         private StarlitTwit.RichTextBoxHash rtxtGet;
         private UctlLine uctlline;
-        private ToolTipPicture tooltipPicture;
         private System.Windows.Forms.Timer timerSetPicture;
         private MyToolTip myToolTip1;
+        private UserControls.MyToolTipImage myToolTipImage1;
     }
 }

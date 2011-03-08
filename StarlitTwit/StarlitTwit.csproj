@@ -121,6 +121,9 @@
     <Compile Include="UserControls\MyToolTipBase.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\MyToolTipImage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\RichTextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -146,12 +149,6 @@
     <Compile Include="UserControls\PanelEx.Designer.cs">
       <DependentUpon>PanelEx.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PermanentToolTip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UserControls\PermanentToolTip.Designer.cs">
-      <DependentUpon>PermanentToolTip.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -159,9 +156,6 @@
       <DependentUpon>SplitButton.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\TabControlEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UserControls\ToolTipPicture.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\UctlDispTwit.cs">
@@ -220,17 +214,11 @@
     <EmbeddedResource Include="UserControls\NumericUpDownExtended.resx">
       <DependentUpon>NumericUpDownExtended.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PermanentToolTip.resx">
-      <DependentUpon>PermanentToolTip.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RichTextBoxEx.resx">
       <DependentUpon>RichTextBoxEx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RichTextBoxHash.resx">
       <DependentUpon>RichTextBoxHash.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ToolTipPicture.resx">
-      <DependentUpon>ToolTipPicture.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UctlDispTwit.resx">
       <DependentUpon>UctlDispTwit.cs</DependentUpon>

@@ -157,8 +157,8 @@ namespace StarlitTwit
         /// </summary>
         public int ToolTipChangeInterval
         {
-            get { return tooltipPicture.SwitchInterval; }
-            set { tooltipPicture.SwitchInterval = value; }
+            get { return myToolTipImage1.SwitchInterval; }
+            set { myToolTipImage1.SwitchInterval = value; }
         }
         #endregion (ToolTipChangeInterval)
         //-------------------------------------------------------------------------------
@@ -346,32 +346,6 @@ namespace StarlitTwit
         }
         #endregion (txtGet_MouseWheel)
         //-------------------------------------------------------------------------------
-        #region tooltipPicture_PrePopup 画像ツールチップポップアップ前
-        //-------------------------------------------------------------------------------
-        //
-        private void tooltipPicture_PrePopup(object sender, CancelEventArgs e)
-        {
-            if (!FrmMain.SettingsData.DisplayThumbnail) { e.Cancel = true; return; }
-
-            //if (!this.Focused) { e.Cancel = true; return; }
-
-            if (tooltipPicture.ImageURLs == null) {
-                // URL設定
-                IEnumerable<string> urls = Utilization.ExtractURL(TwitData.Text);
-                tooltipPicture.ImageURLs = urls;
-            }
-        }
-        #endregion (tooltipPicture_PrePopup)
-        //-------------------------------------------------------------------------------
-        #region tooltipReply_Popup リプライツールチップポップアップ時
-        //-------------------------------------------------------------------------------
-        //
-        private void tooltipReply_Popup(object sender, PopupEventArgs e)
-        {
-            if (this.Focused) { e.Cancel = true; }
-        }
-        #endregion (tooltipReply_Popup)
-        //-------------------------------------------------------------------------------
         #region rtxtGet_LinkClicked リンククリック時
         //-------------------------------------------------------------------------------
         //
@@ -434,14 +408,14 @@ namespace StarlitTwit
         /// </summary>
         public void SelectControl()
         {
-            //foreach (Control ctl in this.Controls) {
-            //    if (ctl is Label) { ctl.ForeColor = LABEL_FORECOLOR_SELECTED; }
-            //}
-
             this.BackColor = GetColor(true);
             this.Focused = true;
 
-            tooltipPicture.SetToolTip(lblTweet);
+            if (myToolTipImage1.ImageURLs == null) {
+                IEnumerable<string> urls = Utilization.ExtractURL(TwitData.Text);
+                myToolTipImage1.SetImageURLs(urls);
+            }
+            myToolTipImage1.Active = true;
         }
         #endregion (SelectControl)
         //-------------------------------------------------------------------------------
@@ -452,14 +426,11 @@ namespace StarlitTwit
         /// </summary>
         public void UnSelectControl()
         {
-            //foreach (Control ctl in this.Controls) {
-            //    if (ctl is Label) { ctl.ForeColor = LABEL_FORECOLOR_UNSELECTED; }
-            //}
             this.ActiveControl = null;
             this.BackColor = GetColor(false);
             this.Focused = false;
 
-            tooltipPicture.RemoveAll();
+            myToolTipImage1.Active = false;
         }
         #endregion (UnSelectControl)
         //-------------------------------------------------------------------------------
@@ -591,7 +562,7 @@ namespace StarlitTwit
         //
         public void ResetPicturePopup()
         {
-            tooltipPicture.ImageURLs = null;
+            myToolTipImage1.ClearImageURLs();
         }
         #endregion (ResetPicturePopup)
         //===============================================================================

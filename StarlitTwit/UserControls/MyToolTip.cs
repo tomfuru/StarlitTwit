@@ -37,7 +37,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
-        #region (Form)
+        #region (void)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// MyToolTipを初期化します。
@@ -50,7 +50,7 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion ((void))
-        #region (Form, IContainer)
+        #region (IContainer)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// MyToolTipを初期化します。
@@ -72,9 +72,9 @@ namespace StarlitTwit
         /// <summary>
         /// ツールチップ表示時
         /// </summary>
-        protected override void OnShowToolTip()
+        protected override void OnShowToolTip(CancelEventArgs e)
         {
-            base.OnShowToolTip();
+            base.OnShowToolTip(e);
             Size = TextRenderer.MeasureText(ToolTipText, Font);
         }
         //-------------------------------------------------------------------------------
