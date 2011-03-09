@@ -1087,7 +1087,6 @@ namespace StarlitTwit
         {
             uctlDisp.RowContextMenu_Click += TwitMenu_RowContextmenu_Click;
             uctlDisp.TweetItemClick += DispTwit_TweetItemClick;
-            uctlDisp.OpenURLRequest += DispTwit_OpenURLRequest;
         }
         #endregion (RegisterUctlDispTwitEvent)
         //-------------------------------------------------------------------------------

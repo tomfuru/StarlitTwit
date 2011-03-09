@@ -201,10 +201,6 @@ namespace StarlitTwit
         [Category("動作")]
         [Description("特殊項目クリック時")]
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
-        /// <summary>URLオープン要請時</summary>
-        [Category("動作")]
-        [Description("URLオープン要請時")]
-        public event EventHandler<OpenURLEventArgs> OpenURLRequest;
         /// <summary>選択インデックス変更時</summary>
         [Category("動作")]
         [Description("選択インデックス変更時")]
@@ -354,10 +350,7 @@ namespace StarlitTwit
             sbUrl.Append(Twitter.URLtwi);
             sbUrl.Append(SelectedTwitData.UserScreenName);
 
-            if (OpenURLRequest != null) {
-                OpenURLRequest.Invoke(this, new OpenURLEventArgs(sbUrl.ToString(),
-                                                                 FrmMain.SettingsData.UseInternalWebBrowser));
-            }
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
         }
         #endregion (tsmiOpenBrowser_UserHome_Click)
         #region tsmiOpenBrowser_ThisTweet_Click ブラウザで開く-このツイートメニュークリック
@@ -371,10 +364,7 @@ namespace StarlitTwit
             sbUrl.Append("/status/");
             sbUrl.Append(SelectedTwitData.StatusID);
 
-            if (OpenURLRequest != null) {
-                OpenURLRequest.Invoke(this, new OpenURLEventArgs(sbUrl.ToString(),
-                                                                 FrmMain.SettingsData.UseInternalWebBrowser));
-            }
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
         }
         #endregion (tsmiOpenBrowser_ThisTweet_Click)
         #region tsmiOpenBrowser_ReplyTweet_Click ブラウザで開く-リプライ先メニュークリック
@@ -390,10 +380,7 @@ namespace StarlitTwit
                 sbUrl.Append("/status/");
                 sbUrl.Append(twitdata.StatusID);
 
-                if (OpenURLRequest != null) {
-                    OpenURLRequest.Invoke(this, new OpenURLEventArgs(sbUrl.ToString(),
-                                                                     FrmMain.SettingsData.UseInternalWebBrowser));
-                }
+                Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);                       
             }
             else {
                 Message.ShowWarningMessage("返信先ツイートが見つかりませんでした。");
@@ -615,17 +602,6 @@ namespace StarlitTwit
             }
         }
         #endregion (Row_TweetItemClick)
-        //-------------------------------------------------------------------------------
-        #region Row_OpenURLRequest URLオープン要請時
-        //-------------------------------------------------------------------------------
-        //
-        private void Row_OpenURLRequest(object sender, OpenURLEventArgs e)
-        {
-            if (OpenURLRequest != null) {
-                OpenURLRequest.Invoke(this, e);
-            }
-        }
-        #endregion (Row_OpenURLRequest)
         //-------------------------------------------------------------------------------
         #region pnlflow_MouseWheel マウスホイール時
         //-------------------------------------------------------------------------------
@@ -1084,7 +1060,6 @@ namespace StarlitTwit
             row.MouseMove += pnlflow_MouseMove;
             row.MouseClick += pnlflow_MouseClick;
             row.TweetItemClick += Row_TweetItemClick;
-            row.OpenURLRequest += Row_OpenURLRequest;
             return row;
         }
         #endregion (MakeTwitRow)

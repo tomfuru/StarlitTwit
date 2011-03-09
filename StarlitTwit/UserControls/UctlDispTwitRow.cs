@@ -189,10 +189,6 @@ namespace StarlitTwit
         [Category("動作")]
         [Description("特殊項目クリック時")]
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
-        /// <summary>URLオープン要請時</summary>
-        [Category("動作")]
-        [Description("URLを開く要請がある時")]
-        public event EventHandler<OpenURLEventArgs> OpenURLRequest;
         //-------------------------------------------------------------------------------
         #endregion (Public イベント)
         //-------------------------------------------------------------------------------
@@ -349,9 +345,7 @@ namespace StarlitTwit
         //
         private void rtxtGet_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            if (OpenURLRequest != null) {
-                OpenURLRequest(this, new OpenURLEventArgs(e.LinkText, FrmMain.SettingsData.UseInternalWebBrowser));
-            }
+            Utilization.OpenBrowser(e.LinkText, FrmMain.SettingsData.UseInternalWebBrowser);
         }
         #endregion (rtxtGet_LinkClicked)
         //-------------------------------------------------------------------------------
