@@ -875,7 +875,7 @@ namespace StarlitTwit
 
             int count = 0;
             foreach (Form form in Application.OpenForms) {
-                if (form == this) { continue; }
+                if (form == this || form is MyToolTipBase.FrmDisp) { continue; }
                 ToolStripMenuItem tsmi;
                 if (menuDic != null && menuDic.ContainsKey(form)) {
                     tsmi = menuDic[form];
