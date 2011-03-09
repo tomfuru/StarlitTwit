@@ -1043,6 +1043,7 @@
             // 
             // btnAllFontColorDefault
             // 
+            this.btnAllFontColorDefault.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAllFontColorDefault.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.btnAllFontColorDefault.Location = new System.Drawing.Point(265, 299);
             this.btnAllFontColorDefault.Name = "btnAllFontColorDefault";
@@ -1300,6 +1301,7 @@
             // 
             // btnBCNormalSelected
             // 
+            this.btnBCNormalSelected.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnBCNormalSelected.Location = new System.Drawing.Point(305, 50);
             this.btnBCNormalSelected.Name = "btnBCNormalSelected";
             this.btnBCNormalSelected.Size = new System.Drawing.Size(43, 23);
@@ -1800,6 +1802,7 @@
             // btnCansel
             // 
             this.btnCansel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCansel.Location = new System.Drawing.Point(288, 351);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(100, 23);
@@ -1810,8 +1813,10 @@
             // 
             // FrmConfig
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCansel;
             this.ClientSize = new System.Drawing.Size(394, 376);
             this.ControlBox = false;
             this.Controls.Add(this.btnCansel);

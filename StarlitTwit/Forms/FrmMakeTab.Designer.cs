@@ -44,13 +44,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.pnlList = new System.Windows.Forms.Panel();
+            this.lblListOwner = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.cmbList = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
             this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
             this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
-            this.lblListOwner = new System.Windows.Forms.Label();
             this.pnlKeyword.SuspendLayout();
             this.pnlUser.SuspendLayout();
             this.pnlList.SuspendLayout();
@@ -71,6 +71,7 @@
             // 
             // btnCansel
             // 
+            this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCansel.Location = new System.Drawing.Point(189, 137);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(75, 23);
@@ -217,6 +218,15 @@
             this.pnlList.TabIndex = 30;
             this.pnlList.Visible = false;
             // 
+            // lblListOwner
+            // 
+            this.lblListOwner.AutoSize = true;
+            this.lblListOwner.Location = new System.Drawing.Point(38, 9);
+            this.lblListOwner.Name = "lblListOwner";
+            this.lblListOwner.Size = new System.Drawing.Size(11, 12);
+            this.lblListOwner.TabIndex = 6;
+            this.lblListOwner.Text = "...";
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -316,19 +326,12 @@
             0,
             0});
             // 
-            // lblListOwner
-            // 
-            this.lblListOwner.AutoSize = true;
-            this.lblListOwner.Location = new System.Drawing.Point(38, 9);
-            this.lblListOwner.Name = "lblListOwner";
-            this.lblListOwner.Size = new System.Drawing.Size(11, 12);
-            this.lblListOwner.TabIndex = 6;
-            this.lblListOwner.Text = "...";
-            // 
             // FrmMakeTab
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCansel;
             this.ClientSize = new System.Drawing.Size(456, 165);
             this.ControlBox = false;
             this.Controls.Add(this.label10);

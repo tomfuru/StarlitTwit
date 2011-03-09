@@ -522,6 +522,7 @@ namespace StarlitTwit
                 : base()
             {
                 this.FormBorderStyle = FormBorderStyle.None;
+                this.ShowInTaskbar = false;
             }
             #endregion (コンストラクタ)
 
