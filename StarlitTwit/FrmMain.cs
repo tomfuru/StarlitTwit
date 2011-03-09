@@ -88,8 +88,8 @@ namespace StarlitTwit
         private StatusState _stateStatusState = StatusState.Normal;
         /// <summary>発言状態によって使用するID</summary>
         private long _statlID = -1;
-        /// <summary>発言状態によって使用する名前</summary>
-        private string _statsName = "";
+        /// <summary>送信先</summary>
+        private string _RecipiantName = "";
         //-------------------------------------------------------------------------------
         #endregion (発言状態関連)
         //-------------------------------------------------------------------------------
@@ -206,8 +206,8 @@ namespace StarlitTwit
             Normal,
             /// <summary>リプライ状態</summary>
             Reply,
-            /// <summary>引用状態</summary>
-            Quote,
+            /// <summary>複数リプライ状態</summary>
+            MultiReply,
             /// <summary>ダイレクトメッセージ送信状態</summary>
             DirectMessage
         }
@@ -335,9 +335,10 @@ namespace StarlitTwit
                 // 返信処理
                 switch (_stateStatusState) {
                     case StatusState.Reply:
-                        if (!txtbox.Text.StartsWith(_statsName)) { ReSetStatusState(); }
+                        if (!txtbox.Text.StartsWith(_RecipiantName)) { ReSetStatusState(); }
                         break;
-                    case StatusState.Quote:
+                    case StatusState.MultiReply:
+                        if (txtbox.Text.Length == 0) { ReSetStatusState(); }
                         break;
                     case StatusState.DirectMessage:
                         break;
@@ -550,14 +551,25 @@ namespace StarlitTwit
         //
         private void TwitMenu_Reply_Click(object sender, TwitRowMenuEventArgs e)
         {
-            rtxtTwit.Text = '@' + e.TwitData.UserScreenName + ' ';
-
-            rtxtTwit.Focus();
-            rtxtTwit.Select(rtxtTwit.Text.Length, 0);
-
-            _statlID = e.TwitData.StatusID;
-            _statsName = rtxtTwit.Text;
-            SetStatusState(StatusState.Reply, e.TwitData.UserScreenName + "宛のリプライ");
+            if (_stateStatusState != StatusState.Reply && _stateStatusState != StatusState.MultiReply) {
+                _statlID = e.TwitData.StatusID;
+                _RecipiantName = '@' + e.TwitData.UserScreenName;
+                rtxtTwit.Text = _RecipiantName + ' ';
+                rtxtTwit.Focus();
+                rtxtTwit.Select(rtxtTwit.Text.Length, 0);
+                SetStatusState(StatusState.Reply, e.TwitData.UserScreenName + "宛のリプライ");
+            }
+            else {
+                if (_stateStatusState == StatusState.Reply) {
+                    rtxtTwit.Text = string.Format(".@{0} {1}", e.TwitData.UserScreenName, rtxtTwit.Text);
+                    rtxtTwit.Focus();
+                }
+                else { // case StatusState.MultiReply
+                    rtxtTwit.Text = string.Format(".@{0} {1}", e.TwitData.UserScreenName, rtxtTwit.Text.Substring(1));
+                    rtxtTwit.Focus();
+                }
+                SetStatusState(StatusState.MultiReply, "複数へのリプライ");
+            }
         }
         #endregion (TwitMenu_Reply_Click)
         //-------------------------------------------------------------------------------
@@ -566,7 +578,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_Quote_Click(object sender, TwitRowMenuEventArgs e)
         {
-            rtxtTwit.Text = GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
 
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
@@ -593,7 +605,7 @@ namespace StarlitTwit
             rtxtTwit.Select(0, 0);
 
             _statlID = e.TwitData.UserID;
-            _statsName = e.TwitData.UserScreenName;
+            _RecipiantName = e.TwitData.UserScreenName;
             SetStatusState(StatusState.DirectMessage, e.TwitData.UserScreenName + "宛のダイレクトメッセージ");
         }
         #endregion (TwitMenu_DirectMessage_Click)
@@ -1685,11 +1697,8 @@ namespace StarlitTwit
                     case StatusState.Reply:
                         Twitter.statuses_update(text, _statlID);
                         break;
-                    case StatusState.Quote:
-                        Twitter.statuses_update(text);
-                        break;
                     case StatusState.DirectMessage:
-                        Twitter.direct_messages_new(_statsName, _statlID, text);
+                        Twitter.direct_messages_new(_RecipiantName, _statlID, text);
                         break;
                 }
 
