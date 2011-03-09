@@ -20,6 +20,7 @@ namespace StarlitTwit
     {
         public const char CHR_LOCKED = '◆';
         public const char CHR_FAVORITED = '★';
+        public const string STR_DATETIMEFORMAT = "yyyy/MM/dd HH:mm:ss";
 
         //-------------------------------------------------------------------------------
         #region +[static]UrlEncode

@@ -45,6 +45,7 @@
             this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsslRestAPI = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuTab = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -59,7 +60,10 @@
             this.menuContainer2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiCon2_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
             this.splContainer = new System.Windows.Forms.SplitContainer();
+            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.menuShortenType = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.lblStatuses = new System.Windows.Forms.Label();
             this.lblStatusesl = new System.Windows.Forms.Label();
             this.llblFollower = new System.Windows.Forms.LinkLabel();
@@ -71,7 +75,6 @@
             this.lblTweetStatus = new System.Windows.Forms.Label();
             this.lblRest = new System.Windows.Forms.Label();
             this.btnTwit = new System.Windows.Forms.Button();
-            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.rtxtTwit = new StarlitTwit.RichTextBoxEx();
             this.tabTwitDisp = new StarlitTwit.TabControlEx();
             this.tabpgHome = new System.Windows.Forms.TabPage();
@@ -82,10 +85,8 @@
             this.uctlDispHistory = new StarlitTwit.UctlDispTwit();
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
-            this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
-            this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
+            this.tsmi自分のプロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -197,7 +198,8 @@
             // tsmi_プロフィール
             // 
             this.tsmi_プロフィール.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiプロフィール更新});
+            this.tsmiプロフィール更新,
+            this.tsmi自分のプロフィール});
             this.tsmi_プロフィール.Enabled = false;
             this.tsmi_プロフィール.Name = "tsmi_プロフィール";
             this.tsmi_プロフィール.Size = new System.Drawing.Size(85, 20);
@@ -239,6 +241,14 @@
             this.statusStrip.Size = new System.Drawing.Size(492, 23);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
+            // 
+            // tssLabel
+            // 
+            this.tssLabel.AutoSize = false;
+            this.tssLabel.Name = "tssLabel";
+            this.tssLabel.Size = new System.Drawing.Size(391, 18);
+            this.tssLabel.Spring = true;
+            this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripSeparator1
             // 
@@ -369,6 +379,27 @@
             this.splContainer.TabIndex = 0;
             this.splContainer.TabStop = false;
             // 
+            // btnURLShorten
+            // 
+            this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnURLShorten.ClickedImage = "Clicked";
+            this.btnURLShorten.ContextMenuStrip = this.menuShortenType;
+            this.btnURLShorten.DisabledImage = "Disabled";
+            this.btnURLShorten.Enabled = false;
+            this.btnURLShorten.FocusedImage = "Focused";
+            this.btnURLShorten.HoverImage = "Hover";
+            this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnURLShorten.ImageKey = "Normal";
+            this.btnURLShorten.Location = new System.Drawing.Point(409, 58);
+            this.btnURLShorten.Name = "btnURLShorten";
+            this.btnURLShorten.NormalImage = "Normal";
+            this.btnURLShorten.Size = new System.Drawing.Size(75, 20);
+            this.btnURLShorten.TabIndex = 4;
+            this.btnURLShorten.Text = "URL短縮";
+            this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnURLShorten.UseVisualStyleBackColor = true;
+            this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
+            // 
             // menuShortenType
             // 
             this.menuShortenType.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -379,6 +410,22 @@
             this.menuShortenType.ShowImageMargin = false;
             this.menuShortenType.Size = new System.Drawing.Size(95, 48);
             this.menuShortenType.Opening += new System.ComponentModel.CancelEventHandler(this.menuShortenType_Opening);
+            // 
+            // tsmibit_ly
+            // 
+            this.tsmibit_ly.Name = "tsmibit_ly";
+            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
+            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
+            this.tsmibit_ly.Text = "bit.ly";
+            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
+            // 
+            // tsmij_mp
+            // 
+            this.tsmij_mp.Name = "tsmij_mp";
+            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
+            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
+            this.tsmij_mp.Text = "j.mp";
+            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
             // 
             // lblStatuses
             // 
@@ -408,6 +455,7 @@
             this.llblFollower.Name = "llblFollower";
             this.llblFollower.Size = new System.Drawing.Size(11, 12);
             this.llblFollower.TabIndex = 1;
+            this.llblFollower.TabStop = true;
             this.llblFollower.Text = "-";
             this.llblFollower.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblFollower_LinkClicked);
             // 
@@ -430,6 +478,7 @@
             this.llblFollowing.Name = "llblFollowing";
             this.llblFollowing.Size = new System.Drawing.Size(11, 12);
             this.llblFollowing.TabIndex = 0;
+            this.llblFollowing.TabStop = true;
             this.llblFollowing.Text = "-";
             this.llblFollowing.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblFollowing_LinkClicked);
             // 
@@ -497,27 +546,6 @@
             this.btnTwit.Text = "つぶやく";
             this.btnTwit.UseVisualStyleBackColor = true;
             this.btnTwit.Click += new System.EventHandler(this.btnTwit_Click);
-            // 
-            // btnURLShorten
-            // 
-            this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnURLShorten.ClickedImage = "Clicked";
-            this.btnURLShorten.ContextMenuStrip = this.menuShortenType;
-            this.btnURLShorten.DisabledImage = "Disabled";
-            this.btnURLShorten.Enabled = false;
-            this.btnURLShorten.FocusedImage = "Focused";
-            this.btnURLShorten.HoverImage = "Hover";
-            this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnURLShorten.ImageKey = "Normal";
-            this.btnURLShorten.Location = new System.Drawing.Point(409, 58);
-            this.btnURLShorten.Name = "btnURLShorten";
-            this.btnURLShorten.NormalImage = "Normal";
-            this.btnURLShorten.Size = new System.Drawing.Size(75, 20);
-            this.btnURLShorten.TabIndex = 4;
-            this.btnURLShorten.Text = "URL短縮";
-            this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnURLShorten.UseVisualStyleBackColor = true;
-            this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
             // 
             // rtxtTwit
             // 
@@ -643,30 +671,6 @@
             this.uctlDispDirect.Size = new System.Drawing.Size(440, 303);
             this.uctlDispDirect.TabIndex = 2;
             // 
-            // tssLabel
-            // 
-            this.tssLabel.AutoSize = false;
-            this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(391, 18);
-            this.tssLabel.Spring = true;
-            this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tsmibit_ly
-            // 
-            this.tsmibit_ly.Name = "tsmibit_ly";
-            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
-            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
-            this.tsmibit_ly.Text = "bit.ly";
-            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
-            // 
-            // tsmij_mp
-            // 
-            this.tsmij_mp.Name = "tsmij_mp";
-            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
-            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
-            this.tsmij_mp.Text = "j.mp";
-            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
-            // 
             // imageListWrapper
             // 
             // 
@@ -675,6 +679,14 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // tsmi自分のプロフィール
+            // 
+            this.tsmi自分のプロフィール.Enabled = false;
+            this.tsmi自分のプロフィール.Name = "tsmi自分のプロフィール";
+            this.tsmi自分のプロフィール.Size = new System.Drawing.Size(226, 22);
+            this.tsmi自分のプロフィール.Text = "自分のプロフィール(&M)";
+            this.tsmi自分のプロフィール.Click += new System.EventHandler(this.tsmi自分のプロフィール_Click);
             // 
             // FrmMain
             // 
@@ -773,6 +785,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmi子画面_nothing;
         private ImageListWrapper imageListWrapper;
         private StarlitTwit.RichTextBoxEx rtxtTwit;
+        private System.Windows.Forms.ToolStripMenuItem tsmi自分のプロフィール;
 
     }
 }

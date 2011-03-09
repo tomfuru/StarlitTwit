@@ -255,7 +255,7 @@ namespace StarlitTwit
                 Twitter.AccessTokenSecret = SettingsData.UserInfoList[0].AccessTokenSecret;
                 Twitter.ScreenName = SettingsData.UserInfoList[0].ScreenName;
                 Twitter.ID = SettingsData.UserInfoList[0].ID;
-                
+
                 TransitToAuthenticatedMode();
             }
             else {
@@ -831,7 +831,7 @@ namespace StarlitTwit
                         () => GetSpecifyTimeTweets(SelectedUctlDispTwit(), frm.EnableDateTimeFrom, frm.DateTimeFrom, frm.EnableDateTimeTo, frm.DateTimeTo),
                         () => tssLabel.RemoveText(STR_GETTING_STATUS)
                     );
-                    
+
                 }
             }
         }
@@ -861,6 +861,20 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (tsmiプロフィール更新_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmi自分のプロフィール_Click 自分のプロフィール
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi自分のプロフィール_Click(object sender, EventArgs e)
+        {
+            UserProfile profile = GetProfile(Twitter.ScreenName);
+            if (profile != null) {
+                FrmProfile frm = new FrmProfile(true, profile, imageListWrapper);
+                Utilization.SetModelessDialogCenter(frm);
+                frm.Show();
+            }
+        }
+        #endregion (tsmi自分のプロフィール_Click)
         //-------------------------------------------------------------------------------
         #region tsmi_子画面_DropDownOpening 子画面メニューオープン時
         //-------------------------------------------------------------------------------
