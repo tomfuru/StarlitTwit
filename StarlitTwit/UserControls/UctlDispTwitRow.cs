@@ -362,7 +362,7 @@ namespace StarlitTwit
         //
         private void timerSetPicture_Tick(object sender, EventArgs e)
         {
-            string IconURL = (TwitData.TwitType == TwitType.Retweet) ? TwitData.RTTwitData.IconURL : TwitData.IconURL;
+            string IconURL = TwitData.MainTwitData.IconURL;
             // 画像読み込み
             if (ImageListWrapper.ImageContainsKey(IconURL)) {
                 picbIcon.Image = ImageListWrapper.GetImage(IconURL);
@@ -412,7 +412,7 @@ namespace StarlitTwit
             this.Focused = true;
 
             if (myToolTipImage.ImageURLs == null) {
-                IEnumerable<string> urls = Utilization.ExtractURL(TwitData.Text);
+                IEnumerable<string> urls = Utilization.ExtractURL(TwitData.MainTwitData.Text);
                 myToolTipImage.SetImageURLs(urls);
             }
             myToolTipImage.Active = true;
@@ -472,7 +472,7 @@ namespace StarlitTwit
         /// </summary>
         public void SetTweetLabel()
         {
-            lblTweet.Text = (TwitData.IsRT()) ? TwitData.RTTwitData.Text : TwitData.Text;
+            lblTweet.Text = TwitData.MainTwitData.Text;
             SetControlLocation();
         }
         #endregion (SetTweetLabel)
@@ -490,7 +490,7 @@ namespace StarlitTwit
         {
             if (!IconVisible || ImageListWrapper == null) { return false; }
 
-            string IconURL = (TwitData.TwitType == TwitType.Retweet) ? TwitData.RTTwitData.IconURL : TwitData.IconURL;
+            string IconURL = TwitData.MainTwitData.IconURL;
 
             if (string.IsNullOrEmpty(IconURL)) { 
                 picbIcon.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
@@ -636,7 +636,7 @@ namespace StarlitTwit
         //
         private Color GetColor(bool selected)
         {
-            if (TwitData.TwitType == TwitType.Retweet) {
+            if (TwitData.IsRT()) {
                 return (selected)
                 ? FrmMain.SettingsData.ColorRTTweetBackSelected
                 : FrmMain.SettingsData.ColorRTTweetBackUnselected;

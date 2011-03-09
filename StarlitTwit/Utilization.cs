@@ -132,8 +132,8 @@ namespace StarlitTwit
             const string RECIPIENT = "Recipient";
 
             string formatRep = format.Replace(@"\n", "\n");
-            bool bIsRT = (twitdata.TwitType == TwitType.Retweet),
-                 bIsDM = (twitdata.TwitType == TwitType.DirectMessage),
+            bool bIsRT = twitdata.IsRT(),
+                 bIsDM = twitdata.IsDM(),
                  bIsSt = (twitdata.TwitType == TwitType.Search);
             int iStart, iEnd, iBase = 0;
             StringBuilder sb = new StringBuilder();
@@ -155,13 +155,13 @@ namespace StarlitTwit
                     if (twitdata.Favorited) { sb.Append(CHR_FAVORITED); }
                 }
                 else if (!bIsSt && key.Equals(NAME)) {
-                    sb.Append((bIsRT) ? twitdata.RTTwitData.UserName : twitdata.UserName);
+                    sb.Append(twitdata.MainTwitData.UserName);
                 }
                 else if (key.Equals(SCREENNAME)) {
-                    sb.Append((bIsRT) ? twitdata.RTTwitData.UserScreenName : twitdata.UserScreenName);
+                    sb.Append(twitdata.MainTwitData.UserScreenName);
                 }
                 else if (!bIsDM && key.Equals(SOURCE)) {
-                    sb.Append((bIsRT) ? twitdata.RTTwitData.Source : twitdata.Source);
+                    sb.Append(twitdata.MainTwitData.Source);
                 }
                 else if (bIsRT && key.Equals(RETWEETER)) {
                     sb.Append(twitdata.UserScreenName);

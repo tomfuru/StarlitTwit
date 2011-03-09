@@ -1127,9 +1127,11 @@ namespace StarlitTwit
         #endregion (oauth/)
 
         //===============================================================================
-        #region UserStream
+        #region UserStream　(test)
         //-------------------------------------------------------------------------------
-        //
+        /// <summary>
+        /// テスト
+        /// </summary>
         public void userstream_statuses_sample()
         {
             const string URL_SAMPLE = @"http://stream.twitter.com/1/statuses/sample.json";
@@ -1882,6 +1884,17 @@ namespace StarlitTwit
         /// <summary>ユーザーがプロテクトか</summary>
         public bool UserProtected;
 
+        //-------------------------------------------------------------------------------
+        #region MainTwitData プロパティ：表示する際にメインとなるTwitDataを取得します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 表示する際にメインとなるTwitDataを取得します。
+        /// </summary>
+        public TwitData MainTwitData
+        {
+            get { return IsRT() ? RTTwitData : this; }
+        }
+        #endregion (MainTwitData)
         //-------------------------------------------------------------------------------
         #region +IsRT Retweetかどうか
         //-------------------------------------------------------------------------------

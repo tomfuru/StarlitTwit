@@ -636,7 +636,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_DisplayUserTweet_Click(object sender, TwitRowMenuEventArgs e)
         {
-            Utilization.ShowUserTweet(this, e.TwitData.UserScreenName);
+            Utilization.ShowUserTweet(this, e.TwitData.MainTwitData.UserScreenName);
         }
         #endregion (TwitMenu_DisplayUserTweet_Click)
         //-------------------------------------------------------------------------------
@@ -645,7 +645,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_MakeUserTab_Click(object sender, TwitRowMenuEventArgs e)
         {
-            MakeNewTab(TabSearchType.User, e.TwitData.UserScreenName);
+            MakeNewTab(TabSearchType.User, e.TwitData.MainTwitData.UserScreenName);
         }
         #endregion (TwitMenu_MakeUserTab_Click)
         //-------------------------------------------------------------------------------
@@ -654,7 +654,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_MakeUserListTab_Click(object sender, TwitRowMenuEventArgs e)
         {
-            MakeNewTab(TabSearchType.List, null, e.TwitData.UserScreenName);
+            MakeNewTab(TabSearchType.List, null, e.TwitData.MainTwitData.UserScreenName);
         }
         #endregion (TwitMenu_MakeUserListTab_Click)
         //-------------------------------------------------------------------------------
