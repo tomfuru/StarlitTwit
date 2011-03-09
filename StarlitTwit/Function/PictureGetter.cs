@@ -212,7 +212,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public static string ConvertURL(string url)
         {
-            if (IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention))) { return url; }
+            if (IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention,StringComparison.OrdinalIgnoreCase))) { return url; }
             else {
                 foreach (var converter in CONVERTERS) {
                     if (converter.IsEffectiveURL(url)) {
