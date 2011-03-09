@@ -147,7 +147,9 @@ namespace StarlitTwit
         private const string STR_GETING_OLDERSTATUS = "より古いデータ取得中...";
         private const string STR_GETING_NEWERSTATUS = "より新しいデータ取得中...";
 
-        private const int ERROR_STATUSBAR_DISM_TIMES = 1;
+        private const string FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
+
+        private const int ERROR_STATUSBAR_DISP_TIMES = 1;
 
         //-------------------------------------------------------------------------------
         #endregion (定数)
@@ -513,6 +515,9 @@ namespace StarlitTwit
                     TwitMenu_UnFavorite_Click(sender, e);
                     break;
                 //-------------------------------------------------------------------------------
+                case RowEventType.DisplayUserProfile:
+                    TwitMenu_DisplayUserProfile_Click(sender, e);
+                    break;
                 case RowEventType.DisplayUserTweet:
                     TwitMenu_DisplayUserTweet_Click(sender, e);
                     break;
@@ -630,6 +635,15 @@ namespace StarlitTwit
             }
         }
         #endregion (TwitMenu_UnFavorite_Click)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_DisplayUserProfile_Click ユーザープロフィール表示
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_DisplayUserProfile_Click(object sender, TwitRowMenuEventArgs e)
+        {
+            ShowProfileForm(false, e.TwitData.MainTwitData.UserScreenName);
+        }
+        #endregion (TwitMenu_DisplayUserProfile_Click)
         //-------------------------------------------------------------------------------
         #region TwitMenu_DisplayUserTweet_Click ユーザー発言表示
         //-------------------------------------------------------------------------------
@@ -764,7 +778,7 @@ namespace StarlitTwit
             this.Close();
         }
         #endregion (tsmiファイル_終了_Click)
-        //-------------------------------------------------------------------------------
+        //===============================================================================
         #region tsmi認証_Click 認証メニュー
         //-------------------------------------------------------------------------------
         //
@@ -851,7 +865,7 @@ namespace StarlitTwit
             }
         }
         #endregion (tsmiClearTweets_Click)
-        //-------------------------------------------------------------------------------
+        //===============================================================================
         #region tsmiプロフィール更新_Click フォロー数・フォロワー数・発言数更新
         //-------------------------------------------------------------------------------
         //
@@ -867,15 +881,10 @@ namespace StarlitTwit
         //
         private void tsmi自分のプロフィール_Click(object sender, EventArgs e)
         {
-            UserProfile profile = GetProfile(Twitter.ScreenName);
-            if (profile != null) {
-                FrmProfile frm = new FrmProfile(true, profile, imageListWrapper);
-                Utilization.SetModelessDialogCenter(frm);
-                frm.Show();
-            }
+            ShowProfileForm(true, Twitter.ScreenName);
         }
         #endregion (tsmi自分のプロフィール_Click)
-        //-------------------------------------------------------------------------------
+        //===============================================================================
         #region tsmi_子画面_DropDownOpening 子画面メニューオープン時
         //-------------------------------------------------------------------------------
         private Dictionary<Form, ToolStripMenuItem> _formMenuDic = null;
@@ -1278,6 +1287,17 @@ namespace StarlitTwit
         #endregion (ReSetStatusState)
 
         //-------------------------------------------------------------------------------
+        #region -ShowProfileForm プロフィール表示(失敗時の処理含)
+        //-------------------------------------------------------------------------------
+        //
+        private void ShowProfileForm(bool canEdit, string screen_name)
+        {
+            if (!Utilization.ShowUserProfile(this, canEdit, screen_name)) {
+                tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES);
+            }
+        }
+        #endregion (ShowProfileForm)
+        //-------------------------------------------------------------------------------
         #region -SetProfileData プロフィールデータを設定します。
         //-------------------------------------------------------------------------------
         //
@@ -1395,7 +1415,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1472,7 +1492,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1532,7 +1552,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1629,7 +1649,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1679,7 +1699,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return;
             }
@@ -1710,7 +1730,7 @@ namespace StarlitTwit
                 Twitter.statuses_destroy(statusid);
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return;
             }
@@ -1735,7 +1755,7 @@ namespace StarlitTwit
                 Twitter.favorites_create(id);
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -1756,34 +1776,13 @@ namespace StarlitTwit
                 Twitter.favorites_destroy(id);
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
             return true;
         }
         #endregion (CreateFavorite)
-
-        //===============================================================================
-        #region -GetProfile プロフィール取得 using TwitterAPI
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// ユーザープロフィールを取得します。
-        /// </summary>
-        /// <param name="screen_name"></param>
-        /// <returns></returns>
-        private UserProfile GetProfile(string screen_name)
-        {
-            try {
-                return Twitter.users_show(screen_name: screen_name);
-            }
-            catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
-                return null;
-            }
-        }
-        //-------------------------------------------------------------------------------
-        #endregion (GetProfile)
 
         //===============================================================================
         #region -GetQuoteString 引用の文字列を取得します。
@@ -2014,7 +2013,7 @@ namespace StarlitTwit
                         getFunc(uctlDisp, standard_id);
                     }
                     catch (TwitterAPIException ex) {
-                        tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISM_TIMES);
+                        tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                         SYSTEMSOUND.Play();
                         return;
                     }
@@ -2061,10 +2060,11 @@ namespace StarlitTwit
                     DateTime now = DateTime.Now;
                     // プロフィール更新
                     if (_profileRenew_IsForce) {
-                        UserProfile profile = GetProfile(Twitter.ScreenName);
+                        UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
                         this.Invoke(new Action(() =>
                         {
                             if (profile != null) { SetProfileData(profile); }
+                            else { tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
                             tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
                         }));
                         _profileRenew_IsForce = false;
@@ -2075,8 +2075,9 @@ namespace StarlitTwit
                         if (ts.TotalSeconds > SettingsData.GetInterval_Profile) {
                             this.Invoke(new Action(() =>
                             {
-                                UserProfile profile = GetProfile(Twitter.ScreenName);
+                                UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
                                 if (profile != null) { SetProfileData(profile); }
+                                else { tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
                                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
                             }));
                             _profileRenew_IsForce = false;

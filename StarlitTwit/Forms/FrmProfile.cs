@@ -17,12 +17,16 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmProfile(bool isSelf, UserProfile profile, ImageListWrapper imagelistwrapper)
+        public FrmProfile(bool canEdit, UserProfile profile, ImageListWrapper imagelistwrapper)
         {
             InitializeComponent();
-            if (!isSelf) {
-
-
+            if (!canEdit) {
+                rtxtDescription.ReadOnly = txtLocation.ReadOnly = txtName.ReadOnly = txtUrl.ReadOnly = true;
+                lblDescriptionRest.Visible = btnRenew.Visible = false;
+                txtUrl.Visible = false;
+            }
+            else {
+                llblWeb.Visible = false;
             }
             _profile = profile;
             picbIcon.ImageListWrapper = imagelistwrapper;
@@ -35,7 +39,9 @@ namespace StarlitTwit
         //
         private void FrmProfile_Load(object sender, EventArgs e)
         {
+            Utilization.SetModelessDialogCenter(this);
             SetProfile(_profile);
+            txtName.Select(0, 0);
         }
         #endregion (FrmProfile_Load)
 
@@ -48,6 +54,16 @@ namespace StarlitTwit
 
         }
         #endregion (btnRenew_Click)
+
+        //-------------------------------------------------------------------------------
+        #region llblWeb_LinkClicked リンククリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void llblWeb_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Utilization.OpenBrowser(llblWeb.Text, FrmMain.SettingsData.UseInternalWebBrowser);
+        }
+        #endregion (llblWeb_LinkClicked)
 
         //-------------------------------------------------------------------------------
         #region btnClose_Click 閉じるボタン
@@ -84,18 +100,27 @@ namespace StarlitTwit
             }
             picbIcon.SetFromImageListWrapper(profile.IconURL);
 
+            lblProtected.Visible = profile.Protected;
+            lblFollow.Visible = profile.Following;
+
+            lblFollowerNum.Text = profile.FollowerNum.ToString();
+            lblFollowingNum.Text = profile.FollowingNum.ToString();
+            lblFavoriteNum.Text = profile.FavoriteNum.ToString();
+            lblStatusNum.Text = profile.StatusNum.ToString();
+
+            lblTimeZone.Text = profile.TimeZone;
+
             lblUserID.Text = profile.UserID.ToString();
             lblRegisterTime.Text = profile.RegisterTime.ToString(Utilization.STR_DATETIMEFORMAT);
             lblScreenName.Text = profile.ScreenName;
             txtName.Text = profile.UserName;
             txtLocation.Text = profile.Location;
-            txtUrl.Text = ""; // URL
+            txtUrl.Text = llblWeb.Text = profile.URL;
             rtxtDescription.Text = profile.Description;
+
+            lblLastStatusTime.Text = string.Format("({0})", profile.LastTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT));
+            lblLastStatus.Text = profile.LastTwitData.Text;
         }
         #endregion (SetProfile)
-
-
-
-
     }
 }

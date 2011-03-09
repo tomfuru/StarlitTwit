@@ -350,7 +350,7 @@ namespace StarlitTwit
         private void rtxtGet_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             if (OpenURLRequest != null) {
-                OpenURLRequest.Invoke(this, new OpenURLEventArgs(e.LinkText, FrmMain.SettingsData.UseInternalWebBrowser));
+                OpenURLRequest(this, new OpenURLEventArgs(e.LinkText, FrmMain.SettingsData.UseInternalWebBrowser));
             }
         }
         #endregion (rtxtGet_LinkClicked)

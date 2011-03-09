@@ -401,6 +401,16 @@ namespace StarlitTwit
         }
         #endregion (tsmiOpenBrowser_ReplyTweet_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiDisplayUserProfile_Click このユーザーのプロフィールを表示するメニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplayUserProfile_Click(object sender, EventArgs e)
+        {
+            if (RowContextMenu_Click != null) {
+                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.DisplayUserProfile, SelectedTwitData));
+            }
+        }
+        #endregion (tsmiDisplayUserProfile_Click)
         #region tsmiDisplayUserTweet_Click このユーザーの発言を表示するメニュークリック時
         //-------------------------------------------------------------------------------
         //
@@ -1505,6 +1515,8 @@ namespace StarlitTwit
         Unfavorite,
         /// <summary>削除 メニュー</summary>
         Delete,
+        /// <summary>このユーザーのプロフィールを表示する　メニュー</summary>
+        DisplayUserProfile,
         /// <summary>このユーザーの発言を表示する メニュー</summary>
         DisplayUserTweet,
         /// <summary>このユーザーのタブを作成 メニュー</summary>

@@ -44,7 +44,7 @@ namespace StarlitTwit
         #endregion (UrlEncode)
 
         //-------------------------------------------------------------------------------
-        #region +[static]GetTwitDataFromID IDから呟きに関するデータを取得します
+        #region +[static]GetTwitDataFromID IDから呟きに関するデータを取得します using TwitterAPI
         //-------------------------------------------------------------------------------
         /// <summary>
         /// IDから呟きデータを取得します。Forbiddenで取得できなかった場合は認証をつけてもう一度リトライします。
@@ -75,6 +75,26 @@ namespace StarlitTwit
             return true;
         }
         #endregion (GetTwitDataFromID)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]GetProfile プロフィール取得 using TwitterAPI
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ユーザープロフィールを取得します。
+        /// </summary>
+        /// <param name="screen_name"></param>
+        /// <returns></returns>
+        public static UserProfile GetProfile(string screen_name)
+        {
+            try {
+                return FrmMain.Twitter.users_show(screen_name: screen_name);
+            }
+            catch (TwitterAPIException) {
+                return null;
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (GetProfile)
 
         //-------------------------------------------------------------------------------
         #region +[static]InterpretFormat フォーマットを解釈して返します。
@@ -346,6 +366,28 @@ namespace StarlitTwit
             }
         }
         #endregion (Callback)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]ShowUserProfile ユーザープロフィールフォームを表示します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ユーザープロフィールフォームを表示します。
+        /// </summary>
+        /// <param name="parent">最上位フォーム</param>
+        /// <param name="canEdit">自分かどうか</param>
+        /// <param name="screen_name">ユーザー名</param>
+        /// <returns></returns>
+        public static bool ShowUserProfile(FrmMain parent,bool canEdit, string screen_name)
+        {
+            UserProfile profile = GetProfile(screen_name);
+            if (profile != null) {
+                FrmProfile frm = new FrmProfile(canEdit, profile, parent.ImageListWrapper);
+                frm.Show(parent);
+                return true;
+            }
+            return false;
+        }
+        #endregion (ShowUserProfile)
 
         //-------------------------------------------------------------------------------
         #region +[static]ShowUserTweet ユーザー発言フォームを表示します。

@@ -1135,7 +1135,7 @@ namespace StarlitTwit
         public void userstream_statuses_sample()
         {
             const string URL_SAMPLE = @"http://stream.twitter.com/1/statuses/sample.json";
-            string url = GetUrlWithOAuthParameters(URL_SAMPLE,GET,null);
+            string url = GetUrlWithOAuthParameters(URL_SAMPLE, GET, null);
 
             WebRequest req = WebRequest.Create(url);
 
@@ -1689,13 +1689,14 @@ namespace StarlitTwit
         private UserProfile ConvertToUserProfile(XElement el)
         {
             try {
-                return new UserProfile() {
+                UserProfile profile = new UserProfile() {
                     UserID = long.Parse(el.Element("id").Value),
                     UserName = el.Element("name").Value,
                     ScreenName = el.Element("screen_name").Value,
                     IconURL = el.Element("profile_image_url").Value,
+                    URL = el.Element("url").Value,
                     Protected = TryParseBool(el.Element("protected").Value),
-                    FolllowRequestSent = TryParseBool(el.Element("follow_request_sent").Value), //TryParseBool(el.Element("follow_request_sent").Value),
+                    FolllowRequestSent = TryParseBool(el.Element("follow_request_sent").Value),
                     Location = el.Element("location").Value,
                     Description = el.Element("description").Value,
                     Following = TryParseBool(el.Element("following").Value),
@@ -1703,8 +1704,25 @@ namespace StarlitTwit
                     FollowingNum = int.Parse(el.Element("friends_count").Value),
                     StatusNum = int.Parse(el.Element("statuses_count").Value),
                     FavoriteNum = int.Parse(el.Element("favourites_count").Value),
-                    RegisterTime = StringToDateTime(el.Element("created_at").Value)
+                    RegisterTime = StringToDateTime(el.Element("created_at").Value),
+                    TimeZone = el.Element("time_zone").Value
                 };
+                profile.LastTwitData = new TwitData() {
+                    TwitType = TwitType.Normal,
+                    UserID = profile.UserID,
+                    IconURL = profile.IconURL,
+                    UserName = profile.UserName,
+                    UserScreenName = profile.ScreenName,
+                    UserProtected = profile.Protected,
+                    Time = StringToDateTime(el.Element("status").Element("created_at").Value),
+                    StatusID = long.Parse(el.Element("status").Element("id").Value),
+                    Mention_StatusID = TryParseLong(el.Element("status").Element("in_reply_to_status_id").Value),
+                    Mention_UserID = TryParseLong(el.Element("status").Element("in_reply_to_user_id").Value),
+                    Text = ConvertSpecialChar(el.Element("status").Element("text").Value),
+                    Source = CutSourceString(el.Element("status").Element("source").Value),
+                    Favorited = bool.Parse(el.Element("status").Element("favorited").Value)
+                };
+                return profile;
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
@@ -1736,7 +1754,7 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="str">変換する文字列</param>
         /// <returns></returns>
-        private long TryParseLong(string str,long defaultValue = -1)
+        private long TryParseLong(string str, long defaultValue = -1)
         {
             long l;
             if (long.TryParse(str, out l)) {
@@ -2006,12 +2024,18 @@ namespace StarlitTwit
         public bool Following;
         /// <summary>アイコンURL</summary>
         public string IconURL;
+        /// <summary>URL</summary>
+        public string URL;
         /// <summary>場所</summary>
         public string Location;
         /// <summary>プロフィール説明</summary>
         public string Description;
         /// <summary>登録日時</summary>
         public DateTime RegisterTime;
+        /// <summary>最終発言データ</summary>
+        public TwitData LastTwitData;
+        /// <summary>タイムゾーン</summary>
+        public string TimeZone;
     }
     //-------------------------------------------------------------------------------
     #endregion (UserProfile)
