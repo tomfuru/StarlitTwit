@@ -124,6 +124,9 @@
     <Compile Include="UserControls\MyToolTipImage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\PictureBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\RichTextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>

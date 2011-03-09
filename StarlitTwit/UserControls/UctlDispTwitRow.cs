@@ -55,8 +55,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         /// <summary>選択されているかどうか。</summary>
         public new bool Focused { get; private set; }
-        /// <summary>再読込回数カウントダウン</summary>
-        private int _iReRead_RestTime = 0;
         /// <summary>画像辞書(KeyはURL)</summary>
         public ImageListWrapper ImageListWrapper { get; set; }
         //-------------------------------------------------------------------------------
@@ -76,7 +74,7 @@ namespace StarlitTwit
             get { return _twitData; }
             set 
             {
-                timerSetPicture.Enabled = false;
+                picbIcon.CanselSetImage();
                 _twitData = value; 
             }
         }
@@ -357,29 +355,6 @@ namespace StarlitTwit
         }
         #endregion (rtxtGet_LinkClicked)
         //-------------------------------------------------------------------------------
-        #region timerSetPicture_Tick 画像取得タイマ
-        //-------------------------------------------------------------------------------
-        //
-        private void timerSetPicture_Tick(object sender, EventArgs e)
-        {
-            string IconURL = TwitData.MainTwitData.IconURL;
-            // 画像読み込み
-            if (ImageListWrapper.ImageContainsKey(IconURL)) {
-                picbIcon.Image = ImageListWrapper.GetImage(IconURL);
-                picbIcon.Visible = true;
-                timerSetPicture.Enabled = false;
-            }
-
-            _iReRead_RestTime -= timerSetPicture.Interval;
-            if (_iReRead_RestTime <= 0) {
-                // 終了
-                picbIcon.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
-                picbIcon.Visible = true; 
-                timerSetPicture.Enabled = false;
-            }
-        }
-        #endregion (timerSetPicture_Tick)
-        //-------------------------------------------------------------------------------
         #endregion (イベント)
 
         //===============================================================================
@@ -492,17 +467,12 @@ namespace StarlitTwit
 
             string IconURL = TwitData.MainTwitData.IconURL;
 
-            if (string.IsNullOrEmpty(IconURL)) { 
+            if (string.IsNullOrEmpty(IconURL)) {
                 picbIcon.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
             }
-            else if (ImageListWrapper.ImageContainsKey(IconURL)) {
-                picbIcon.Image = ImageListWrapper.GetImage(IconURL);
-            }
             else {
-                picbIcon.Image = null;
-                // タイマーON
-                _iReRead_RestTime = PICTURE_REREAD_TIME;
-                timerSetPicture.Enabled = true;
+                picbIcon.ImageListWrapper = ImageListWrapper;
+                picbIcon.SetFromImageListWrapper(IconURL);
             }
             return IconVisible = true;
         }

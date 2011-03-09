@@ -29,9 +29,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.lblName = new System.Windows.Forms.Label();
-            this.picbIcon = new System.Windows.Forms.PictureBox();
+            this.picbIcon = new StarlitTwit.PictureBoxEx();
             this.lblTweet = new System.Windows.Forms.Label();
-            this.timerSetPicture = new System.Windows.Forms.Timer(this.components);
             this.uctlline = new StarlitTwit.UctlLine();
             this.rtxtGet = new StarlitTwit.RichTextBoxHash();
             this.myToolTipReply = new StarlitTwit.MyToolTip(this.components);
@@ -55,6 +54,7 @@
             // 
             // picbIcon
             // 
+            this.picbIcon.ImageListWrapper = null;
             this.picbIcon.Location = new System.Drawing.Point(2, 2);
             this.picbIcon.Name = "picbIcon";
             this.picbIcon.Size = new System.Drawing.Size(48, 48);
@@ -76,10 +76,6 @@
                 "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT";
             this.lblTweet.UseMnemonic = false;
             this.lblTweet.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Label_DoubleClick);
-            // 
-            // timerSetPicture
-            // 
-            this.timerSetPicture.Tick += new System.EventHandler(this.timerSetPicture_Tick);
             // 
             // uctlline
             // 
@@ -148,11 +144,10 @@
         #endregion
 
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.PictureBox picbIcon;
+        private PictureBoxEx picbIcon;
         private System.Windows.Forms.Label lblTweet;
         private StarlitTwit.RichTextBoxHash rtxtGet;
         private UctlLine uctlline;
-        private System.Windows.Forms.Timer timerSetPicture;
         private MyToolTip myToolTipReply;
         private UserControls.MyToolTipImage myToolTipImage;
     }
