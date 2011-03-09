@@ -221,7 +221,7 @@ namespace StarlitTwit
             sb.AppendLine(p.UserName);
             sb.AppendLine("●位置情報");
             sb.AppendLine(p.Location);
-            sb.AppendLine("●プロフィール：");
+            sb.AppendLine("●自己紹介：");
             sb.AppendLine(p.Description);
             sb.Append("●フォロー数：");
             sb.AppendLine(p.FollowingNum.ToString());
