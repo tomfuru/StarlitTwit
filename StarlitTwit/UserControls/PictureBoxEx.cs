@@ -47,6 +47,7 @@ namespace StarlitTwit
                 this.Visible = true;
                 return;
             }
+            this.Image = null;
             this.Visible = false;
             _iReRead_RestTime = PICTURE_REREAD_TIME;
             _imageKey = imagekey;
