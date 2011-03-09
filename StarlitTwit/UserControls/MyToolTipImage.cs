@@ -157,7 +157,7 @@ namespace StarlitTwit.UserControls
 
                 /// size config
                 Size size = _img[_imgIndex].Size;
-                Size = new Size(size.Width + PADDING * 2, size.Height + PADDING * 2);
+                Size = new Size(Math.Min(size.Width, _maxSize.Width) + PADDING * 2, Math.Min(size.Height, _maxSize.Height) + PADDING * 2);
             }
             if (!_timer.Enabled) { _timer.Start(); }
         }

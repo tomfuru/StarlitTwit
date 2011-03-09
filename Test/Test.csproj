@@ -67,7 +67,9 @@
     <Compile Include="FormListView.Designer.cs">
       <DependentUpon>FormListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PermanentToolTip.cs" />
+    <Compile Include="PermanentToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PermanentToolTip.designer.cs">
       <DependentUpon>PermanentToolTip.cs</DependentUpon>
     </Compile>
@@ -82,7 +84,9 @@
     <Compile Include="TestPermanentToolTip.Designer.cs">
       <DependentUpon>TestPermanentToolTip.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolTipPicture.cs" />
+    <Compile Include="ToolTipPicture.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

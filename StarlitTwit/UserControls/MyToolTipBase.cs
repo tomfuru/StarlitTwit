@@ -218,13 +218,7 @@ namespace StarlitTwit
         //
         private void DispControl_MouseDown(object sender, MouseEventArgs e)
         {
-            lock (_lockTimer) {
-                if (_timer != null) {
-                    _timer.Stop();
-                    _currentState = ToolTipState.EnterWait;
-                    Hide();
-                }
-            }
+            Hide();
         }
         #endregion (DispControl_MouseDown)
         //-------------------------------------------------------------------------------
@@ -266,15 +260,18 @@ namespace StarlitTwit
         //
         private void DispControl_Leave(object sender, EventArgs e)
         {
-            lock (_lockTimer) {
-                if (_timer != null) {
-                    _timer.Stop();
-                    _currentState = ToolTipState.EnterWait;
-                    Hide();
-                }
-            }
+            Hide();
         }
         #endregion (DispControl_Leave)
+        //-------------------------------------------------------------------------------
+        #region Disp_Enter ToolTipコントロールEnter時
+        //-------------------------------------------------------------------------------
+        //
+        private void Disp_Enter(object sender, EventArgs e)
+        {
+            Hide();
+        }
+        #endregion (Disp_Enter)
         //-------------------------------------------------------------------------------
         #region Timer_Tick タイマーに指定された時間が経過したとき
         //-------------------------------------------------------------------------------
@@ -409,6 +406,7 @@ namespace StarlitTwit
                 StartPosition = FormStartPosition.Manual,
                 BackColor = BackColor
             };
+            _disp.Enter += Disp_Enter;
             _disp.Paint += Disp_Paint;
 
             ConfigDispForm(p);
@@ -426,11 +424,18 @@ namespace StarlitTwit
         /// </summary>
         private void Hide()
         {
-            if (_disp != null) {
-                _disp.Close();
-                _disp = null;
+            lock (_lockTimer) {
+                if (_timer != null) {
+                    _timer.Stop();
+                    _currentState = ToolTipState.EnterWait;
+
+                    if (_disp != null) {
+                        _disp.Close();
+                        _disp = null;
+                        OnHideToolTip();
+                    }
+                }
             }
-            OnHideToolTip();
         }
         #endregion (Hide)
 
@@ -519,6 +524,7 @@ namespace StarlitTwit
                 this.FormBorderStyle = FormBorderStyle.None;
             }
             #endregion (コンストラクタ)
+
 
             //-------------------------------------------------------------------------
             #region CreateParams
