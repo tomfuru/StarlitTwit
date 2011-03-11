@@ -409,12 +409,13 @@ namespace StarlitTwit
             _disp.Enter += Disp_Enter;
             _disp.Paint += Disp_Paint;
 
-            ConfigDispForm(p);
-            
-            _disp.Show();
+            if (ConfigDispForm(p)) {
+                _disp.Show();
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion ((Point))
+        //-------------------------------------------------------------------------------
         #endregion (Display)
         //-------------------------------------------------------------------------------
         #region -Hide 隠蔽処理
@@ -443,20 +444,37 @@ namespace StarlitTwit
         #region #-ConfigDispForm 表示フォームの位置・サイズを決める
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// 表示フォームの位置・サイズを決める
+        /// 表示フォームの位置・サイズを決めます。表示可能かどうかが返ります。
         /// </summary>
-        protected void ConfigDispForm()
+        /// <return>表示が可能かどうか</return>
+        protected bool ConfigDispForm()
         {
-            ConfigDispForm(GetDispPoint());
+            return ConfigDispForm(GetDispPoint());
         }
-        //
-        private void ConfigDispForm(Point p)
+        /// <summary>
+        /// 表示フォームの位置・サイズを決めます。表示可能かどうかが返ります。
+        /// </summary>
+        /// <param name="p">表示位置</param>
+        /// <return>表示が可能かどうか</return>
+        private bool ConfigDispForm(Point p)
         {
-            _disp.Size = Size.Add(Size, _disp.Margin.Size);
-            Size jutSize = JutOutSize(p, _disp.Size);
-            //////
+            bool canDisplay = true;
 
+            _disp.Size = Size.Add(Size, _disp.Margin.Size);
+            Tuple<Size,Screen> jutInfo = JutOutSize(p, _disp.Size);
+            if (jutInfo != null) {
+                if (jutInfo.Item1.Height > 0) { // 下はみ出る
+                    p.Y -= _disp.Size.Height + CURSOR_SIZE.Height + 2;
+                }
+
+                if (jutInfo.Item1.Width > 0) {  // 右はみ出る
+                    p.X -= _disp.Size.Width + 2;
+                }
+                if (!jutInfo.Item2.Bounds.Contains(p)) { canDisplay = false; }
+            }
             _disp.Location = p;
+
+            return canDisplay;
         }
         #endregion (ConfigDispForm)
 
@@ -471,7 +489,7 @@ namespace StarlitTwit
                 Point pC = DisplayControl.PointToClient(Cursor.Position);
 
                 pDisp = _dispControl.PointToScreen(pC);
-                pDisp.Y += 20;
+                pDisp.Y += CURSOR_SIZE.Height;
             }
             else { pDisp = new Point(0, 0); }
             return pDisp;
@@ -482,7 +500,7 @@ namespace StarlitTwit
         #region -JutOutSize 画面からはみ出るサイズ
         //-------------------------------------------------------------------------------
         //
-        private Size JutOutSize(Point loc, Size dispSize)
+        private Tuple<Size,Screen> JutOutSize(Point loc, Size dispSize)
         {
             Rectangle rect = new Rectangle(loc, dispSize);
             Screen currentScr = null;
@@ -492,14 +510,14 @@ namespace StarlitTwit
                     break;
                 }
             }
-            if (currentScr == null) { return Size.Empty; }
+            if (currentScr == null) { return null; }
 
             Rectangle cross = Rectangle.Intersect(currentScr.Bounds, rect);
-            return new Size(rect.Width - cross.Width, rect.Height - cross.Height);
+            return new Tuple<Size, Screen>(new Size(rect.Width - cross.Width, rect.Height - cross.Height), currentScr);
         }
         #endregion (JutOutSize)
 
-        //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         #region (Class)FrmDisp
         //-------------------------------------------------------------------------------
         public class FrmDisp : Form
