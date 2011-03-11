@@ -361,6 +361,13 @@ namespace StarlitTwit
         //
         private void rtxtTwit_KeyDown(object sender, KeyEventArgs e)
         {
+            // Ctrl+Tab によるタブ入力の抑制
+            if (e.Control && e.KeyCode == Keys.Tab) {
+                e.SuppressKeyPress = true;
+                return; 
+            }
+
+            // Enter入力時の発言イベント発生
             if (e.KeyData == Keys.Enter) {
                 if (!e.Shift || !e.Control) {
                     e.SuppressKeyPress = true;
@@ -419,7 +426,7 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower frm = new FrmFollower(imageListWrapper) {
+            FrmFollower frm = new FrmFollower(this, imageListWrapper) {
                 FormType = FrmFollower.EFormType.Following,
                 Text = "フォローしている人"
             };
@@ -432,7 +439,7 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower frm = new FrmFollower(imageListWrapper) {
+            FrmFollower frm = new FrmFollower(this, imageListWrapper) {
                 FormType = FrmFollower.EFormType.Follower,
                 Text = "フォローされている人"
             };

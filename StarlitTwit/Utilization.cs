@@ -376,16 +376,26 @@ namespace StarlitTwit
         /// <param name="parent">最上位フォーム</param>
         /// <param name="canEdit">自分かどうか</param>
         /// <param name="screen_name">ユーザー名</param>
-        /// <returns></returns>
+        /// <returns>プロフィール取得に成功したかどうか</returns>
         public static bool ShowUserProfile(FrmMain parent,bool canEdit, string screen_name)
         {
             UserProfile profile = GetProfile(screen_name);
             if (profile != null) {
-                FrmProfile frm = new FrmProfile(canEdit, profile, parent.ImageListWrapper);
-                frm.Show(parent);
+                ShowUserProfile(parent, canEdit, profile);
                 return true;
             }
             return false;
+        }
+        /// <summary>
+        /// ユーザープロフィールフォームを表示します。
+        /// </summary>
+        /// <param name="parent">最上位フォーム</param>
+        /// <param name="canEdit">自分かどうか</param>
+        /// <param name="screen_name">ユーザー名</param>
+        public static void ShowUserProfile(FrmMain parent, bool canEdit, UserProfile profile)
+        {
+            FrmProfile frm = new FrmProfile(canEdit, profile, parent.ImageListWrapper);
+            frm.Show(parent);
         }
         #endregion (ShowUserProfile)
 

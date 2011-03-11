@@ -118,8 +118,14 @@ namespace StarlitTwit
             txtUrl.Text = llblWeb.Text = profile.URL;
             rtxtDescription.Text = profile.Description;
 
-            lblLastStatusTime.Text = string.Format("({0})", profile.LastTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT));
-            lblLastStatus.Text = profile.LastTwitData.Text;
+            if (profile.LastTwitData != null) {
+                lblLastStatusTime.Text = string.Format("({0})", profile.LastTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT));
+                lblLastStatus.Text = profile.LastTwitData.Text;
+            }
+            else {
+                lblLastStatusTime.Visible = false;
+                lblLastStatus.Text = "(無し)";
+            }
         }
         #endregion (SetProfile)
     }

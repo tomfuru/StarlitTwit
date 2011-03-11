@@ -17,6 +17,7 @@ namespace StarlitTwit
     {
         public EFormType FormType { get; set; }
 
+        private FrmMain _mainForm = null;
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
         private ImageListWrapper _imageListWrapper = null;
@@ -25,9 +26,10 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmFollower(ImageListWrapper imgListWrapper)
+        public FrmFollower(FrmMain mainForm, ImageListWrapper imgListWrapper)
         {
             InitializeComponent();
+            _mainForm = mainForm;
             _imageListWrapper = imgListWrapper;
             lstvList.SmallImageList = imgListWrapper.ImageList;
         }
@@ -151,6 +153,16 @@ namespace StarlitTwit
             }
         }
         #endregion (tsmiRemove_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplayUserProfile_Click プロフィール表示クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplayUserProfile_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowUserProfile(_mainForm, false, prof);
+        }
+        #endregion (tsmiDisplayUserProfile_Click)
         //-------------------------------------------------------------------------------
         #region tsmiDisplayUserTweet_Click 発言表示クリック時
         //-------------------------------------------------------------------------------

@@ -42,6 +42,7 @@
             this.tsmi認証 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_プロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiプロフィール更新 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi自分のプロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -86,7 +87,6 @@
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
-            this.tsmi自分のプロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -212,6 +212,14 @@
             this.tsmiプロフィール更新.Size = new System.Drawing.Size(226, 22);
             this.tsmiプロフィール更新.Text = "フォロー数・発言数を更新する(&P)";
             this.tsmiプロフィール更新.Click += new System.EventHandler(this.tsmiプロフィール更新_Click);
+            // 
+            // tsmi自分のプロフィール
+            // 
+            this.tsmi自分のプロフィール.Enabled = false;
+            this.tsmi自分のプロフィール.Name = "tsmi自分のプロフィール";
+            this.tsmi自分のプロフィール.Size = new System.Drawing.Size(226, 22);
+            this.tsmi自分のプロフィール.Text = "自分のプロフィール(&M)";
+            this.tsmi自分のプロフィール.Click += new System.EventHandler(this.tsmi自分のプロフィール_Click);
             // 
             // tsmi_子画面
             // 
@@ -679,14 +687,6 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // tsmi自分のプロフィール
-            // 
-            this.tsmi自分のプロフィール.Enabled = false;
-            this.tsmi自分のプロフィール.Name = "tsmi自分のプロフィール";
-            this.tsmi自分のプロフィール.Size = new System.Drawing.Size(226, 22);
-            this.tsmi自分のプロフィール.Text = "自分のプロフィール(&M)";
-            this.tsmi自分のプロフィール.Click += new System.EventHandler(this.tsmi自分のプロフィール_Click);
             // 
             // FrmMain
             // 

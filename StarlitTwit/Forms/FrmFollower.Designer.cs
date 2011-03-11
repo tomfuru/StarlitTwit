@@ -37,11 +37,12 @@
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenBrowserUserHome = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAppend = new System.Windows.Forms.Button();
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsmiOpenBrowserUserHome = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRow.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -90,10 +91,11 @@
             this.tsmiFollow,
             this.tsmiRemove,
             this.toolStripMenuItem1,
+            this.tsmiDisplayUserProfile,
             this.tsmiDisplayUserTweet,
             this.tsmiOpenBrowserUserHome});
             this.menuRow.Name = "contextMenuStrip1";
-            this.menuRow.Size = new System.Drawing.Size(261, 120);
+            this.menuRow.Size = new System.Drawing.Size(261, 142);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // tsmiFollow
@@ -121,6 +123,13 @@
             this.tsmiDisplayUserTweet.Size = new System.Drawing.Size(260, 22);
             this.tsmiDisplayUserTweet.Text = "このユーザーの発言を表示する(&D)";
             this.tsmiDisplayUserTweet.Click += new System.EventHandler(this.tsmiDisplayUserTweet_Click);
+            // 
+            // tsmiOpenBrowserUserHome
+            // 
+            this.tsmiOpenBrowserUserHome.Name = "tsmiOpenBrowserUserHome";
+            this.tsmiOpenBrowserUserHome.Size = new System.Drawing.Size(260, 22);
+            this.tsmiOpenBrowserUserHome.Text = "このユーザーのホームをブラウザで見る(&B)";
+            this.tsmiOpenBrowserUserHome.Click += new System.EventHandler(this.tsmiOpenBrowserUserHome_Click);
             // 
             // btnAppend
             // 
@@ -157,12 +166,12 @@
             this.tsslabel.Spring = true;
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tsmiOpenBrowserUserHome
+            // tsmiDisplayUserProfile
             // 
-            this.tsmiOpenBrowserUserHome.Name = "tsmiOpenBrowserUserHome";
-            this.tsmiOpenBrowserUserHome.Size = new System.Drawing.Size(260, 22);
-            this.tsmiOpenBrowserUserHome.Text = "このユーザーのホームをブラウザで見る(&B)";
-            this.tsmiOpenBrowserUserHome.Click += new System.EventHandler(this.tsmiOpenBrowserUserHome_Click);
+            this.tsmiDisplayUserProfile.Name = "tsmiDisplayUserProfile";
+            this.tsmiDisplayUserProfile.Size = new System.Drawing.Size(260, 22);
+            this.tsmiDisplayUserProfile.Text = "このユーザーのプロフィールを表示する(&P)";
+            this.tsmiDisplayUserProfile.Click += new System.EventHandler(this.tsmiDisplayUserProfile_Click);
             // 
             // FrmFollower
             // 
@@ -204,5 +213,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserTweet;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenBrowserUserHome;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserProfile;
     }
 }

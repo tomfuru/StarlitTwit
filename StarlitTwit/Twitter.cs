@@ -1707,21 +1707,24 @@ namespace StarlitTwit
                     RegisterTime = StringToDateTime(el.Element("created_at").Value),
                     TimeZone = el.Element("time_zone").Value
                 };
-                profile.LastTwitData = new TwitData() {
-                    TwitType = TwitType.Normal,
-                    UserID = profile.UserID,
-                    IconURL = profile.IconURL,
-                    UserName = profile.UserName,
-                    UserScreenName = profile.ScreenName,
-                    UserProtected = profile.Protected,
-                    Time = StringToDateTime(el.Element("status").Element("created_at").Value),
-                    StatusID = long.Parse(el.Element("status").Element("id").Value),
-                    Mention_StatusID = TryParseLong(el.Element("status").Element("in_reply_to_status_id").Value),
-                    Mention_UserID = TryParseLong(el.Element("status").Element("in_reply_to_user_id").Value),
-                    Text = ConvertSpecialChar(el.Element("status").Element("text").Value),
-                    Source = CutSourceString(el.Element("status").Element("source").Value),
-                    Favorited = bool.Parse(el.Element("status").Element("favorited").Value)
-                };
+                if (el.Element("status") != null) {
+                    profile.LastTwitData = new TwitData() {
+                        TwitType = TwitType.Normal,
+                        UserID = profile.UserID,
+                        IconURL = profile.IconURL,
+                        UserName = profile.UserName,
+                        UserScreenName = profile.ScreenName,
+                        UserProtected = profile.Protected,
+                        Time = StringToDateTime(el.Element("status").Element("created_at").Value),
+                        StatusID = long.Parse(el.Element("status").Element("id").Value),
+                        Mention_StatusID = TryParseLong(el.Element("status").Element("in_reply_to_status_id").Value),
+                        Mention_UserID = TryParseLong(el.Element("status").Element("in_reply_to_user_id").Value),
+                        Text = ConvertSpecialChar(el.Element("status").Element("text").Value),
+                        Source = CutSourceString(el.Element("status").Element("source").Value),
+                        Favorited = bool.Parse(el.Element("status").Element("favorited").Value)
+                    };
+                }
+                else { profile.LastTwitData = null; }
                 return profile;
             }
             catch (NullReferenceException ex) {
