@@ -891,6 +891,65 @@ namespace StarlitTwit
         }
         #endregion (friendships_destroy)
         //-------------------------------------------------------------------------------
+        #region friendships_exists フォロー有無
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォロー有無を取得します。return [ユーザーA follows ユーザーB]?
+        /// </summary>
+        /// <param name="withAuth">認証を含めるか</param>
+        /// <param name="user_a">ユーザーA</param>
+        /// <param name="user_b">ユーザーB</param>
+        /// <returns>ユーザーA follows ユーザーB?</returns>
+        public bool friendships_exists(bool withAuth, string user_a, string user_b)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("user_a", user_a);
+                paramdic.Add("user_b", user_b);
+            }
+
+            string urlbase = URLapi + @"friendships/exists.xml?";
+            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
+                                    : urlbase + '?' + JoinParameters(paramdic);
+            XElement el = GetByAPI(url);
+
+            return bool.Parse(el.Value);
+        }
+        #endregion (friendships_exists)
+        //-------------------------------------------------------------------------------
+        #region friendships_show 2ユーザー間の情報確認
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// friendships/show メソッド
+        /// </summary>
+        /// <param name="source_id">[option:1] subject user</param>
+        /// <param name="source_screen_name">[option:1] subject user</param>
+        /// <param name="target_id">[option:2] target user</param>
+        /// <param name="target_screen_name">[option:2] target user</param>
+        /// <returns></returns>
+        public object friendships_show(long source_id = -1, string source_screen_name = null,
+                                       long target_id = -1, string target_screen_name = null)
+        {
+            if (source_id == -1 && string.IsNullOrEmpty(source_screen_name)) { throw new ArgumentException("対象ユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (target_id == -1 && string.IsNullOrEmpty(target_screen_name)) { throw new ArgumentException("ターゲットユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (source_id != -1) { paramdic.Add("source_id", source_id.ToString()); }
+                if (!string.IsNullOrEmpty(source_screen_name)) { paramdic.Add("source_screen_name", source_screen_name); }
+                if (target_id != -1) { paramdic.Add("target_id", target_id.ToString()); }
+                if (!string.IsNullOrEmpty(target_screen_name)) { paramdic.Add("target_screen_name", target_screen_name); }
+            }
+
+            string urlbase = URLapi + @"friendships/show.xml";
+            string url = urlbase + '?' + JoinParameters(paramdic);
+
+            XElement el = GetByAPI(url);
+
+            return ConvertToRelationshipData(el);
+        }
+        #endregion (friendships_show)
+        //-------------------------------------------------------------------------------
         #endregion (friendships/ (フレンド関連))
 
         //-------------------------------------------------------------------------------
@@ -927,8 +986,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, bool include_entities = false)
         {
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url) 
-             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。");}
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url)
+             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。"); }
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1834,6 +1893,38 @@ namespace StarlitTwit
             }
         }
         #endregion (ConvertToAPILimitData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToRelationshipData XElementからRelationshipData型に変換します
+        //-------------------------------------------------------------------------------
+        //
+        private RelationshipData ConvertToRelationshipData(XElement el)
+        {
+            try {
+                XElement source = el.Element("source");
+                XElement target = el.Element("target");
+                return new RelationshipData() {
+                    Source_ScreenName = source.Element("screen_name").Value,
+                    Source_UserID = long.Parse(source.Element("id").Value),
+                    Target_ScreenName = target.Element("screen_name").Value,
+                    Target_UserID = long.Parse(target.Element("id").Value),
+                    Following = bool.Parse(source.Element("following").Value),
+                    Followed = bool.Parse(source.Element("followed_by").Value),
+                    AllReplies = ParseBoolConsideringNil(source.Element("all_replies")),
+                    Blocking = ParseBoolConsideringNil(source.Element("blocking")),
+                    //CanDM = bool.Parse(source.Element("can_dm").Value),
+                    CanDM = ParseBoolConsideringNil(source.Element("can_dm")),
+                    Marked_Spam = ParseBoolConsideringNil(source.Element("marked_spam")),
+                    Notification_Enabled = ParseBoolConsideringNil(source.Element("notifications_enabled")),
+                    Want_Retweets = ParseBoolConsideringNil(source.Element("want_retweets"))
+                };
+            }
+            catch (NullReferenceException ex) {
+                Log.DebugLog(ex);
+                Log.DebugLog(el.ToString());
+                throw new TwitterAPIException(1001, "予期しないXmlです。");
+            }
+        }
+        #endregion (ConvertToRelationshipData)
         //===============================================================================
         #region -TryParseLong 文字列をlongに変換します。
         //-------------------------------------------------------------------------------
@@ -1900,6 +1991,18 @@ namespace StarlitTwit
             return DateTime.ParseExact(str, DATETIME_FORMATS, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal);
         }
         #endregion (StringToDateTime)
+        //-------------------------------------------------------------------------------
+        #region -ParseBoolConsideringNil Nilを考慮して要素からbool値を取り出します。
+        //-------------------------------------------------------------------------------
+        //
+        private bool ParseBoolConsideringNil(XElement el, bool defaultvalue = false)
+        {
+            bool b;
+            return (bool.TryParse(el.Value, out b)) ? b :
+                   (el.Value == "") ? bool.Parse(el.Attribute("nil").Value) : 
+                                      defaultvalue;
+        }
+        #endregion (ParseBoolConsideringNil)
         //-------------------------------------------------------------------------------
         #region -ConvertSpecialChar 特殊文字を変換します。
         //-------------------------------------------------------------------------------
@@ -2142,6 +2245,41 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (APILimitData)
+    //-------------------------------------------------------------------------------
+    #region RelationShipData 構造体：2ユーザー間の情報
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// 2ユーザー間の情報を表します。SourceがTargetに対してどのようであるかを表します。
+    /// </summary>
+    public struct RelationshipData
+    {
+        /// <summary>対象ユーザー名</summary>
+        public string Source_ScreenName;
+        /// <summary>対象ユーザーID</summary>
+        public long Source_UserID;
+        /// <summary>ターゲットユーザー名</summary>
+        public string Target_ScreenName;
+        /// <summary>ターゲットユーザーID</summary>
+        public long Target_UserID;
+        /// <summary>Source follows Target?</summary>
+        public bool Following;
+        /// <summary>Target follows Source?</summary>
+        public bool Followed;
+        /// <summary>スパム認定しているか</summary>
+        public bool Marked_Spam;
+        /// <summary>DMを送れるか</summary>
+        public bool CanDM;
+        /// <summary>ブロック中か</summary>
+        public bool Blocking;
+        /// <summary>Nortificationが有効か</summary>
+        public bool Notification_Enabled;
+        /// <summary></summary>
+        public bool Want_Retweets;
+        /// <summary></summary>
+        public bool AllReplies;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (RelationShipData)
 
     //-----------------------------------------------------------------------------------
     #region TwitType 列挙体：発言タイプ
