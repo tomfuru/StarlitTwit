@@ -8,6 +8,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml;
+using System.Globalization;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -892,6 +894,31 @@ namespace StarlitTwit
         #endregion (friendships/ (フレンド関連))
 
         //-------------------------------------------------------------------------------
+        #region account/ (アカウント関連)
+        //-------------------------------------------------------------------------------
+        #region account_rate_limit_status
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// abbount/rate_limit_statusメソッド
+        /// </summary>
+        /// <param name="withAuth">認証を行うかどうか。認証しない場合はIP依存のデータが返る</param>
+        /// <returns>残数データ</returns>
+        public APILimitData account_rate_limit_status(bool withAuth)
+        {
+            string urlbase = URLapi + @"account/rate_limit_status.xml";
+            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET)
+                                    : urlbase;
+
+            XElement el = GetByAPI(url);
+            return ConvertToAPILimitData(el);
+        }
+        #endregion (account_rate_limit_status)
+
+
+        //-------------------------------------------------------------------------------
+        #endregion (account/ (アカウント関連))
+
+        //-------------------------------------------------------------------------------
         #region favorites/ (お気に入り関連)
         //-------------------------------------------------------------------------------
         #region favorites_get お気に入り取得（未実装）
@@ -1749,6 +1776,30 @@ namespace StarlitTwit
                    select ConvertToUserProfile(stat);
         }
         #endregion (ConvertToUserProfileArray)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToAPILimitData XElementからAPILimitData型に変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private APILimitData ConvertToAPILimitData(XElement el)
+        {
+            try {
+                APILimitData data = new APILimitData() {
+                    Remaining = int.Parse(el.Element("remaining-hits").Value),
+                    HourlyLimit = int.Parse(el.Element("hourly-limit").Value),
+                    ResetTime = StringToDateTime(el.Element("reset-time").Value)
+                };
+                long rt = long.Parse(el.Element("reset-time-in-seconds").Value);
+                long tick = 621356292000000000L + rt * 10000000L; // 621356292000000000 : 1970/01/01 09:00:00のTicks
+                Debug.Assert(data.ResetTime.Ticks == tick);
+                return data;
+            }
+            catch (NullReferenceException ex) {
+                Log.DebugLog(ex);
+                Log.DebugLog(el.ToString());
+                throw new TwitterAPIException(1001, "予期しないXmlです。");
+            }
+        }
+        #endregion (ConvertToAPILimitData)
         //===============================================================================
         #region -TryParseLong 文字列をlongに変換します。
         //-------------------------------------------------------------------------------
@@ -1810,11 +1861,9 @@ namespace StarlitTwit
             //例1：Fri Jul 16 16:58:46 +0000 2010
             //例2：Mon, 11 Oct 2010 00:00:34 +0000
             //例3：Sun Oct 10 17:25:16 UTC 2010
+            //例4：2011-03-12T14:14:01+00:00
 
-            return DateTime.ParseExact(str,
-                                       DATETIME_FORMATS,
-                                       System.Globalization.DateTimeFormatInfo.InvariantInfo,
-                                       System.Globalization.DateTimeStyles.AssumeUniversal);
+            return DateTime.ParseExact(str, DATETIME_FORMATS, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal);
         }
         #endregion (StringToDateTime)
         //-------------------------------------------------------------------------------
@@ -2042,6 +2091,23 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (UserProfile)
+    //-------------------------------------------------------------------------------
+    #region APILimitData 構造体：API残使用回数に関する情報
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct APILimitData
+    {
+        /// <summary>残りのAPI使用可能回数</summary>
+        public int Remaining;
+        /// <summary>1時間あたりのAPI使用可能回数</summary>
+        public int HourlyLimit;
+        /// <summary>リセット時刻</summary>
+        public DateTime ResetTime;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (APILimitData)
 
     //-----------------------------------------------------------------------------------
     #region TwitType 列挙体：発言タイプ

@@ -8,6 +8,7 @@
   &lt;string&gt;ddd MMM d HH:mm:ss +0000 yyyy&lt;/string&gt;
   &lt;string&gt;ddd, d MMM yyyy HH:mm:ss +0000&lt;/string&gt;
   &lt;string&gt;ddd MMM d HH:mm:ss UTC yyyy&lt;/string&gt;
+  &lt;string&gt;yyyy-MM-ddTHH:mm:ss+00:00&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
   </Settings>

@@ -30,6 +30,7 @@ namespace StarlitTwit.Properties {
   <string>ddd MMM d HH:mm:ss +0000 yyyy</string>
   <string>ddd, d MMM yyyy HH:mm:ss +0000</string>
   <string>ddd MMM d HH:mm:ss UTC yyyy</string>
+  <string>yyyy-MM-ddTHH:mm:ss+00:00</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection DateTimeFormat {
             get {
