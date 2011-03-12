@@ -468,7 +468,8 @@ namespace StarlitTwit
                 }
 
                 if (jutInfo.Item1.Width > 0) {  // 右はみ出る
-                    p.X -= _disp.Size.Width + 2;
+                    //p.X -= _disp.Size.Width + 2;
+                    p.X = jutInfo.Item2.Bounds.Right - _disp.Size.Width;
                 }
                 if (!jutInfo.Item2.Bounds.Contains(p)) { canDisplay = false; }
             }
