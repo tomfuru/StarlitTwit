@@ -1403,7 +1403,7 @@ namespace StarlitTwit
                 }
                 else if (uctldisp == uctlDispReply) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Reply : SettingsData.RenewGetNum_Reply;
-                    d = Twitter.statuses_mentions(count: iCount);
+                    d = Twitter.statuses_mentions(count: iCount, include_rts: true);
                 }
                 else if (uctldisp == uctlDispHistory) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_History : SettingsData.RenewGetNum_History;
@@ -1483,7 +1483,7 @@ namespace StarlitTwit
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, since_id: since_id);
                 }
                 else if (uctldisp == uctlDispReply) {
-                    d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, since_id: since_id);
+                    d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, since_id: since_id, include_rts: true);
                 }
                 else if (uctldisp == uctlDispHistory) {
                     d = Twitter.statuses_user_timeline(count: SettingsData.RenewGetNum_History, since_id: since_id, include_rts: true);
@@ -1543,7 +1543,7 @@ namespace StarlitTwit
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, max_id: max_id);
                 }
                 else if (uctldisp == uctlDispReply) {
-                    d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, max_id: max_id);
+                    d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, max_id: max_id, include_rts: true);
                 }
                 else if (uctldisp == uctlDispHistory) {
                     d = Twitter.statuses_user_timeline(count: SettingsData.RenewGetNum_History, max_id: max_id, include_rts: true);
@@ -1625,7 +1625,7 @@ namespace StarlitTwit
                     }
                     else if (uctldisp == uctlDispReply) {
                         if (i == MAX_MENTION / 200 + 1) { break; } // 800まで
-                        d = Twitter.statuses_mentions(count: 200, page: i);
+                        d = Twitter.statuses_mentions(count: 200, page: i, include_rts: true);
                     }
                     else if (uctldisp == uctlDispHistory) {
                         if (i == MAX_USER / 200 + 1) { break; } // 3200まで
