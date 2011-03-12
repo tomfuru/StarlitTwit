@@ -13,6 +13,10 @@ namespace StarlitTwit
     {
         private UserProfile _profile;
 
+        bool _canEdit;
+        // 変更確認用
+        string _bakName, _bakLoc, _bakUrl, _bakDesc;
+
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
@@ -20,6 +24,7 @@ namespace StarlitTwit
         public FrmProfile(bool canEdit, UserProfile profile, ImageListWrapper imagelistwrapper)
         {
             InitializeComponent();
+            _canEdit = canEdit;
             if (!canEdit) {
                 rtxtDescription.ReadOnly = txtLocation.ReadOnly = txtName.ReadOnly = txtUrl.ReadOnly = true;
                 lblDescriptionRest.Visible = btnRenew.Visible = false;
@@ -41,17 +46,44 @@ namespace StarlitTwit
         {
             Utilization.SetModelessDialogCenter(this);
             SetProfile(_profile);
+            if (_canEdit) { SaveProfileTemporary(); }
             txtName.Select(0, 0);
         }
         #endregion (FrmProfile_Load)
 
         //-------------------------------------------------------------------------------
-        #region btnRenew_Click 更新ボタン
+        #region FrmProfile_FormClosing クローズ中イベント
+        //-------------------------------------------------------------------------------
+        //
+        private void FrmProfile_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_canEdit && (_bakName != txtName.Text
+                            || _bakLoc != txtLocation.Text
+                            || _bakUrl != txtUrl.Text
+                            || _bakDesc != rtxtDescription.Text)) {
+                if (Message.ShowQuestionMessage("プロフィールが変更されています。画面を閉じてよろしいですか？") == DialogResult.No) {
+                    e.Cancel = true;
+                }
+            }
+        }
+        #endregion (FrmProfile_FormClosing)
+
+        //-------------------------------------------------------------------------------
+        #region btnRenew_Click 更新ボタン using Twitter API
         //-------------------------------------------------------------------------------
         //
         private void btnRenew_Click(object sender, EventArgs e)
         {
-
+            if (Message.ShowQuestionMessage("プロフィールを更新します。よろしいですか？") == DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.account_update_profile(txtName.Text, txtUrl.Text, txtLocation.Text, rtxtDescription.Text);
+                    SaveProfileTemporary();
+                    Message.ShowInfoMessage("プロフィールを更新しました。");
+                }
+                catch (TwitterAPIException) {
+                    Message.ShowErrorMessage("プロフィールの更新に失敗しました。");
+                }
+            }
         }
         #endregion (btnRenew_Click)
 
@@ -128,5 +160,18 @@ namespace StarlitTwit
             }
         }
         #endregion (SetProfile)
+
+        //-------------------------------------------------------------------------------
+        #region -SaveProfileTemporary 一時的なプロフィール保存
+        //-------------------------------------------------------------------------------
+        //
+        private void SaveProfileTemporary()
+        {
+            _bakName = txtName.Text;
+            _bakLoc = txtLocation.Text;
+            _bakUrl = txtUrl.Text;
+            _bakDesc = rtxtDescription.Text;
+        }
+        #endregion (SaveProfileTemporary)
     }
 }

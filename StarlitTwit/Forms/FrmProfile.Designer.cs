@@ -467,6 +467,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "...";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmProfile_FormClosing);
             this.Load += new System.EventHandler(this.FrmProfile_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).EndInit();
             this.ResumeLayout(false);

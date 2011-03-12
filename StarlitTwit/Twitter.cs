@@ -913,7 +913,37 @@ namespace StarlitTwit
             return ConvertToAPILimitData(el);
         }
         #endregion (account_rate_limit_status)
+        //-------------------------------------------------------------------------------
+        #region account_update_profile プロフィール更新
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// account_update_profileメソッド
+        /// </summary>
+        /// <param name="name">[option]</param>
+        /// <param name="url">[option]</param>
+        /// <param name="location">[option]</param>
+        /// <param name="description">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, bool include_entities = false)
+        {
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url) 
+             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。");}
 
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
+                if (!string.IsNullOrEmpty(url)) { paramdic.Add("url", Utilization.UrlEncode(url)); }
+                if (!string.IsNullOrEmpty(location)) { paramdic.Add("location", Utilization.UrlEncode(location)); }
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+            string url_post = GetUrlWithOAuthParameters(URLapi + @"account/update_profile.xml", POST, paramdic);
+
+            XElement el = PostToAPI(url_post);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (account_update_profile)
 
         //-------------------------------------------------------------------------------
         #endregion (account/ (アカウント関連))
@@ -1788,9 +1818,13 @@ namespace StarlitTwit
                     HourlyLimit = int.Parse(el.Element("hourly-limit").Value),
                     ResetTime = StringToDateTime(el.Element("reset-time").Value)
                 };
+
+                // reset-time-in-secondsによるAssertion
                 long rt = long.Parse(el.Element("reset-time-in-seconds").Value);
-                long tick = 621356292000000000L + rt * 10000000L; // 621356292000000000 : 1970/01/01 09:00:00のTicks
-                Debug.Assert(data.ResetTime.Ticks == tick);
+                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc); // 基準時刻
+                DateTime dt2 = dt.ToLocalTime().AddSeconds(rt);
+                Debug.Assert(data.ResetTime == dt2);
+
                 return data;
             }
             catch (NullReferenceException ex) {
