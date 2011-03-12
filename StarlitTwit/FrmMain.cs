@@ -589,6 +589,8 @@ namespace StarlitTwit
 
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
+
+            ReSetStatusState();
         }
         #endregion (TwitMenu_Quote_Click)
         //-------------------------------------------------------------------------------
@@ -622,9 +624,11 @@ namespace StarlitTwit
         //
         private void TwitMenu_DisplayConversation_Click(object sender, TwitRowMenuEventArgs e)
         {
+            UctlDispTwit dispTwit = (UctlDispTwit)sender;
+
             FrmDispTweet frm = new FrmDispTweet(this, imageListWrapper);
             frm.FormType = FrmDispTweet.EFormType.Conversation;
-            frm.ReplyStartTwitdata = e.TwitData;
+            frm.ReplyStartTwitdata = dispTwit.TraceReply(e.TwitData.StatusID);
             frm.Show(this);
         }
         #endregion (TwitMenu_DisplayConversation_Click)
@@ -1699,6 +1703,7 @@ namespace StarlitTwit
 
                 switch (_stateStatusState) {
                     case StatusState.Normal:
+                    case StatusState.MultiReply:
                         Twitter.statuses_update(text);
                         break;
                     case StatusState.Reply:

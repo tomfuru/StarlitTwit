@@ -21,7 +21,7 @@ namespace StarlitTwit
         /// <summary>FormType=Userの時必須，ユーザー名</summary>
         public string UserScreenName { get; set; }
         /// <summary>FormType=Conversationの時必須，最初の発言データ</summary>
-        public TwitData ReplyStartTwitdata { get; set; }
+        public IEnumerable<TwitData> ReplyStartTwitdata { get; set; }
 
         const int GET_NUM = 50;
         //-------------------------------------------------------------------------------
@@ -92,9 +92,10 @@ namespace StarlitTwit
                     if (ReplyStartTwitdata != null) {
                         this.Text = "会話";
                         uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
-                        uctlDispTwit.AddData(new TwitData[] { ReplyStartTwitdata }, true);
+                        TwitData[] data = ReplyStartTwitdata.ToArray();
+                        uctlDispTwit.AddData(data , true);
                         tsslabel.Text = "リプライ取得中...";
-                        Utilization.InvokeTransaction(() => GetReplies(ReplyStartTwitdata.Mention_StatusID));
+                        Utilization.InvokeTransaction(() => GetReplies(data[data.Length -1].Mention_StatusID));
                     }
                     else {
                         Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");

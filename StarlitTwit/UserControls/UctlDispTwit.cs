@@ -825,6 +825,25 @@ namespace StarlitTwit
             }
         }
         #endregion (SetAllRowReplyText)
+        //-------------------------------------------------------------------------------
+        #region +TraceReply リプライをトレース
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 指定発言IDからリプライをトレースしていきます。
+        /// </summary>
+        /// <param name="startStatusID">開始発言ID</param>
+        /// <returns></returns>
+        public IEnumerable<TwitData> TraceReply(long startStatusID)
+        {
+            long statusid = startStatusID;
+            do {
+                if (!_rowDataList.ContainsKey(statusid)) { break; }
+                TwitData data = _rowDataList[statusid].TwitData;
+                yield return data;
+                statusid = data.Mention_StatusID;
+            } while (statusid != -1);
+        }
+        #endregion (TraceReply)
         //===============================================================================
         #region -AdjustControl コントロールの内容・位置・サイズの調整を行います。
         //-------------------------------------------------------------------------------
