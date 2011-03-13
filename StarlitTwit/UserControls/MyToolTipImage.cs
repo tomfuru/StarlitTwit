@@ -147,7 +147,6 @@ namespace StarlitTwit.UserControls
             _disp.Refresh();
         }
         #endregion (Timer_Tick)
-
         //-------------------------------------------------------------------------------
         #region Image_Animate 画像フレームが進んだとき
         //-------------------------------------------------------------------------------
@@ -214,7 +213,7 @@ namespace StarlitTwit.UserControls
                 Rectangle drawrect = e.ClipRectangle;
                 g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
                 if (_dispLoading) { ImageAnimator.UpdateFrames(_loadingimg); Console.Write("l"); }
-                Image img = (_dispLoading) ? StarlitTwit.Properties.Resources.NowLoadingL : _img[_imgIndex];
+                Image img = (_dispLoading) ? _loadingimg : _img[_imgIndex];
                 g.DrawImage(img, PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
             }
         }
