@@ -149,6 +149,7 @@ namespace StarlitTwit
             const string SCREENNAME = "ScreenName";
             const string SOURCE = "Source";
             const string DATETIME = "DateTime";
+            const string RTDATETIME = "RTDateTime";
             const string RETWEETER = "Retweeter";
             const string RECIPIENT = "Recipient";
 
@@ -196,6 +197,14 @@ namespace StarlitTwit
                     if (ikStart == DATETIME.Length && ikEnd == key.Length - 1) {
                         string dateFormat = key.Substring(ikStart + 1, ikEnd - ikStart - 1);
                         sb.Append(twitdata.Time.ToString(dateFormat));
+                    }
+                }
+                else if (bIsRT && key.StartsWith(RTDATETIME)) {
+                    int ikStart = key.IndexOf(PARENTHESIS_START),
+                        ikEnd = key.IndexOf(PARENTHESIS_END);
+                    if (ikStart == RTDATETIME.Length && ikEnd == key.Length - 1) {
+                        string dateFormat = key.Substring(ikStart + 1, ikEnd - ikStart - 1);
+                        sb.Append(twitdata.RTTwitData.Time.ToString(dateFormat));
                     }
                 }
 
