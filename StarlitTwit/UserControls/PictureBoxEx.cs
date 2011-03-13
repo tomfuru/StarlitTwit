@@ -47,8 +47,7 @@ namespace StarlitTwit
                 this.Visible = true;
                 return;
             }
-            this.Image = null;
-            this.Visible = false;
+            this.Image = StarlitTwit.Properties.Resources.NowLoadingS;
             _iReRead_RestTime = PICTURE_REREAD_TIME;
             _imageKey = imagekey;
 
@@ -82,7 +81,7 @@ namespace StarlitTwit
             _iReRead_RestTime -= _timerSetPicture.Interval;
             if (_iReRead_RestTime <= 0) {
                 // 終了
-                this.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
+                this.Image = StarlitTwit.Properties.Resources.cross;
                 this.Visible = true;
                 _timerSetPicture.Enabled = false;
             }

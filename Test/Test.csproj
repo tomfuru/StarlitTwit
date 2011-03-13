@@ -107,6 +107,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="TestPermanentToolTip.resx">
       <DependentUpon>TestPermanentToolTip.cs</DependentUpon>
@@ -124,6 +125,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\NowLoadingL.gif" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarlitTwit\StarlitTwit.csproj">

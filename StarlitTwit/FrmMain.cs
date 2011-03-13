@@ -37,8 +37,6 @@ namespace StarlitTwit
 
             DEFAULT_TABPAGES = new TabPage[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
 
-            imageListWrapper.ImageAdd(STR_IMGLIST_CROSS, StarlitTwit.Properties.Resources.cross);
-
             tsslRestAPI.Text = "";
             lblTweetStatus.Text = "";
 
@@ -114,8 +112,6 @@ namespace StarlitTwit
         //===============================================================================
         #region 定数
         //-------------------------------------------------------------------------------
-        /// <summary>×マークの画像のKey</summary>
-        public const string STR_IMGLIST_CROSS = "CROSS";
         /// <summary>発言可能な長さ</summary>
         private const int MAX_LENGTH = 140;
         /// <summary>デフォルトである(消せない)タブページ</summary>

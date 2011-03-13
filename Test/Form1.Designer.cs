@@ -67,6 +67,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.testPermanentToolTip1 = new Test.TestPermanentToolTip();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
             this.tabControlEx1.SuspendLayout();
@@ -76,6 +77,7 @@
             this.tabPage8.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.anisTabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -195,7 +197,7 @@
             this.tabControlEx1.Controls.Add(this.tabPage6);
             this.tabControlEx1.Controls.Add(this.tabPage7);
             this.tabControlEx1.Controls.Add(this.tabPage8);
-            this.tabControlEx1.Location = new System.Drawing.Point(109, 290);
+            this.tabControlEx1.Location = new System.Drawing.Point(102, 211);
             this.tabControlEx1.Name = "tabControlEx1";
             this.tabControlEx1.SelectedIndex = 0;
             this.tabControlEx1.Size = new System.Drawing.Size(423, 100);
@@ -310,9 +312,9 @@
             this.toolStripStatusLabelEx1,
             this.toolStripStatusLabel2,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 535);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 559);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(991, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(997, 22);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -324,7 +326,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(965, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(971, 17);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
@@ -427,13 +429,30 @@
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // testPermanentToolTip1
+            // 
+            this.testPermanentToolTip1.AutoPopDelay = 11111111;
+            this.testPermanentToolTip1.InitialDelay = 500;
+            this.testPermanentToolTip1.ReshowDelay = 100;
+            this.testPermanentToolTip1.ShowAlways = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(102, 336);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(196, 196);
+            this.pictureBox1.TabIndex = 17;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(1, 1);
-            this.ClientSize = new System.Drawing.Size(991, 557);
+            this.ClientSize = new System.Drawing.Size(997, 581);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.dateTimePicker1);
@@ -466,6 +485,7 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.anisTabControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -512,6 +532,7 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private TestPermanentToolTip testPermanentToolTip1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

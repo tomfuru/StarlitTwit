@@ -73,5 +73,19 @@ namespace StarlitTwit.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap NowLoadingL {
+            get {
+                object obj = ResourceManager.GetObject("NowLoadingL", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap NowLoadingS {
+            get {
+                object obj = ResourceManager.GetObject("NowLoadingS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

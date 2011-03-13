@@ -93,7 +93,13 @@ namespace Test
             //,@"http://a1.twimg.com/profile_images/996833013/____3-______normal.png"};
 
             //toolTip3.SetToolTip(button1, "aaaa\nbbbb\ncccc");
+
+            imageList.Images.Add("load",Test.Properties.Resources.NowLoadingL);
+
+            pictureBox1.Image = imageList.Images["load"];
         }
+
+        private ImageList imageList = new ImageList() { ImageSize = new Size(192, 192) };
 
         private void ScrollBarConfig()
         {

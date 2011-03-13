@@ -462,7 +462,7 @@ namespace StarlitTwit
             string IconURL = TwitData.MainTwitData.IconURL;
 
             if (string.IsNullOrEmpty(IconURL)) {
-                picbIcon.Image = ImageListWrapper.GetImage(FrmMain.STR_IMGLIST_CROSS);
+                picbIcon.Image = StarlitTwit.Properties.Resources.cross;
             }
             else {
                 picbIcon.ImageListWrapper = ImageListWrapper;
