@@ -23,6 +23,12 @@ namespace StarlitTwit.UserControls
         private Timer _timer = new Timer() { Interval = 3000 };
         /// <summary>画像処理時のロックオブジェクト</summary>
         private object _lockimg = new object();
+        /// <summary>イメージ取得中かどうか</summary>
+        private volatile bool _gettingImage = false;
+        /// <summary>ロード中表示か</summary>
+        private bool _dispLoading = true;
+        /// <summary>ロード中画像</summary>
+        private Bitmap _loadingimg;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -133,11 +139,29 @@ namespace StarlitTwit.UserControls
 
                 _imgIndex++;
                 _imgIndex %= _img.Length;
+
+                Size = GetPreferSize(_img[_imgIndex].Size);
             }
+
             ConfigDispForm();
             _disp.Refresh();
         }
         #endregion (Timer_Tick)
+
+        //-------------------------------------------------------------------------------
+        #region Image_Animate 画像フレームが進んだとき
+        //-------------------------------------------------------------------------------
+        //
+        private void Image_Animate(object sender, EventArgs e)
+        {
+            try {
+                if (_disp != null) {
+                    _disp.Invalidate();
+                }
+            }
+            catch (InvalidOperationException) { }
+        }
+        #endregion (Image_Animate)
 
         //-------------------------------------------------------------------------------
         #region #[override]OnShowToolTip
@@ -150,35 +174,26 @@ namespace StarlitTwit.UserControls
             base.OnShowToolTip(e);
 
             lock (_lockimg) {
+                if (_imgURLs == null || _imgURLs.Length == 0) { e.Cancel = true; return; }
+                Size size;
                 if (_img == null) {
-                    if (_imgURLs != null) { GetImages(); }
-                    if (_img == null) { e.Cancel = true; return; }
-                }
+                    if (!_gettingImage) { Utilization.InvokeTransaction(() => GetImages()); }
 
-                /// size config
-                Size size = _img[_imgIndex].Size;
-                Size = new Size(Math.Min(size.Width, _maxSize.Width) + PADDING * 2, Math.Min(size.Height, _maxSize.Height) + PADDING * 2);
+                    size = StarlitTwit.Properties.Resources.NowLoadingL.Size;
+                    _dispLoading = true;
+                }
+                else {
+                    /// size config
+                    size = _img[_imgIndex].Size;
+                    _dispLoading = false;
+
+                    if (!_timer.Enabled) { _timer.Start(); }
+                }
+                Size = GetPreferSize(size);
             }
-            if (!_timer.Enabled) { _timer.Start(); }
         }
         //-------------------------------------------------------------------------------
         #endregion (#[override]OnShowToolTip)
-
-        //-------------------------------------------------------------------------------
-        #region #[override]CanselDisplay 表示キャンセル条件
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected override bool CanselDisplay()
-        {
-            lock (_lockimg) {
-                if (_imgURLs == null) { return true; }
-            }
-            return false;
-        }
-        #endregion (#[override]CanselDisplay)
 
         //-------------------------------------------------------------------------------
         #region #[override]Disp_Paint 表示
@@ -193,13 +208,14 @@ namespace StarlitTwit.UserControls
             Control c = (Control)sender;
 
             lock (_lockimg) {
-                if (_img == null) { return; }
+                if (!_dispLoading && _img == null) { return; }
                 Graphics g = e.Graphics;
                 g.Clear(c.BackColor);
-
                 Rectangle drawrect = e.ClipRectangle;
                 g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
-                g.DrawImage(_img[_imgIndex], PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
+                if (_dispLoading) { ImageAnimator.UpdateFrames(_loadingimg); Console.Write("l"); }
+                Image img = (_dispLoading) ? StarlitTwit.Properties.Resources.NowLoadingL : _img[_imgIndex];
+                g.DrawImage(img, PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
             }
         }
         #endregion (Disp_Paint)
@@ -214,7 +230,7 @@ namespace StarlitTwit.UserControls
         public void SetImageURLs(IEnumerable<string> urls)
         {
             lock (_lockimg) {
-                _imgURLs = urls.ToArray();
+                _imgURLs = PictureGetter.ConvertURLs(urls).ToArray();
                 _imgIndex = 0;
                 DisposeImages();
             }
@@ -237,6 +253,17 @@ namespace StarlitTwit.UserControls
         #endregion (ClearImageURLs)
 
         //-------------------------------------------------------------------------------
+        #region -GetPreferSize 画像サイズから好ましいサイズを取得します。
+        //-------------------------------------------------------------------------------
+        //
+        private Size GetPreferSize(Size size)
+        {
+            return new Size(Math.Min(size.Width, _maxSize.Width) + PADDING * 2,
+                            Math.Min(size.Height, _maxSize.Height) + PADDING * 2);
+        }
+        #endregion (GetPreferSize)
+
+        //-------------------------------------------------------------------------------
         #region -GetImages 画像を取得します。
         //-------------------------------------------------------------------------------
         /// <summary>
@@ -244,18 +271,28 @@ namespace StarlitTwit.UserControls
         /// </summary>
         private void GetImages()
         {
+            EventHandler evh = new EventHandler(Image_Animate);
+            _loadingimg = StarlitTwit.Properties.Resources.NowLoadingL;
+            ImageAnimator.Animate(_loadingimg, evh);
+
             List<Image> list = new List<Image>();
-            foreach (var url in PictureGetter.ConvertURLs(_imgURLs)) {
+            foreach (var url in _imgURLs) {
                 Image img = Utilization.GetImageFromURL(url);
                 if (img != null) { list.Add(img); }
             }
 
             if (list.Count > 0) {
                 _img = list.ToArray();
+                if (_disp != null) {
+                    OnShowToolTip(null);
+                    _disp.Invoke(new Action(() => ConfigDispForm()));
+                    _disp.Invalidate();
+                }
             }
-            else {
-                _imgURLs = null;
-            }
+            else { _img = null; }
+
+            ImageAnimator.StopAnimate(_loadingimg, evh);
+            _gettingImage = false;
         }
         //-------------------------------------------------------------------------------
         #endregion (GetImages)

@@ -75,23 +75,11 @@ namespace StarlitTwit
         protected override void OnShowToolTip(CancelEventArgs e)
         {
             base.OnShowToolTip(e);
+            if (string.IsNullOrEmpty(ToolTipText) || Font == null) { e.Cancel = true; return; }
             Size = TextRenderer.MeasureText(ToolTipText, Font);
         }
         //-------------------------------------------------------------------------------
         #endregion (#[override]OnShowToolTip)
-
-        //-------------------------------------------------------------------------------
-        #region #[override]CanselDisplay 表示キャンセル条件
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected override bool CanselDisplay()
-        {
-            return string.IsNullOrEmpty(ToolTipText) || Font == null;
-        }
-        #endregion (#[override]CanselDisplay)
 
         //-------------------------------------------------------------------------------
         #region #[override]Disp_Paint 表示

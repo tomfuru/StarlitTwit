@@ -21,6 +21,7 @@ namespace StarlitTwit
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
         private ImageListWrapper _imageListWrapper = null;
+        private Bitmap _bmp;
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
@@ -67,6 +68,18 @@ namespace StarlitTwit
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (FrmFollower_Load)
+        //-------------------------------------------------------------------------------
+        #region Image_Animate 画像フレームが進んだとき
+        //-------------------------------------------------------------------------------
+        //
+        private void Image_Animate(object sender, EventArgs e)
+        {
+            try {
+                this.Invoke(new Action(() => lstvList.Invalidate()));
+            }
+            catch (InvalidOperationException) { }
+        }
+        #endregion (Image_Animate)
         //-------------------------------------------------------------------------------
         #region lstvList_MouseMove マウスオーバー時
         //-------------------------------------------------------------------------------
@@ -210,6 +223,33 @@ namespace StarlitTwit
             }
         }
         #endregion (lstvList_ColumnWidthChanging)
+        //===============================================================================
+        #region lstvList_DrawColumnHeader ヘッダ描画
+        //-------------------------------------------------------------------------------
+        //
+        private void lstvList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+        #endregion (lstvList_DrawColumnHeader)
+        //-------------------------------------------------------------------------------
+        #region lstvList_DrawSubItem アイテム描画
+        //-------------------------------------------------------------------------------
+        //
+        private void lstvList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            if (e.ColumnIndex > 0) { e.DrawDefault = true; return; }
+            ImageAnimator.UpdateFrames(_bmp);
+            e.DrawBackground();
+            Image img = _imageListWrapper.GetImage(_profileList[e.ItemIndex].IconURL);
+            if (img != null) {
+                e.Graphics.DrawImage(img, e.Bounds.Location);
+            }
+            else {
+                e.Graphics.DrawImage(_bmp, e.Bounds.Location);
+            }
+        }
+        #endregion (lstvList_DrawSubItem)
         //-------------------------------------------------------------------------------
         #endregion (イベント)
 
@@ -258,8 +298,7 @@ namespace StarlitTwit
             foreach (var p in profiles) {
                 ListViewItem item = new ListViewItem();
                 item.Tag = p;
-                item.ImageKey = p.IconURL;
-                if (!lstvList.SmallImageList.Images.ContainsKey(p.IconURL)) { urllist.Add(new Tuple<ListViewItem, string>(item, p.IconURL)); }
+                if (!_imageListWrapper.ImageContainsKey(p.IconURL)) { urllist.Add(new Tuple<ListViewItem, string>(item, p.IconURL)); }
                 ListViewItem.ListViewSubItem si = new ListViewItem.ListViewSubItem();
                 item.SubItems.Add(p.ScreenName);
                 item.SubItems.Add(p.UserName);
@@ -270,8 +309,9 @@ namespace StarlitTwit
             lstvList.Items.AddRange(items.ToArray());
             _profileList.AddRange(profiles);
 
-            Utilization.InvokeTransaction(() => GetImages(urllist));
-
+            if (urllist.Count > 0) {
+                Utilization.InvokeTransaction(() => GetImages(urllist));
+            }
             //lstvList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
         #endregion (AddList)
@@ -325,26 +365,24 @@ namespace StarlitTwit
         private void GetImages(IEnumerable<Tuple<ListViewItem, string>> data)
         {
             try {
+                EventHandler evh = new EventHandler(Image_Animate);
+                _bmp = StarlitTwit.Properties.Resources.NowLoadingS;
+                ImageAnimator.Animate(_bmp, evh);
                 foreach (var d in data) {
                     Image img = Utilization.GetImageFromURL(d.Item2);
                     if (img != null) {
                         _imageListWrapper.ImageAdd(d.Item2, img);
-                        this.Invoke(new Action(() => ResetImageKey(d.Item1)));
+                        this.Invoke(new Action(() => Refresh()));
+                    }
+                    else {
+                        d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;
                     }
                 }
+                ImageAnimator.StopAnimate(_bmp, evh);
             }
             catch (InvalidOperationException) { }
         }
         #endregion (GetImages)
-        //-------------------------------------------------------------------------------
-        #region -ResetImageKey 画像キーを再設定して画像を表示させます
-        //-------------------------------------------------------------------------------
-        //
-        private void ResetImageKey(ListViewItem item)
-        {
-            item.ImageKey = item.ImageKey;
-        }
-        #endregion (ResetImageKey)
         //-------------------------------------------------------------------------------
         #region -Follow フォローを行います using TwitterAPI
         //-------------------------------------------------------------------------------
@@ -372,7 +410,18 @@ namespace StarlitTwit
         #endregion (RemoveFollow)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
+
+        #region Comment Out
+        ////-------------------------------------------------------------------------------
+        //#region -ResetImageKey 画像キーを再設定して画像を表示させます
+        ////-------------------------------------------------------------------------------
+        ////
+        //private void ResetImageKey(ListViewItem item)
+        //{
+        //    item.ImageKey = item.ImageKey;
+        //}
+        //#endregion (ResetImageKey)
+        ////-------------------------------------------------------------------------------
+        #endregion (Comment Out)
     }
-
-
 }

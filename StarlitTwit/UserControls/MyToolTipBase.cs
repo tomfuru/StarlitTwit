@@ -65,7 +65,8 @@ namespace StarlitTwit
         [Category("動作")]
         [DefaultValue(true)]
         [Description("ToolTipが有効かどうかを設定します。")]
-        public bool Active {
+        public bool Active
+        {
             get { return _active; }
             set
             {
@@ -228,7 +229,7 @@ namespace StarlitTwit
         private void DispControl_Enter(object sender, EventArgs e)
         {
             lock (_lockTimer) {
-                if (!_active || CanselDisplay()) { return; }
+                if (!_active) { return; }
 
                 if (_timer != null) {
                     _timer.Stop();
@@ -278,25 +279,28 @@ namespace StarlitTwit
         //
         private void Timer_Tick(object sender, EventArgs e)
         {
-            lock (_lockTimer) {
-                if (_timer != null) {
-                    _timer.Stop();
-                    switch (_currentState) {
-                        case ToolTipState.DisplayWait:
-                            _currentState = ToolTipState.Displaying;
-                            Display();
-                            if (_dispDuration > 0) {
-                                _timer.Interval = _dispDuration;
-                                _timer.Start();
-                            }
-                            break;
-                        case ToolTipState.Displaying:
-                            _currentState = ToolTipState.FinDisplay;
-                            Hide();
-                            break;
+            try {
+                lock (_lockTimer) {
+                    if (_timer != null) {
+                        _timer.Stop();
+                        switch (_currentState) {
+                            case ToolTipState.DisplayWait:
+                                _currentState = ToolTipState.Displaying;
+                                Display();
+                                if (_dispDuration > 0) {
+                                    _timer.Interval = _dispDuration;
+                                    _timer.Start();
+                                }
+                                break;
+                            case ToolTipState.Displaying:
+                                _currentState = ToolTipState.FinDisplay;
+                                Hide();
+                                break;
+                        }
                     }
                 }
             }
+            catch (InvalidOperationException) { }
         }
         #endregion (Timer_Tick)
 
@@ -310,16 +314,6 @@ namespace StarlitTwit
         /// <param name="e"></param>
         protected abstract void Disp_Paint(object sender, PaintEventArgs e);
         #endregion (Disp_Paint)
-
-        //-------------------------------------------------------------------------------
-        #region #[virtual]CanselDisplay 表示抑制
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// 表示を抑制するかどうかの条件設定。この処理には時間をかけないでください。
-        /// </summary>
-        /// <returns></returns>
-        protected virtual bool CanselDisplay() { return false; }
-        #endregion (CanselDisplay)
 
         //-------------------------------------------------------------------------------
         #region #[virtual]OnShowToolTip ツールチップが表示される直前
@@ -352,7 +346,7 @@ namespace StarlitTwit
         /// </summary>
         public void Show()
         {
-            if (!_active || CanselDisplay()) { return; }
+            if (!_active) { return; }
             Display();
         }
         /// <summary>
@@ -361,7 +355,7 @@ namespace StarlitTwit
         /// <param name="p">表示する点</param>
         public void Show(Point p)
         {
-            if (!_active || CanselDisplay()) { return; }
+            if (!_active) { return; }
             Display(p);
         }
         /// <summary>
@@ -461,7 +455,7 @@ namespace StarlitTwit
             bool canDisplay = true;
 
             _disp.Size = Size.Add(Size, _disp.Margin.Size);
-            Tuple<Size,Screen> jutInfo = JutOutSize(p, _disp.Size);
+            Tuple<Size, Screen> jutInfo = JutOutSize(p, _disp.Size);
             if (jutInfo != null) {
                 if (jutInfo.Item1.Height > 0) { // 下はみ出る
                     p.Y -= _disp.Size.Height + CURSOR_SIZE.Height + 2;
@@ -485,11 +479,22 @@ namespace StarlitTwit
         //
         private Point GetDispPoint()
         {
-            Point pDisp;
+            Point pDisp = new Point();
             if (_dispControl != null) {
-                Point pC = DisplayControl.PointToClient(Cursor.Position);
+                Point pC;
+                if (_dispControl.InvokeRequired) {
+                    _dispControl.Invoke(new Action(() =>
+                    {
+                        pC = _dispControl.PointToClient(Cursor.Position);
+                        pDisp = _dispControl.PointToScreen(pC);
+                    }));
+                }
+                else {
+                    pC = _dispControl.PointToClient(Cursor.Position);
+                    pDisp = _dispControl.PointToScreen(pC);
+                }
 
-                pDisp = _dispControl.PointToScreen(pC);
+
                 pDisp.Y += CURSOR_SIZE.Height;
             }
             else { pDisp = new Point(0, 0); }
@@ -501,7 +506,7 @@ namespace StarlitTwit
         #region -JutOutSize 画面からはみ出るサイズ
         //-------------------------------------------------------------------------------
         //
-        private Tuple<Size,Screen> JutOutSize(Point loc, Size dispSize)
+        private Tuple<Size, Screen> JutOutSize(Point loc, Size dispSize)
         {
             Rectangle rect = new Rectangle(loc, dispSize);
             Screen currentScr = null;
@@ -542,6 +547,7 @@ namespace StarlitTwit
             {
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.ShowInTaskbar = false;
+                this.DoubleBuffered = true;
             }
             #endregion (コンストラクタ)
 

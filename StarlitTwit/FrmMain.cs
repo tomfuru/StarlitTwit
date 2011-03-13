@@ -42,6 +42,8 @@ namespace StarlitTwit
 
             //tabpgPublic.ToolTipText = "全体";
 
+            imageListWrapper.ImageAdd(STR_IMAGE_CROSS, StarlitTwit.Properties.Resources.cross);
+
             Twitter = new Twitter();
         }
         //-------------------------------------------------------------------------------
@@ -112,6 +114,8 @@ namespace StarlitTwit
         //===============================================================================
         #region 定数
         //-------------------------------------------------------------------------------
+        /// <summary>×画像</summary>
+        public const string STR_IMAGE_CROSS = "CROSS";
         /// <summary>発言可能な長さ</summary>
         private const int MAX_LENGTH = 140;
         /// <summary>デフォルトである(消せない)タブページ</summary>

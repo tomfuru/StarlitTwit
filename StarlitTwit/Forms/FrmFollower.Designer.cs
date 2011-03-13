@@ -28,62 +28,23 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.lstvList = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuRow = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiFollow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowserUserHome = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAppend = new System.Windows.Forms.Button();
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.lstvList = new StarlitTwit.ListViewEx();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuRow.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lstvList
-            // 
-            this.lstvList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstvList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.lstvList.ContextMenuStrip = this.menuRow;
-            this.lstvList.FullRowSelect = true;
-            this.lstvList.GridLines = true;
-            this.lstvList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lstvList.Location = new System.Drawing.Point(12, 12);
-            this.lstvList.MultiSelect = false;
-            this.lstvList.Name = "lstvList";
-            this.lstvList.Size = new System.Drawing.Size(387, 225);
-            this.lstvList.TabIndex = 0;
-            this.lstvList.UseCompatibleStateImageBehavior = false;
-            this.lstvList.View = System.Windows.Forms.View.Details;
-            this.lstvList.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstvList_ColumnWidthChanging);
-            this.lstvList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lstvList_MouseMove);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "";
-            this.columnHeader1.Width = 52;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "ユーザー名";
-            this.columnHeader2.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "名称";
-            this.columnHeader3.Width = 100;
             // 
             // menuRow
             // 
@@ -95,7 +56,7 @@
             this.tsmiDisplayUserTweet,
             this.tsmiOpenBrowserUserHome});
             this.menuRow.Name = "contextMenuStrip1";
-            this.menuRow.Size = new System.Drawing.Size(261, 142);
+            this.menuRow.Size = new System.Drawing.Size(261, 120);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // tsmiFollow
@@ -116,6 +77,13 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(257, 6);
+            // 
+            // tsmiDisplayUserProfile
+            // 
+            this.tsmiDisplayUserProfile.Name = "tsmiDisplayUserProfile";
+            this.tsmiDisplayUserProfile.Size = new System.Drawing.Size(260, 22);
+            this.tsmiDisplayUserProfile.Text = "このユーザーのプロフィールを表示する(&P)";
+            this.tsmiDisplayUserProfile.Click += new System.EventHandler(this.tsmiDisplayUserProfile_Click);
             // 
             // tsmiDisplayUserTweet
             // 
@@ -151,8 +119,6 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsslabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 269);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(411, 22);
@@ -166,12 +132,46 @@
             this.tsslabel.Spring = true;
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tsmiDisplayUserProfile
+            // lstvList
             // 
-            this.tsmiDisplayUserProfile.Name = "tsmiDisplayUserProfile";
-            this.tsmiDisplayUserProfile.Size = new System.Drawing.Size(260, 22);
-            this.tsmiDisplayUserProfile.Text = "このユーザーのプロフィールを表示する(&P)";
-            this.tsmiDisplayUserProfile.Click += new System.EventHandler(this.tsmiDisplayUserProfile_Click);
+            this.lstvList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstvList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.lstvList.ContextMenuStrip = this.menuRow;
+            this.lstvList.FullRowSelect = true;
+            this.lstvList.GridLines = true;
+            this.lstvList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lstvList.Location = new System.Drawing.Point(12, 12);
+            this.lstvList.MultiSelect = false;
+            this.lstvList.Name = "lstvList";
+            this.lstvList.OwnerDraw = true;
+            this.lstvList.Size = new System.Drawing.Size(387, 225);
+            this.lstvList.TabIndex = 0;
+            this.lstvList.UseCompatibleStateImageBehavior = false;
+            this.lstvList.View = System.Windows.Forms.View.Details;
+            this.lstvList.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstvList_ColumnWidthChanging);
+            this.lstvList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lstvList_DrawColumnHeader);
+            this.lstvList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lstvList_DrawSubItem);
+            this.lstvList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lstvList_MouseMove);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "";
+            this.columnHeader1.Width = 48;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "ユーザー名";
+            this.columnHeader2.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "名称";
+            this.columnHeader3.Width = 100;
             // 
             // FrmFollower
             // 
@@ -190,8 +190,6 @@
             this.Text = "...";
             this.Load += new System.EventHandler(this.FrmFollower_Load);
             this.menuRow.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,7 +197,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView lstvList;
+        private StarlitTwit.ListViewEx lstvList;
         private System.Windows.Forms.Button btnAppend;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;

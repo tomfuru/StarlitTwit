@@ -121,6 +121,9 @@
     <Compile Include="UserControls\ImageListWrapper.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\ListViewEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\MyToolTip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -252,6 +255,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\icon.ico" />
+    <None Include="Resources\nowloading.gif" />
     <None Include="StarlitTwit.manifest" />
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +265,7 @@
     <Content Include="Documents\TwitterAPI.txt" />
     <Content Include="Documents\仕様.txt" />
     <Content Include="Resources\cross.bmp" />
+    <Content Include="Resources\Image1.gif" />
     <None Include="Resources\NowLoadingL.gif" />
     <None Include="Resources\NowLoadingS.gif" />
   </ItemGroup>
