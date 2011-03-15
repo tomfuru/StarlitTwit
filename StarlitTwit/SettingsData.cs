@@ -193,6 +193,26 @@ namespace StarlitTwit
         #endregion (URL関係)
 
         //-------------------------------------------------------------------------------
+        #region 画像サムネイル関係
+        //-------------------------------------------------------------------------------
+        /// <summary>TwitPicサムネイル</summary>
+        public TwitPicThumbnailType ThumbType_twitpic;
+        /// <summary>movapicサムネイル</summary>
+        public movapicThumbnailType ThumbType_movapic;
+        /// <summary>photozouサムネイル</summary>
+        public PhotozouThumbnailType ThumbType_photozou;
+        /// <summary>img_lyサムネイル</summary>
+        public imglyThumbnailType ThumbType_img_ly;
+        /// <summary>yFrogサムネイル</summary>
+        public yFrogThumbnailType ThumbType_yFrog;
+        /// <summary>plixi,tweetphotoサムネイル</summary>
+        public plixiThumbnailType ThumbType_plixi;
+        /// <summary>ow.lyサムネイル</summary>
+        public owlyThumbnailType ThumbType_ow_ly;
+        //-------------------------------------------------------------------------------
+        #endregion (画像サムネイル関係)
+
+        //-------------------------------------------------------------------------------
         #region その他
         //-------------------------------------------------------------------------------
         /// <summary>タブデータ</summary>

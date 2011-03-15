@@ -243,9 +243,17 @@ namespace StarlitTwit
         //
         private void InitializeControl()
         {
+            // サムネイル設定
+            SetComboBoxEnumValue(cmbThumbimgly,typeof(imglyThumbnailType));
+            SetComboBoxEnumValue(cmbThumbmovapic,typeof(movapicThumbnailType));
+            SetComboBoxEnumValue(cmbThumbowly,typeof(owlyThumbnailType));
+            SetComboBoxEnumValue(cmbThumbPhotozou,typeof(PhotozouThumbnailType));
+            SetComboBoxEnumValue(cmbThumbplixi, typeof(plixiThumbnailType));
+            SetComboBoxEnumValue(cmbThumbTwitpic, typeof(TwitPicThumbnailType));
+            SetComboBoxEnumValue(cmbThumbyFrog,typeof(yFrogThumbnailType));
+
             // URL短縮サービスコンボボックス
-            URLShortenType[] types = (URLShortenType[])Enum.GetValues(typeof(URLShortenType));
-            foreach (URLShortenType type in types) { cmbURLShortenType.Items.Add(type); }
+            SetComboBoxEnumValue(cmbURLShortenType, typeof(URLShortenType));
         }
         #endregion (InitializeControl)
         //-------------------------------------------------------------------------------
@@ -321,54 +329,41 @@ namespace StarlitTwit
             chbDispReplyTooltip.Tag = numReplyTooltipDepth;
         }
         #endregion (SetAssociateData)
-        //-------------------------------------------------------------------------------
+        //===============================================================================
         #region -SetSettingsData 設定データを設定
         //-------------------------------------------------------------------------------
         //
         private void SetSettingsData()
         {
-            SetGetTweetData(SettingsData);
-            SetDispTweetData(SettingsData);
-            SetFontAndColorData(SettingsData);
-            SetOtherData(SettingsData);
-        }
-        #endregion (SetSettingsData)
-        //-------------------------------------------------------------------------------
-        #region -SetGetTweetData 取得系データ設定
-        //-------------------------------------------------------------------------------
-        //
-        private void SetGetTweetData(SettingsData setting)
-        {
-            numDirect_First.Value = setting.FirstGetNum_Direct;
-            numHistory_First.Value = setting.FirstGetNum_History;
-            numReply_First.Value = setting.FirstGetNum_Reply;
-            numTimeline_First.Value = setting.FirstGetNum_Home;
+            #region ■■取得設定■■
+            //-------------------------------------------------------------------------------
+            numDirect_First.Value = SettingsData.FirstGetNum_Direct;
+            numHistory_First.Value = SettingsData.FirstGetNum_History;
+            numReply_First.Value = SettingsData.FirstGetNum_Reply;
+            numTimeline_First.Value = SettingsData.FirstGetNum_Home;
 
-            numDirect_Add.Value = setting.RenewGetNum_Direct;
-            numHistory_Add.Value = setting.RenewGetNum_History;
-            numReply_Add.Value = setting.RenewGetNum_Reply;
-            numTimeline_Add.Value = setting.RenewGetNum_Home;
+            numDirect_Add.Value = SettingsData.RenewGetNum_Direct;
+            numHistory_Add.Value = SettingsData.RenewGetNum_History;
+            numReply_Add.Value = SettingsData.RenewGetNum_Reply;
+            numTimeline_Add.Value = SettingsData.RenewGetNum_Home;
 
-            numDirect_Interval.Value = setting.GetInterval_Direct;
-            numHistory_Interval.Value = setting.GetInterval_History;
-            numReply_Interval.Value = setting.GetInterval_Reply;
-            numTimeline_Interval.Value = setting.GetInterval_Home;
+            numDirect_Interval.Value = SettingsData.GetInterval_Direct;
+            numHistory_Interval.Value = SettingsData.GetInterval_History;
+            numReply_Interval.Value = SettingsData.GetInterval_Reply;
+            numTimeline_Interval.Value = SettingsData.GetInterval_Home;
 
-            numProfile_Interval.Value = setting.GetInterval_Profile;
-        }
-        #endregion (SetGetTweetData)
-        //-------------------------------------------------------------------------------
-        #region -SetDispTweetData ツイート表示系データ設定
-        //-------------------------------------------------------------------------------
-        //
-        private void SetDispTweetData(SettingsData setting)
-        {
-            txtNameFormat.Text = setting.NameFormat;
-            txtNameFormatRT.Text = setting.NameFormatRetweet;
-            txtNameFormatDM.Text = setting.NameFormatDM;
-            txtNameFormatSearch.Text = setting.NameFormatSearch;
+            numProfile_Interval.Value = SettingsData.GetInterval_Profile;
+            //-------------------------------------------------------------------------------
+            #endregion
 
-            switch (setting.QuoteType) {
+            #region ■■表示設定■■
+            //-------------------------------------------------------------------------------
+            txtNameFormat.Text = SettingsData.NameFormat;
+            txtNameFormatRT.Text = SettingsData.NameFormatRetweet;
+            txtNameFormatDM.Text = SettingsData.NameFormatDM;
+            txtNameFormatSearch.Text = SettingsData.NameFormatSearch;
+
+            switch (SettingsData.QuoteType) {
                 case QuoteType.QT:
                     rdbQT.Checked = true;
                     break;
@@ -380,67 +375,77 @@ namespace StarlitTwit
                     break;
             }
 
-            chbDispIcon.Checked = setting.DisplayIcon;
-            numIconSize.Value = setting.IconSize;
-        }
-        #endregion (SetDispTweetData)
-        //-------------------------------------------------------------------------------
-        #region -SetFontAndColorData フォント・色系データ設定
-        //-------------------------------------------------------------------------------
-        //
-        private void SetFontAndColorData(SettingsData setting)
-        {
+            chbDispIcon.Checked = SettingsData.DisplayIcon;
+            numIconSize.Value = SettingsData.IconSize;
+            //-------------------------------------------------------------------------------
+            #endregion ■■表示設定■■
+
+            #region ■■フォント・色設定■■
+            //-------------------------------------------------------------------------------
             // Font
-            txtExNormalTitle.Font = setting.FontNormalTweetTitle;
-            txtExNormalTitle.ForeColor = setting.ColorNormalTweetTitle;
-            txtExNormalText.Font = setting.FontNormalTweetText;
-            txtExNormalText.ForeColor = setting.ColorNormalTweetText;
-            txtExReplyToMeTitle.Font = setting.FontReplyToMeTweetTitle;
-            txtExReplyToMeTitle.ForeColor = setting.ColorReplyToMeTweetTitle;
-            txtExReplyToMeText.Font = setting.FontReplyToMeTweetText;
-            txtExReplyToMeText.ForeColor = setting.ColorReplyToMeTweetText;
-            txtExReplyToOtherTitle.Font = setting.FontReplyToOtherTweetTitle;
-            txtExReplyToOtherTitle.ForeColor = setting.ColorReplyToOtherTweetTitle;
-            txtExReplyToOtherText.Font = setting.FontReplyToOtherTweetText;
-            txtExReplyToOtherText.ForeColor = setting.ColorReplyToOtherTweetText;
-            txtExRTTitle.Font = setting.FontRTTweetTitle;
-            txtExRTTitle.ForeColor = setting.ColorRTTweetTitle;
-            txtExRTText.Font = setting.FontRTTweetText;
-            txtExRTText.ForeColor = setting.ColorRTTweetText;
+            txtExNormalTitle.Font = SettingsData.FontNormalTweetTitle;
+            txtExNormalText.Font = SettingsData.FontNormalTweetText;
+            txtExReplyToMeTitle.Font = SettingsData.FontReplyToMeTweetTitle;
+            txtExReplyToMeText.Font = SettingsData.FontReplyToMeTweetText;
+            txtExReplyToOtherTitle.Font = SettingsData.FontReplyToOtherTweetTitle;
+            txtExReplyToOtherText.Font = SettingsData.FontReplyToOtherTweetText;
+            txtExRTTitle.Font = SettingsData.FontRTTweetTitle;
+            txtExRTText.Font = SettingsData.FontRTTweetText;
+
+            // ForeColor
+            txtExNormalTitle.ForeColor = SettingsData.ColorNormalTweetTitle;
+            txtExNormalText.ForeColor = SettingsData.ColorNormalTweetText;
+            txtExReplyToMeTitle.ForeColor = SettingsData.ColorReplyToMeTweetTitle;
+            txtExReplyToMeText.ForeColor = SettingsData.ColorReplyToMeTweetText;
+            txtExReplyToOtherTitle.ForeColor = SettingsData.ColorReplyToOtherTweetTitle;
+            txtExReplyToOtherText.ForeColor = SettingsData.ColorReplyToOtherTweetText;
+            txtExRTTitle.ForeColor = SettingsData.ColorRTTweetTitle;
+            txtExRTText.ForeColor = SettingsData.ColorRTTweetText;
 
             // BackColor
-            txtBCNormalUnSelected.BackColor = setting.ColorNormalTweetBackUnselected;
-            txtBCNormalSelected.BackColor = setting.ColorNormalTweetBackSelected;
-            txtBCReplyToMeUnSelected.BackColor = setting.ColorReplyToMeTweetBackUnselected;
-            txtBCReplyToMeSelected.BackColor = setting.ColorReplyToMeTweetBackSelected;
-            txtBCReplyToOtherUnSelected.BackColor = setting.ColorReplyToOtherTweetBackUnselected;
-            txtBCReplyToOtherSelected.BackColor = setting.ColorReplyToOtherTweetBackSelected;
-            txtBCRTUnSelected.BackColor = setting.ColorRTTweetBackUnselected;
-            txtBCRTSelected.BackColor = setting.ColorRTTweetBackSelected;
+            txtBCNormalUnSelected.BackColor = SettingsData.ColorNormalTweetBackUnselected;
+            txtBCNormalSelected.BackColor = SettingsData.ColorNormalTweetBackSelected;
+            txtBCReplyToMeUnSelected.BackColor = SettingsData.ColorReplyToMeTweetBackUnselected;
+            txtBCReplyToMeSelected.BackColor = SettingsData.ColorReplyToMeTweetBackSelected;
+            txtBCReplyToOtherUnSelected.BackColor = SettingsData.ColorReplyToOtherTweetBackUnselected;
+            txtBCReplyToOtherSelected.BackColor = SettingsData.ColorReplyToOtherTweetBackSelected;
+            txtBCRTUnSelected.BackColor = SettingsData.ColorRTTweetBackUnselected;
+            txtBCRTSelected.BackColor = SettingsData.ColorRTTweetBackSelected;
+            //-------------------------------------------------------------------------------
+            #endregion ■■フォント・色設定■■
+
+            #region ■■サムネイル設定■■
+            //-------------------------------------------------------------------------------
+            cmbThumbimgly.SelectedItem = SettingsData.ThumbType_img_ly;
+            cmbThumbmovapic.SelectedItem = SettingsData.ThumbType_movapic;
+            cmbThumbowly.SelectedItem = SettingsData.ThumbType_ow_ly;
+            cmbThumbPhotozou.SelectedItem = SettingsData.ThumbType_photozou;
+            cmbThumbplixi.SelectedItem = SettingsData.ThumbType_plixi;
+            cmbThumbTwitpic.SelectedItem = SettingsData.ThumbType_twitpic;
+            cmbThumbyFrog.SelectedItem = SettingsData.ThumbType_yFrog;
+            //-------------------------------------------------------------------------------
+            #endregion (■■サムネイル設定■■)
+
+            #region ■■その他設定■■
+            //-------------------------------------------------------------------------------
+            txtHeader.Text = SettingsData.Header;
+            txtFooter.Text = SettingsData.Footer;
+
+            chbDispThumbnail.Checked = SettingsData.DisplayThumbnail;
+            numThumbnailInterval.Value = SettingsData.DisplayThumbnailInterval;
+            chbDispReplyTooltip.Checked = SettingsData.DisplayReplyToolTip;
+            numReplyTooltipDepth.Value = SettingsData.DisplayReplyToolTipDepth;
+            chbDispReplyBaloon.Checked = SettingsData.DisplayReplyBaloon;
+            chbDispDMBaloon.Checked = SettingsData.DisplayDMBaloon;
+
+            cmbURLShortenType.SelectedItem = SettingsData.URLShortenType;
+
+            chbUseInternalWebBrowser.Checked = SettingsData.UseInternalWebBrowser;
+            txtWebBrowserPath.Text = SettingsData.WebBrowserPath;
+            //-------------------------------------------------------------------------------
+            #endregion ■■その他設定■■
         }
-        #endregion (SetFontAndColorData)
-        //-------------------------------------------------------------------------------
-        #region -SetOtherData その他設定
-        //-------------------------------------------------------------------------------
-        //
-        private void SetOtherData(SettingsData setting)
-        {
-            txtHeader.Text = setting.Header;
-            txtFooter.Text = setting.Footer;
-
-            chbDispThumbnail.Checked = setting.DisplayThumbnail;
-            numThumbnailInterval.Value = setting.DisplayThumbnailInterval;
-            chbDispReplyTooltip.Checked = setting.DisplayReplyToolTip;
-            numReplyTooltipDepth.Value = setting.DisplayReplyToolTipDepth;
-            chbDispReplyBaloon.Checked = setting.DisplayReplyBaloon;
-            chbDispDMBaloon.Checked = setting.DisplayDMBaloon;
-
-            cmbURLShortenType.SelectedItem = setting.URLShortenType;
-
-            chbUseInternalWebBrowser.Checked = setting.UseInternalWebBrowser;
-            txtWebBrowserPath.Text = setting.WebBrowserPath;
-        }
-        #endregion (SetOtherData)
+        #endregion (SetSettingsData)
         //===============================================================================
         #region -GetSettingsData 設定データを取得
         //-------------------------------------------------------------------------------
@@ -517,6 +522,18 @@ namespace StarlitTwit
             //-------------------------------------------------------------------------------
             #endregion ■■フォント・色設定■■
 
+            #region ■■サムネイル設定■■
+            //-------------------------------------------------------------------------------
+            SettingsData.ThumbType_img_ly = (imglyThumbnailType)cmbThumbimgly.SelectedItem;
+            SettingsData.ThumbType_movapic = (movapicThumbnailType)cmbThumbmovapic.SelectedItem;
+            SettingsData.ThumbType_ow_ly = (owlyThumbnailType)cmbThumbowly.SelectedItem;
+            SettingsData.ThumbType_photozou = (PhotozouThumbnailType)cmbThumbPhotozou.SelectedItem;
+            SettingsData.ThumbType_plixi = (plixiThumbnailType)cmbThumbplixi.SelectedItem;
+            SettingsData.ThumbType_twitpic = (TwitPicThumbnailType)cmbThumbTwitpic.SelectedItem;
+            SettingsData.ThumbType_yFrog = (yFrogThumbnailType)cmbThumbyFrog.SelectedItem;
+            //-------------------------------------------------------------------------------
+            #endregion (■■サムネイル設定■■)
+
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------
             SettingsData.Header = txtHeader.Text;
@@ -537,6 +554,19 @@ namespace StarlitTwit
             #endregion ■■その他設定■■
         }
         #endregion (GetSettingsData)
+
+        //-------------------------------------------------------------------------------
+        #region -SetComboBoxEnumValue コンボボックスにEnumの値を設定します。
+        //-------------------------------------------------------------------------------
+        //
+        private void SetComboBoxEnumValue(ComboBox combobox, Type enumType)
+        {
+            if (!enumType.IsEnum) { throw new ArgumentException("enumTypeがEnum型ではありません"); }
+
+            Array array = Enum.GetValues(enumType);
+            foreach (var item in array) { combobox.Items.Add(item); }
+        }
+        #endregion (SetComboBoxEnumValue)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
     }

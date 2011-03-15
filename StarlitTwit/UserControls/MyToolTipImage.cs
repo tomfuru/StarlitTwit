@@ -263,7 +263,7 @@ namespace StarlitTwit.UserControls
         #endregion (GetPreferSize)
 
         //-------------------------------------------------------------------------------
-        #region -GetImages 画像を取得します。
+        #region -GetImages 画像を取得します。(別スレッド)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 画像を取得します。
@@ -281,14 +281,14 @@ namespace StarlitTwit.UserControls
             }
 
             if (list.Count > 0) {
-                _img = list.ToArray();
+                lock (_lockimg) { _img = list.ToArray(); }
                 if (_disp != null) {
                     OnShowToolTip(null);
                     _disp.Invoke(new Action(() => ConfigDispForm()));
                     _disp.Invalidate();
                 }
             }
-            else { _img = null; }
+            else { lock (_lockimg) { _img = null; } }
 
             ImageAnimator.StopAnimate(_loadingimg, evh);
             _gettingImage = false;

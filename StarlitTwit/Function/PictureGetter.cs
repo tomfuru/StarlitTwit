@@ -7,9 +7,17 @@ using System.Net;
 using System.Xml.Linq;
 using System.IO;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace StarlitTwit
 {
+    //public enum TwitPicThumbnailType : byte
+    //{
+    //    thumb,
+    //    mini,
+    //    表示しない
+    //}
     public static partial class PictureGetter
     {
         /// <summary>[static]読み込み可能な画像の拡張子</summary>
@@ -48,27 +56,41 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class TwitpicConverter : IThumbnailConverter
         {
+            const string CHECKPATTERN = @"^http://twitpic.com/[a-z0-9]+$";
+            const string THUMBFORMAT = @"http://twitpic.com/show/{0}/{1}";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
             {
-                const string TWITPIC = @"twitpic.com";
+                return Regex.IsMatch(url, CHECKPATTERN);
 
-                string hostname = Utilization.GetHostName(url);
-                if (hostname == null) { return false; }
-
-                try {
-                    IPHostEntry entry = Dns.GetHostEntry(hostname);
-                    IPHostEntry twitpicentry = Dns.GetHostEntry(TWITPIC);
-                    return (entry.AddressList.Except(twitpicentry.AddressList).Count() == 0);
-                }
-                catch (SocketException) { return false; }
+                //const string TWITPIC = @"twitpic.com";
+                //string hostname = Utilization.GetHostName(url);
+                //if (hostname == null) { return false; }
+                //try {
+                //    IPHostEntry entry = Dns.GetHostEntry(hostname);
+                //    IPHostEntry twitpicentry = Dns.GetHostEntry(TWITPIC);
+                //    return (entry.AddressList.Except(twitpicentry.AddressList).Count() == 0);
+                //}
+                //catch (SocketException) { return false; }
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                string[] urlpartials = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                const string THUMB = "thumb";
+                const string MINI = "mini";
 
-                return urlpartials[0] + "//" + urlpartials[1] + "/show/thumb/" + urlpartials[2];
+                string type;
+                switch (FrmMain.SettingsData.ThumbType_twitpic) {
+                    case TwitPicThumbnailType.thumb:
+                        type = THUMB;
+                        break;
+                    case TwitPicThumbnailType.mini:
+                        type = MINI;
+                        break;
+                    default:
+                        return null;
+                }
+                return string.Format(THUMBFORMAT, type, url.Split('/').Last());
             }
         }
         #endregion (TwitpicConverter)
@@ -77,16 +99,18 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class PhotozouConverter : IThumbnailConverter
         {
-            private const string DOMAIN = @"http://photozou.jp/";
+            private const string CHECKPATTERN = @"^http://photozou.jp/photo/show/[0-9]+/[0-9]+$";
             private const string INFOAPI_URL = @"http://api.photozou.jp/rest/photo_info";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
             {
-                return url.StartsWith(DOMAIN);
+                return Regex.IsMatch(url, CHECKPATTERN);
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
+                if (FrmMain.SettingsData.ThumbType_photozou != PhotozouThumbnailType.表示する) { return null; }
+
                 string id = url.Split('/').Last();
                 string apiurl = INFOAPI_URL + @"?photo_id=" + id;
                 try {
@@ -107,16 +131,17 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class yFrogConverter : IThumbnailConverter
         {
-            private const string DOMAIN = @"http://yfrog.com/";
+            private const string CHECKPATTERN = @"^http://yfrog.com/[a-z0-9]+$";
             private const string THUMBNAIL = ".th.jpg";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
             {
-                return url.StartsWith(DOMAIN);
+                return Regex.IsMatch(url, CHECKPATTERN);
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
+                if (FrmMain.SettingsData.ThumbType_yFrog != yFrogThumbnailType.表示する) { return null; }
                 return url + THUMBNAIL;
             }
         }
@@ -127,20 +152,32 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class img_lyConverter : IThumbnailConverter
         {
-            private const string DOMAIN = @"http://img.ly/";
+            private const string CHECKPATTERN = @"^http://img.ly/[0-9a-zA-Z]+$";
+            private const string THUMBFORMAT = @"http://img.ly/show/{0}/{1}";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
             {
-                return url.StartsWith(DOMAIN);
+                return Regex.IsMatch(url, CHECKPATTERN);
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(DOMAIN);
-                sb.Append("show/thumb/");
-                sb.Append(url.Split('/').Last());
-                return sb.ToString();
+                const string THUMB = "thumb";
+                const string MINI = "mini";
+
+                string type;
+                switch (FrmMain.SettingsData.ThumbType_img_ly) {
+                    case imglyThumbnailType.thumb:
+                        type = THUMB;
+                        break;
+                    case imglyThumbnailType.mini:
+                        type = MINI;
+                        break;
+                    default:
+                        return null;
+                }
+
+                return string.Format(THUMBFORMAT, type, url.Split('/').Last());
             }
         }
         //-------------------------------------------------------------------------------
@@ -150,20 +187,96 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class movapicConverter : IThumbnailConverter
         {
-            private const string DOMAIN = @"http://movapic.com/";
+            private const string CHECKPATTERN = @"^http://movapic.com/pic/[0-9]{15}[0-9a-z]+$";
+            private const string THUMBFORMAT = @"http://image.movapic.com/pic/{0}_{1}.jpeg";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
             {
-                return url.StartsWith(DOMAIN);
+                return Regex.IsMatch(url, CHECKPATTERN);
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                return string.Format("http://image.movapic.com/pic/s_{0}.jpeg", url.Split('/').Last());
+                const char S = 's';
+                const char T = 't';
+
+                char type;
+                switch (FrmMain.SettingsData.ThumbType_movapic) {
+                    case movapicThumbnailType.s:
+                        type = S;
+                        break;
+                    case movapicThumbnailType.t:
+                        type = T;
+                        break;
+                    default:
+                        return null;
+                }
+
+                return string.Format(THUMBFORMAT, type, url.Split('/').Last());
             }
         }
         //-------------------------------------------------------------------------------
         #endregion ((class)movapic Converter)
+        //-------------------------------------------------------------------------------
+        #region (class)plixi Converter
+        //-------------------------------------------------------------------------------
+        private class plixiConverter : IThumbnailConverter
+        {
+            private const string PATTERN = @"^http://(plixi|tweetphoto).com/p/[0-9]+$";
+            private const string THUMBURLFORMAT = @"http://api.plixi.com/api/TPAPI.svc/imagefromurl?size={0}&url={1}";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return Regex.IsMatch(url, PATTERN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                const string THUMBNAIL = "thumbnail";
+                const string MEDIUM = "medium";
+                const string BIG = "big";
+
+                string type;
+                switch (FrmMain.SettingsData.ThumbType_plixi) {
+                    case plixiThumbnailType.thumbnail:
+                        type = THUMBNAIL;
+                        break;
+                    case plixiThumbnailType.medium:
+                        type = MEDIUM;
+                        break;
+                    case plixiThumbnailType.big:
+                        type = BIG;
+                        break;
+                    default:
+                        return null;
+                }
+
+                return string.Format(THUMBURLFORMAT, type, url);
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)plixi Converter)
+        //-------------------------------------------------------------------------------
+        #region (class)ow.ly Converter
+        //-------------------------------------------------------------------------------
+        private class ow_lyConverter : IThumbnailConverter
+        {
+            private const string CHECKPATTERN = @"^http://ow.ly/i/[0-9a-zA-Z]+$";
+            private const string THUMBFORMAT = @"http://static.ow.ly/photos/thumb/{0}.jpg";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return Regex.IsMatch(url, CHECKPATTERN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                if (FrmMain.SettingsData.ThumbType_ow_ly != owlyThumbnailType.表示する) { return null; }
+                return string.Format(THUMBFORMAT, url.Split('/').Last());
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (ow.ly Converter)
         //-------------------------------------------------------------------------------
         #endregion ((classes)実装コンバータ)
 
@@ -181,7 +294,9 @@ namespace StarlitTwit
                             new PhotozouConverter(),
                             new yFrogConverter(),
                             new img_lyConverter(),
-                            new movapicConverter()
+                            new movapicConverter(),
+                            new plixiConverter(),
+                            new ow_lyConverter()
                         };
         }
         //-------------------------------------------------------------------------------
@@ -212,7 +327,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public static string ConvertURL(string url)
         {
-            if (IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention,StringComparison.OrdinalIgnoreCase))) { return url; }
+            if (IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention, StringComparison.OrdinalIgnoreCase))) { return url; }
             else {
                 foreach (var converter in CONVERTERS) {
                     if (converter.IsEffectiveURL(url)) {
@@ -258,4 +373,80 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (GetImageCodecInfo)
     }
+
+    //-------------------------------------------------------------------------------
+    #region TwitPicThumbnailType 列挙体
+    //-------------------------------------------------------------------------------
+    public enum TwitPicThumbnailType : byte
+    {
+        thumb,
+        mini,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (TwitPicThumbnailType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region PhotozouThumbnailType 列挙体
+    //-------------------------------------------------------------------------------
+    public enum PhotozouThumbnailType : byte
+    {
+        表示する,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (PhotozouThumbnailType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region yFrogThumbnailType 列挙体
+    //-------------------------------------------------------------------------------
+    public enum yFrogThumbnailType : byte
+    {
+        表示する,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (yFrogThumbnailType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region imglyThumbnailType 列挙体
+    //-------------------------------------------------------------------------------
+    public enum imglyThumbnailType : byte
+    {
+        thumb,
+        mini,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (imglyThumbnailType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region movapicThumbnailType 列挙体
+    //-------------------------------------------------------------------------------
+    public enum movapicThumbnailType : byte
+    {
+        s,
+        t,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (movapicThumbnailType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region plixiThumbnailType 列挙体
+    //-------------------------------------------------------------------------------
+    public enum plixiThumbnailType : byte
+    {
+        thumbnail,
+        medium,
+        big,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (plixiThumbnailType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region owlyThumbnailType 列挙体：
+    //-------------------------------------------------------------------------------
+    public enum owlyThumbnailType
+    {
+        表示する,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (owlyThumbnailType)
 }
