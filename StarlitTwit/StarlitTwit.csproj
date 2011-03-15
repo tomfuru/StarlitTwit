@@ -40,7 +40,13 @@
   <PropertyGroup>
     <ApplicationManifest>StarlitTwit.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json.Net35">
+      <HintPath>..\..\Lib\Json40r1\Bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -255,7 +261,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\icon.ico" />
-    <None Include="Resources\nowloading.gif" />
     <None Include="StarlitTwit.manifest" />
   </ItemGroup>
   <ItemGroup>
@@ -265,7 +270,6 @@
     <Content Include="Documents\TwitterAPI.txt" />
     <Content Include="Documents\仕様.txt" />
     <Content Include="Resources\cross.bmp" />
-    <Content Include="Resources\Image1.gif" />
     <None Include="Resources\NowLoadingL.gif" />
     <None Include="Resources\NowLoadingS.gif" />
   </ItemGroup>

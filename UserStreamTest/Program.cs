@@ -5,20 +5,19 @@ using System.Text;
 using System.Net;
 using System.IO;
 using StarlitTwit;
+using System.Windows.Forms;
 
 namespace UserStreamTest
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
-            SettingsData data = SettingsData.Restore();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-            Twitter twitter = new Twitter();
-            
-            
-
-            twitter.userstream_statuses_sample();
+            Application.Run(new Form1());
         }
     }
 }

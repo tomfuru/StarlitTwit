@@ -10,6 +10,11 @@ using System.Xml.Linq;
 using System.Xml;
 using System.Globalization;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Threading;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace StarlitTwit
 {
@@ -1248,21 +1253,49 @@ namespace StarlitTwit
         /// <summary>
         /// テスト
         /// </summary>
-        public void userstream_statuses_sample()
+        public CancellationTokenSource userstream_statuses_sample(Action<string> action)
         {
             const string URL_SAMPLE = @"http://stream.twitter.com/1/statuses/sample.json";
             string url = GetUrlWithOAuthParameters(URL_SAMPLE, GET, null);
 
-            WebRequest req = WebRequest.Create(url);
+            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
 
-            WebResponse res = req.GetResponse();
-            using (Stream stream = res.GetResponseStream())
-            using (StreamReader sr = new StreamReader(stream)) {
-                while (!sr.EndOfStream) {
-                    string line = sr.ReadLine();
-                    Console.WriteLine(line);
+
+            Utilization.InvokeTransaction(() =>
+            {
+                WebRequest req = WebRequest.Create(url);
+                WebResponse res = req.GetResponse();
+                //using (Stream stream = res.GetResponseStream())
+                //using (StreamReader sr = new StreamReader(stream)) {
+                //    while (!sr.EndOfStream) {
+                //        if (token.IsCancellationRequested) {
+                //            string str = sr.ReadToEnd();
+                //            res.Close();
+                //            break;
+                //        }
+                //        string line = sr.ReadLine();
+                //        action(line);
+                //        //Console.WriteLine(line);
+                //    }
+                //}
+
+                using (Stream stream = res.GetResponseStream())
+                using (StreamReader sr = new StreamReader(stream)) {
+                    while (!sr.EndOfStream) {
+                        if (token.IsCancellationRequested) {
+                            string str = sr.ReadToEnd();
+                            res.Close();
+                            break;
+                        }
+                        string line = sr.ReadLine();
+                        action(line);
+                        //Console.WriteLine(line);
+                    }
                 }
-            }
+            });
+
+            return cts;
         }
         //-------------------------------------------------------------------------------
         #endregion (UserStream)
@@ -1999,7 +2032,7 @@ namespace StarlitTwit
         {
             bool b;
             return (bool.TryParse(el.Value, out b)) ? b :
-                   (el.Value == "") ? bool.Parse(el.Attribute("nil").Value) : 
+                   (el.Value == "") ? bool.Parse(el.Attribute("nil").Value) :
                                       defaultvalue;
         }
         #endregion (ParseBoolConsideringNil)
