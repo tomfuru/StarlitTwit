@@ -257,8 +257,21 @@ namespace StarlitTwit.UserControls
         //
         private Size GetPreferSize(Size size)
         {
-            return new Size(Math.Min(size.Width, _maxSize.Width) + PADDING * 2,
-                            Math.Min(size.Height, _maxSize.Height) + PADDING * 2);
+            double max_ratio = (double)_maxSize.Height / (double)_maxSize.Width;
+            double ratio = (double)size.Height / (double)size.Width;
+
+            if (ratio > max_ratio) {
+                if (size.Height > _maxSize.Height) {
+                    size = new Size((int)Math.Round(_maxSize.Width / ratio), _maxSize.Height);
+                }
+            }
+            else {
+                if (size.Width > _maxSize.Width) {
+                    size = new Size(_maxSize.Width, (int)Math.Round(_maxSize.Height * ratio));
+                }
+            }
+
+            return new Size(size.Width + PADDING * 2, size.Height + PADDING * 2);
         }
         #endregion (GetPreferSize)
 
