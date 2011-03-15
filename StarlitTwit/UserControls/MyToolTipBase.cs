@@ -15,7 +15,7 @@ namespace StarlitTwit
         #region メンバー
         //-------------------------------------------------------------------------------
         /// <summary>表示部分</summary>
-        protected FrmDisp _disp = null;
+        private FrmDisp _disp = null;
         /// <summary>タイマー</summary>
         private Timer _timer = null;
         /// <summary>現在の状態</summary>
@@ -171,6 +171,17 @@ namespace StarlitTwit
             }
         }
         #endregion (DisplayControl)
+        //-------------------------------------------------------------------------------
+        #region #DisplayForm プロパティ：表示フォーム
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ツールチップ表示フォーム
+        /// </summary>
+        protected FrmDisp DisplayForm
+        {
+            get { return _disp; }
+        }
+        #endregion (DisplayForm)
         //-------------------------------------------------------------------------------
         #endregion (プロパティ)
 
@@ -412,12 +423,12 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (Display)
         //-------------------------------------------------------------------------------
-        #region -Hide 隠蔽処理
+        #region +Hide 隠蔽処理
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 隠蔽処理
         /// </summary>
-        private void Hide()
+        public void Hide()
         {
             lock (_lockTimer) {
                 if (_timer != null) {
@@ -548,9 +559,19 @@ namespace StarlitTwit
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.ShowInTaskbar = false;
                 this.DoubleBuffered = true;
+                this.Enter += new EventHandler(FrmDisp_Enter);
             }
             #endregion (コンストラクタ)
 
+            //-------------------------------------------------------------------------------
+            #region FrmDisp_Enter フォームEnter時
+            //-------------------------------------------------------------------------------
+            //
+            private void FrmDisp_Enter(object sender, EventArgs e)
+            {
+                this.Close();
+            }
+            #endregion (FrmDisp_Enter)
 
             //-------------------------------------------------------------------------
             #region CreateParams

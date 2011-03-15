@@ -132,7 +132,7 @@ namespace StarlitTwit.UserControls
         private void Timer_Tick(object sender, EventArgs e)
         {
             lock (_lockimg) {
-                if (_img == null || _disp == null || _disp.IsDisposed) {
+                if (_img == null || DisplayForm == null || DisplayForm.IsDisposed) {
                     _timer.Stop();
                     return;
                 }
@@ -144,7 +144,7 @@ namespace StarlitTwit.UserControls
             }
 
             ConfigDispForm();
-            _disp.Refresh();
+            DisplayForm.Refresh();
         }
         #endregion (Timer_Tick)
         //-------------------------------------------------------------------------------
@@ -154,8 +154,8 @@ namespace StarlitTwit.UserControls
         private void Image_Animate(object sender, EventArgs e)
         {
             try {
-                if (_disp != null) {
-                    _disp.Invalidate();
+                if (DisplayForm != null) {
+                    DisplayForm.Invalidate();
                 }
             }
             catch (InvalidOperationException) { }
@@ -176,7 +176,10 @@ namespace StarlitTwit.UserControls
                 if (_imgURLs == null || _imgURLs.Length == 0) { e.Cancel = true; return; }
                 Size size;
                 if (_img == null) {
-                    if (!_gettingImage) { Utilization.InvokeTransaction(() => GetImages()); }
+                    if (!_gettingImage) {
+                        _loadingimg = StarlitTwit.Properties.Resources.NowLoadingL;
+                        Utilization.InvokeTransaction(() => GetImages());
+                    }
 
                     size = StarlitTwit.Properties.Resources.NowLoadingL.Size;
                     _dispLoading = true;
@@ -284,7 +287,6 @@ namespace StarlitTwit.UserControls
         private void GetImages()
         {
             EventHandler evh = new EventHandler(Image_Animate);
-            _loadingimg = StarlitTwit.Properties.Resources.NowLoadingL;
             ImageAnimator.Animate(_loadingimg, evh);
 
             List<Image> list = new List<Image>();
@@ -295,10 +297,13 @@ namespace StarlitTwit.UserControls
 
             if (list.Count > 0) {
                 lock (_lockimg) { _img = list.ToArray(); }
-                if (_disp != null) {
-                    OnShowToolTip(null);
-                    _disp.Invoke(new Action(() => ConfigDispForm()));
-                    _disp.Invalidate();
+                if (DisplayForm != null) {
+                    CancelEventArgs e = new CancelEventArgs();
+                    OnShowToolTip(e);
+                    if (!e.Cancel) {
+                        DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                        DisplayForm.Invalidate();
+                    }
                 }
             }
             else { lock (_lockimg) { _img = null; } }
