@@ -251,6 +251,7 @@ namespace StarlitTwit
             SetComboBoxEnumValue(cmbThumbplixi, typeof(plixiThumbnailType));
             SetComboBoxEnumValue(cmbThumbTwitpic, typeof(TwitPicThumbnailType));
             SetComboBoxEnumValue(cmbThumbyFrog,typeof(yFrogThumbnailType));
+            SetComboBoxEnumValue(cmbThumbTwipplePhoto, typeof(twipplephotoThumbnailType));
 
             // URL短縮サービスコンボボックス
             SetComboBoxEnumValue(cmbURLShortenType, typeof(URLShortenType));
@@ -423,6 +424,7 @@ namespace StarlitTwit
             cmbThumbplixi.SelectedItem = SettingsData.ThumbType_plixi;
             cmbThumbTwitpic.SelectedItem = SettingsData.ThumbType_twitpic;
             cmbThumbyFrog.SelectedItem = SettingsData.ThumbType_yFrog;
+            cmbThumbTwipplePhoto.SelectedItem = SettingsData.ThumbType_twipplephoto;
             //-------------------------------------------------------------------------------
             #endregion (■■サムネイル設定■■)
 
@@ -531,6 +533,7 @@ namespace StarlitTwit
             SettingsData.ThumbType_plixi = (plixiThumbnailType)cmbThumbplixi.SelectedItem;
             SettingsData.ThumbType_twitpic = (TwitPicThumbnailType)cmbThumbTwitpic.SelectedItem;
             SettingsData.ThumbType_yFrog = (yFrogThumbnailType)cmbThumbyFrog.SelectedItem;
+            SettingsData.ThumbType_twipplephoto = (twipplephotoThumbnailType)cmbThumbTwipplePhoto.SelectedItem;
             //-------------------------------------------------------------------------------
             #endregion (■■サムネイル設定■■)
 

@@ -29,6 +29,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabpgGet = new System.Windows.Forms.TabPage();
+            this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
             this.label39 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -37,8 +38,20 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_Add = new StarlitTwit.NumericUpDownExtended();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_First = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
             this.tabpgDisp = new System.Windows.Forms.TabPage();
             this.lblNameFormatSearchSample = new System.Windows.Forms.Label();
             this.lblNameFormatDMSample = new System.Windows.Forms.Label();
@@ -122,6 +135,21 @@
             this.btnFontNormalText = new System.Windows.Forms.Button();
             this.txtExNormalTitle = new System.Windows.Forms.TextBox();
             this.btnFontNormalTitle = new System.Windows.Forms.Button();
+            this.tabpgThumbnail = new System.Windows.Forms.TabPage();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.cmbThumbowly = new System.Windows.Forms.ComboBox();
+            this.cmbThumbplixi = new System.Windows.Forms.ComboBox();
+            this.cmbThumbmovapic = new System.Windows.Forms.ComboBox();
+            this.cmbThumbimgly = new System.Windows.Forms.ComboBox();
+            this.cmbThumbyFrog = new System.Windows.Forms.ComboBox();
+            this.cmbThumbPhotozou = new System.Windows.Forms.ComboBox();
+            this.cmbThumbTwitpic = new System.Windows.Forms.ComboBox();
+            this.label45 = new System.Windows.Forms.Label();
             this.tabpgElse = new System.Windows.Forms.TabPage();
             this.cmbURLShortenType = new System.Windows.Forms.ComboBox();
             this.label40 = new System.Windows.Forms.Label();
@@ -143,47 +171,12 @@
             this.chbDispThumbnail = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.tabpgThumbnail = new System.Windows.Forms.TabPage();
-            this.label45 = new System.Windows.Forms.Label();
-            this.cmbThumbTwitpic = new System.Windows.Forms.ComboBox();
-            this.cmbThumbPhotozou = new System.Windows.Forms.ComboBox();
-            this.cmbThumbyFrog = new System.Windows.Forms.ComboBox();
-            this.cmbThumbimgly = new System.Windows.Forms.ComboBox();
-            this.cmbThumbmovapic = new System.Windows.Forms.ComboBox();
-            this.cmbThumbplixi = new System.Windows.Forms.ComboBox();
-            this.cmbThumbowly = new System.Windows.Forms.ComboBox();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
-            this.label51 = new System.Windows.Forms.Label();
-            this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_First = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
+            this.label52 = new System.Windows.Forms.Label();
+            this.cmbThumbTwipplePhoto = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tabpgDisp.SuspendLayout();
-            this.grpIcon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).BeginInit();
-            this.grpQuoteType.SuspendLayout();
-            this.tabpgFontAndColor.SuspendLayout();
-            this.tabpgElse.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).BeginInit();
-            this.tabpgThumbnail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).BeginInit();
@@ -196,6 +189,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).BeginInit();
+            this.tabpgDisp.SuspendLayout();
+            this.grpIcon.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).BeginInit();
+            this.grpQuoteType.SuspendLayout();
+            this.tabpgFontAndColor.SuspendLayout();
+            this.tabpgThumbnail.SuspendLayout();
+            this.tabpgElse.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -227,6 +229,24 @@
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
+            // 
+            // numProfile_Interval
+            // 
+            this.numProfile_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numProfile_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numProfile_Interval.Location = new System.Drawing.Point(164, 176);
+            this.numProfile_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numProfile_Interval.Name = "numProfile_Interval";
+            this.numProfile_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numProfile_Interval.TabIndex = 1;
             // 
             // label39
             // 
@@ -334,6 +354,169 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "発言履歴";
             // 
+            // numTimeline_Interval
+            // 
+            this.numTimeline_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_Interval.Location = new System.Drawing.Point(293, 34);
+            this.numTimeline_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numTimeline_Interval.Name = "numTimeline_Interval";
+            this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_Interval.TabIndex = 2;
+            this.numTimeline_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_Interval
+            // 
+            this.numReply_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_Interval.Location = new System.Drawing.Point(293, 63);
+            this.numReply_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numReply_Interval.Name = "numReply_Interval";
+            this.numReply_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numReply_Interval.TabIndex = 5;
+            this.numReply_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_Interval
+            // 
+            this.numHistory_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_Interval.Location = new System.Drawing.Point(293, 92);
+            this.numHistory_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numHistory_Interval.Name = "numHistory_Interval";
+            this.numHistory_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_Interval.TabIndex = 8;
+            this.numHistory_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_Interval
+            // 
+            this.numDirect_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_Interval.Location = new System.Drawing.Point(293, 122);
+            this.numDirect_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numDirect_Interval.Name = "numDirect_Interval";
+            this.numDirect_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_Interval.TabIndex = 11;
+            this.numDirect_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numTimeline_Add
+            // 
+            this.numTimeline_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Location = new System.Drawing.Point(197, 34);
+            this.numTimeline_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Name = "numTimeline_Add";
+            this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_Add.TabIndex = 1;
+            this.numTimeline_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_Add
+            // 
+            this.numReply_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_Add.Location = new System.Drawing.Point(197, 63);
+            this.numReply_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numReply_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_Add.Name = "numReply_Add";
+            this.numReply_Add.Size = new System.Drawing.Size(56, 19);
+            this.numReply_Add.TabIndex = 4;
+            this.numReply_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_Add
+            // 
+            this.numHistory_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Location = new System.Drawing.Point(197, 92);
+            this.numHistory_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Name = "numHistory_Add";
+            this.numHistory_Add.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_Add.TabIndex = 7;
+            this.numHistory_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
             // label4
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -353,6 +536,151 @@
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 12;
             this.label5.Text = "初期取得数";
+            // 
+            // numTimeline_First
+            // 
+            this.numTimeline_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Location = new System.Drawing.Point(101, 34);
+            this.numTimeline_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Name = "numTimeline_First";
+            this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_First.TabIndex = 0;
+            this.numTimeline_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_First
+            // 
+            this.numReply_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_First.Location = new System.Drawing.Point(101, 63);
+            this.numReply_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numReply_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_First.Name = "numReply_First";
+            this.numReply_First.Size = new System.Drawing.Size(56, 19);
+            this.numReply_First.TabIndex = 3;
+            this.numReply_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_Add
+            // 
+            this.numDirect_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Location = new System.Drawing.Point(197, 122);
+            this.numDirect_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Name = "numDirect_Add";
+            this.numDirect_Add.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_Add.TabIndex = 10;
+            this.numDirect_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_First
+            // 
+            this.numHistory_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_First.Location = new System.Drawing.Point(101, 92);
+            this.numHistory_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numHistory_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_First.Name = "numHistory_First";
+            this.numHistory_First.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_First.TabIndex = 6;
+            this.numHistory_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_First
+            // 
+            this.numDirect_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_First.Location = new System.Drawing.Point(101, 122);
+            this.numDirect_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numDirect_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_First.Name = "numDirect_First";
+            this.numDirect_First.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_First.TabIndex = 9;
+            this.numDirect_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
             // 
             // tabpgDisp
             // 
@@ -1265,6 +1593,158 @@
             this.btnFontNormalTitle.UseVisualStyleBackColor = true;
             this.btnFontNormalTitle.Click += new System.EventHandler(this.btnFontConfig_Click);
             // 
+            // tabpgThumbnail
+            // 
+            this.tabpgThumbnail.Controls.Add(this.label52);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbTwipplePhoto);
+            this.tabpgThumbnail.Controls.Add(this.label51);
+            this.tabpgThumbnail.Controls.Add(this.label50);
+            this.tabpgThumbnail.Controls.Add(this.label49);
+            this.tabpgThumbnail.Controls.Add(this.label48);
+            this.tabpgThumbnail.Controls.Add(this.label47);
+            this.tabpgThumbnail.Controls.Add(this.label46);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbowly);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbplixi);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbmovapic);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbimgly);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbyFrog);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
+            this.tabpgThumbnail.Controls.Add(this.label45);
+            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
+            this.tabpgThumbnail.Name = "tabpgThumbnail";
+            this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
+            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
+            this.tabpgThumbnail.TabIndex = 4;
+            this.tabpgThumbnail.Text = "サムネイル";
+            this.tabpgThumbnail.UseVisualStyleBackColor = true;
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(8, 243);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(30, 12);
+            this.label51.TabIndex = 13;
+            this.label51.Text = "ow.ly";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(8, 207);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(88, 12);
+            this.label50.TabIndex = 12;
+            this.label50.Text = "plixi/tweetphoto";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(8, 171);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(47, 12);
+            this.label49.TabIndex = 11;
+            this.label49.Text = "movapic";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(8, 135);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(34, 12);
+            this.label48.TabIndex = 10;
+            this.label48.Text = "img.ly";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(8, 99);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(34, 12);
+            this.label47.TabIndex = 9;
+            this.label47.Text = "yFrog";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(8, 63);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(50, 12);
+            this.label46.TabIndex = 8;
+            this.label46.Text = "photozou";
+            // 
+            // cmbThumbowly
+            // 
+            this.cmbThumbowly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbowly.FormattingEnabled = true;
+            this.cmbThumbowly.Location = new System.Drawing.Point(97, 240);
+            this.cmbThumbowly.Name = "cmbThumbowly";
+            this.cmbThumbowly.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbowly.TabIndex = 7;
+            // 
+            // cmbThumbplixi
+            // 
+            this.cmbThumbplixi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbplixi.FormattingEnabled = true;
+            this.cmbThumbplixi.Location = new System.Drawing.Point(97, 204);
+            this.cmbThumbplixi.Name = "cmbThumbplixi";
+            this.cmbThumbplixi.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbplixi.TabIndex = 6;
+            // 
+            // cmbThumbmovapic
+            // 
+            this.cmbThumbmovapic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbmovapic.FormattingEnabled = true;
+            this.cmbThumbmovapic.Location = new System.Drawing.Point(97, 168);
+            this.cmbThumbmovapic.Name = "cmbThumbmovapic";
+            this.cmbThumbmovapic.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbmovapic.TabIndex = 5;
+            // 
+            // cmbThumbimgly
+            // 
+            this.cmbThumbimgly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbimgly.FormattingEnabled = true;
+            this.cmbThumbimgly.Location = new System.Drawing.Point(97, 132);
+            this.cmbThumbimgly.Name = "cmbThumbimgly";
+            this.cmbThumbimgly.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbimgly.TabIndex = 4;
+            // 
+            // cmbThumbyFrog
+            // 
+            this.cmbThumbyFrog.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbyFrog.FormattingEnabled = true;
+            this.cmbThumbyFrog.Location = new System.Drawing.Point(97, 96);
+            this.cmbThumbyFrog.Name = "cmbThumbyFrog";
+            this.cmbThumbyFrog.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbyFrog.TabIndex = 3;
+            // 
+            // cmbThumbPhotozou
+            // 
+            this.cmbThumbPhotozou.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbPhotozou.FormattingEnabled = true;
+            this.cmbThumbPhotozou.Location = new System.Drawing.Point(97, 60);
+            this.cmbThumbPhotozou.Name = "cmbThumbPhotozou";
+            this.cmbThumbPhotozou.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbPhotozou.TabIndex = 2;
+            // 
+            // cmbThumbTwitpic
+            // 
+            this.cmbThumbTwitpic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbTwitpic.FormattingEnabled = true;
+            this.cmbThumbTwitpic.Location = new System.Drawing.Point(97, 24);
+            this.cmbThumbTwitpic.Name = "cmbThumbTwitpic";
+            this.cmbThumbTwitpic.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbTwitpic.TabIndex = 1;
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(8, 27);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(39, 12);
+            this.label45.TabIndex = 0;
+            this.label45.Text = "twitpic";
+            // 
             // tabpgElse
             // 
             this.tabpgElse.Controls.Add(this.cmbURLShortenType);
@@ -1502,481 +1982,23 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // tabpgThumbnail
+            // label52
             // 
-            this.tabpgThumbnail.Controls.Add(this.label51);
-            this.tabpgThumbnail.Controls.Add(this.label50);
-            this.tabpgThumbnail.Controls.Add(this.label49);
-            this.tabpgThumbnail.Controls.Add(this.label48);
-            this.tabpgThumbnail.Controls.Add(this.label47);
-            this.tabpgThumbnail.Controls.Add(this.label46);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbowly);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbplixi);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbmovapic);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbimgly);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbyFrog);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
-            this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
-            this.tabpgThumbnail.Controls.Add(this.label45);
-            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
-            this.tabpgThumbnail.Name = "tabpgThumbnail";
-            this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
-            this.tabpgThumbnail.TabIndex = 4;
-            this.tabpgThumbnail.Text = "サムネイル";
-            this.tabpgThumbnail.UseVisualStyleBackColor = true;
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(8, 279);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(75, 12);
+            this.label52.TabIndex = 15;
+            this.label52.Text = "ついっぷるフォト";
             // 
-            // label45
+            // cmbThumbTwipplePhoto
             // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(8, 27);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(39, 12);
-            this.label45.TabIndex = 0;
-            this.label45.Text = "twitpic";
-            // 
-            // cmbThumbTwitpic
-            // 
-            this.cmbThumbTwitpic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbTwitpic.FormattingEnabled = true;
-            this.cmbThumbTwitpic.Location = new System.Drawing.Point(97, 24);
-            this.cmbThumbTwitpic.Name = "cmbThumbTwitpic";
-            this.cmbThumbTwitpic.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbTwitpic.TabIndex = 1;
-            // 
-            // cmbThumbPhotozou
-            // 
-            this.cmbThumbPhotozou.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbPhotozou.FormattingEnabled = true;
-            this.cmbThumbPhotozou.Location = new System.Drawing.Point(97, 60);
-            this.cmbThumbPhotozou.Name = "cmbThumbPhotozou";
-            this.cmbThumbPhotozou.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbPhotozou.TabIndex = 2;
-            // 
-            // cmbThumbyFrog
-            // 
-            this.cmbThumbyFrog.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbyFrog.FormattingEnabled = true;
-            this.cmbThumbyFrog.Location = new System.Drawing.Point(97, 96);
-            this.cmbThumbyFrog.Name = "cmbThumbyFrog";
-            this.cmbThumbyFrog.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbyFrog.TabIndex = 3;
-            // 
-            // cmbThumbimgly
-            // 
-            this.cmbThumbimgly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbimgly.FormattingEnabled = true;
-            this.cmbThumbimgly.Location = new System.Drawing.Point(97, 132);
-            this.cmbThumbimgly.Name = "cmbThumbimgly";
-            this.cmbThumbimgly.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbimgly.TabIndex = 4;
-            // 
-            // cmbThumbmovapic
-            // 
-            this.cmbThumbmovapic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbmovapic.FormattingEnabled = true;
-            this.cmbThumbmovapic.Location = new System.Drawing.Point(97, 168);
-            this.cmbThumbmovapic.Name = "cmbThumbmovapic";
-            this.cmbThumbmovapic.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbmovapic.TabIndex = 5;
-            // 
-            // cmbThumbplixi
-            // 
-            this.cmbThumbplixi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbplixi.FormattingEnabled = true;
-            this.cmbThumbplixi.Location = new System.Drawing.Point(97, 204);
-            this.cmbThumbplixi.Name = "cmbThumbplixi";
-            this.cmbThumbplixi.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbplixi.TabIndex = 6;
-            // 
-            // cmbThumbowly
-            // 
-            this.cmbThumbowly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbowly.FormattingEnabled = true;
-            this.cmbThumbowly.Location = new System.Drawing.Point(97, 240);
-            this.cmbThumbowly.Name = "cmbThumbowly";
-            this.cmbThumbowly.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbowly.TabIndex = 7;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(8, 63);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(50, 12);
-            this.label46.TabIndex = 8;
-            this.label46.Text = "photozou";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(8, 99);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(34, 12);
-            this.label47.TabIndex = 9;
-            this.label47.Text = "yFrog";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(8, 135);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(34, 12);
-            this.label48.TabIndex = 10;
-            this.label48.Text = "img.ly";
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(8, 171);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(47, 12);
-            this.label49.TabIndex = 11;
-            this.label49.Text = "movapic";
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(8, 207);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(88, 12);
-            this.label50.TabIndex = 12;
-            this.label50.Text = "plixi/tweetphoto";
-            // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(8, 243);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(30, 12);
-            this.label51.TabIndex = 13;
-            this.label51.Text = "ow.ly";
-            // 
-            // numProfile_Interval
-            // 
-            this.numProfile_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numProfile_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numProfile_Interval.Location = new System.Drawing.Point(164, 176);
-            this.numProfile_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numProfile_Interval.Name = "numProfile_Interval";
-            this.numProfile_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numProfile_Interval.TabIndex = 1;
-            // 
-            // numTimeline_Interval
-            // 
-            this.numTimeline_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_Interval.Location = new System.Drawing.Point(293, 34);
-            this.numTimeline_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numTimeline_Interval.Name = "numTimeline_Interval";
-            this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Interval.TabIndex = 2;
-            this.numTimeline_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_Interval
-            // 
-            this.numReply_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_Interval.Location = new System.Drawing.Point(293, 63);
-            this.numReply_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numReply_Interval.Name = "numReply_Interval";
-            this.numReply_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numReply_Interval.TabIndex = 5;
-            this.numReply_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_Interval
-            // 
-            this.numHistory_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_Interval.Location = new System.Drawing.Point(293, 92);
-            this.numHistory_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numHistory_Interval.Name = "numHistory_Interval";
-            this.numHistory_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_Interval.TabIndex = 8;
-            this.numHistory_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_Interval
-            // 
-            this.numDirect_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_Interval.Location = new System.Drawing.Point(293, 122);
-            this.numDirect_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numDirect_Interval.Name = "numDirect_Interval";
-            this.numDirect_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_Interval.TabIndex = 11;
-            this.numDirect_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numTimeline_Add
-            // 
-            this.numTimeline_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Location = new System.Drawing.Point(197, 34);
-            this.numTimeline_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Name = "numTimeline_Add";
-            this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Add.TabIndex = 1;
-            this.numTimeline_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_Add
-            // 
-            this.numReply_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_Add.Location = new System.Drawing.Point(197, 63);
-            this.numReply_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numReply_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_Add.Name = "numReply_Add";
-            this.numReply_Add.Size = new System.Drawing.Size(56, 19);
-            this.numReply_Add.TabIndex = 4;
-            this.numReply_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_Add
-            // 
-            this.numHistory_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Location = new System.Drawing.Point(197, 92);
-            this.numHistory_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Name = "numHistory_Add";
-            this.numHistory_Add.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_Add.TabIndex = 7;
-            this.numHistory_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numTimeline_First
-            // 
-            this.numTimeline_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Location = new System.Drawing.Point(101, 34);
-            this.numTimeline_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Name = "numTimeline_First";
-            this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_First.TabIndex = 0;
-            this.numTimeline_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_First
-            // 
-            this.numReply_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_First.Location = new System.Drawing.Point(101, 63);
-            this.numReply_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numReply_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_First.Name = "numReply_First";
-            this.numReply_First.Size = new System.Drawing.Size(56, 19);
-            this.numReply_First.TabIndex = 3;
-            this.numReply_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_Add
-            // 
-            this.numDirect_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Location = new System.Drawing.Point(197, 122);
-            this.numDirect_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Name = "numDirect_Add";
-            this.numDirect_Add.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_Add.TabIndex = 10;
-            this.numDirect_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_First
-            // 
-            this.numHistory_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_First.Location = new System.Drawing.Point(101, 92);
-            this.numHistory_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numHistory_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_First.Name = "numHistory_First";
-            this.numHistory_First.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_First.TabIndex = 6;
-            this.numHistory_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_First
-            // 
-            this.numDirect_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_First.Location = new System.Drawing.Point(101, 122);
-            this.numDirect_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numDirect_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_First.Name = "numDirect_First";
-            this.numDirect_First.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_First.TabIndex = 9;
-            this.numDirect_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            this.cmbThumbTwipplePhoto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbTwipplePhoto.FormattingEnabled = true;
+            this.cmbThumbTwipplePhoto.Location = new System.Drawing.Point(97, 276);
+            this.cmbThumbTwipplePhoto.Name = "cmbThumbTwipplePhoto";
+            this.cmbThumbTwipplePhoto.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbTwipplePhoto.TabIndex = 14;
             // 
             // FrmConfig
             // 
@@ -1998,24 +2020,9 @@
             this.tabControl1.ResumeLayout(false);
             this.tabpgGet.ResumeLayout(false);
             this.tabpgGet.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.tabpgDisp.ResumeLayout(false);
-            this.tabpgDisp.PerformLayout();
-            this.grpIcon.ResumeLayout(false);
-            this.grpIcon.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).EndInit();
-            this.grpQuoteType.ResumeLayout(false);
-            this.grpQuoteType.PerformLayout();
-            this.tabpgFontAndColor.ResumeLayout(false);
-            this.tabpgFontAndColor.PerformLayout();
-            this.tabpgElse.ResumeLayout(false);
-            this.tabpgElse.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).EndInit();
-            this.tabpgThumbnail.ResumeLayout(false);
-            this.tabpgThumbnail.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).EndInit();
@@ -2028,6 +2035,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).EndInit();
+            this.tabpgDisp.ResumeLayout(false);
+            this.tabpgDisp.PerformLayout();
+            this.grpIcon.ResumeLayout(false);
+            this.grpIcon.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).EndInit();
+            this.grpQuoteType.ResumeLayout(false);
+            this.grpQuoteType.PerformLayout();
+            this.tabpgFontAndColor.ResumeLayout(false);
+            this.tabpgFontAndColor.PerformLayout();
+            this.tabpgThumbnail.ResumeLayout(false);
+            this.tabpgThumbnail.PerformLayout();
+            this.tabpgElse.ResumeLayout(false);
+            this.tabpgElse.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2178,5 +2200,7 @@
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.ComboBox cmbThumbowly;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.ComboBox cmbThumbTwipplePhoto;
     }
 }
