@@ -20,7 +20,7 @@ namespace StarlitTwit.UserControls
         /// <summary>現在表示中イメージインデックス</summary>
         private int _imgIndex = 0;
         /// <summary>表示切替タイマー</summary>
-        private Timer _timer = new Timer() { Interval = 3000 };
+        private Timer _switchTimer = new Timer() { Interval = 3000 };
         /// <summary>画像処理時のロックオブジェクト</summary>
         private object _lockimg = new object();
         /// <summary>イメージ取得中かどうか</summary>
@@ -53,8 +53,8 @@ namespace StarlitTwit.UserControls
         [DefaultValue(3000)]
         public int SwitchInterval
         {
-            get { return _timer.Interval; }
-            set { _timer.Interval = value; }
+            get { return _switchTimer.Interval; }
+            set { _switchTimer.Interval = value; }
         }
         #endregion (SwitchInterval)
         //-------------------------------------------------------------------------------
@@ -121,19 +121,19 @@ namespace StarlitTwit.UserControls
         //
         private void Initialize()
         {
-            _timer.Tick += new EventHandler(Timer_Tick);
+            _switchTimer.Tick += SwitchTimer_Tick;
         }
         #endregion (Initialize)
 
         //-------------------------------------------------------------------------------
-        #region Timer_Tick 切り替えタイマーイベント
+        #region SwitchTimer_Tick 切り替えタイマーイベント
         //-------------------------------------------------------------------------------
         //
-        private void Timer_Tick(object sender, EventArgs e)
+        private void SwitchTimer_Tick(object sender, EventArgs e)
         {
             lock (_lockimg) {
                 if (_img == null || DisplayForm == null || DisplayForm.IsDisposed) {
-                    _timer.Stop();
+                    _switchTimer.Stop();
                     return;
                 }
 
@@ -146,7 +146,7 @@ namespace StarlitTwit.UserControls
             ConfigDispForm();
             DisplayForm.Refresh();
         }
-        #endregion (Timer_Tick)
+        #endregion (SwitchTimer_Tick)
         //-------------------------------------------------------------------------------
         #region Image_Animate 画像フレームが進んだとき
         //-------------------------------------------------------------------------------
@@ -189,13 +189,24 @@ namespace StarlitTwit.UserControls
                     size = _img[_imgIndex].Size;
                     _dispLoading = false;
 
-                    if (!_timer.Enabled) { _timer.Start(); }
+                    if (!_switchTimer.Enabled) { _switchTimer.Start(); }
                 }
                 Size = GetPreferSize(size);
             }
         }
         //-------------------------------------------------------------------------------
         #endregion (#[override]OnShowToolTip)
+        //-------------------------------------------------------------------------------
+        #region #[override]OnHideToolTip
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ツールチップ隠蔽時
+        /// </summary>
+        protected override void OnHideToolTip()
+        {
+            _switchTimer.Stop();
+        }
+        #endregion (OnHideToolTip)
 
         //-------------------------------------------------------------------------------
         #region #[override]Disp_Paint 表示
@@ -301,8 +312,12 @@ namespace StarlitTwit.UserControls
                     CancelEventArgs e = new CancelEventArgs();
                     OnShowToolTip(e);
                     if (!e.Cancel) {
-                        DisplayForm.Invoke(new Action(() => ConfigDispForm()));
-                        DisplayForm.Invalidate();
+                        try {
+                            DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                            DisplayForm.Invalidate();
+                        }
+                        catch (NullReferenceException){}
+                        catch (InvalidOperationException) { }
                     }
                 }
             }
