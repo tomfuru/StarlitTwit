@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace StarlitTwit
 {
@@ -477,20 +478,28 @@ namespace StarlitTwit
         /// <returns>URLの配列。</returns>
         public static IEnumerable<string> ExtractURL(string text)
         {
-            const string HTTP = @"http://";
-            const string ENDCHARS = " 　";
+            #region comment out 
+            //const string HTTP = @"http://";
+            //const string ENDCHARS = " 　";
 
-            int index = 0;
+            //int index = 0;
 
-            while (true) {
-                int start = (index < text.Length) ? text.IndexOf(HTTP, index) : -1;
-                if (start == -1) { break; }
-                int end = text.IndexOfAny(ENDCHARS.ToCharArray(), start);
-                if (end == -1) { end = text.Length; }
+            //while (true) {
+            //    int start = (index < text.Length) ? text.IndexOf(HTTP, index) : -1;
+            //    if (start == -1) { break; }
+            //    int end = text.IndexOfAny(ENDCHARS.ToCharArray(), start);
+            //    if (end == -1) { end = text.Length; }
 
-                string url = text.Substring(start, end - start);
-                yield return url;
-                index = end + 1;
+            //    string url = text.Substring(start, end - start);
+            //    yield return url;
+            //    index = end + 1;
+            //}
+            #endregion
+            const string CHECKPATTERN = @"(http|https)://[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]+";
+
+            MatchCollection mc = Regex.Matches(text, CHECKPATTERN);
+            foreach (Match match in mc) {
+                yield return match.Value;
             }
         }
         #endregion (ExtractURL)
