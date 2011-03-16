@@ -20,7 +20,8 @@ namespace StarlitTwit.UserControls
         /// <summary>現在表示中イメージインデックス</summary>
         private int _imgIndex = 0;
         /// <summary>表示切替タイマー</summary>
-        private Timer _switchTimer = new Timer() { Interval = 3000 };
+        //private Timer _switchTimer = new Timer() { Interval = 3000 };
+        System.Timers.Timer _switchTimer = new System.Timers.Timer(3000);
         /// <summary>画像処理時のロックオブジェクト</summary>
         private object _lockimg = new object();
         /// <summary>イメージ取得中かどうか</summary>
@@ -53,7 +54,7 @@ namespace StarlitTwit.UserControls
         [DefaultValue(3000)]
         public int SwitchInterval
         {
-            get { return _switchTimer.Interval; }
+            get { return (int)_switchTimer.Interval; }
             set { _switchTimer.Interval = value; }
         }
         #endregion (SwitchInterval)
@@ -121,15 +122,15 @@ namespace StarlitTwit.UserControls
         //
         private void Initialize()
         {
-            _switchTimer.Tick += SwitchTimer_Tick;
+            _switchTimer.Elapsed += SwitchTimer_Elapsed;
         }
         #endregion (Initialize)
 
         //-------------------------------------------------------------------------------
-        #region SwitchTimer_Tick 切り替えタイマーイベント
+        #region SwitchTimer_Elapsed 切り替えタイマーイベント
         //-------------------------------------------------------------------------------
         //
-        private void SwitchTimer_Tick(object sender, EventArgs e)
+        private void SwitchTimer_Elapsed(object sender, EventArgs e)
         {
             lock (_lockimg) {
                 if (_img == null || DisplayForm == null || DisplayForm.IsDisposed) {
@@ -143,10 +144,19 @@ namespace StarlitTwit.UserControls
                 Size = GetPreferSize(_img[_imgIndex].Size);
             }
 
-            ConfigDispForm();
-            DisplayForm.Refresh();
+            if (DisplayForm.InvokeRequired) {
+                DisplayForm.Invoke(new Action(() =>
+                {
+                    ConfigDispForm();
+                    DisplayForm.Refresh();
+                }));
+            }
+            else {
+                ConfigDispForm();
+                DisplayForm.Refresh();
+            }
         }
-        #endregion (SwitchTimer_Tick)
+        #endregion (SwitchTimer_Elapsed)
         //-------------------------------------------------------------------------------
         #region Image_Animate 画像フレームが進んだとき
         //-------------------------------------------------------------------------------
@@ -189,7 +199,7 @@ namespace StarlitTwit.UserControls
                     size = _img[_imgIndex].Size;
                     _dispLoading = false;
 
-                    if (!_switchTimer.Enabled) { _switchTimer.Start(); }
+                    _switchTimer.Start();
                 }
                 Size = GetPreferSize(size);
             }
