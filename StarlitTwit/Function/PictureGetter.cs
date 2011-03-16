@@ -12,12 +12,6 @@ using System.Xml.Serialization;
 
 namespace StarlitTwit
 {
-    //public enum TwitPicThumbnailType : byte
-    //{
-    //    thumb,
-    //    mini,
-    //    表示しない
-    //}
     public static partial class PictureGetter
     {
         /// <summary>[static]読み込み可能な画像の拡張子</summary>
@@ -52,6 +46,20 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region (private classes)実装コンバータ
         //-------------------------------------------------------------------------------
+        #region サムネイルタイプ文字(列)
+        //-------------------------------------------------------------------------------
+        private const string THUMB = "thumb";
+        private const string MINI = "mini";
+        private const char S = 's';
+        private const char T = 't';
+        private const string THUMBNAIL = "thumbnail";
+        private const string MEDIUM = "medium";
+        private const string BIG = "big";
+        private const string LARGE = "large";
+        private const string ORIG = "orig";
+        //-------------------------------------------------------------------------------
+        #endregion (サムネイルタイプ文字列)
+        //-------------------------------------------------------------------------------
         #region (class)Twitpic Converter
         //-------------------------------------------------------------------------------
         private class TwitpicConverter : IThumbnailConverter
@@ -76,9 +84,6 @@ namespace StarlitTwit
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                const string THUMB = "thumb";
-                const string MINI = "mini";
-
                 string type;
                 switch (FrmMain.SettingsData.ThumbType_twitpic) {
                     case TwitPicThumbnailType.thumb:
@@ -162,8 +167,6 @@ namespace StarlitTwit
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                const string THUMB = "thumb";
-                const string MINI = "mini";
 
                 string type;
                 switch (FrmMain.SettingsData.ThumbType_img_ly) {
@@ -197,8 +200,6 @@ namespace StarlitTwit
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                const char S = 's';
-                const char T = 't';
 
                 char type;
                 switch (FrmMain.SettingsData.ThumbType_movapic) {
@@ -232,9 +233,6 @@ namespace StarlitTwit
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
             {
-                const string THUMBNAIL = "thumbnail";
-                const string MEDIUM = "medium";
-                const string BIG = "big";
 
                 string type;
                 switch (FrmMain.SettingsData.ThumbType_plixi) {
@@ -278,6 +276,40 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (ow.ly Converter)
         //-------------------------------------------------------------------------------
+        #region (class)twipplephoto Converter
+        //-------------------------------------------------------------------------------
+        private class TwipplePhotoConverter : IThumbnailConverter
+        {
+            private const string CHECKPATTERN = @"^http://p.twipple.jp/[0-9a-zA-Z]+$";
+            private const string THUMBFORMAT = @"http://p.twipple.jp/show/{0}/{1}";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return Regex.IsMatch(url, CHECKPATTERN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                string type;
+                switch (FrmMain.SettingsData.ThumbType_twipplephoto) {
+                    case twipplephotoThumbnailType.thumb:
+                        type = THUMB;
+                        break;
+                    case twipplephotoThumbnailType.large:
+                        type = LARGE;
+                        break;
+                    case twipplephotoThumbnailType.orig:
+                        type = ORIG;
+                        break;
+                    default:
+                        return null;
+                }
+                return string.Format(THUMBFORMAT, type, url.Split('/').Last());
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)twipplephoto Converter)
+        //-------------------------------------------------------------------------------
         #endregion ((classes)実装コンバータ)
 
         //-------------------------------------------------------------------------------
@@ -296,7 +328,8 @@ namespace StarlitTwit
                             new img_lyConverter(),
                             new movapicConverter(),
                             new plixiConverter(),
-                            new ow_lyConverter()
+                            new ow_lyConverter(),
+                            new TwipplePhotoConverter()
                         };
         }
         //-------------------------------------------------------------------------------
@@ -449,4 +482,16 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (owlyThumbnailType)
+    //-------------------------------------------------------------------------------
+    #region twipplephotoThumbnailType 列挙体：
+    //-------------------------------------------------------------------------------
+    public enum twipplephotoThumbnailType
+    {
+        thumb,
+        large,
+        orig,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (twipplephotoThumbnailType)
 }

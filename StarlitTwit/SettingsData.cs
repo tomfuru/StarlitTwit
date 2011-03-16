@@ -209,6 +209,8 @@ namespace StarlitTwit
         public plixiThumbnailType ThumbType_plixi;
         /// <summary>ow.lyサムネイル</summary>
         public owlyThumbnailType ThumbType_ow_ly;
+        /// <summary>TwipplePhotoサムネイル</summary>
+        public twipplephotoThumbnailType ThumbType_twipplephoto;
         //-------------------------------------------------------------------------------
         #endregion (画像サムネイル関係)
 
