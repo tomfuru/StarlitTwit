@@ -148,6 +148,9 @@
     <Compile Include="UserControls\RichTextBoxEx.Designer.cs">
       <DependentUpon>RichTextBoxEx.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\RichTextBoxExBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\RichTextBoxHash.cs">
       <SubType>Component</SubType>
     </Compile>

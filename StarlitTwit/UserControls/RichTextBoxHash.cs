@@ -6,37 +6,27 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace StarlitTwit
 {
-    public partial class RichTextBoxHash : RichTextBoxEx
+    public partial class RichTextBoxHash : RichTextBoxExBase
     {
+        private List<Range> _hashList;
+        private Range _onRange;
+
+        /// <summary>テキストボックス内の特殊項目(URL除く)がクリックされた時に発生するイベント</summary>
+        public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
+
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         public RichTextBoxHash()
         {
             InitializeComponent();
-            SetComponent();
         }
-        //-------------------------------------------------------------------------------
-        #region SetComponent 新規コンポーネントセット
-        //-------------------------------------------------------------------------------
-        //
-        private void SetComponent()
-        {
-
-        }
-        #endregion (SetComponent)
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
-
-        private List<Range> _hashList;
-        private bool _suspendTextChanged = false;
-        private Range _onRange;
-
-        /// <summary>テキストボックス内の特殊項目(URL除く)がクリックされた時に発生するイベント</summary>
-        public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
 
         //-------------------------------------------------------------------------------
         #region +[new]Text プロパティ
@@ -49,31 +39,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (Text プロパティ：)
 
-        //-------------------------------------------------------------------------------
-        #region RichTextBoxHash_TextChanged テキストチェンジ時
-        //-------------------------------------------------------------------------------
-        //
-        private void RichTextBoxHash_TextChanged(object sender, EventArgs e)
-        {
-            if (_suspendTextChanged) { return; }
-
-            //Stopwatch sw = Stopwatch.StartNew();
-            //if (_hashList != null) { _hashList.Clear(); }
-            //_hashList = GetHashRanges();
-
-            //foreach (Range r in _hashList) {
-            //    Select(r.start, r.length);
-            //    _suspendTextChanged = true;
-            //    SelectionFont = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold | FontStyle.Underline);
-            //    SelectionColor = Color.Blue;
-            //    _suspendTextChanged = false;
-                
-            //}
-
-            //Console.WriteLine(sw.ElapsedMilliseconds.ToString() + "ms");
-            // 選択解除？
-        }
-        #endregion (RichTextBoxHash_TextChanged)
         //-------------------------------------------------------------------------------
         #region RichTextBoxHash_MouseMove マウス移動時
         //-------------------------------------------------------------------------------
@@ -150,7 +115,6 @@ namespace StarlitTwit
         public void ChangeFonts()
         {
             if (_hashList != null) { _hashList.Clear(); }
-            //_hashList = GetHashRanges();
             _hashList = GetHashRangesByRegex();
 
             foreach (Range r in _hashList) {
@@ -175,6 +139,11 @@ namespace StarlitTwit
             return list;
         }
         #endregion (GetHashRangesByRegex)
+
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            
+        }
     }
 
     //-------------------------------------------------------------------------------

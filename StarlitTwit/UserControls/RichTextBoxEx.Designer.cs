@@ -64,12 +64,14 @@
             this.tsmiPaste});
             this.contextMenu.Name = "contextMenuStrip1";
             this.contextMenu.Size = new System.Drawing.Size(165, 70);
-            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // RichTextBoxEx
             // 
             this.ContextMenuStrip = this.contextMenu;
+            this.CopyMenu = this.tsmiCopy;
+            this.CutMenu = this.tsmiCut;
             this.DetectUrls = false;
+            this.PasteMenu = this.tsmiPaste;
             this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
