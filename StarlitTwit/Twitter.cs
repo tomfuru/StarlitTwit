@@ -1671,6 +1671,7 @@ namespace StarlitTwit
                     Favorited = bool.Parse(el.Element("favorited").Value),
                     Mention_StatusID = TryParseLong(el.Element("in_reply_to_status_id").Value),
                     Mention_UserID = TryParseLong(el.Element("in_reply_to_user_id").Value),
+                    Mention_ScreenName = el.Element("in_reply_to_screen_name").Value,
                     Text = ConvertSpecialChar(el.Element("text").Value),
                     Source = CutSourceString(el.Element("source").Value),
                     UserID = long.Parse(el.Element("user").Element("id").Value),
@@ -1687,6 +1688,7 @@ namespace StarlitTwit
                             Favorited = bool.Parse(el.Element("retweeted_status").Element("favorited").Value),
                             Mention_StatusID = TryParseLong(el.Element("retweeted_status").Element("in_reply_to_status_id").Value),
                             Mention_UserID = TryParseLong(el.Element("retweeted_status").Element("in_reply_to_user_id").Value),
+                            Mention_ScreenName = el.Element("retweeted_status").Element("in_reply_to_screen_name").Value,
                             Text = ConvertSpecialChar(el.Element("retweeted_status").Element("text").Value),
                             Source = CutSourceString(el.Element("retweeted_status").Element("source").Value),
                             UserID = long.Parse(el.Element("retweeted_status").Element("user").Element("id").Value),
@@ -2105,6 +2107,8 @@ namespace StarlitTwit
         public long Mention_StatusID;
         /// <summary>リプライ時のみ：返信先ユーザーID</summary>
         public long Mention_UserID;
+        /// <summary>リプライ時のみ：返信先ユーザー表示名</summary>
+        public string Mention_ScreenName;
         /// <summary>ダイレクトメッセージの送信先のユーザー名</summary>
         public string DMScreenName;
         /// <summary>発言をお気に入りに登録しているか</summary>

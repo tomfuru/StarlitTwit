@@ -232,7 +232,7 @@ namespace StarlitTwit
                     break;
             }
 
-            bool isReply = (SelectedTwitData.Mention_StatusID > 0);
+            bool isReply = (SelectedTwitData.MainTwitData.Mention_StatusID > 0);
             bool isDirect = (SelectedTwitData.TwitType == TwitType.DirectMessage);
             bool isProtected = SelectedTwitData.UserProtected;
             bool isMine = (SelectedTwitData.UserID == FrmMain.Twitter.ID);
@@ -240,7 +240,7 @@ namespace StarlitTwit
 
             tsmiReply.Enabled = !isDirect;
             tsmiQuote.Enabled = tsmiRetweet.Enabled = !isDirect && !isProtected;
-            tsmiRetweet.Enabled = !(isMine || isDirect);
+            tsmiRetweet.Enabled = !(isMine || isProtected || isDirect);
 
             tsmiDispConversation.Enabled = isReply;
 
@@ -348,7 +348,7 @@ namespace StarlitTwit
         {
             StringBuilder sbUrl = new StringBuilder();
             sbUrl.Append(Twitter.URLtwi);
-            sbUrl.Append(SelectedTwitData.UserScreenName);
+            sbUrl.Append(SelectedTwitData.MainTwitData.UserScreenName);
 
             Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
         }
@@ -360,9 +360,9 @@ namespace StarlitTwit
         {
             StringBuilder sbUrl = new StringBuilder();
             sbUrl.Append(Twitter.URLtwi);
-            sbUrl.Append(SelectedTwitData.UserScreenName);
+            sbUrl.Append(SelectedTwitData.MainTwitData.UserScreenName);
             sbUrl.Append("/status/");
-            sbUrl.Append(SelectedTwitData.StatusID);
+            sbUrl.Append(SelectedTwitData.MainTwitData.StatusID);
 
             Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
         }
@@ -372,19 +372,13 @@ namespace StarlitTwit
         //
         private void tsmiOpenBrowser_ReplyTweet_Click(object sender, EventArgs e)
         {
-            TwitData twitdata;
-            if (Utilization.GetTwitDataFromID(SelectedTwitData.Mention_StatusID, out twitdata)) {
-                StringBuilder sbUrl = new StringBuilder();
-                sbUrl.Append(Twitter.URLtwi);
-                sbUrl.Append(twitdata.UserScreenName);
-                sbUrl.Append("/status/");
-                sbUrl.Append(twitdata.StatusID);
+            StringBuilder sbUrl = new StringBuilder();
+            sbUrl.Append(Twitter.URLtwi);
+            sbUrl.Append(SelectedTwitData.MainTwitData.Mention_ScreenName);
+            sbUrl.Append("/status/");
+            sbUrl.Append(SelectedTwitData.MainTwitData.Mention_StatusID);
 
-                Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);                       
-            }
-            else {
-                Message.ShowWarningMessage("返信先ツイートが見つかりませんでした。");
-            }
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
         }
         #endregion (tsmiOpenBrowser_ReplyTweet_Click)
         //-------------------------------------------------------------------------------
@@ -838,7 +832,7 @@ namespace StarlitTwit
             long statusid = startStatusID;
             do {
                 if (!_rowDataList.ContainsKey(statusid)) { break; }
-                TwitData data = _rowDataList[statusid].TwitData;
+                TwitData data = _rowDataList[statusid].TwitData.MainTwitData;
                 yield return data;
                 statusid = data.Mention_StatusID;
             } while (statusid != -1);
