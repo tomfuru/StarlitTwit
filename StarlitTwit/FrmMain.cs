@@ -1006,10 +1006,10 @@ namespace StarlitTwit
         private void tsmiTab_EditTab_Click(object sender, EventArgs e)
         {
             tssLabel.SetText(STR_WAITING_TABEDIT);
+            TabPage tabpg = tabTwitDisp.SelectedTab;
             LockAndProcess(_mreThreadConfirm, _mreThreadRun, () =>
             {
                 tssLabel.RemoveText(STR_WAITING_TABEDIT);
-                TabPage tabpg = tabTwitDisp.SelectedTab;
                 TabData tabdata;
                 lock (SettingsData.TabDataDic) { tabdata = SettingsData.TabDataDic[(string)tabpg.Tag]; }
                 using (FrmMakeTab frm = new FrmMakeTab(Twitter)) {
@@ -1046,11 +1046,11 @@ namespace StarlitTwit
         //
         private void tsmiTab_DeleteTab_Click(object sender, EventArgs e)
         {
+            TabPage tabpg = tabTwitDisp.SelectedTab;
             if (Message.ShowQuestionMessage("本当に削除してよろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
                 tssLabel.SetText(STR_WAITING_DELETETAB);
                 LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
                 {
-                    TabPage tabpg = tabTwitDisp.SelectedTab;
                     tabTwitDisp.TabPages.Remove(tabpg);
 
                     LockAndProcess(_autoRenewDic, () =>
