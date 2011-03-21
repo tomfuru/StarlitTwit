@@ -49,8 +49,6 @@
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.toolTip2 = new StarlitTwit.ToolTipPicture(this.components);
-            this.toolTip3 = new StarlitTwit.PermanentToolTip(this.components);
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelEx1 = new StarlitTwit.ToolStripStatusLabelEx();
@@ -61,13 +59,16 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.richTextBox3 = new StarlitTwit.RichTextBoxHash();
             this.anisTabControl1 = new Anis.Controls.AnisTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.toolTip2 = new StarlitTwit.ToolTipPicture(this.components);
+            this.toolTip3 = new StarlitTwit.PermanentToolTip(this.components);
             this.testPermanentToolTip1 = new Test.TestPermanentToolTip();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
             this.tabControlEx1.SuspendLayout();
@@ -76,8 +77,8 @@
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.anisTabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.anisTabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -279,22 +280,6 @@
             this.comboBox1.Size = new System.Drawing.Size(121, 20);
             this.comboBox1.TabIndex = 0;
             // 
-            // toolTip2
-            // 
-            this.toolTip2.AutoPopDelay = 5000;
-            this.toolTip2.ImageURLs = null;
-            this.toolTip2.InitialDelay = 1000;
-            this.toolTip2.MaximumSize = new System.Drawing.Size(500, 500);
-            this.toolTip2.OwnerDraw = true;
-            this.toolTip2.ReshowDelay = 100;
-            this.toolTip2.SwitchInterval = 2000;
-            // 
-            // toolTip3
-            // 
-            this.toolTip3.AutoPopDelay = 10000;
-            this.toolTip3.InitialDelay = 500;
-            this.toolTip3.ReshowDelay = 100;
-            // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.White;
@@ -363,7 +348,7 @@
             // 
             // richTextBox2
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(369, 423);
+            this.richTextBox2.Location = new System.Drawing.Point(369, 317);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Size = new System.Drawing.Size(306, 96);
             this.richTextBox2.TabIndex = 15;
@@ -375,6 +360,24 @@
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(298, 208);
             this.propertyGrid1.TabIndex = 16;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(102, 336);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(196, 196);
+            this.pictureBox1.TabIndex = 17;
+            this.pictureBox1.TabStop = false;
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(359, 436);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(306, 96);
+            this.richTextBox3.TabIndex = 18;
+            this.richTextBox3.Text = "";
+            this.richTextBox3.TextChanged += new System.EventHandler(this.richTextBox3_TextChanged);
             // 
             // anisTabControl1
             // 
@@ -429,21 +432,28 @@
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // toolTip2
+            // 
+            this.toolTip2.AutoPopDelay = 5000;
+            this.toolTip2.ImageURLs = null;
+            this.toolTip2.InitialDelay = 1000;
+            this.toolTip2.MaximumSize = new System.Drawing.Size(500, 500);
+            this.toolTip2.OwnerDraw = true;
+            this.toolTip2.ReshowDelay = 100;
+            this.toolTip2.SwitchInterval = 2000;
+            // 
+            // toolTip3
+            // 
+            this.toolTip3.AutoPopDelay = 10000;
+            this.toolTip3.InitialDelay = 500;
+            this.toolTip3.ReshowDelay = 100;
+            // 
             // testPermanentToolTip1
             // 
             this.testPermanentToolTip1.AutoPopDelay = 11111111;
             this.testPermanentToolTip1.InitialDelay = 500;
             this.testPermanentToolTip1.ReshowDelay = 100;
             this.testPermanentToolTip1.ShowAlways = true;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(102, 336);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(196, 196);
-            this.pictureBox1.TabIndex = 17;
-            this.pictureBox1.TabStop = false;
             // 
             // Form1
             // 
@@ -452,6 +462,7 @@
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.ClientSize = new System.Drawing.Size(997, 581);
+            this.Controls.Add(this.richTextBox3);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.richTextBox2);
@@ -484,8 +495,8 @@
             this.tabPage8.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.anisTabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.anisTabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -533,6 +544,7 @@
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private TestPermanentToolTip testPermanentToolTip1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private StarlitTwit.RichTextBoxHash richTextBox3;
     }
 }
 

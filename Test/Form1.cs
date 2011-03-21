@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Threading;
+using StarlitTwit;
 
 namespace Test
 {
@@ -177,6 +178,11 @@ namespace Test
             //toolStripStatusLabel1.Text = "あｓだ";
             toolStripStatusLabelEx1.SetText("あｄさだ");
             toolStripStatusLabelEx1.SetText("ｓだじょ");
+        }
+
+        private void richTextBox3_TextChanged(object sender, EventArgs e)
+        {
+            richTextBox3.ChangeFonts();
         }
     }
 }
