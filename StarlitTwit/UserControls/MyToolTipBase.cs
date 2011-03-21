@@ -559,19 +559,19 @@ namespace StarlitTwit
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.ShowInTaskbar = false;
                 this.DoubleBuffered = true;
-                this.Enter += new EventHandler(FrmDisp_Enter);
+                this.Click += new EventHandler(FrmDisp_Click);
             }
             #endregion (コンストラクタ)
 
             //-------------------------------------------------------------------------------
-            #region FrmDisp_Enter フォームEnter時
+            #region FrmDisp_Click Click時
             //-------------------------------------------------------------------------------
             //
-            private void FrmDisp_Enter(object sender, EventArgs e)
+            private void FrmDisp_Click(object sender, EventArgs e)
             {
                 this.Close();
             }
-            #endregion (FrmDisp_Enter)
+            #endregion (FrmDisp_Click)
 
             //-------------------------------------------------------------------------
             #region CreateParams
