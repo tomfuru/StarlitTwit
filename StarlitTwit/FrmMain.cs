@@ -768,6 +768,7 @@ namespace StarlitTwit
                         SettingsData = frmconf.SettingsData;
                         SettingsData.Save();
 
+                        // 設定の適用
                         foreach (TabPage tabpage in DEFAULT_TABPAGES) {
                             tabpage.ToolTipText = DefaultTabToString(tabpage);
                             UctlDispTwit dispTwit = _dispTwitDic[tabpage];

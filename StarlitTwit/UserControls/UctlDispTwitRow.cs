@@ -380,11 +380,14 @@ namespace StarlitTwit
             this.BackColor = GetColor(true);
             this.Focused = true;
 
-            if (myToolTipImage.ImageURLs == null) {
-                IEnumerable<string> urls = Utilization.ExtractURL(TwitData.MainTwitData.Text);
-                myToolTipImage.SetImageURLs(urls);
+            if (FrmMain.SettingsData.DisplayThumbnail) {
+                if (myToolTipImage.ImageURLs == null) {
+                    IEnumerable<string> urls = Utilization.ExtractURL(TwitData.MainTwitData.Text);
+                    myToolTipImage.SetImageURLs(urls);
+                }
+                myToolTipImage.SwitchInterval = FrmMain.SettingsData.DisplayThumbnailInterval;
+                myToolTipImage.Active = true;
             }
-            myToolTipImage.Active = true;
         }
         #endregion (SelectControl)
         //-------------------------------------------------------------------------------

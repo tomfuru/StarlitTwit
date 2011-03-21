@@ -136,6 +136,8 @@
             this.txtExNormalTitle = new System.Windows.Forms.TextBox();
             this.btnFontNormalTitle = new System.Windows.Forms.Button();
             this.tabpgThumbnail = new System.Windows.Forms.TabPage();
+            this.label52 = new System.Windows.Forms.Label();
+            this.cmbThumbTwipplePhoto = new System.Windows.Forms.ComboBox();
             this.label51 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
@@ -162,17 +164,15 @@
             this.txtHeader = new System.Windows.Forms.TextBox();
             this.label31 = new System.Windows.Forms.Label();
             this.numReplyTooltipDepth = new System.Windows.Forms.NumericUpDown();
-            this.numThumbnailInterval = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
             this.chbDispDMBaloon = new System.Windows.Forms.CheckBox();
             this.chbDispReplyBaloon = new System.Windows.Forms.CheckBox();
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
-            this.chbDispThumbnail = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.label52 = new System.Windows.Forms.Label();
-            this.cmbThumbTwipplePhoto = new System.Windows.Forms.ComboBox();
+            this.numThumbnailInterval = new System.Windows.Forms.NumericUpDown();
+            this.label29 = new System.Windows.Forms.Label();
+            this.chbDispThumbnail = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
@@ -1595,6 +1595,9 @@
             // 
             // tabpgThumbnail
             // 
+            this.tabpgThumbnail.Controls.Add(this.numThumbnailInterval);
+            this.tabpgThumbnail.Controls.Add(this.label29);
+            this.tabpgThumbnail.Controls.Add(this.chbDispThumbnail);
             this.tabpgThumbnail.Controls.Add(this.label52);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbTwipplePhoto);
             this.tabpgThumbnail.Controls.Add(this.label51);
@@ -1619,10 +1622,28 @@
             this.tabpgThumbnail.Text = "サムネイル";
             this.tabpgThumbnail.UseVisualStyleBackColor = true;
             // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(18, 270);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(75, 12);
+            this.label52.TabIndex = 15;
+            this.label52.Text = "ついっぷるフォト";
+            // 
+            // cmbThumbTwipplePhoto
+            // 
+            this.cmbThumbTwipplePhoto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbTwipplePhoto.FormattingEnabled = true;
+            this.cmbThumbTwipplePhoto.Location = new System.Drawing.Point(107, 267);
+            this.cmbThumbTwipplePhoto.Name = "cmbThumbTwipplePhoto";
+            this.cmbThumbTwipplePhoto.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbTwipplePhoto.TabIndex = 14;
+            // 
             // label51
             // 
             this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(8, 243);
+            this.label51.Location = new System.Drawing.Point(18, 242);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(30, 12);
             this.label51.TabIndex = 13;
@@ -1631,7 +1652,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(8, 207);
+            this.label50.Location = new System.Drawing.Point(18, 214);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(88, 12);
             this.label50.TabIndex = 12;
@@ -1640,7 +1661,7 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(8, 171);
+            this.label49.Location = new System.Drawing.Point(18, 186);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(47, 12);
             this.label49.TabIndex = 11;
@@ -1649,7 +1670,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(8, 135);
+            this.label48.Location = new System.Drawing.Point(18, 158);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(34, 12);
             this.label48.TabIndex = 10;
@@ -1658,7 +1679,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(8, 99);
+            this.label47.Location = new System.Drawing.Point(18, 130);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(34, 12);
             this.label47.TabIndex = 9;
@@ -1667,7 +1688,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(8, 63);
+            this.label46.Location = new System.Drawing.Point(18, 102);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(50, 12);
             this.label46.TabIndex = 8;
@@ -1677,7 +1698,7 @@
             // 
             this.cmbThumbowly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbowly.FormattingEnabled = true;
-            this.cmbThumbowly.Location = new System.Drawing.Point(97, 240);
+            this.cmbThumbowly.Location = new System.Drawing.Point(107, 239);
             this.cmbThumbowly.Name = "cmbThumbowly";
             this.cmbThumbowly.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbowly.TabIndex = 7;
@@ -1686,7 +1707,7 @@
             // 
             this.cmbThumbplixi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbplixi.FormattingEnabled = true;
-            this.cmbThumbplixi.Location = new System.Drawing.Point(97, 204);
+            this.cmbThumbplixi.Location = new System.Drawing.Point(107, 211);
             this.cmbThumbplixi.Name = "cmbThumbplixi";
             this.cmbThumbplixi.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbplixi.TabIndex = 6;
@@ -1695,7 +1716,7 @@
             // 
             this.cmbThumbmovapic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbmovapic.FormattingEnabled = true;
-            this.cmbThumbmovapic.Location = new System.Drawing.Point(97, 168);
+            this.cmbThumbmovapic.Location = new System.Drawing.Point(107, 183);
             this.cmbThumbmovapic.Name = "cmbThumbmovapic";
             this.cmbThumbmovapic.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbmovapic.TabIndex = 5;
@@ -1704,7 +1725,7 @@
             // 
             this.cmbThumbimgly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbimgly.FormattingEnabled = true;
-            this.cmbThumbimgly.Location = new System.Drawing.Point(97, 132);
+            this.cmbThumbimgly.Location = new System.Drawing.Point(107, 155);
             this.cmbThumbimgly.Name = "cmbThumbimgly";
             this.cmbThumbimgly.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbimgly.TabIndex = 4;
@@ -1713,7 +1734,7 @@
             // 
             this.cmbThumbyFrog.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbyFrog.FormattingEnabled = true;
-            this.cmbThumbyFrog.Location = new System.Drawing.Point(97, 96);
+            this.cmbThumbyFrog.Location = new System.Drawing.Point(107, 127);
             this.cmbThumbyFrog.Name = "cmbThumbyFrog";
             this.cmbThumbyFrog.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbyFrog.TabIndex = 3;
@@ -1722,7 +1743,7 @@
             // 
             this.cmbThumbPhotozou.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbPhotozou.FormattingEnabled = true;
-            this.cmbThumbPhotozou.Location = new System.Drawing.Point(97, 60);
+            this.cmbThumbPhotozou.Location = new System.Drawing.Point(107, 99);
             this.cmbThumbPhotozou.Name = "cmbThumbPhotozou";
             this.cmbThumbPhotozou.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbPhotozou.TabIndex = 2;
@@ -1731,7 +1752,7 @@
             // 
             this.cmbThumbTwitpic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbTwitpic.FormattingEnabled = true;
-            this.cmbThumbTwitpic.Location = new System.Drawing.Point(97, 24);
+            this.cmbThumbTwitpic.Location = new System.Drawing.Point(107, 71);
             this.cmbThumbTwitpic.Name = "cmbThumbTwitpic";
             this.cmbThumbTwitpic.Size = new System.Drawing.Size(121, 20);
             this.cmbThumbTwitpic.TabIndex = 1;
@@ -1739,7 +1760,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(8, 27);
+            this.label45.Location = new System.Drawing.Point(18, 74);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(39, 12);
             this.label45.TabIndex = 0;
@@ -1758,13 +1779,10 @@
             this.tabpgElse.Controls.Add(this.txtHeader);
             this.tabpgElse.Controls.Add(this.label31);
             this.tabpgElse.Controls.Add(this.numReplyTooltipDepth);
-            this.tabpgElse.Controls.Add(this.numThumbnailInterval);
             this.tabpgElse.Controls.Add(this.label30);
-            this.tabpgElse.Controls.Add(this.label29);
             this.tabpgElse.Controls.Add(this.chbDispDMBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyTooltip);
-            this.tabpgElse.Controls.Add(this.chbDispThumbnail);
             this.tabpgElse.Location = new System.Drawing.Point(4, 21);
             this.tabpgElse.Name = "tabpgElse";
             this.tabpgElse.Padding = new System.Windows.Forms.Padding(3);
@@ -1872,33 +1890,6 @@
             this.numReplyTooltipDepth.Size = new System.Drawing.Size(61, 19);
             this.numReplyTooltipDepth.TabIndex = 5;
             // 
-            // numThumbnailInterval
-            // 
-            this.numThumbnailInterval.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.numThumbnailInterval.Location = new System.Drawing.Point(238, 114);
-            this.numThumbnailInterval.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.numThumbnailInterval.Minimum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.numThumbnailInterval.Name = "numThumbnailInterval";
-            this.numThumbnailInterval.Size = new System.Drawing.Size(61, 19);
-            this.numThumbnailInterval.TabIndex = 3;
-            this.numThumbnailInterval.Value = new decimal(new int[] {
-            3000,
-            0,
-            0,
-            0});
-            // 
             // label30
             // 
             this.label30.AutoSize = true;
@@ -1907,15 +1898,6 @@
             this.label30.Size = new System.Drawing.Size(120, 12);
             this.label30.TabIndex = 5;
             this.label30.Text = "表示する深さ（0は無限）";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(32, 116);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(200, 12);
-            this.label29.TabIndex = 4;
-            this.label29.Text = "複数画像の場合の切り替え間隔（ミリ秒）";
             // 
             // chbDispDMBaloon
             // 
@@ -1948,17 +1930,6 @@
             this.chbDispReplyTooltip.UseVisualStyleBackColor = true;
             this.chbDispReplyTooltip.CheckedChanged += new System.EventHandler(this.chbWithEnableChange_CheckedChanged);
             // 
-            // chbDispThumbnail
-            // 
-            this.chbDispThumbnail.AutoSize = true;
-            this.chbDispThumbnail.Location = new System.Drawing.Point(20, 92);
-            this.chbDispThumbnail.Name = "chbDispThumbnail";
-            this.chbDispThumbnail.Size = new System.Drawing.Size(149, 16);
-            this.chbDispThumbnail.TabIndex = 2;
-            this.chbDispThumbnail.Text = "画像サムネイルを表示する";
-            this.chbDispThumbnail.UseVisualStyleBackColor = true;
-            this.chbDispThumbnail.CheckedChanged += new System.EventHandler(this.chbWithEnableChange_CheckedChanged);
-            // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1982,23 +1953,51 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // label52
+            // numThumbnailInterval
             // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(8, 279);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(75, 12);
-            this.label52.TabIndex = 15;
-            this.label52.Text = "ついっぷるフォト";
+            this.numThumbnailInterval.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numThumbnailInterval.Location = new System.Drawing.Point(224, 45);
+            this.numThumbnailInterval.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numThumbnailInterval.Minimum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.numThumbnailInterval.Name = "numThumbnailInterval";
+            this.numThumbnailInterval.Size = new System.Drawing.Size(61, 19);
+            this.numThumbnailInterval.TabIndex = 17;
+            this.numThumbnailInterval.Value = new decimal(new int[] {
+            3000,
+            0,
+            0,
+            0});
             // 
-            // cmbThumbTwipplePhoto
+            // label29
             // 
-            this.cmbThumbTwipplePhoto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbThumbTwipplePhoto.FormattingEnabled = true;
-            this.cmbThumbTwipplePhoto.Location = new System.Drawing.Point(97, 276);
-            this.cmbThumbTwipplePhoto.Name = "cmbThumbTwipplePhoto";
-            this.cmbThumbTwipplePhoto.Size = new System.Drawing.Size(121, 20);
-            this.cmbThumbTwipplePhoto.TabIndex = 14;
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(18, 47);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(200, 12);
+            this.label29.TabIndex = 18;
+            this.label29.Text = "複数画像の場合の切り替え間隔（ミリ秒）";
+            // 
+            // chbDispThumbnail
+            // 
+            this.chbDispThumbnail.AutoSize = true;
+            this.chbDispThumbnail.Location = new System.Drawing.Point(20, 18);
+            this.chbDispThumbnail.Name = "chbDispThumbnail";
+            this.chbDispThumbnail.Size = new System.Drawing.Size(149, 16);
+            this.chbDispThumbnail.TabIndex = 16;
+            this.chbDispThumbnail.Text = "画像サムネイルを表示する";
+            this.chbDispThumbnail.UseVisualStyleBackColor = true;
             // 
             // FrmConfig
             // 
@@ -2146,11 +2145,8 @@
         private System.Windows.Forms.CheckBox chbDispDMBaloon;
         private System.Windows.Forms.CheckBox chbDispReplyBaloon;
         private System.Windows.Forms.CheckBox chbDispReplyTooltip;
-        private System.Windows.Forms.CheckBox chbDispThumbnail;
         private System.Windows.Forms.NumericUpDown numReplyTooltipDepth;
-        private System.Windows.Forms.NumericUpDown numThumbnailInterval;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label29;
         private System.Windows.Forms.TextBox txtFooter;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.TextBox txtHeader;
@@ -2202,5 +2198,8 @@
         private System.Windows.Forms.ComboBox cmbThumbowly;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.ComboBox cmbThumbTwipplePhoto;
+        private System.Windows.Forms.NumericUpDown numThumbnailInterval;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.CheckBox chbDispThumbnail;
     }
 }

@@ -417,6 +417,9 @@ namespace StarlitTwit
 
             #region ■■サムネイル設定■■
             //-------------------------------------------------------------------------------
+            chbDispThumbnail.Checked = SettingsData.DisplayThumbnail;
+            numThumbnailInterval.Value = SettingsData.DisplayThumbnailInterval;
+
             cmbThumbimgly.SelectedItem = SettingsData.ThumbType_img_ly;
             cmbThumbmovapic.SelectedItem = SettingsData.ThumbType_movapic;
             cmbThumbowly.SelectedItem = SettingsData.ThumbType_ow_ly;
@@ -433,8 +436,6 @@ namespace StarlitTwit
             txtHeader.Text = SettingsData.Header;
             txtFooter.Text = SettingsData.Footer;
 
-            chbDispThumbnail.Checked = SettingsData.DisplayThumbnail;
-            numThumbnailInterval.Value = SettingsData.DisplayThumbnailInterval;
             chbDispReplyTooltip.Checked = SettingsData.DisplayReplyToolTip;
             numReplyTooltipDepth.Value = SettingsData.DisplayReplyToolTipDepth;
             chbDispReplyBaloon.Checked = SettingsData.DisplayReplyBaloon;
@@ -526,6 +527,9 @@ namespace StarlitTwit
 
             #region ■■サムネイル設定■■
             //-------------------------------------------------------------------------------
+            SettingsData.DisplayThumbnail = chbDispThumbnail.Checked;
+            SettingsData.DisplayThumbnailInterval = (int)numThumbnailInterval.Value;
+
             SettingsData.ThumbType_img_ly = (imglyThumbnailType)cmbThumbimgly.SelectedItem;
             SettingsData.ThumbType_movapic = (movapicThumbnailType)cmbThumbmovapic.SelectedItem;
             SettingsData.ThumbType_ow_ly = (owlyThumbnailType)cmbThumbowly.SelectedItem;
@@ -542,8 +546,6 @@ namespace StarlitTwit
             SettingsData.Header = txtHeader.Text;
             SettingsData.Footer = txtFooter.Text;
 
-            SettingsData.DisplayThumbnail = chbDispThumbnail.Checked;
-            SettingsData.DisplayThumbnailInterval = (int)numThumbnailInterval.Value;
             SettingsData.DisplayReplyToolTip = chbDispReplyTooltip.Checked;
             SettingsData.DisplayReplyToolTipDepth = (int)numReplyTooltipDepth.Value;
             SettingsData.DisplayReplyBaloon = chbDispReplyBaloon.Checked;
