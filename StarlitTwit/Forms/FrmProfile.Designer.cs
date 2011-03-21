@@ -278,7 +278,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(136, 80);
+            this.label10.Location = new System.Drawing.Point(136, 78);
             this.label10.Name = "label10";
             this.label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label10.Size = new System.Drawing.Size(58, 12);
@@ -328,7 +328,7 @@
             // lblFollowingNum
             // 
             this.lblFollowingNum.AutoSize = true;
-            this.lblFollowingNum.Location = new System.Drawing.Point(197, 80);
+            this.lblFollowingNum.Location = new System.Drawing.Point(197, 78);
             this.lblFollowingNum.Name = "lblFollowingNum";
             this.lblFollowingNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblFollowingNum.Size = new System.Drawing.Size(11, 12);
