@@ -233,13 +233,14 @@ namespace StarlitTwit.UserControls
             Control c = (Control)sender;
 
             lock (_lockimg) {
-                if (!_dispLoading && _img == null) { return; }
                 Graphics g = e.Graphics;
                 g.Clear(c.BackColor);
                 Rectangle drawrect = e.ClipRectangle;
                 g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
-                if (_dispLoading) { ImageAnimator.UpdateFrames(_loadingimg); }
-                Image img = (_dispLoading) ? _loadingimg : _img[_imgIndex];
+                if (_dispLoading && _gettingImage) { ImageAnimator.UpdateFrames(_loadingimg); }
+                Image img = (_dispLoading && _gettingImage) ? _loadingimg : 
+                            (_img != null) ? _img[_imgIndex] :
+                                             StarlitTwit.Properties.Resources.failed;
                 g.DrawImage(img, PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
             }
         }
@@ -311,6 +312,7 @@ namespace StarlitTwit.UserControls
         {
             EventHandler evh = new EventHandler(Image_Animate);
             ImageAnimator.Animate(_loadingimg, evh);
+            _gettingImage = true;
 
             List<Image> list = new List<Image>();
             foreach (var url in _imgURLs) {
@@ -333,7 +335,12 @@ namespace StarlitTwit.UserControls
                     }
                 }
             }
-            else { lock (_lockimg) { _img = null; } }
+            else { 
+                lock (_lockimg) { _img = null; }
+                Size = GetPreferSize(Properties.Resources.failed.Size);
+                DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                DisplayForm.Invalidate();
+            }
 
             ImageAnimator.StopAnimate(_loadingimg, evh);
             _gettingImage = false;
