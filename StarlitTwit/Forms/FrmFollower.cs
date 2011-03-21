@@ -21,7 +21,8 @@ namespace StarlitTwit
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
         private ImageListWrapper _imageListWrapper = null;
-        private Bitmap _bmp;
+        /// <summary>ロード中画像</summary>
+        private Bitmap _loadingimg;
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
@@ -239,14 +240,14 @@ namespace StarlitTwit
         private void lstvList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             if (e.ColumnIndex > 0) { e.DrawDefault = true; return; }
-            ImageAnimator.UpdateFrames(_bmp);
+            ImageAnimator.UpdateFrames(_loadingimg);
             e.DrawBackground();
             Image img = _imageListWrapper.GetImage(_profileList[e.ItemIndex].IconURL);
             if (img != null) {
                 e.Graphics.DrawImage(img, e.Bounds.Location);
             }
-            else {
-                e.Graphics.DrawImage(_bmp, e.Bounds.Location);
+            else if (_loadingimg != null) {
+                e.Graphics.DrawImage(_loadingimg, e.Bounds.Location);
             }
         }
         #endregion (lstvList_DrawSubItem)
@@ -364,10 +365,10 @@ namespace StarlitTwit
         //
         private void GetImages(IEnumerable<Tuple<ListViewItem, string>> data)
         {
+            EventHandler evh = new EventHandler(Image_Animate);
+            _loadingimg = StarlitTwit.Properties.Resources.NowLoadingS;
             try {
-                EventHandler evh = new EventHandler(Image_Animate);
-                _bmp = StarlitTwit.Properties.Resources.NowLoadingS;
-                ImageAnimator.Animate(_bmp, evh);
+                ImageAnimator.Animate(_loadingimg, evh);
                 foreach (var d in data) {
                     Image img = Utilization.GetImageFromURL(d.Item2);
                     if (img != null) {
@@ -378,9 +379,9 @@ namespace StarlitTwit
                         d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;
                     }
                 }
-                ImageAnimator.StopAnimate(_bmp, evh);
             }
             catch (InvalidOperationException) { }
+            finally { ImageAnimator.StopAnimate(_loadingimg, evh); }
         }
         #endregion (GetImages)
         //-------------------------------------------------------------------------------

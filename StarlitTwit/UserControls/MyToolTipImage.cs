@@ -187,7 +187,9 @@ namespace StarlitTwit.UserControls
                 Size size;
                 if (_img == null) {
                     if (!_gettingImage) {
-                        _loadingimg = StarlitTwit.Properties.Resources.NowLoadingL;
+                        if (_loadingimg == null) {
+                            _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingL.Clone();
+                        }
                         Utilization.InvokeTransaction(() => GetImages());
                     }
 
@@ -236,7 +238,7 @@ namespace StarlitTwit.UserControls
                 g.Clear(c.BackColor);
                 Rectangle drawrect = e.ClipRectangle;
                 g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
-                if (_dispLoading) { ImageAnimator.UpdateFrames(_loadingimg); Console.Write("l"); }
+                if (_dispLoading) { ImageAnimator.UpdateFrames(_loadingimg); }
                 Image img = (_dispLoading) ? _loadingimg : _img[_imgIndex];
                 g.DrawImage(img, PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
             }
@@ -326,7 +328,7 @@ namespace StarlitTwit.UserControls
                             DisplayForm.Invoke(new Action(() => ConfigDispForm()));
                             DisplayForm.Invalidate();
                         }
-                        catch (NullReferenceException){}
+                        catch (NullReferenceException) { }
                         catch (InvalidOperationException) { }
                     }
                 }
@@ -355,6 +357,19 @@ namespace StarlitTwit.UserControls
             }
         }
         #endregion (DisposeImages)
+
+        //-------------------------------------------------------------------------------
+        #region #[override]Dispose
+        //-------------------------------------------------------------------------------
+        //
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing) {
+                _loadingimg.Dispose();
+            }
+        }
+        #endregion (#[override]Dispose)
     }
 }
 
