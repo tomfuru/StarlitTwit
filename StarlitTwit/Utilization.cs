@@ -22,6 +22,7 @@ namespace StarlitTwit
         public const char CHR_LOCKED = '◆';
         public const char CHR_FAVORITED = '★';
         public const string STR_DATETIMEFORMAT = "yyyy/MM/dd HH:mm:ss";
+        public const string URL_REGEX_PATTERN = @"(http|https)://[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]+";
 
         //-------------------------------------------------------------------------------
         #region +[static]UrlEncode
@@ -495,9 +496,8 @@ namespace StarlitTwit
             //    index = end + 1;
             //}
             #endregion
-            const string CHECKPATTERN = @"(http|https)://[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]+";
 
-            MatchCollection mc = Regex.Matches(text, CHECKPATTERN);
+            MatchCollection mc = Regex.Matches(text, URL_REGEX_PATTERN);
             foreach (Match match in mc) {
                 yield return match.Value;
             }

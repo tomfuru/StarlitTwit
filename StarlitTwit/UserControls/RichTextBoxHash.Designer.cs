@@ -80,6 +80,7 @@
             this.CopyMenu = this.tsmiCopy;
             this.CutMenu = this.tsmiCut;
             this.PasteMenu = this.tsmiPaste;
+            this.SurpressDefaultMenuStateChange = true;
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.RichTextBoxHash_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.RichTextBoxHash_MouseMove);
             this.contextMenu.ResumeLayout(false);

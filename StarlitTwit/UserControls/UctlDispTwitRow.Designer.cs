@@ -96,6 +96,7 @@
             this.rtxtGet.ReadOnly = true;
             this.rtxtGet.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.rtxtGet.Size = new System.Drawing.Size(100, 19);
+            this.rtxtGet.SurpressDefaultMenuStateChange = true;
             this.rtxtGet.TabIndex = 3;
             this.rtxtGet.TabStop = false;
             this.rtxtGet.Text = "";
