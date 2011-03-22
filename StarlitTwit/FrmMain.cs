@@ -364,7 +364,7 @@ namespace StarlitTwit
             // Ctrl+Tab によるタブ入力の抑制
             if (e.Control && e.KeyCode == Keys.Tab) {
                 e.SuppressKeyPress = true;
-                return; 
+                return;
             }
 
             // Enter入力時の発言イベント発生
@@ -1893,17 +1893,20 @@ namespace StarlitTwit
             switch (data.SearchType) {
                 case TabSearchType.Keyword:
                     sb.Append("キーワード:");
+                    sb.AppendLine(data.SearchWord);
                     break;
                 case TabSearchType.User:
                     sb.Append("ユーザー:");
+                    sb.AppendLine(data.SearchWord);
                     break;
                 case TabSearchType.List:
-                    sb.Append("リスト(オーナー:");
+                    sb.Append("リスト:");
+                    sb.AppendLine(data.SearchWord);
+                    sb.Append("(オーナー:");
                     sb.Append(data.ListOwner);
-                    sb.Append("):");
+                    sb.AppendLine(")");
                     break;
             }
-            sb.AppendLine(data.SearchWord);
 
             sb.Append(STR_FIRST_GET_NUM);
             sb.Append(data.FirstGetNum.ToString());
@@ -1918,9 +1921,7 @@ namespace StarlitTwit
                 sb.Append(data.GetInterval.ToString());
                 sb.Append(STR_SECOND);
             }
-            else {
-                sb.Append(STR_NOT_AUTOGET);
-            }
+            else { sb.Append(STR_NOT_AUTOGET); }
 
             return sb.ToString();
         }
