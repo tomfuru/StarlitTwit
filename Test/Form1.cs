@@ -182,7 +182,7 @@ namespace Test
 
         private void richTextBox3_TextChanged(object sender, EventArgs e)
         {
-            richTextBox3.ChangeFonts();
+            richTextBox3.ChangeFonts(null);
         }
     }
 }

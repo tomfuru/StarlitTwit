@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace StarlitTwit
 {
@@ -35,6 +36,10 @@ namespace StarlitTwit
         public static readonly string URLapi;
         public static readonly string URLtwi;
         public static readonly string URLsearch;
+
+        public const bool DEFAULT_INCLUDE_ENTITIES = false;
+
+        public const string HASH_REGEX_PATTERN = @"(?<entity>(@|#[a-zA-Z_])[a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])";
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -86,7 +91,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = false)
+        public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -113,7 +118,7 @@ namespace StarlitTwit
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
         public IEnumerable<TwitData> statuses_home_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                 bool trim_user = false, bool include_entities = false)
+                                                 bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -145,7 +150,7 @@ namespace StarlitTwit
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
         public IEnumerable<TwitData> statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                    bool trim_user = false, bool include_rts = false, bool include_entities = false)
+                                                    bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -179,7 +184,7 @@ namespace StarlitTwit
         /// <param name="include_rts">[option]</param>
         /// <param name="include_entities">[option]</param>
         public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                           bool trim_user = false, bool include_rts = false, bool include_entities = false)
+                                           bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -213,7 +218,7 @@ namespace StarlitTwit
         /// <param name="include_rts">[option]</param>
         /// <param name="include_entities">[option]</param>
         public IEnumerable<TwitData> statuses_mentions(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                            bool trim_user = false, bool include_rts = false, bool include_entities = false)
+                                            bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -244,7 +249,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
         public IEnumerable<TwitData> statuses_retweeted_by_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                   bool trim_user = false, bool include_entities = false)
+                                                   bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -274,7 +279,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
         public IEnumerable<TwitData> statuses_retweeted_to_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                   bool trim_user = false, bool include_entities = false)
+                                                   bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -304,7 +309,7 @@ namespace StarlitTwit
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
         public IEnumerable<TwitData> statuses_retweets_of_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                  bool trim_user = false, bool include_entities = false)
+                                                  bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -335,7 +340,7 @@ namespace StarlitTwit
         /// <param name="id">取得する発言ID</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData statuses_show(bool withAuthParam, long id, bool trim_user = false, bool include_entities = false)
+        public TwitData statuses_show(bool withAuthParam, long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -367,7 +372,7 @@ namespace StarlitTwit
         /// statuses/updateメソッド
         /// </summary>
         public TwitData statuses_update(string status, long in_reply_to_status_id = -1, double latitude = double.NaN, double longtitude = double.NaN,
-                                    string place_id = "", bool display_coordinates = false, bool trim_user = false, bool include_entities = false)
+                                    string place_id = "", bool display_coordinates = false, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -398,7 +403,7 @@ namespace StarlitTwit
         /// <param name="id">削除するID</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData statuses_destroy(long id, bool trim_user = false, bool include_entities = false)
+        public TwitData statuses_destroy(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -434,7 +439,7 @@ namespace StarlitTwit
         /// <param name="count">[option] &lt;100</param>
         /// <param name="trim_user">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = false)
+        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -484,7 +489,7 @@ namespace StarlitTwit
         /// <param name="screen_name">[select]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile users_show(long user_id = -1, string screen_name = null, bool include_entities = false)
+        public UserProfile users_show(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
 
@@ -510,7 +515,7 @@ namespace StarlitTwit
         /// <param name="screen_names">[select]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public IEnumerable<UserProfile> users_lookup(long[] user_ids = null, string[] screen_names = null, bool include_entities = false)
+        public IEnumerable<UserProfile> users_lookup(long[] user_ids = null, string[] screen_names = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
                 throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
@@ -538,7 +543,7 @@ namespace StarlitTwit
         /// <param name="cursor">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public Tuple<IEnumerable<UserProfile>, long, long> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
+        public Tuple<IEnumerable<UserProfile>, long, long> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -565,7 +570,7 @@ namespace StarlitTwit
         /// <param name="cursor">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public Tuple<IEnumerable<UserProfile>, long, long> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = false)
+        public Tuple<IEnumerable<UserProfile>, long, long> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -597,7 +602,7 @@ namespace StarlitTwit
         /// <param name="count">[option]</param>
         /// <param name="page">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = false)
+        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -624,7 +629,7 @@ namespace StarlitTwit
         /// <param name="count">[option]</param>
         /// <param name="page">[option]</param>
         /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = false)
+        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -650,7 +655,7 @@ namespace StarlitTwit
         /// <param name="user_id">送信先のユーザーID</param>
         /// <param name="text">送信テキスト</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = false)
+        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -675,7 +680,7 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="id">削除先発言ID</param>
         /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_destroy(long id, bool include_entities = false)
+        public TwitData direct_messages_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -854,7 +859,7 @@ namespace StarlitTwit
         /// <param name="follow">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = false, bool include_entities = false)
+        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -880,7 +885,7 @@ namespace StarlitTwit
         /// <param name="screen_name">[select]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile friendships_destroy(long user_id = -1, string screen_name = null, bool include_entities = false)
+        public UserProfile friendships_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -989,7 +994,7 @@ namespace StarlitTwit
         /// <param name="description">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, bool include_entities = false)
+        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url)
              && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。"); }
@@ -1039,7 +1044,7 @@ namespace StarlitTwit
         /// favorites_create お気に入り設定
         /// </summary>
         /// <returns></returns>
-        public TwitData favorites_create(long id, bool include_entities = false)
+        public TwitData favorites_create(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1059,7 +1064,7 @@ namespace StarlitTwit
         /// favorites_destroy お気に入り削除）
         /// </summary>
         /// <returns></returns>
-        public TwitData favorites_destroy(long id, bool include_entities = false)
+        public TwitData favorites_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1662,8 +1667,10 @@ namespace StarlitTwit
         private TwitData ConvertToTwitData(XElement el)
         {
             try {
-                bool notRT = (el.Element("retweeted_status") == null);
-                return new TwitData() {
+                XElement RTel = el.Element("retweeted_status");
+                bool notRT = (RTel == null);
+
+                var data = new TwitData() {
                     TwitType = (notRT) ? TwitType.Normal : TwitType.Retweet,
                     DMScreenName = "",
                     StatusID = long.Parse(el.Element("id").Value),
@@ -1683,21 +1690,26 @@ namespace StarlitTwit
                         : new TwitData() {
                             TwitType = StarlitTwit.TwitType.Normal,
                             DMScreenName = "",
-                            StatusID = long.Parse(el.Element("retweeted_status").Element("id").Value),
-                            Time = StringToDateTime(el.Element("retweeted_status").Element("created_at").Value),
-                            Favorited = bool.Parse(el.Element("retweeted_status").Element("favorited").Value),
-                            Mention_StatusID = TryParseLong(el.Element("retweeted_status").Element("in_reply_to_status_id").Value),
-                            Mention_UserID = TryParseLong(el.Element("retweeted_status").Element("in_reply_to_user_id").Value),
-                            Mention_ScreenName = el.Element("retweeted_status").Element("in_reply_to_screen_name").Value,
-                            Text = ConvertSpecialChar(el.Element("retweeted_status").Element("text").Value),
-                            Source = CutSourceString(el.Element("retweeted_status").Element("source").Value),
-                            UserID = long.Parse(el.Element("retweeted_status").Element("user").Element("id").Value),
-                            UserName = el.Element("retweeted_status").Element("user").Element("name").Value,
-                            IconURL = el.Element("retweeted_status").Element("user").Element("profile_image_url").Value,
-                            UserScreenName = el.Element("retweeted_status").Element("user").Element("screen_name").Value,
-                            UserProtected = bool.Parse(el.Element("retweeted_status").Element("user").Element("protected").Value)
-                        }
+                            StatusID = long.Parse(RTel.Element("id").Value),
+                            Time = StringToDateTime(RTel.Element("created_at").Value),
+                            Favorited = bool.Parse(RTel.Element("favorited").Value),
+                            Mention_StatusID = TryParseLong(RTel.Element("in_reply_to_status_id").Value),
+                            Mention_UserID = TryParseLong(RTel.Element("in_reply_to_user_id").Value),
+                            Mention_ScreenName = RTel.Element("in_reply_to_screen_name").Value,
+                            Text = ConvertSpecialChar(RTel.Element("text").Value),
+                            Source = CutSourceString(RTel.Element("source").Value),
+                            UserID = long.Parse(RTel.Element("user").Element("id").Value),
+                            UserName = RTel.Element("user").Element("name").Value,
+                            IconURL = RTel.Element("user").Element("profile_image_url").Value,
+                            UserScreenName = RTel.Element("user").Element("screen_name").Value,
+                            UserProtected = bool.Parse(RTel.Element("user").Element("protected").Value)
+                        },
+                    //Entities = ConvertToEntityData(el.Element("entities")).ToArray()
                 };
+
+                data.Entities = GetEntitiesByRegex(data.MainTwitData.Text).ToArray();
+
+                return data;
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
@@ -1960,6 +1972,40 @@ namespace StarlitTwit
             }
         }
         #endregion (ConvertToRelationshipData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToEntityData XElementからEntityData型に変換します
+        //-------------------------------------------------------------------------------
+        //
+        private IEnumerable<EntityData> ConvertToEntityData(XElement el)
+        {
+            if (el == null) { yield break; }
+
+            // mention
+            var mentions = from m in el.Element("user_mentions").Elements("user_mention")
+                           select new EntityData(ItemType.User,
+                                                 Range.Make(int.Parse(m.Attribute("start").Value),
+                                                            int.Parse(m.Attribute("end").Value)),
+                                                 m.Element("screen_name").Value);
+            // hashtags
+            var hashtags = from h in el.Element("hashtags").Elements("hashtag")
+                           select new EntityData(ItemType.HashTag,
+                                                 Range.Make(int.Parse(h.Attribute("start").Value),
+                                                            int.Parse(h.Attribute("end").Value)),
+                                                 h.Element("text").Value);
+
+            // url
+            var urls = from u in el.Element("urls").Elements("url")
+                       select new EntityData(null,
+                                             Range.Make(int.Parse(u.Attribute("start").Value),
+                                                        int.Parse(u.Attribute("end").Value)),
+                                             u.Element("url").Value);
+
+
+            foreach (var item in mentions) { yield return item; }
+            foreach (var item in hashtags) { yield return item; }
+            foreach (var item in urls) { yield return item; }
+        }
+        #endregion (ConvertToEntityData)
         //===============================================================================
         #region -TryParseLong 文字列をlongに変換します。
         //-------------------------------------------------------------------------------
@@ -2080,6 +2126,38 @@ namespace StarlitTwit
         }
         #endregion (ConcatWithComma)
         //-------------------------------------------------------------------------------
+        #region -GetEntitiesByRegex 正規表現を利用してエンティティを抽出します。
+        //-------------------------------------------------------------------------------
+        //
+        private IEnumerable<EntityData> GetEntitiesByRegex(string text)
+        {
+            List<EntityData> list = new List<EntityData>();
+            Regex r = new Regex(HASH_REGEX_PATTERN);
+            foreach (Match m in r.Matches(text)) {
+                Group g = m.Groups["entity"];
+                switch (g.Value[0]) {
+                    case '@':
+                        yield return new EntityData(ItemType.User, new Range(g.Index, g.Length), g.Value.Substring(1));
+                        break;
+                    case '#':
+                        yield return new EntityData(ItemType.HashTag, new Range(g.Index, g.Length), g.Value);
+                        break;
+                    default:
+                        Debug.Assert(false, "ここには来ない");
+                        break;
+                }
+            }
+
+            Regex r2 = new Regex(Utilization.URL_REGEX_PATTERN);
+            foreach (Match m in r2.Matches(text)) {
+                string value;
+                if (m.Value[0] == 't') { value = 'h' + m.Value; }
+                else { value = m.Value; }
+                yield return new EntityData(null, new Range(m.Index, m.Length), value);
+            }
+        }
+        #endregion (GetEntitiesByRegex)
+        //-------------------------------------------------------------------------------
         #endregion (Private Util Methods)
     }
 
@@ -2115,6 +2193,8 @@ namespace StarlitTwit
         public bool Favorited;
         /// <summary>RT発言情報</summary>
         public TwitData RTTwitData;
+        /// <summary>エンティティ</summary>
+        public EntityData[] Entities;
 
         // 発言ユーザー情報
         /// <summary>ユーザーID</summary>
@@ -2338,6 +2418,153 @@ namespace StarlitTwit
     //-------------------------------------------------------------------------------
     #endregion (TwitType)
 
+    //-------------------------------------------------------------------------------
+    #region EntityData 構造体
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// エンティティの情報を表します。
+    /// </summary>
+    public struct EntityData
+    {
+        /// <summary>アイテムの種類．nullの時はURL</summary>
+        public ItemType? type;
+        /// <summary>範囲</summary>
+        public Range range;
+        /// <summary>アイテムの情報を表す文字列</summary>
+        public string str;
+
+        public EntityData(ItemType? type, Range range, string str)
+        {
+            this.type = type;
+            this.range = range;
+            this.str = str;
+        }
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (EntityData)
+    //-------------------------------------------------------------------------------
+    #region +ItemType 列挙体：種類
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// クリックしたアイテムの種類
+    /// </summary>
+    public enum ItemType : byte
+    {
+        /// <summary>ハッシュタグ</summary>
+        HashTag,
+        /// <summary>ユーザー</summary>
+        User
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (ItemType)
+    //-------------------------------------------------------------------------------
+    #region (Class)Range
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// 値の範囲を表します。
+    /// </summary>
+    public struct Range : IEquatable<Range>
+    {
+        /// <summary>空のRangeを表します。</summary>
+        public static Range Empty = new Range(0, 0);
+
+        private int start;
+        private int length;
+
+        /// <summary>始まり</summary>
+        public int Start { get { return start; } }
+        /// <summary>長さ</summary>
+        public int Length { get { return length; } }
+        /// <summary>終わり</summary>
+        public int End { get { return start + length; } }
+
+        //-------------------------------------------------------------------------------
+        #region コンストラクタ
+        //-------------------------------------------------------------------------------
+        //
+        public Range(int start, int length)
+        {
+            this.start = start;
+            this.length = length;
+        }
+        #endregion (コンストラクタ)
+        //-------------------------------------------------------------------------------
+        #region +InRange 値が範囲の中にあるか判別します
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 値がこの範囲の中にあるかどうか判断します。
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <param name="includeBorder">[option]境界を含むかどうか</param>
+        /// <returns></returns>
+        public bool InRange(int value, bool includeBorder = true)
+        {
+            return (includeBorder)
+               ? ((value >= Start) && (value <= Start + Length))
+               : ((value > Start) && (value < Start + Length));
+        }
+        #endregion (InRange)
+        //-------------------------------------------------------------------------------
+        #region +IsEmptyプロパティ：範囲が空かどうか判定
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 範囲が空かどうか判定します。
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty
+        {
+            get { return Length == 0; }
+        }
+        #endregion (IsEmpty)
+
+        //-------------------------------------------------------------------------------
+        #region IEquatable<Range>.Equals 等価判断
+        //-------------------------------------------------------------------------------
+        //
+        public bool Equals(Range other)
+        {
+            return (this.Start == other.Start && this.Length == other.Length);
+        }
+        #endregion (IEquatable<Range>.Equals)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]Equals 等価判断
+        //-------------------------------------------------------------------------------
+        //
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is Range)) { return false; }
+            return this.Equals((Range)obj);
+        }
+        #endregion (+[override]Equals)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]GetHashCode ハッシュコード取得
+        //-------------------------------------------------------------------------------
+        //
+        public override int GetHashCode()
+        {
+            return (Start.GetHashCode() ^ Length.GetHashCode());
+        }
+        #endregion (+[override]GetHashCode)
+
+
+        //-------------------------------------------------------------------------------
+        #region +[static]Make Rangeを作成
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 始点と終点からRangeを作成します。
+        /// </summary>
+        /// <param name="start">始点</param>
+        /// <param name="end">終点</param>
+        /// <returns></returns>
+        public static Range Make(int start, int end)
+        {
+            return new Range(start, end - start);
+        }
+        #endregion (Make)
+    }
+    #endregion ((Class)Range)
 
     //-----------------------------------------------------------------------------------
     #region (Class)TwitterAPIException
