@@ -381,6 +381,7 @@
             // splContainer.Panel2
             // 
             this.splContainer.Panel2.Controls.Add(this.tabTwitDisp);
+            this.splContainer.Panel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.splContainer_Panel2_MouseClick);
             this.splContainer.Size = new System.Drawing.Size(492, 619);
             this.splContainer.SplitterDistance = 106;
             this.splContainer.SplitterWidth = 2;
@@ -632,7 +633,7 @@
             this.uctlDispReply.Location = new System.Drawing.Point(0, 0);
             this.uctlDispReply.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispReply.Name = "uctlDispReply";
-            this.uctlDispReply.Size = new System.Drawing.Size(440, 303);
+            this.uctlDispReply.Size = new System.Drawing.Size(480, 482);
             this.uctlDispReply.TabIndex = 1;
             // 
             // tabpgHistory
@@ -654,7 +655,7 @@
             this.uctlDispHistory.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHistory.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHistory.Name = "uctlDispHistory";
-            this.uctlDispHistory.Size = new System.Drawing.Size(440, 303);
+            this.uctlDispHistory.Size = new System.Drawing.Size(480, 482);
             this.uctlDispHistory.TabIndex = 0;
             // 
             // tabpgDirect
@@ -676,7 +677,7 @@
             this.uctlDispDirect.Location = new System.Drawing.Point(0, 0);
             this.uctlDispDirect.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispDirect.Name = "uctlDispDirect";
-            this.uctlDispDirect.Size = new System.Drawing.Size(440, 303);
+            this.uctlDispDirect.Size = new System.Drawing.Size(480, 482);
             this.uctlDispDirect.TabIndex = 2;
             // 
             // imageListWrapper

@@ -16,8 +16,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         /// <summary>リストデータ</summary>
         private IEnumerable<ListData> _listData = null;
-        /// <summary>API呼び出しクラス</summary>
-        private Twitter _twitter;
         /// <summary>リストオーナー</summary>
         private string _listOwner = null;
         /// <summary>データ文字列</summary>
@@ -36,11 +34,9 @@ namespace StarlitTwit
         /// タブ作成フォームを初期化します。
         /// </summary>
         /// <param name="twitter">Twitter APIを使用するためのクラス</param>
-        public FrmMakeTab(Twitter twitter)
+        public FrmMakeTab()
         {
             InitializeComponent();
-
-            _twitter = twitter;
 
             pnlList.Location = pnlUser.Location = pnlKeyword.Location;
             this.Size = new Size(287, 189);
@@ -215,12 +211,12 @@ namespace StarlitTwit
         {
             if (_listData == null) {
                 try {
-                    _listOwner = (string.IsNullOrEmpty(listOwner)) ? _twitter.ScreenName : listOwner;
+                    _listOwner = (string.IsNullOrEmpty(listOwner)) ? FrmMain.Twitter.ScreenName : listOwner;
                     lblListOwner.Text = "ユーザー:" + _listOwner;
 
                     long next_cursor = -1;
                     do {
-                        Tuple<IEnumerable<ListData>, long, long> lsttpl = _twitter.lists_Get(_listOwner, next_cursor);
+                        Tuple<IEnumerable<ListData>, long, long> lsttpl = FrmMain.Twitter.lists_Get(_listOwner, next_cursor);
                         _listData = lsttpl.Item1;
                         next_cursor = lsttpl.Item2;
                         if (_listData.Count() > 0) {

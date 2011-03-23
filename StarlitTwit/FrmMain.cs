@@ -489,6 +489,17 @@ namespace StarlitTwit
         }
         #endregion (btnURLShorten_MenuClick)
         //-------------------------------------------------------------------------------
+        #region splContainer_Panel2_MouseClick パネル2クリック
+        //-------------------------------------------------------------------------------
+        //
+        private void splContainer_Panel2_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right) {
+                menuContainer2.Show(splContainer.Panel2, e.Location, ToolStripDropDownDirection.BelowRight);
+            }
+        }
+        #endregion (splContainer_Panel2_MouseClick)
+        //-------------------------------------------------------------------------------
         #endregion (諸コントロール)
         //===============================================================================
         #region ↓行右クリックメニュー
@@ -1012,7 +1023,7 @@ namespace StarlitTwit
                 tssLabel.RemoveText(STR_WAITING_TABEDIT);
                 TabData tabdata;
                 lock (SettingsData.TabDataDic) { tabdata = SettingsData.TabDataDic[(string)tabpg.Tag]; }
-                using (FrmMakeTab frm = new FrmMakeTab(Twitter)) {
+                using (FrmMakeTab frm = new FrmMakeTab()) {
                     frm.TabData = tabdata;
                     if (frm.ShowDialog() == DialogResult.OK) {
                         lock (SettingsData.TabDataDic) {
@@ -1138,7 +1149,7 @@ namespace StarlitTwit
 
                 tabdata.SearchType = type;
 
-                using (FrmMakeTab frm = new FrmMakeTab(Twitter)) {
+                using (FrmMakeTab frm = new FrmMakeTab()) {
                     frm.TabData = tabdata;
                     if (frm.ShowDialog() == DialogResult.OK) {
                         tabdata = frm.TabData;

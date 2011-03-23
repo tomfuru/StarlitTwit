@@ -64,7 +64,7 @@
             this.btnOK.Location = new System.Drawing.Point(104, 137);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
+            this.btnOK.TabIndex = 8;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -75,7 +75,7 @@
             this.btnCansel.Location = new System.Drawing.Point(189, 137);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(75, 23);
-            this.btnCansel.TabIndex = 1;
+            this.btnCansel.TabIndex = 9;
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
@@ -131,7 +131,7 @@
             this.cmbSearchType.Location = new System.Drawing.Point(81, 21);
             this.cmbSearchType.Name = "cmbSearchType";
             this.cmbSearchType.Size = new System.Drawing.Size(106, 20);
-            this.cmbSearchType.TabIndex = 26;
+            this.cmbSearchType.TabIndex = 0;
             this.cmbSearchType.SelectedIndexChanged += new System.EventHandler(this.cmbSearchType_SelectedIndexChanged);
             // 
             // label2
@@ -150,7 +150,7 @@
             this.pnlKeyword.Location = new System.Drawing.Point(19, 43);
             this.pnlKeyword.Name = "pnlKeyword";
             this.pnlKeyword.Size = new System.Drawing.Size(168, 62);
-            this.pnlKeyword.TabIndex = 28;
+            this.pnlKeyword.TabIndex = 1;
             this.pnlKeyword.Visible = false;
             // 
             // label3
@@ -178,7 +178,7 @@
             this.pnlUser.Location = new System.Drawing.Point(283, 11);
             this.pnlUser.Name = "pnlUser";
             this.pnlUser.Size = new System.Drawing.Size(168, 62);
-            this.pnlUser.TabIndex = 29;
+            this.pnlUser.TabIndex = 2;
             this.pnlUser.Visible = false;
             // 
             // label8
@@ -215,7 +215,7 @@
             this.pnlList.Location = new System.Drawing.Point(283, 98);
             this.pnlList.Name = "pnlList";
             this.pnlList.Size = new System.Drawing.Size(168, 62);
-            this.pnlList.TabIndex = 30;
+            this.pnlList.TabIndex = 3;
             this.pnlList.Visible = false;
             // 
             // lblListOwner
@@ -270,7 +270,7 @@
             0});
             this.numTimeline_Interval.Name = "numTimeline_Interval";
             this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Interval.TabIndex = 23;
+            this.numTimeline_Interval.TabIndex = 7;
             // 
             // numTimeline_Add
             // 
@@ -292,7 +292,7 @@
             0});
             this.numTimeline_Add.Name = "numTimeline_Add";
             this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Add.TabIndex = 21;
+            this.numTimeline_Add.TabIndex = 6;
             this.numTimeline_Add.Value = new decimal(new int[] {
             20,
             0,
@@ -319,7 +319,7 @@
             0});
             this.numTimeline_First.Name = "numTimeline_First";
             this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_First.TabIndex = 20;
+            this.numTimeline_First.TabIndex = 5;
             this.numTimeline_First.Value = new decimal(new int[] {
             20,
             0,
