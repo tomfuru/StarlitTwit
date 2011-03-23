@@ -534,19 +534,6 @@ namespace StarlitTwit
                     TwitMenu_UnFavorite_Click(sender, e);
                     break;
                 //-------------------------------------------------------------------------------
-                case RowEventType.DisplayUserProfile:
-                    TwitMenu_DisplayUserProfile_Click(sender, e);
-                    break;
-                case RowEventType.DisplayUserTweet:
-                    TwitMenu_DisplayUserTweet_Click(sender, e);
-                    break;
-                case RowEventType.MakeUserTab:
-                    TwitMenu_MakeUserTab_Click(sender, e);
-                    break;
-                case RowEventType.MakeUserListTab:
-                    TwitMenu_MakeUserListTab_Click(sender, e);
-                    break;
-                //-------------------------------------------------------------------------------
                 case RowEventType.Delete:
                     TwitMenu_Delete_Click(sender, e);
                     break;
@@ -670,42 +657,6 @@ namespace StarlitTwit
         }
         #endregion (TwitMenu_UnFavorite_Click)
         //-------------------------------------------------------------------------------
-        #region TwitMenu_DisplayUserProfile_Click ユーザープロフィール表示
-        //-------------------------------------------------------------------------------
-        //
-        private void TwitMenu_DisplayUserProfile_Click(object sender, TwitRowMenuEventArgs e)
-        {
-            ShowProfileForm(false, e.TwitData.MainTwitData.UserScreenName);
-        }
-        #endregion (TwitMenu_DisplayUserProfile_Click)
-        //-------------------------------------------------------------------------------
-        #region TwitMenu_DisplayUserTweet_Click ユーザー発言表示
-        //-------------------------------------------------------------------------------
-        //
-        private void TwitMenu_DisplayUserTweet_Click(object sender, TwitRowMenuEventArgs e)
-        {
-            Utilization.ShowUserTweet(this, e.TwitData.MainTwitData.UserScreenName);
-        }
-        #endregion (TwitMenu_DisplayUserTweet_Click)
-        //-------------------------------------------------------------------------------
-        #region TwitMenu_MakeUserTab_Click ユーザータブ追加
-        //-------------------------------------------------------------------------------
-        //
-        private void TwitMenu_MakeUserTab_Click(object sender, TwitRowMenuEventArgs e)
-        {
-            MakeNewTab(TabSearchType.User, e.TwitData.MainTwitData.UserScreenName);
-        }
-        #endregion (TwitMenu_MakeUserTab_Click)
-        //-------------------------------------------------------------------------------
-        #region TwitMenu_MakeUserListTab_Click ユーザー所有リストのタブ作成
-        //-------------------------------------------------------------------------------
-        //
-        private void TwitMenu_MakeUserListTab_Click(object sender, TwitRowMenuEventArgs e)
-        {
-            MakeNewTab(TabSearchType.List, null, e.TwitData.MainTwitData.UserScreenName);
-        }
-        #endregion (TwitMenu_MakeUserListTab_Click)
-        //-------------------------------------------------------------------------------
         #region TwitMenu_Delete_Click 削除
         //-------------------------------------------------------------------------------
         //
@@ -759,6 +710,77 @@ namespace StarlitTwit
             }
         }
         #endregion (TwitMenu_SpecifyTimeTweetRequest_Click)
+        //-------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_EntityEvent エンティティ関連メニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        public void TwitMenu_EntityEvent(object sender, EntityEventArgs e)
+        {
+            switch (e.EventType) {
+                case EntityEventType.User_DisplayProfile:
+                    TwitMenu_EntityEvent_DisplayUserProfile(sender, e);
+                    break;
+                case EntityEventType.User_DisplayTweets:
+                    TwitMenu_EntityEvent_DisplayUserTweet(sender, e);
+                    break;
+                case EntityEventType.User_MakeUserTab:
+                    TwitMenu_EntityEvent_MakeUserTab(sender, e);
+                    break;
+                case EntityEventType.User_MakeListTab:
+                    TwitMenu_EntityEvent_MakeUserListTab(sender, e);
+                    break;
+                case EntityEventType.Hashtag_MakeTab:
+                    TwitMenu_EntityEvent_MakeHashtagTab(sender, e);
+                    break;
+            }
+        }
+        #endregion (TwitMenu_EntityEvent)
+        //===============================================================================
+        #region TwitMenu_EntityEvent_DisplayUserProfile ユーザープロフィール表示
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_EntityEvent_DisplayUserProfile(object sender, EntityEventArgs e)
+        {
+            ShowProfileForm(false, e.Data);
+        }
+        #endregion (TwitMenu_EntityEvent_DisplayUserProfile)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_EntityEvent_DisplayUserTweet ユーザー発言表示
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_EntityEvent_DisplayUserTweet(object sender, EntityEventArgs e)
+        {
+            Utilization.ShowUserTweet(this, e.Data);
+        }
+        #endregion (TwitMenu_EntityEvent_DisplayUserTweet)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_EntityEvent_MakeUserTab ユーザータブ追加
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_EntityEvent_MakeUserTab(object sender, EntityEventArgs e)
+        {
+            MakeNewTab(TabSearchType.User, e.Data);
+        }
+        #endregion (TwitMenu_EntityEvent_MakeUserTab)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_EntityEvent_MakeUserListTab ユーザー所有リストのタブ作成
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_EntityEvent_MakeUserListTab(object sender, EntityEventArgs e)
+        {
+            MakeNewTab(TabSearchType.List, null, e.Data);
+        }
+        #endregion (TwitMenu_EntityEvent_MakeUserListTab)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_EntityEvent_MakeHashtagTab ハッシュタグのタブ作成
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_EntityEvent_MakeHashtagTab(object sender, EntityEventArgs e)
+        {
+            MakeNewTab(TabSearchType.Keyword, e.Data);
+        }
+        #endregion (TwitMenu_EntityEvent_MakeHashtagTab)
         //-------------------------------------------------------------------------------
         #endregion (↓行右クリックメニュー)
         //===============================================================================
@@ -1121,6 +1143,7 @@ namespace StarlitTwit
         public void RegisterUctlDispTwitEvent(UctlDispTwit uctlDisp)
         {
             uctlDisp.RowContextMenu_Click += TwitMenu_RowContextmenu_Click;
+            uctlDisp.EntityEvent += TwitMenu_EntityEvent;
             uctlDisp.TweetItemClick += DispTwit_TweetItemClick;
         }
         #endregion (RegisterUctlDispTwitEvent)

@@ -209,6 +209,10 @@ namespace StarlitTwit
         [Category("ツイート")]
         [Description("行右クリックメニュークリック時")]
         public event EventHandler<TwitRowMenuEventArgs> RowContextMenu_Click;
+        /// <summary>エンティティ関係メニュークリック時</summary>
+        [Category("ツイート")]
+        [Description("ツイート内エンティティに関するメニューイベント発生時")]
+        public event EventHandler<EntityEventArgs> EntityEvent;
         //-------------------------------------------------------------------------------
         #endregion (Public イベント)
         //-------------------------------------------------------------------------------
@@ -224,7 +228,7 @@ namespace StarlitTwit
                 case MenuType.Default:
                     break;
                 case MenuType.RestrictedUser:
-                    tsmiDisplayUserTweet.Visible = tsmiSpecifyTime.Visible = false;
+                    /*tsmiDisplayUserTweet.Visible = */tsmiSpecifyTime.Visible = false;
                     break;
                 case MenuType.Conversation:
                     tsmiDispConversation.Visible = tsmiSepConversation.Visible = false;
@@ -254,6 +258,39 @@ namespace StarlitTwit
             tsmiDelete.Enabled = isMine;
 
             tsmiMoreRecently.Visible = false; // 暫定
+
+            // コンボボックス項目設定
+            tsComboUser.Items.Clear();
+            tsComboHashtag.Items.Clear();
+            tsComboURL.Items.Clear();
+
+            // 発言に関係のあるユーザーをコンボボックスに
+            tsComboUser.Items.Add(SelectedTwitData.MainTwitData.UserScreenName);
+            if (isRT) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.UserScreenName); }
+            if (isReply) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.Mention_ScreenName); }
+
+            foreach (EntityData entity in SelectedTwitData.Entities) {
+                if (entity.type.HasValue) {
+                    switch (entity.type.Value) {
+                        case ItemType.HashTag:
+                            tsComboHashtag.Items.AddAvoidDup(entity.str);
+                            break;
+                        case ItemType.User:
+                            tsComboUser.Items.AddAvoidDup(entity.str);
+                            break;
+                    }
+                }
+                else { // URL
+                    tsComboURL.Items.AddAvoidDup(entity.str);
+                }
+            }
+            tsComboUser.SelectedIndex = 0;
+            if (tsmiHashtag.Visible = (tsComboHashtag.Items.Count > 0)) {
+                tsComboHashtag.SelectedIndex = 0;
+            }
+            if (tsmiURL.Visible = (tsComboURL.Items.Count > 0)) {
+                tsComboURL.SelectedIndex = 0;
+            }
         }
         #endregion (menuRow_Opening)
         #region ↓tsmi- メニュー項目イベント
@@ -342,18 +379,6 @@ namespace StarlitTwit
         }
         #endregion (tsmiDelete_Click)
         //-------------------------------------------------------------------------------
-        #region tsmiOpenBrowser_UserHome_Click ブラウザで開く-このユーザーのホームメニュークリック
-        //-------------------------------------------------------------------------------
-        //
-        private void tsmiOpenBrowser_UserHome_Click(object sender, EventArgs e)
-        {
-            StringBuilder sbUrl = new StringBuilder();
-            sbUrl.Append(Twitter.URLtwi);
-            sbUrl.Append(SelectedTwitData.MainTwitData.UserScreenName);
-
-            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
-        }
-        #endregion (tsmiOpenBrowser_UserHome_Click)
         #region tsmiOpenBrowser_ThisTweet_Click ブラウザで開く-このツイートメニュークリック
         //-------------------------------------------------------------------------------
         //
@@ -383,46 +408,88 @@ namespace StarlitTwit
         }
         #endregion (tsmiOpenBrowser_ReplyTweet_Click)
         //-------------------------------------------------------------------------------
-        #region tsmiDisplayUserProfile_Click このユーザーのプロフィールを表示するメニュークリック時
+        #region tsmiUser_DisplayProfile_Click ユーザー：プロフィール表示クリック
         //-------------------------------------------------------------------------------
         //
-        private void tsmiDisplayUserProfile_Click(object sender, EventArgs e)
+        private void tsmiUser_DisplayProfile_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.DisplayUserProfile, SelectedTwitData));
+            if (EntityEvent != null) {
+                EntityEvent(this, new EntityEventArgs(EntityEventType.User_DisplayProfile, (string)tsComboUser.SelectedItem));
             }
         }
-        #endregion (tsmiDisplayUserProfile_Click)
-        #region tsmiDisplayUserTweet_Click このユーザーの発言を表示するメニュークリック時
+        #endregion (tsmiUser_DisplayProfile_Click)
+        #region tsmiUser_DisplayTweets_Click ユーザー：発言を表示クリック
         //-------------------------------------------------------------------------------
         //
-        private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
+        private void tsmiUser_DisplayTweets_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.DisplayUserTweet, SelectedTwitData));
+            if (EntityEvent != null) {
+                EntityEvent(this, new EntityEventArgs(EntityEventType.User_DisplayTweets, (string)tsComboUser.SelectedItem));
             }
         }
-        #endregion (tsmiDisplayUserTweet_Click)
-        #region tsmiMakeUserTab_Click このユーザーのタブを作成メニュークリック時
+        #endregion (tsmiUser_DisplayTweets_Click)
+        #region tsmiUser_MakeUserTab_Click ユーザー：タブ作成クリック
         //-------------------------------------------------------------------------------
         //
-        private void tsmiMakeUserTab_Click(object sender, EventArgs e)
+        private void tsmiUser_MakeUserTab_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.MakeUserTab, SelectedTwitData));
+            if (EntityEvent != null) {
+                EntityEvent(this, new EntityEventArgs(EntityEventType.User_MakeUserTab, (string)tsComboUser.SelectedItem));
             }
         }
-        #endregion (tsmiMakeUserTab_Click)
-        #region tsmiMakeUserListTab_Click このユーザーのリストのタブを作成メニュークリック時
+        #endregion (tsmiUser_MakeUserTab_Click)
+        #region tsmiUser_MakeListTab_Click ユーザー：リストタブ作成クリック
         //-------------------------------------------------------------------------------
         //
-        private void tsmiMakeUserListTab_Click(object sender, EventArgs e)
+        private void tsmiUser_MakeListTab_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.MakeUserListTab, SelectedTwitData));
+            if (EntityEvent != null) {
+                EntityEvent(this, new EntityEventArgs(EntityEventType.User_MakeListTab, (string)tsComboUser.SelectedItem));
             }
         }
-        #endregion (tsmiMakeUserListTab_Click)
+        #endregion (tsmiUser_MakeListTab_Click)
+        #region tsmiUser_OpenBrowser_Click ユーザー：ブラウザで開くクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUser_OpenBrowser_Click(object sender, EventArgs e)
+        {
+            StringBuilder sbUrl = new StringBuilder();
+            sbUrl.Append(Twitter.URLtwi);
+            sbUrl.Append((string)tsComboUser.SelectedItem);
+
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
+        }
+        #endregion (tsmiUser_OpenBrowser_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiHashtag_MakeTab_Click ハッシュタグ：タブ作成クリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiHashtag_MakeTab_Click(object sender, EventArgs e)
+        {
+            if (EntityEvent != null) {
+                EntityEvent(this, new EntityEventArgs(EntityEventType.Hashtag_MakeTab, (string)tsComboHashtag.SelectedItem));
+            }
+        }
+        #endregion (tsmiHashtag_MakeTab_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiURL_OpenExternalBrowser_Click URL：外部ブラウザで開くクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiURL_OpenExternalBrowser_Click(object sender, EventArgs e)
+        {
+            string url = (string)tsComboURL.SelectedItem;
+            Utilization.OpenBrowser(url, false);
+        }
+        #endregion (tsmiURL_OpenExternalBrowser_Click)
+        #region tsmiURL_OpenInternalBrowser_Click URL：内部ブラウザで開くクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiURL_OpenInternalBrowser_Click(object sender, EventArgs e)
+        {
+            string url = (string)tsComboURL.SelectedItem;
+            Utilization.OpenBrowser(url, true);
+        }
+        #endregion (tsmiURL_OpenInternalBrowser_Click)
         //-------------------------------------------------------------------------------
         #region tsmiOlderData_Click より古いデータメニュークリック時
         //-------------------------------------------------------------------------------
@@ -1467,9 +1534,8 @@ namespace StarlitTwit
         #region コンストラクタ 初期化
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// SearchInfoEventArgsクラスを初期化します。
+        /// TwitRowMenuEventArgsクラスを初期化します。
         /// </summary>
-        /// <param name="info">検索情報</param>
         public TwitRowMenuEventArgs(RowEventType type, TwitData data)
         {
             EventType = type;
@@ -1504,14 +1570,6 @@ namespace StarlitTwit
         Unfavorite,
         /// <summary>削除 メニュー</summary>
         Delete,
-        /// <summary>このユーザーのプロフィールを表示する　メニュー</summary>
-        DisplayUserProfile,
-        /// <summary>このユーザーの発言を表示する メニュー</summary>
-        DisplayUserTweet,
-        /// <summary>このユーザーのタブを作成 メニュー</summary>
-        MakeUserTab,
-        /// <summary>このユーザーのリストのタブを作成 メニュー</summary>
-        MakeUserListTab,
         /// <summary>より古い発言取得 メニュー</summary>
         OlderTweetRequest,
         /// <summary>より新しい発言取得 メニュー</summary>
@@ -1521,6 +1579,57 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (RowEventType)
+
+    //-----------------------------------------------------------------------------------
+    #region (Class)EntityEventArgs
+    //-----------------------------------------------------------------------------------
+    /// <summary>
+    /// 呟き行データに関するイベントのための情報を提供します。
+    /// </summary>
+    public class EntityEventArgs : EventArgs
+    {
+        /// <summary>イベントの種類</summary>
+        public EntityEventType EventType { get; private set; }
+        /// <summary>エンティティデータ</summary>
+        public string Data { get; private set; }
+
+        //-------------------------------------------------------------------------------
+        #region コンストラクタ 初期化
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// EntityEventArgsクラスを初期化します。
+        /// </summary>
+        public EntityEventArgs(EntityEventType type, string data)
+        {
+            EventType = type;
+            Data = data;
+        }
+        #endregion (コンストラクタ)
+    }
+    //-----------------------------------------------------------------------------------
+    #endregion ((Class)SearchInfoEventArgs)
+
+    //-------------------------------------------------------------------------------
+    #region +EntityEventType 列挙体：エンティティデータに関するイベントの種類
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// エンティティデータに関するイベントの種類
+    /// </summary>
+    public enum EntityEventType
+    {
+        /// <summary>ユーザー：プロフィール表示</summary>
+        User_DisplayProfile,
+        /// <summary>ユーザー：発言表示</summary>
+        User_DisplayTweets,
+        /// <summary>ユーザー：ユーザータブ作成</summary>
+        User_MakeUserTab,
+        /// <summary>ユーザー：リストタブ作成</summary>
+        User_MakeListTab,
+        /// <summary>ハッシュタグ：タブ作成</summary>
+        Hashtag_MakeTab
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (EntityEventType)
 
     //-----------------------------------------------------------------------------------
     #region +SearchType 列挙体：検索タイプ

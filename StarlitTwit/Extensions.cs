@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace StarlitTwit
 {
     public static class Extensions
     {
         //-------------------------------------------------------------------------------
-        #region +[extension]WriteLineConsole コンソールに値を書き込み
+        #region +[extension]object.WriteLineConsole コンソールに値を書き込み
         //-------------------------------------------------------------------------------
         /// <summary>
         /// このオブジェクトの値をコンソールに書き込みます。
@@ -35,7 +36,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (WriteLineConsole)
         //-------------------------------------------------------------------------------
-        #region +[extension]WriteConsole コンソールに値書き込み
+        #region +[extension]object.WriteConsole コンソールに値書き込み
         //-------------------------------------------------------------------------------
         /// <summary>
         /// このオブジェクトの値をコンソールに書き込みます。
@@ -62,7 +63,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (WriteConsole)
         //-------------------------------------------------------------------------------
-        #region +[extension]ForEach 各項目について処理
+        #region +[extension]IEnumerable<T>.ForEach 各項目について処理
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 各項目について処理を行います。
@@ -77,7 +78,7 @@ namespace StarlitTwit
         #endregion (ForEach<T>)
 
         //-------------------------------------------------------------------------------
-        #region +[extension]SaveRemove 項目がある場合のみ消去
+        #region +[extension]Dictionary<K,V>.SaveRemove 項目がある場合のみ消去
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 項目がある場合のみ消去を行います。
@@ -87,7 +88,7 @@ namespace StarlitTwit
         /// <param name="dic">this</param>
         /// <param name="keyitem">削除する項目</param>
         /// <returns></returns>
-        public static bool SaveRemove<TKey,TValue>(this Dictionary<TKey,TValue> dic, TKey keyitem)
+        public static bool SaveRemove<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey keyitem)
         {
             if (dic.ContainsKey(keyitem)) {
                 dic.Remove(keyitem);
@@ -96,5 +97,19 @@ namespace StarlitTwit
             return false;
         }
         #endregion (SaveRemove)
+
+        //-------------------------------------------------------------------------------
+        #region +[extention]ComboBox.ObjectCollection.CombAddAvoidDup 重複を避けて追加します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 重複を避けて項目を追加します。
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="item">追加する項目</param>
+        public static void AddAvoidDup(this ComboBox.ObjectCollection collection, object item)
+        {
+            if (!collection.Contains(item)) { collection.Add(item); }
+        }
+        #endregion (AddAvoidDup)
     }
 }

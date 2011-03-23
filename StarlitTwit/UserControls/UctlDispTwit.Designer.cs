@@ -42,14 +42,25 @@
             this.tsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSepDelete = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpenBrowser = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiOpenBrowser_UserHome = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowser_ThisTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowser_ReplyTweet = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiMakeUserTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiMakeUserListTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUser_DisplayProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUser_DisplayTweets = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUser_MakeUserTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUser_MakeListTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUser_OpenBrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsComboUser = new System.Windows.Forms.ToolStripComboBox();
+            this.tsmiHashtag = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHashtag_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsComboHashtag = new System.Windows.Forms.ToolStripComboBox();
+            this.tsmiURL = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiURL_OpenExternalBrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiURL_OpenInternalBrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsComboURL = new System.Windows.Forms.ToolStripComboBox();
             this.tsmiSepMoreTweet = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiMoreRecently = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOlder = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,182 +86,263 @@
             this.tsmiDelete,
             this.tsmiSepDelete,
             this.tsmiOpenBrowser,
-            this.toolStripMenuItem2,
-            this.tsmiDisplayUserProfile,
-            this.tsmiDisplayUserTweet,
-            this.tsmiMakeUserTab,
-            this.tsmiMakeUserListTab,
+            this.tsmiUser,
+            this.tsmiHashtag,
+            this.tsmiURL,
             this.tsmiSepMoreTweet,
             this.tsmiMoreRecently,
             this.tsmiOlder,
             this.tsmiSpecifyTime});
             this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(244, 414);
+            this.menuRow.Size = new System.Drawing.Size(226, 386);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiReply
             // 
             this.tsmiReply.Name = "tsmiReply";
-            this.tsmiReply.Size = new System.Drawing.Size(243, 22);
+            this.tsmiReply.Size = new System.Drawing.Size(225, 22);
             this.tsmiReply.Text = "返信(&R)";
             this.tsmiReply.Click += new System.EventHandler(this.tsmiReply_Click);
             // 
             // tsmiQuote
             // 
             this.tsmiQuote.Name = "tsmiQuote";
-            this.tsmiQuote.Size = new System.Drawing.Size(243, 22);
+            this.tsmiQuote.Size = new System.Drawing.Size(225, 22);
             this.tsmiQuote.Text = "引用(&Q)";
             this.tsmiQuote.Click += new System.EventHandler(this.tsmiQuote_Click);
             // 
             // tsmiRetweet
             // 
             this.tsmiRetweet.Name = "tsmiRetweet";
-            this.tsmiRetweet.Size = new System.Drawing.Size(243, 22);
+            this.tsmiRetweet.Size = new System.Drawing.Size(225, 22);
             this.tsmiRetweet.Text = "リツイート(&T)";
             this.tsmiRetweet.Click += new System.EventHandler(this.tsmiRetweet_Click);
             // 
             // tsmiDirectMessage
             // 
             this.tsmiDirectMessage.Name = "tsmiDirectMessage";
-            this.tsmiDirectMessage.Size = new System.Drawing.Size(243, 22);
+            this.tsmiDirectMessage.Size = new System.Drawing.Size(225, 22);
             this.tsmiDirectMessage.Text = "ダイレクトメッセージ(&D)";
             this.tsmiDirectMessage.Click += new System.EventHandler(this.tsmiDirectMessage_Click);
             // 
             // tsmiSepConversation
             // 
             this.tsmiSepConversation.Name = "tsmiSepConversation";
-            this.tsmiSepConversation.Size = new System.Drawing.Size(240, 6);
+            this.tsmiSepConversation.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiDispConversation
             // 
             this.tsmiDispConversation.Name = "tsmiDispConversation";
-            this.tsmiDispConversation.Size = new System.Drawing.Size(243, 22);
+            this.tsmiDispConversation.Size = new System.Drawing.Size(225, 22);
             this.tsmiDispConversation.Text = "会話を表示(&C)";
             this.tsmiDispConversation.Click += new System.EventHandler(this.tsmiDispConversation_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(240, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiFavorite
             // 
             this.tsmiFavorite.Name = "tsmiFavorite";
-            this.tsmiFavorite.Size = new System.Drawing.Size(243, 22);
+            this.tsmiFavorite.Size = new System.Drawing.Size(225, 22);
             this.tsmiFavorite.Text = "お気に入りに追加(&F)";
             this.tsmiFavorite.Click += new System.EventHandler(this.tsmiFavorite_Click);
             // 
             // tsmiUnfavorite
             // 
             this.tsmiUnfavorite.Name = "tsmiUnfavorite";
-            this.tsmiUnfavorite.Size = new System.Drawing.Size(243, 22);
+            this.tsmiUnfavorite.Size = new System.Drawing.Size(225, 22);
             this.tsmiUnfavorite.Text = "お気に入りから削除(&F)";
             this.tsmiUnfavorite.Click += new System.EventHandler(this.tsmiUnfavorite_Click);
             // 
             // tsmiSepFavorite
             // 
             this.tsmiSepFavorite.Name = "tsmiSepFavorite";
-            this.tsmiSepFavorite.Size = new System.Drawing.Size(240, 6);
+            this.tsmiSepFavorite.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiDelete
             // 
             this.tsmiDelete.Name = "tsmiDelete";
-            this.tsmiDelete.Size = new System.Drawing.Size(243, 22);
+            this.tsmiDelete.Size = new System.Drawing.Size(225, 22);
             this.tsmiDelete.Text = "削除(&D)";
             this.tsmiDelete.Click += new System.EventHandler(this.tsmiDelete_Click);
             // 
             // tsmiSepDelete
             // 
             this.tsmiSepDelete.Name = "tsmiSepDelete";
-            this.tsmiSepDelete.Size = new System.Drawing.Size(240, 6);
+            this.tsmiSepDelete.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiOpenBrowser
             // 
             this.tsmiOpenBrowser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiOpenBrowser_UserHome,
             this.tsmiOpenBrowser_ThisTweet,
             this.tsmiOpenBrowser_ReplyTweet});
             this.tsmiOpenBrowser.Name = "tsmiOpenBrowser";
-            this.tsmiOpenBrowser.Size = new System.Drawing.Size(243, 22);
-            this.tsmiOpenBrowser.Text = "ブラウザで開く";
-            // 
-            // tsmiOpenBrowser_UserHome
-            // 
-            this.tsmiOpenBrowser_UserHome.Name = "tsmiOpenBrowser_UserHome";
-            this.tsmiOpenBrowser_UserHome.Size = new System.Drawing.Size(168, 22);
-            this.tsmiOpenBrowser_UserHome.Text = "このユーザーのホーム";
-            this.tsmiOpenBrowser_UserHome.Click += new System.EventHandler(this.tsmiOpenBrowser_UserHome_Click);
+            this.tsmiOpenBrowser.Size = new System.Drawing.Size(225, 22);
+            this.tsmiOpenBrowser.Text = "ツイートをブラウザで開く(&B)";
             // 
             // tsmiOpenBrowser_ThisTweet
             // 
             this.tsmiOpenBrowser_ThisTweet.Name = "tsmiOpenBrowser_ThisTweet";
-            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(168, 22);
+            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(152, 22);
             this.tsmiOpenBrowser_ThisTweet.Text = "このツイート";
             this.tsmiOpenBrowser_ThisTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ThisTweet_Click);
             // 
             // tsmiOpenBrowser_ReplyTweet
             // 
             this.tsmiOpenBrowser_ReplyTweet.Name = "tsmiOpenBrowser_ReplyTweet";
-            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(168, 22);
+            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(152, 22);
             this.tsmiOpenBrowser_ReplyTweet.Text = "リプライ先ツイート";
             this.tsmiOpenBrowser_ReplyTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ReplyTweet_Click);
             // 
-            // toolStripMenuItem2
+            // tsmiUser
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(240, 6);
+            this.tsmiUser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiUser_DisplayProfile,
+            this.tsmiUser_DisplayTweets,
+            this.tsmiUser_MakeUserTab,
+            this.tsmiUser_MakeListTab,
+            this.tsmiUser_OpenBrowser,
+            this.toolStripMenuItem3,
+            this.tsComboUser});
+            this.tsmiUser.Name = "tsmiUser";
+            this.tsmiUser.Size = new System.Drawing.Size(225, 22);
+            this.tsmiUser.Text = "ユーザー(&U)";
             // 
-            // tsmiDisplayUserProfile
+            // tsmiUser_DisplayProfile
             // 
-            this.tsmiDisplayUserProfile.Name = "tsmiDisplayUserProfile";
-            this.tsmiDisplayUserProfile.Size = new System.Drawing.Size(243, 22);
-            this.tsmiDisplayUserProfile.Text = "このユーザーのプロフィールを表示する";
-            this.tsmiDisplayUserProfile.Click += new System.EventHandler(this.tsmiDisplayUserProfile_Click);
+            this.tsmiUser_DisplayProfile.Name = "tsmiUser_DisplayProfile";
+            this.tsmiUser_DisplayProfile.Size = new System.Drawing.Size(181, 22);
+            this.tsmiUser_DisplayProfile.Text = "プロフィールを表示する";
+            this.tsmiUser_DisplayProfile.Click += new System.EventHandler(this.tsmiUser_DisplayProfile_Click);
             // 
-            // tsmiDisplayUserTweet
+            // tsmiUser_DisplayTweets
             // 
-            this.tsmiDisplayUserTweet.Name = "tsmiDisplayUserTweet";
-            this.tsmiDisplayUserTweet.Size = new System.Drawing.Size(243, 22);
-            this.tsmiDisplayUserTweet.Text = "このユーザーの発言を表示する";
-            this.tsmiDisplayUserTweet.Click += new System.EventHandler(this.tsmiDisplayUserTweet_Click);
+            this.tsmiUser_DisplayTweets.Name = "tsmiUser_DisplayTweets";
+            this.tsmiUser_DisplayTweets.Size = new System.Drawing.Size(181, 22);
+            this.tsmiUser_DisplayTweets.Text = "発言を表示する";
+            this.tsmiUser_DisplayTweets.Click += new System.EventHandler(this.tsmiUser_DisplayTweets_Click);
             // 
-            // tsmiMakeUserTab
+            // tsmiUser_MakeUserTab
             // 
-            this.tsmiMakeUserTab.Name = "tsmiMakeUserTab";
-            this.tsmiMakeUserTab.Size = new System.Drawing.Size(243, 22);
-            this.tsmiMakeUserTab.Text = "このユーザーのタブを作成する";
-            this.tsmiMakeUserTab.Click += new System.EventHandler(this.tsmiMakeUserTab_Click);
+            this.tsmiUser_MakeUserTab.Name = "tsmiUser_MakeUserTab";
+            this.tsmiUser_MakeUserTab.Size = new System.Drawing.Size(181, 22);
+            this.tsmiUser_MakeUserTab.Text = "タブを作成する";
+            this.tsmiUser_MakeUserTab.Click += new System.EventHandler(this.tsmiUser_MakeUserTab_Click);
             // 
-            // tsmiMakeUserListTab
+            // tsmiUser_MakeListTab
             // 
-            this.tsmiMakeUserListTab.Name = "tsmiMakeUserListTab";
-            this.tsmiMakeUserListTab.Size = new System.Drawing.Size(243, 22);
-            this.tsmiMakeUserListTab.Text = "このユーザーのリストのタブを作成する";
-            this.tsmiMakeUserListTab.Click += new System.EventHandler(this.tsmiMakeUserListTab_Click);
+            this.tsmiUser_MakeListTab.Name = "tsmiUser_MakeListTab";
+            this.tsmiUser_MakeListTab.Size = new System.Drawing.Size(181, 22);
+            this.tsmiUser_MakeListTab.Text = "リストのタブを作成する";
+            this.tsmiUser_MakeListTab.Click += new System.EventHandler(this.tsmiUser_MakeListTab_Click);
+            // 
+            // tsmiUser_OpenBrowser
+            // 
+            this.tsmiUser_OpenBrowser.Name = "tsmiUser_OpenBrowser";
+            this.tsmiUser_OpenBrowser.Size = new System.Drawing.Size(181, 22);
+            this.tsmiUser_OpenBrowser.Text = "ホームをブラウザで開く";
+            this.tsmiUser_OpenBrowser.Click += new System.EventHandler(this.tsmiUser_OpenBrowser_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(178, 6);
+            // 
+            // tsComboUser
+            // 
+            this.tsComboUser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tsComboUser.Name = "tsComboUser";
+            this.tsComboUser.Size = new System.Drawing.Size(121, 20);
+            // 
+            // tsmiHashtag
+            // 
+            this.tsmiHashtag.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiHashtag_MakeTab,
+            this.toolStripMenuItem4,
+            this.tsComboHashtag});
+            this.tsmiHashtag.Name = "tsmiHashtag";
+            this.tsmiHashtag.Size = new System.Drawing.Size(225, 22);
+            this.tsmiHashtag.Text = "ハッシュタグ(&H)";
+            // 
+            // tsmiHashtag_MakeTab
+            // 
+            this.tsmiHashtag_MakeTab.Name = "tsmiHashtag_MakeTab";
+            this.tsmiHashtag_MakeTab.Size = new System.Drawing.Size(181, 22);
+            this.tsmiHashtag_MakeTab.Text = "タブを作成する";
+            this.tsmiHashtag_MakeTab.Click += new System.EventHandler(this.tsmiHashtag_MakeTab_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(178, 6);
+            // 
+            // tsComboHashtag
+            // 
+            this.tsComboHashtag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tsComboHashtag.Name = "tsComboHashtag";
+            this.tsComboHashtag.Size = new System.Drawing.Size(121, 20);
+            // 
+            // tsmiURL
+            // 
+            this.tsmiURL.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiURL_OpenExternalBrowser,
+            this.tsmiURL_OpenInternalBrowser,
+            this.toolStripMenuItem5,
+            this.tsComboURL});
+            this.tsmiURL.Name = "tsmiURL";
+            this.tsmiURL.Size = new System.Drawing.Size(225, 22);
+            this.tsmiURL.Text = "URL(&P)";
+            // 
+            // tsmiURL_OpenExternalBrowser
+            // 
+            this.tsmiURL_OpenExternalBrowser.Name = "tsmiURL_OpenExternalBrowser";
+            this.tsmiURL_OpenExternalBrowser.Size = new System.Drawing.Size(181, 22);
+            this.tsmiURL_OpenExternalBrowser.Text = "外部ブラウザで開く";
+            this.tsmiURL_OpenExternalBrowser.Click += new System.EventHandler(this.tsmiURL_OpenExternalBrowser_Click);
+            // 
+            // tsmiURL_OpenInternalBrowser
+            // 
+            this.tsmiURL_OpenInternalBrowser.Name = "tsmiURL_OpenInternalBrowser";
+            this.tsmiURL_OpenInternalBrowser.Size = new System.Drawing.Size(181, 22);
+            this.tsmiURL_OpenInternalBrowser.Text = "内部ブラウザで開く";
+            this.tsmiURL_OpenInternalBrowser.Click += new System.EventHandler(this.tsmiURL_OpenInternalBrowser_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(178, 6);
+            // 
+            // tsComboURL
+            // 
+            this.tsComboURL.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tsComboURL.Name = "tsComboURL";
+            this.tsComboURL.Size = new System.Drawing.Size(121, 20);
             // 
             // tsmiSepMoreTweet
             // 
             this.tsmiSepMoreTweet.Name = "tsmiSepMoreTweet";
-            this.tsmiSepMoreTweet.Size = new System.Drawing.Size(240, 6);
+            this.tsmiSepMoreTweet.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiMoreRecently
             // 
             this.tsmiMoreRecently.Name = "tsmiMoreRecently";
-            this.tsmiMoreRecently.Size = new System.Drawing.Size(243, 22);
+            this.tsmiMoreRecently.Size = new System.Drawing.Size(225, 22);
             this.tsmiMoreRecently.Text = "これより新しいツイートを取得する";
             this.tsmiMoreRecently.Click += new System.EventHandler(this.tsmiMoreRecentData_Click);
             // 
             // tsmiOlder
             // 
             this.tsmiOlder.Name = "tsmiOlder";
-            this.tsmiOlder.Size = new System.Drawing.Size(243, 22);
+            this.tsmiOlder.Size = new System.Drawing.Size(225, 22);
             this.tsmiOlder.Text = "これより古いツイートを取得する";
             this.tsmiOlder.Click += new System.EventHandler(this.tsmiOlderData_Click);
             // 
             // tsmiSpecifyTime
             // 
             this.tsmiSpecifyTime.Name = "tsmiSpecifyTime";
-            this.tsmiSpecifyTime.Size = new System.Drawing.Size(243, 22);
+            this.tsmiSpecifyTime.Size = new System.Drawing.Size(225, 22);
             this.tsmiSpecifyTime.Text = "時刻を指定して発言取得(&G)";
             this.tsmiSpecifyTime.Click += new System.EventHandler(this.tsmiSpecifyTime_Click);
             // 
@@ -317,22 +409,33 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiDispConversation;
         private System.Windows.Forms.VScrollBar vscrbar;
         private System.Windows.Forms.ToolStripSeparator tsmiSepFavorite;
-        private System.Windows.Forms.ToolStripMenuItem tsmiMakeUserTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiDelete;
         private System.Windows.Forms.ToolStripSeparator tsmiSepMoreTweet;
-        private System.Windows.Forms.ToolStripMenuItem tsmiMakeUserListTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenBrowser;
-        private System.Windows.Forms.ToolStripMenuItem tsmiOpenBrowser_UserHome;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenBrowser_ThisTweet;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenBrowser_ReplyTweet;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmiFavorite;
         private System.Windows.Forms.ToolStripMenuItem tsmiUnfavorite;
         private System.Windows.Forms.ToolStripMenuItem tsmiDirectMessage;
         private System.Windows.Forms.ToolStripSeparator tsmiSepConversation;
         private System.Windows.Forms.ToolStripMenuItem tsmiSpecifyTime;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserTweet;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserProfile;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser_DisplayProfile;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser_DisplayTweets;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser_MakeUserTab;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser_MakeListTab;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripComboBox tsComboUser;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHashtag;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHashtag_MakeTab;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripComboBox tsComboHashtag;
+        private System.Windows.Forms.ToolStripMenuItem tsmiURL;
+        private System.Windows.Forms.ToolStripMenuItem tsmiURL_OpenExternalBrowser;
+        private System.Windows.Forms.ToolStripMenuItem tsmiURL_OpenInternalBrowser;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripComboBox tsComboURL;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser_OpenBrowser;
     }
 }

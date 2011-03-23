@@ -1820,24 +1820,30 @@ namespace StarlitTwit
         private IEnumerable<TwitData> ConvertToTwitDataJson(XElement el)
         {
             try {
-                return from stat in el.Element("results").Elements("item")
-                       select new TwitData() {
-                           TwitType = StarlitTwit.TwitType.Search,
+                Func<XElement,TwitData> makeTwitData = xel => {
+                    TwitData data = new TwitData() {
+                        TwitType = StarlitTwit.TwitType.Search,
                            DMScreenName = "",
-                           StatusID = long.Parse(stat.Element("id").Value),
-                           Time = StringToDateTime(stat.Element("created_at").Value),
+                           StatusID = long.Parse(xel.Element("id").Value),
+                           Time = StringToDateTime(xel.Element("created_at").Value),
                            Favorited = false,
-                           Mention_StatusID = TryParseLong(stat.Element("to_user_id").Value),
+                           Mention_StatusID = TryParseLong(xel.Element("to_user_id").Value),
                            Mention_UserID = -1,
-                           Text = ConvertSpecialChar(stat.Element("text").Value),
-                           Source = CutSourceString(ConvertSpecialChar(stat.Element("source").Value)),
-                           UserID = long.Parse(stat.Element("from_user_id").Value),
+                           Text = ConvertSpecialChar(xel.Element("text").Value),
+                           Source = CutSourceString(ConvertSpecialChar(xel.Element("source").Value)),
+                           UserID = long.Parse(xel.Element("from_user_id").Value),
                            UserName = "",
-                           IconURL = stat.Element("profile_image_url").Value,
-                           UserScreenName = stat.Element("from_user").Value,
+                           IconURL = xel.Element("profile_image_url").Value,
+                           UserScreenName = xel.Element("from_user").Value,
                            UserProtected = false,
                            RTTwitData = null
-                       };
+                    };
+                    data.Entities = GetEntitiesByRegex(data.Text).ToArray();
+                    return data;
+                };
+
+                return from stat in el.Element("results").Elements("item")
+                       select makeTwitData(stat);   
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
