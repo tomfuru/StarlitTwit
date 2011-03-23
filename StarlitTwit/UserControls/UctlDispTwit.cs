@@ -233,14 +233,15 @@ namespace StarlitTwit
             }
 
             bool isReply = (SelectedTwitData.MainTwitData.Mention_StatusID > 0);
-            bool isDirect = (SelectedTwitData.TwitType == TwitType.DirectMessage);
+            bool isDirect = SelectedTwitData.IsDM();
             bool isProtected = SelectedTwitData.UserProtected;
+            bool isRT = SelectedTwitData.IsRT();
             bool isMine = (SelectedTwitData.UserID == FrmMain.Twitter.ID);
             bool isFavorited = SelectedTwitData.Favorited;
 
             tsmiReply.Enabled = !isDirect;
             tsmiQuote.Enabled = tsmiRetweet.Enabled = !isDirect && !isProtected;
-            tsmiRetweet.Enabled = !(isMine || isProtected || isDirect);
+            tsmiRetweet.Enabled = isRT || !(isMine || isProtected || isDirect);
 
             tsmiDispConversation.Enabled = isReply;
 
