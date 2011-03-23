@@ -185,14 +185,14 @@
             // tsmiOpenBrowser_ThisTweet
             // 
             this.tsmiOpenBrowser_ThisTweet.Name = "tsmiOpenBrowser_ThisTweet";
-            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(152, 22);
+            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(151, 22);
             this.tsmiOpenBrowser_ThisTweet.Text = "このツイート";
             this.tsmiOpenBrowser_ThisTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ThisTweet_Click);
             // 
             // tsmiOpenBrowser_ReplyTweet
             // 
             this.tsmiOpenBrowser_ReplyTweet.Name = "tsmiOpenBrowser_ReplyTweet";
-            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(152, 22);
+            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(151, 22);
             this.tsmiOpenBrowser_ReplyTweet.Text = "リプライ先ツイート";
             this.tsmiOpenBrowser_ReplyTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ReplyTweet_Click);
             // 
@@ -216,6 +216,7 @@
             this.tsmiUser_DisplayProfile.Size = new System.Drawing.Size(181, 22);
             this.tsmiUser_DisplayProfile.Text = "プロフィールを表示する";
             this.tsmiUser_DisplayProfile.Click += new System.EventHandler(this.tsmiUser_DisplayProfile_Click);
+            this.tsmiUser_DisplayProfile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_DisplayTweets
             // 
@@ -223,6 +224,7 @@
             this.tsmiUser_DisplayTweets.Size = new System.Drawing.Size(181, 22);
             this.tsmiUser_DisplayTweets.Text = "発言を表示する";
             this.tsmiUser_DisplayTweets.Click += new System.EventHandler(this.tsmiUser_DisplayTweets_Click);
+            this.tsmiUser_DisplayTweets.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_MakeUserTab
             // 
@@ -230,6 +232,7 @@
             this.tsmiUser_MakeUserTab.Size = new System.Drawing.Size(181, 22);
             this.tsmiUser_MakeUserTab.Text = "タブを作成する";
             this.tsmiUser_MakeUserTab.Click += new System.EventHandler(this.tsmiUser_MakeUserTab_Click);
+            this.tsmiUser_MakeUserTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_MakeListTab
             // 
@@ -237,6 +240,7 @@
             this.tsmiUser_MakeListTab.Size = new System.Drawing.Size(181, 22);
             this.tsmiUser_MakeListTab.Text = "リストのタブを作成する";
             this.tsmiUser_MakeListTab.Click += new System.EventHandler(this.tsmiUser_MakeListTab_Click);
+            this.tsmiUser_MakeListTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_OpenBrowser
             // 
@@ -244,6 +248,7 @@
             this.tsmiUser_OpenBrowser.Size = new System.Drawing.Size(181, 22);
             this.tsmiUser_OpenBrowser.Text = "ホームをブラウザで開く";
             this.tsmiUser_OpenBrowser.Click += new System.EventHandler(this.tsmiUser_OpenBrowser_Click);
+            this.tsmiUser_OpenBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // toolStripMenuItem3
             // 
@@ -272,6 +277,7 @@
             this.tsmiHashtag_MakeTab.Size = new System.Drawing.Size(181, 22);
             this.tsmiHashtag_MakeTab.Text = "タブを作成する";
             this.tsmiHashtag_MakeTab.Click += new System.EventHandler(this.tsmiHashtag_MakeTab_Click);
+            this.tsmiHashtag_MakeTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // toolStripMenuItem4
             // 
@@ -301,6 +307,7 @@
             this.tsmiURL_OpenExternalBrowser.Size = new System.Drawing.Size(181, 22);
             this.tsmiURL_OpenExternalBrowser.Text = "外部ブラウザで開く";
             this.tsmiURL_OpenExternalBrowser.Click += new System.EventHandler(this.tsmiURL_OpenExternalBrowser_Click);
+            this.tsmiURL_OpenExternalBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiURL_OpenInternalBrowser
             // 
@@ -308,6 +315,7 @@
             this.tsmiURL_OpenInternalBrowser.Size = new System.Drawing.Size(181, 22);
             this.tsmiURL_OpenInternalBrowser.Text = "内部ブラウザで開く";
             this.tsmiURL_OpenInternalBrowser.Click += new System.EventHandler(this.tsmiURL_OpenInternalBrowser_Click);
+            this.tsmiURL_OpenInternalBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // toolStripMenuItem5
             // 

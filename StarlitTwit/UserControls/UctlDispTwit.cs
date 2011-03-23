@@ -522,6 +522,15 @@ namespace StarlitTwit
         }
         #endregion (tsmiSpecifyTime_Click)
         #endregion (tsmi-)
+        #region tsmiEntityItem_MouseMove EntityItemマウス移動時
+        //-------------------------------------------------------------------------------
+        /// <remarks>こうしないとコンボボックス選択後にハイライトされない</remarks>
+        private void tsmiEntityItem_MouseMove(object sender, MouseEventArgs e)
+        {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            tsmi.Select();
+        }
+        #endregion (tsmiEntityItem_MouseMove)
         //===============================================================================
         #region pnlflow_MouseDown マウスダウン時
         //-------------------------------------------------------------------------------
