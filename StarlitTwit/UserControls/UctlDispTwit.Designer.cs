@@ -85,10 +85,10 @@
             this.tsmiSepFavorite,
             this.tsmiDelete,
             this.tsmiSepDelete,
-            this.tsmiOpenBrowser,
             this.tsmiUser,
             this.tsmiHashtag,
             this.tsmiURL,
+            this.tsmiOpenBrowser,
             this.tsmiSepMoreTweet,
             this.tsmiMoreRecently,
             this.tsmiOlder,
@@ -185,14 +185,14 @@
             // tsmiOpenBrowser_ThisTweet
             // 
             this.tsmiOpenBrowser_ThisTweet.Name = "tsmiOpenBrowser_ThisTweet";
-            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(151, 22);
+            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(152, 22);
             this.tsmiOpenBrowser_ThisTweet.Text = "このツイート";
             this.tsmiOpenBrowser_ThisTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ThisTweet_Click);
             // 
             // tsmiOpenBrowser_ReplyTweet
             // 
             this.tsmiOpenBrowser_ReplyTweet.Name = "tsmiOpenBrowser_ReplyTweet";
-            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(151, 22);
+            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(152, 22);
             this.tsmiOpenBrowser_ReplyTweet.Text = "リプライ先ツイート";
             this.tsmiOpenBrowser_ReplyTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ReplyTweet_Click);
             // 
