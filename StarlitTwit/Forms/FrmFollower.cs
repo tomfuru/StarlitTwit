@@ -445,7 +445,10 @@ namespace StarlitTwit
             }
             catch (InvalidOperationException) { }
             catch (TwitterAPIException) {
-                this.Invoke(new Action(() => tsslabel.Text = "取得に失敗しました。"));
+                this.Invoke(new Action(() => {
+                    tsslabel.Text = "取得に失敗しました。";
+                    btnAppend.Enabled = true;
+                }));
             }
         }
         #endregion (GetUsers)

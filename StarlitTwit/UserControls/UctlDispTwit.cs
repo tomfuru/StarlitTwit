@@ -492,6 +492,17 @@ namespace StarlitTwit
         }
         #endregion (tsmiURL_OpenInternalBrowser_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiDispRetweeter_Click Retweetしたユーザーを見るクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispRetweeter_Click(object sender, EventArgs e)
+        {
+            if (RowContextMenu_Click != null) {
+                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Retweeter, SelectedTwitData));
+            }
+        }
+        #endregion (tsmiDispRetweeter_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiOlderData_Click より古いデータメニュークリック時
         //-------------------------------------------------------------------------------
         //
@@ -1580,6 +1591,8 @@ namespace StarlitTwit
         Unfavorite,
         /// <summary>削除 メニュー</summary>
         Delete,
+        /// <summary>Retweetしたユーザー メニュー</summary>
+        Retweeter,
         /// <summary>より古い発言取得 メニュー</summary>
         OlderTweetRequest,
         /// <summary>より新しい発言取得 メニュー</summary>

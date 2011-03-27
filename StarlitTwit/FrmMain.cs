@@ -426,13 +426,7 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower form = Application.OpenForms
-                                 .OfType<FrmFollower>()
-                                 .FirstOrDefault(f => f.FormType == FrmFollower.EFormType.MyFollowing);
-            if (form != null) {
-                form.BringToFront();
-            }
-            else {
+            if (!Utilization.ExistFrmFollower(FrmFollower.EFormType.MyFollowing)) {
                 FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollowing);
                 frm.Show(this);
             }
@@ -444,13 +438,7 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower form = Application.OpenForms
-                                 .OfType<FrmFollower>()
-                                 .FirstOrDefault(f => f.FormType == FrmFollower.EFormType.MyFollower);
-            if (form != null) {
-                form.BringToFront();
-            }
-            else {
+            if (!Utilization.ExistFrmFollower(FrmFollower.EFormType.MyFollower)) {
                 FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollower);
                 frm.Show(this);
             }
@@ -546,6 +534,10 @@ namespace StarlitTwit
                 //-------------------------------------------------------------------------------
                 case RowEventType.Delete:
                     TwitMenu_Delete_Click(sender, e);
+                    break;
+                //-------------------------------------------------------------------------------
+                case RowEventType.Retweeter:
+                    TwitMenu_Retweeter_Click(sender, e);
                     break;
                 //-------------------------------------------------------------------------------
                 case RowEventType.OlderTweetRequest:
@@ -677,6 +669,19 @@ namespace StarlitTwit
             }
         }
         #endregion (TwitMenu_Delete_Click)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_Retweeter_Click リツイートしたユーザー
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_Retweeter_Click(object sender, TwitRowMenuEventArgs e)
+        {
+            if (!Utilization.ExistFrmFollower(FrmFollower.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID)) {
+                FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.Retweeter);
+                frm.RetweetStatusID = e.TwitData.MainTwitData.StatusID;
+                frm.Show(this);
+            }
+        }
+        #endregion (TwitMenu_Retweeter_Click)
         //-------------------------------------------------------------------------------
         #region TwitMenu_OlderDataRequest_Click より古い発言取得
         //-------------------------------------------------------------------------------

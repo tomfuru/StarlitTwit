@@ -132,29 +132,32 @@ namespace StarlitTwit.UserControls
         //
         private void SwitchTimer_Elapsed(object sender, EventArgs e)
         {
-            lock (_lockimg) {
-                if (_img == null || DisplayForm == null || DisplayForm.IsDisposed) {
-                    _switchTimer.Stop();
-                    return;
+            try {
+                lock (_lockimg) {
+                    if (_img == null || DisplayForm == null || DisplayForm.IsDisposed) {
+                        _switchTimer.Stop();
+                        return;
+                    }
+
+                    _imgIndex++;
+                    _imgIndex %= _img.Length;
+
+                    Size = GetPreferSize(_img[_imgIndex].Size);
                 }
 
-                _imgIndex++;
-                _imgIndex %= _img.Length;
-
-                Size = GetPreferSize(_img[_imgIndex].Size);
-            }
-
-            if (DisplayForm.InvokeRequired) {
-                DisplayForm.Invoke(new Action(() =>
-                {
+                if (DisplayForm.InvokeRequired) {
+                    DisplayForm.Invoke(new Action(() =>
+                    {
+                        ConfigDispForm();
+                        DisplayForm.Refresh();
+                    }));
+                }
+                else {
                     ConfigDispForm();
                     DisplayForm.Refresh();
-                }));
+                }
             }
-            else {
-                ConfigDispForm();
-                DisplayForm.Refresh();
-            }
+            catch (InvalidOperationException) {}
         }
         #endregion (SwitchTimer_Elapsed)
         //-------------------------------------------------------------------------------

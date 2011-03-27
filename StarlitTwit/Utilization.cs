@@ -462,6 +462,33 @@ namespace StarlitTwit
         #endregion (ShowUserTweet)
 
         //-------------------------------------------------------------------------------
+        #region +[static]ExistFrmFollower 既にあるFrmFollowerを探し同じものがあれば
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 既にあるFrmFollowerと同じものがあるかどうか探し，あれば最前面にします。
+        /// </summary>
+        /// <param name="type">タイプ</param>
+        /// <param name="screen_name">UserFollower,UserFollowingタイプのみ必要</param>
+        /// <param name="retweet_id">Retweeterタイプのみ必要</param>
+        /// <returns>あればtrue,なければfalse</returns>
+        public static bool ExistFrmFollower(FrmFollower.EFormType type, string screen_name = null, long retweet_id = -1)
+        {
+            Func<FrmFollower, bool> judgeFunc = f =>
+                f.FormType == type
+                && !((type == FrmFollower.EFormType.UserFollower && type == FrmFollower.EFormType.UserFollowing) && f.UserScreenName != screen_name)
+                && !(type == FrmFollower.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
+
+
+            FrmFollower form = Application.OpenForms
+                                 .OfType<FrmFollower>()
+                                 .FirstOrDefault(judgeFunc);
+
+            if (form != null) { form.BringToFront(); }
+            return form != null;
+        }
+        #endregion (ExistFrmFollower)
+
+        //-------------------------------------------------------------------------------
         #region +[static]OpenBrowser URLを開きます。
         //-------------------------------------------------------------------------------
         /// <summary>
