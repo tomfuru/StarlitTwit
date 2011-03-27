@@ -578,7 +578,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_friends)
         //-------------------------------------------------------------------------------
@@ -605,7 +605,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/followers.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_followers)
         //-------------------------------------------------------------------------------

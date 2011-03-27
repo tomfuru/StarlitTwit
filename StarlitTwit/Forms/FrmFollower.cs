@@ -83,6 +83,8 @@ namespace StarlitTwit
         //
         private void FrmFollower_Load(object sender, EventArgs e)
         {
+            Utilization.SetModelessDialogCenter(this);
+
             switch (FormType) {
                 case EFormType.MyFollower:
                     Text = "フォローされている人";
@@ -91,11 +93,11 @@ namespace StarlitTwit
                     Text = "フォローしている人";
                     break;
                 case EFormType.UserFollower:
-                    Debug.Assert(UserScreenName == null, "UserScreenNameが設定されていない");
+                    Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
                     Text = string.Format("{0}をフォローしている人", UserScreenName);
                     break;
                 case EFormType.UserFollowing:
-                    Debug.Assert(UserScreenName == null, "UserScreenNameが設定されていない");
+                    Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
                     Text = string.Format("{0}がフォローしている人", UserScreenName);
                     break;
                 case EFormType.Retweeter:
@@ -220,6 +222,30 @@ namespace StarlitTwit
         }
         #endregion (tsmiRemove_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiDispFollowing_Click フレンドを見るクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispFollowing_Click(object sender, EventArgs e)
+        {
+            FrmFollower frm = new FrmFollower(_mainForm, _imageListWrapper, EFormType.UserFollowing) {
+                UserScreenName = ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName
+            };
+            frm.Show(_mainForm);
+        }
+        #endregion (tsmiDispFollowing_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDispFollower_Click フォロワーを見るクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispFollower_Click(object sender, EventArgs e)
+        {
+            FrmFollower frm = new FrmFollower(_mainForm, _imageListWrapper, EFormType.UserFollower) {
+                UserScreenName = ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName
+            };
+            frm.Show(_mainForm);
+        }
+        #endregion (tsmiDispFollower_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiDisplayUserProfile_Click プロフィール表示クリック時
         //-------------------------------------------------------------------------------
         //
@@ -261,6 +287,7 @@ namespace StarlitTwit
         private void btnAppend_Click(object sender, EventArgs e)
         {
             tsslabel.Text = "取得中...";
+            btnAppend.Enabled = false;
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)
@@ -349,6 +376,7 @@ namespace StarlitTwit
             List<Tuple<ListViewItem, string>> urllist = new List<Tuple<ListViewItem, string>>();
             List<ListViewItem> items = new List<ListViewItem>();
             foreach (var p in profiles) {
+                if (_profileList.Exists(prof => prof.UserID == p.UserID)) { continue; } // 重複防止
                 ListViewItem item = new ListViewItem();
                 item.Tag = p;
                 if (!_imageListWrapper.ImageContainsKey(p.IconURL)) { urllist.Add(new Tuple<ListViewItem, string>(item, p.IconURL)); }

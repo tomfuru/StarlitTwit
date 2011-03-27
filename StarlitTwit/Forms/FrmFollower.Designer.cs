@@ -32,6 +32,9 @@
             this.tsmiFollow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDispFollower = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispFollowing = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowserUserHome = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,11 +43,11 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnClose = new System.Windows.Forms.Button();
+            this.lblCount = new System.Windows.Forms.Label();
             this.lstvList = new StarlitTwit.ListViewEx();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblCount = new System.Windows.Forms.Label();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,11 +57,14 @@
             this.tsmiFollow,
             this.tsmiRemove,
             this.toolStripMenuItem1,
+            this.tsmiDispFollowing,
+            this.tsmiDispFollower,
+            this.toolStripMenuItem2,
             this.tsmiDisplayUserProfile,
             this.tsmiDisplayUserTweet,
             this.tsmiOpenBrowserUserHome});
             this.menuRow.Name = "contextMenuStrip1";
-            this.menuRow.Size = new System.Drawing.Size(261, 120);
+            this.menuRow.Size = new System.Drawing.Size(261, 170);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // tsmiFollow
@@ -79,6 +85,25 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(257, 6);
+            // 
+            // tsmiDispFollower
+            // 
+            this.tsmiDispFollower.Name = "tsmiDispFollower";
+            this.tsmiDispFollower.Size = new System.Drawing.Size(260, 22);
+            this.tsmiDispFollower.Text = "フォロワーを見る";
+            this.tsmiDispFollower.Click += new System.EventHandler(this.tsmiDispFollower_Click);
+            // 
+            // tsmiDispFollowing
+            // 
+            this.tsmiDispFollowing.Name = "tsmiDispFollowing";
+            this.tsmiDispFollowing.Size = new System.Drawing.Size(260, 22);
+            this.tsmiDispFollowing.Text = "フレンドを見る";
+            this.tsmiDispFollowing.Click += new System.EventHandler(this.tsmiDispFollowing_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(257, 6);
             // 
             // tsmiDisplayUserProfile
             // 
@@ -103,7 +128,7 @@
             // 
             // btnAppend
             // 
-            this.btnAppend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAppend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAppend.Enabled = false;
             this.btnAppend.Location = new System.Drawing.Point(12, 243);
             this.btnAppend.Name = "btnAppend";
@@ -136,6 +161,7 @@
             // 
             // btnClose
             // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Location = new System.Drawing.Point(324, 243);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
@@ -143,6 +169,16 @@
             this.btnClose.Text = "閉じる";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // lblCount
+            // 
+            this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(298, 1);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(11, 12);
+            this.lblCount.TabIndex = 4;
+            this.lblCount.Text = "...";
             // 
             // lstvList
             // 
@@ -184,15 +220,6 @@
             // 
             this.columnHeader3.Text = "名称";
             this.columnHeader3.Width = 100;
-            // 
-            // lblCount
-            // 
-            this.lblCount.AutoSize = true;
-            this.lblCount.Location = new System.Drawing.Point(298, 1);
-            this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(11, 12);
-            this.lblCount.TabIndex = 4;
-            this.lblCount.Text = "...";
             // 
             // FrmFollower
             // 
@@ -237,5 +264,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserProfile;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblCount;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispFollower;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispFollowing;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     }
 }

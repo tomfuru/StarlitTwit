@@ -426,8 +426,16 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollowing);
-            frm.ShowDialog(this);
+            FrmFollower form = Application.OpenForms
+                                 .OfType<FrmFollower>()
+                                 .FirstOrDefault(f => f.FormType == FrmFollower.EFormType.MyFollowing);
+            if (form != null) {
+                form.BringToFront();
+            }
+            else {
+                FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollowing);
+                frm.Show(this);
+            }
         }
         #endregion (llblFollowing_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -436,8 +444,16 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollower);
-            frm.ShowDialog(this);
+            FrmFollower form = Application.OpenForms
+                                 .OfType<FrmFollower>()
+                                 .FirstOrDefault(f => f.FormType == FrmFollower.EFormType.MyFollower);
+            if (form != null) {
+                form.BringToFront();
+            }
+            else {
+                FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollower);
+                frm.Show(this);
+            }
         }
         #endregion (llblFollower_LinkClicked)
         //-------------------------------------------------------------------------------
