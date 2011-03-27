@@ -267,7 +267,7 @@ namespace StarlitTwit
             // 発言に関係のあるユーザーをコンボボックスに
             tsComboUser.Items.Add(SelectedTwitData.MainTwitData.UserScreenName);
             if (isRT) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.UserScreenName); }
-            if (isReply) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.Mention_ScreenName); }
+            if (isReply) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.MainTwitData.Mention_ScreenName); }
 
             foreach (EntityData entity in SelectedTwitData.Entities) {
                 if (entity.type.HasValue) {
