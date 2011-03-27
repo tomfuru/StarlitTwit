@@ -310,7 +310,11 @@ namespace StarlitTwit
                 rtxtGet.Size = new Size(lbl.Width, lbl.Height);
                 rtxtGet.Font = lbl.Font;
                 rtxtGet.Text = lbl.Text;
-                rtxtGet.ChangeFonts(TwitData.Entities);
+                if (lbl == lblTweet) {
+                    rtxtGet.EnableEntity = true;
+                    rtxtGet.ChangeFonts(TwitData.Entities);
+                }
+                else { rtxtGet.EnableEntity = false; }
 
                 lbl.Visible = false;
                 rtxtGet.Visible = true;

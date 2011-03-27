@@ -54,6 +54,19 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (Text プロパティ：)
+        //-------------------------------------------------------------------------------
+        #region EnableEntity プロパティ
+        //-------------------------------------------------------------------------------
+        private bool _enableEntity = true;
+        /// <summary>
+        /// Entityのクリックを有効にするか
+        /// </summary>
+        public bool EnableEntity
+        {
+            get { return _enableEntity; }
+            set { _enableEntity = value; }
+        }
+        #endregion (EnableEntity)
 
         //-------------------------------------------------------------------------------
         #region RichTextBoxHash_MouseMove マウス移動時
@@ -61,7 +74,7 @@ namespace StarlitTwit
         //
         private void RichTextBoxHash_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_entities == null || _entities.Length == 0) { return; }
+            if (!EnableEntity || _entities == null || _entities.Length == 0) { return; }
 
             Range past = new Range(this.SelectionStart, this.SelectionLength);
 
@@ -97,7 +110,7 @@ namespace StarlitTwit
         //
         private void RichTextBoxHash_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) {
+            if (EnableEntity && e.Button == MouseButtons.Left) {
                 if (!_onRange.IsEmpty) {
                     var entity = Array.Find(_entities, info => info.range.Equals(_onRange));
 
