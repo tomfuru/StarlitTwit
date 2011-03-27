@@ -190,6 +190,7 @@ namespace StarlitTwit.UserControls
                         if (_loadingimg == null) {
                             _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingL.Clone();
                         }
+                        _gettingImage = true;
                         Utilization.InvokeTransaction(() => GetImages());
                     }
 
@@ -312,7 +313,6 @@ namespace StarlitTwit.UserControls
         {
             EventHandler evh = new EventHandler(Image_Animate);
             ImageAnimator.Animate(_loadingimg, evh);
-            _gettingImage = true;
 
             List<Image> list = new List<Image>();
             foreach (var url in _imgURLs) {
@@ -337,9 +337,11 @@ namespace StarlitTwit.UserControls
             }
             else { 
                 lock (_lockimg) { _img = null; }
-                Size = GetPreferSize(Properties.Resources.failed.Size);
-                DisplayForm.Invoke(new Action(() => ConfigDispForm()));
-                DisplayForm.Invalidate();
+                if (DisplayForm != null) {
+                    Size = GetPreferSize(Properties.Resources.failed.Size);
+                    DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                    DisplayForm.Invalidate();
+                }
             }
 
             ImageAnimator.StopAnimate(_loadingimg, evh);
