@@ -1744,7 +1744,7 @@ namespace StarlitTwit
         private TwitData ConvertToTwitDataDM(XElement el)
         {
             try {
-                return new TwitData() {
+                var data = new TwitData() {
                     TwitType = StarlitTwit.TwitType.DirectMessage,
                     DMScreenName = el.Element("recipient_screen_name").Value,
                     StatusID = long.Parse(el.Element("id").Value),
@@ -1761,6 +1761,10 @@ namespace StarlitTwit
                     UserProtected = bool.Parse(el.Element("sender").Element("protected").Value),
                     RTTwitData = null
                 };
+
+                data.Entities = GetEntitiesByRegex(data.Text).ToArray();
+
+                return data;
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);

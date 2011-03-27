@@ -268,6 +268,7 @@ namespace StarlitTwit
             tsComboUser.Items.Add(SelectedTwitData.MainTwitData.UserScreenName);
             if (isRT) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.UserScreenName); }
             if (isReply) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.MainTwitData.Mention_ScreenName); }
+            if (isDirect) { tsComboUser.Items.AddAvoidDup(SelectedTwitData.DMScreenName); }
 
             foreach (EntityData entity in SelectedTwitData.Entities) {
                 if (entity.type.HasValue) {
