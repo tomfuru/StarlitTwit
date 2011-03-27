@@ -448,30 +448,52 @@ namespace StarlitTwit
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweets/" + id.ToString() + ".xml", GET, paramdic);
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/retweets/{1}.xml", URLapi, id), GET, paramdic);
             return ConvertToTwitDataArray(GetByAPI(url));
         }
         #endregion (statuses_retweets)
         //-------------------------------------------------------------------------------
-        #region +statuses_id_retweeted_by (未実装)
+        #region +statuses_id_retweeted_by
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/id/retweeted_byメソッド (未実装)
+        /// statuses/id/retweeted_byメソッド
         /// </summary>
-        public void statuses_id_retweeted_by()
+        public IEnumerable<UserProfile> statuses_id_retweeted_by(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
 
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by.xml", URLapi, id), GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPI(url));
         }
         #endregion (statuses_id_retweeted_by)
         //-------------------------------------------------------------------------------
-        #region +statuses_id_retweeted_by_ids (未実装)
+        #region +statuses_id_retweeted_by_ids
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/id/retweeted_by/idsメソッド (未実装)
+        /// statuses/id/retweeted_by/idsメソッド 
         /// </summary>
-        public void statuses_id_retweeted_by_ids()
+        public IEnumerable<long> statuses_id_retweeted_by_ids(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
 
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by/ids.xml", URLapi, id), GET, paramdic);
+            XElement el = GetByAPI(url);
+
+            var ids = from elem in el.Elements("id")
+                      select long.Parse(elem.Value);
+            return ids;
         }
         #endregion (statuses_id_retweeted_by_ids)
         //-------------------------------------------------------------------------------
@@ -1824,30 +1846,31 @@ namespace StarlitTwit
         private IEnumerable<TwitData> ConvertToTwitDataJson(XElement el)
         {
             try {
-                Func<XElement,TwitData> makeTwitData = xel => {
+                Func<XElement, TwitData> makeTwitData = xel =>
+                {
                     TwitData data = new TwitData() {
                         TwitType = StarlitTwit.TwitType.Search,
-                           DMScreenName = "",
-                           StatusID = long.Parse(xel.Element("id").Value),
-                           Time = StringToDateTime(xel.Element("created_at").Value),
-                           Favorited = false,
-                           Mention_StatusID = TryParseLong(xel.Element("to_user_id").Value),
-                           Mention_UserID = -1,
-                           Text = ConvertSpecialChar(xel.Element("text").Value),
-                           Source = CutSourceString(ConvertSpecialChar(xel.Element("source").Value)),
-                           UserID = long.Parse(xel.Element("from_user_id").Value),
-                           UserName = "",
-                           IconURL = xel.Element("profile_image_url").Value,
-                           UserScreenName = xel.Element("from_user").Value,
-                           UserProtected = false,
-                           RTTwitData = null
+                        DMScreenName = "",
+                        StatusID = long.Parse(xel.Element("id").Value),
+                        Time = StringToDateTime(xel.Element("created_at").Value),
+                        Favorited = false,
+                        Mention_StatusID = TryParseLong(xel.Element("to_user_id").Value),
+                        Mention_UserID = -1,
+                        Text = ConvertSpecialChar(xel.Element("text").Value),
+                        Source = CutSourceString(ConvertSpecialChar(xel.Element("source").Value)),
+                        UserID = long.Parse(xel.Element("from_user_id").Value),
+                        UserName = "",
+                        IconURL = xel.Element("profile_image_url").Value,
+                        UserScreenName = xel.Element("from_user").Value,
+                        UserProtected = false,
+                        RTTwitData = null
                     };
                     data.Entities = GetEntitiesByRegex(data.Text).ToArray();
                     return data;
                 };
 
                 return from stat in el.Element("results").Elements("item")
-                       select makeTwitData(stat);   
+                       select makeTwitData(stat);
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
@@ -2352,6 +2375,16 @@ namespace StarlitTwit
         public TwitData LastTwitData;
         /// <summary>タイムゾーン</summary>
         public string TimeZone;
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            return string.Format("{0}(ID:{1})", ScreenName, UserID);
+        }
+        #endregion (+[override]ToString)
     }
     //-------------------------------------------------------------------------------
     #endregion (UserProfile)
@@ -2369,6 +2402,16 @@ namespace StarlitTwit
         public int HourlyLimit;
         /// <summary>リセット時刻</summary>
         public DateTime ResetTime;
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            return string.Format("{0}/{1} Reset:{2}", Remaining, HourlyLimit, ResetTime.ToString(Utilization.STR_DATETIMEFORMAT));
+        }
+        #endregion (+[override]ToString)
     }
     //-------------------------------------------------------------------------------
     #endregion (APILimitData)
@@ -2404,6 +2447,16 @@ namespace StarlitTwit
         public bool Want_Retweets;
         /// <summary></summary>
         public bool AllReplies;
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            return string.Format("{0} and {1}", Source_ScreenName, Target_ScreenName);
+        }
+        #endregion (+[override]ToString)
     }
     //-------------------------------------------------------------------------------
     #endregion (RelationShipData)
@@ -2443,12 +2496,35 @@ namespace StarlitTwit
         /// <summary>アイテムの情報を表す文字列</summary>
         public string str;
 
+        //-------------------------------------------------------------------------------
+        #region コンストラクタ
+        //-------------------------------------------------------------------------------
+        //
         public EntityData(ItemType? type, Range range, string str)
         {
             this.type = type;
             this.range = range;
             this.str = str;
         }
+        #endregion (コンストラクタ)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (type.HasValue) {
+                sb.Append(type.Value.ToString());
+            }
+            else { sb.Append("URL"); }
+            sb.Append(':');
+            sb.Append(str);
+            sb.Append(range);
+            return sb.ToString();
+        }
+        #endregion (+[override]ToString)
     }
     //-------------------------------------------------------------------------------
     #endregion (EntityData)
@@ -2558,6 +2634,15 @@ namespace StarlitTwit
         }
         #endregion (+[override]GetHashCode)
 
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            return string.Format("({0}, {1})", Start, End);
+        }
+        #endregion (+[override]ToString)
 
         //-------------------------------------------------------------------------------
         #region +[static]Make Rangeを作成

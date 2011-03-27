@@ -39,10 +39,12 @@
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnClose = new System.Windows.Forms.Button();
             this.lstvList = new StarlitTwit.ListViewEx();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblCount = new System.Windows.Forms.Label();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,6 +134,16 @@
             this.tsslabel.Spring = true;
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(324, 243);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 3;
+            this.btnClose.Text = "閉じる";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // lstvList
             // 
             this.lstvList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -145,11 +157,11 @@
             this.lstvList.FullRowSelect = true;
             this.lstvList.GridLines = true;
             this.lstvList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lstvList.Location = new System.Drawing.Point(12, 12);
+            this.lstvList.Location = new System.Drawing.Point(12, 16);
             this.lstvList.MultiSelect = false;
             this.lstvList.Name = "lstvList";
             this.lstvList.OwnerDraw = true;
-            this.lstvList.Size = new System.Drawing.Size(387, 225);
+            this.lstvList.Size = new System.Drawing.Size(387, 221);
             this.lstvList.TabIndex = 0;
             this.lstvList.UseCompatibleStateImageBehavior = false;
             this.lstvList.View = System.Windows.Forms.View.Details;
@@ -173,11 +185,22 @@
             this.columnHeader3.Text = "名称";
             this.columnHeader3.Width = 100;
             // 
+            // lblCount
+            // 
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(298, 1);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(11, 12);
+            this.lblCount.TabIndex = 4;
+            this.lblCount.Text = "...";
+            // 
             // FrmFollower
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(411, 291);
+            this.Controls.Add(this.lblCount);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lstvList);
             this.Controls.Add(this.btnAppend);
@@ -212,5 +235,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserTweet;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenBrowserUserHome;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserProfile;
+        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Label lblCount;
     }
 }

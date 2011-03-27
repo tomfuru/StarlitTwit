@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -15,25 +16,39 @@ namespace StarlitTwit
     /// </summary>
     public partial class FrmFollower : Form
     {
-        public EFormType FormType { get; set; }
+        //-------------------------------------------------------------------------------
+        #region Variables
+        //-------------------------------------------------------------------------------
+        public EFormType FormType { get; private set; }
+        /// <summary>FormType=UserFollowing,UserFollowerの時に設定しなければならない</summary>
+        public string UserScreenName { get; set; }
+        /// <summary>FormType=Retweeterの時に設定しなければならない</summary>
+        public long RetweetStatusID { get; set; }
 
         private FrmMain _mainForm = null;
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
+        private int _page = 0;
         private ImageListWrapper _imageListWrapper = null;
         /// <summary>ロード中画像</summary>
         private Bitmap _loadingimg;
+        //-------------------------------------------------------------------------------
+        #endregion (Variables)
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmFollower(FrmMain mainForm, ImageListWrapper imgListWrapper)
+        public FrmFollower(FrmMain mainForm, ImageListWrapper imgListWrapper, EFormType formtype)
         {
             InitializeComponent();
             _mainForm = mainForm;
             _imageListWrapper = imgListWrapper;
             lstvList.SmallImageList = imgListWrapper.ImageList;
+            FormType = formtype;
+
+            UserScreenName = null;
+            RetweetStatusID = -1;
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -46,10 +61,16 @@ namespace StarlitTwit
         /// </summary>
         public enum EFormType : byte
         {
-            /// <summary>フォローされているユーザー</summary>
-            Follower,
-            /// <summary>フォローしているユーザー</summary>
-            Following
+            /// <summary>自分をフォローしているユーザー</summary>
+            MyFollower,
+            /// <summary>自分がフォローしているユーザー</summary>
+            MyFollowing,
+            /// <summary>他ユーザーをフォローしているユーザー</summary>
+            UserFollower,
+            /// <summary>他ユーザーがフォローしているユーザー</summary>
+            UserFollowing,
+            /// <summary>リツイートしたユーザー</summary>
+            Retweeter
         }
         //-------------------------------------------------------------------------------
         #endregion (EFormType)
@@ -62,13 +83,44 @@ namespace StarlitTwit
         //
         private void FrmFollower_Load(object sender, EventArgs e)
         {
-            if (FormType == EFormType.Follower) {
+            switch (FormType) {
+                case EFormType.MyFollower:
+                    Text = "フォローされている人";
+                    break;
+                case EFormType.MyFollowing:
+                    Text = "フォローしている人";
+                    break;
+                case EFormType.UserFollower:
+                    Debug.Assert(UserScreenName == null, "UserScreenNameが設定されていない");
+                    Text = string.Format("{0}をフォローしている人", UserScreenName);
+                    break;
+                case EFormType.UserFollowing:
+                    Debug.Assert(UserScreenName == null, "UserScreenNameが設定されていない");
+                    Text = string.Format("{0}がフォローしている人", UserScreenName);
+                    break;
+                case EFormType.Retweeter:
+                    Debug.Assert(RetweetStatusID > 0, "UserScreenNameが設定されていない");
+                    Text = string.Format("発言ID{0}のリツイーター", RetweetStatusID);
+                    break;
+            }
+
+            if (FormType != EFormType.MyFollowing) {
                 lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 100 });
             }
             tsslabel.Text = "取得中...";
+            lblCount.Text = "";
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (FrmFollower_Load)
+        //-------------------------------------------------------------------------------
+        #region btnClose_Click 閉じるボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        #endregion (btnClose_Click)
         //-------------------------------------------------------------------------------
         #region Image_Animate 画像フレームが進んだとき
         //-------------------------------------------------------------------------------
@@ -132,7 +184,7 @@ namespace StarlitTwit
         {
             if (Message.ShowQuestionMessage("フォローします。よろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
                 UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-                bool? ret = Follow(prof.ScreenName);
+                bool? ret = Utilization.Follow(prof.ScreenName);
                 if (!ret.HasValue) {
                     lstvList.SelectedItems[0].SubItems[3].Text = "リクエスト済";
                     ((UserProfile)lstvList.SelectedItems[0].Tag).FolllowRequestSent = true;
@@ -153,13 +205,13 @@ namespace StarlitTwit
         {
             if (Message.ShowQuestionMessage("フォローを解除します。よろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
                 UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-                if (RemoveFollow(prof.ScreenName)) {
+                if (Utilization.RemoveFollow(prof.ScreenName)) {
                     switch (FormType) {
-                        case EFormType.Follower:
+                        case EFormType.MyFollower:
                             lstvList.SelectedItems[0].SubItems[3].Text = "";
                             ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
                             break;
-                        case EFormType.Following:
+                        case EFormType.MyFollowing:
                             lstvList.Items.Remove(lstvList.SelectedItems[0]);
                             break;
                     }
@@ -322,40 +374,50 @@ namespace StarlitTwit
         //
         private void GetUsers()
         {
-            bool canFinalize = true;
             try {
                 IEnumerable<UserProfile> profiles = null;
-                Tuple<IEnumerable<UserProfile>, long, long> proftpl;
-                switch (FormType) {
-                    case EFormType.Follower:
-                        proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
-                        profiles = proftpl.Item1;
-                        _next_cursor = proftpl.Item2;
-                        break;
-                    case EFormType.Following:
-                        proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
-                        profiles = proftpl.Item1;
-                        _next_cursor = proftpl.Item2;
-                        break;
+                if (FormType == EFormType.Retweeter) {
+                    profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
+                    this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
+                }
+                else {
+                    Tuple<IEnumerable<UserProfile>, long, long> proftpl;
+                    switch (FormType) {
+                        case EFormType.MyFollower:
+                            proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
+                            profiles = proftpl.Item1;
+                            _next_cursor = proftpl.Item2;
+                            break;
+                        case EFormType.MyFollowing:
+                            proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
+                            profiles = proftpl.Item1;
+                            _next_cursor = proftpl.Item2;
+                            break;
+                        case EFormType.UserFollower:
+                            proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
+                            profiles = proftpl.Item1;
+                            _next_cursor = proftpl.Item2;
+                            break;
+                        case EFormType.UserFollowing:
+                            proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
+                            profiles = proftpl.Item1;
+                            _next_cursor = proftpl.Item2;
+                            break;
+                    }
+                    this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
                 }
                 if (profiles != null) {
                     this.Invoke(new Action(() =>
                     {
                         AddList(profiles);
+                        lblCount.Text = string.Format("{0}人見つかりました", _profileList.Count);
                         tsslabel.Text = "取得完了しました。";
                     }));
                 }
             }
-            catch (InvalidOperationException) {
-                canFinalize = false;
-            }
+            catch (InvalidOperationException) { }
             catch (TwitterAPIException) {
                 this.Invoke(new Action(() => tsslabel.Text = "取得に失敗しました。"));
-            }
-            finally {
-                if (canFinalize) {
-                    this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
-                }
             }
         }
         #endregion (GetUsers)
@@ -384,31 +446,6 @@ namespace StarlitTwit
             finally { ImageAnimator.StopAnimate(_loadingimg, evh); }
         }
         #endregion (GetImages)
-        //-------------------------------------------------------------------------------
-        #region -Follow フォローを行います using TwitterAPI
-        //-------------------------------------------------------------------------------
-        //
-        private bool? Follow(string screen_name)
-        {
-            try {
-                UserProfile ret = FrmMain.Twitter.friendships_create(screen_name: screen_name);
-                if (ret.Protected && !ret.Following) { return null; }
-            }
-            catch (TwitterAPIException) { return false; }
-            return true;
-        }
-        #endregion (Follow)
-        //-------------------------------------------------------------------------------
-        #region -RemoveFollow フォロー解除を行います using TwitterAPI
-        //-------------------------------------------------------------------------------
-        //
-        private bool RemoveFollow(string screen_name)
-        {
-            try { FrmMain.Twitter.friendships_destroy(screen_name: screen_name); }
-            catch (TwitterAPIException) { return false; }
-            return true;
-        }
-        #endregion (RemoveFollow)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
 

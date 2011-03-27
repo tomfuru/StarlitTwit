@@ -46,6 +46,40 @@ namespace StarlitTwit
         #endregion (UrlEncode)
 
         //-------------------------------------------------------------------------------
+        #region +[static]Follow フォローを行います using TwitterAPI
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォローを行います。返り値は成功:true,失敗:false,成功したが承認待ち:null
+        /// </summary>
+        /// <param name="screen_name">フォローするユーザーのScreenName</param>
+        /// <returns>成功:true,失敗:false,成功したが認証待ち:null</returns>
+        public static bool? Follow(string screen_name)
+        {
+            try {
+                UserProfile ret = FrmMain.Twitter.friendships_create(screen_name: screen_name);
+                if (ret.Protected && !ret.Following) { return null; }
+            }
+            catch (TwitterAPIException) { return false; }
+            return true;
+        }
+        #endregion (Follow)
+        //-------------------------------------------------------------------------------
+        #region +[static]RemoveFollow フォロー解除を行います using TwitterAPI
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォロー解除を行います。できたかどうかが返ります。
+        /// </summary>
+        /// <param name="screen_name">フォロー解除するユーザーのScreenName</param>
+        /// <returns></returns>
+        public static bool RemoveFollow(string screen_name)
+        {
+            try { FrmMain.Twitter.friendships_destroy(screen_name: screen_name); }
+            catch (TwitterAPIException) { return false; }
+            return true;
+        }
+        #endregion (RemoveFollow)
+
+        //-------------------------------------------------------------------------------
         #region +[static]GetTwitDataFromID IDから呟きに関するデータを取得します using TwitterAPI
         //-------------------------------------------------------------------------------
         /// <summary>
