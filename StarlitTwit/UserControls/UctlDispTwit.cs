@@ -461,6 +461,14 @@ namespace StarlitTwit
             Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
         }
         #endregion (tsmiUser_OpenBrowser_Click)
+        #region tsmiUser_Clipboard_Click ユーザー：クリップボードにコピークリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUser_Clipboard_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText((string)tsComboUser.SelectedItem);
+        }
+        #endregion (tsmiUser_Clipboard_Click)
         //-------------------------------------------------------------------------------
         #region tsmiHashtag_MakeTab_Click ハッシュタグ：タブ作成クリック
         //-------------------------------------------------------------------------------
@@ -472,6 +480,14 @@ namespace StarlitTwit
             }
         }
         #endregion (tsmiHashtag_MakeTab_Click)
+        #region tsmiHashtag_Clipboard_Click ハッシュタグ：クリップボードにコピークリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiHashtag_Clipboard_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText((string)tsComboHashtag.SelectedItem);
+        }
+        #endregion (tsmiHashtag_Clipboard_Click)
         //-------------------------------------------------------------------------------
         #region tsmiURL_OpenExternalBrowser_Click URL：外部ブラウザで開くクリック
         //-------------------------------------------------------------------------------
@@ -491,6 +507,14 @@ namespace StarlitTwit
             Utilization.OpenBrowser(url, true);
         }
         #endregion (tsmiURL_OpenInternalBrowser_Click)
+        #region tsmiURL_Clipboard_Click URL：クリップボードにコピークリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiURL_Clipboard_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText((string)tsComboURL.SelectedItem);
+        }
+        #endregion (tsmiURL_Clipboard_Click)
         //-------------------------------------------------------------------------------
         #region tsmiDispRetweeter_Click Retweetしたユーザーを見るクリック
         //-------------------------------------------------------------------------------

@@ -51,24 +51,27 @@
             this.tsComboUser = new System.Windows.Forms.ToolStripComboBox();
             this.tsmiHashtag = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHashtag_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHashtag_Clipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsComboHashtag = new System.Windows.Forms.ToolStripComboBox();
             this.tsmiURL = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiURL_OpenExternalBrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiURL_OpenInternalBrowser = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiURL_Clipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsComboURL = new System.Windows.Forms.ToolStripComboBox();
             this.tsmiOpenBrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowser_ThisTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowser_ReplyTweet = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSepMoreTweet = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiDispRetweeter = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDispRetweeter = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSepMoreTweet = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiMoreRecently = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOlder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSpecifyTime = new System.Windows.Forms.ToolStripMenuItem();
             this.vscrbar = new System.Windows.Forms.VScrollBar();
             this.pnlTweets = new StarlitTwit.PanelEx();
+            this.tsmiUser_Clipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,7 +101,7 @@
             this.tsmiOlder,
             this.tsmiSpecifyTime});
             this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(226, 414);
+            this.menuRow.Size = new System.Drawing.Size(242, 392);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiReply
@@ -185,6 +188,7 @@
             this.tsmiUser_MakeUserTab,
             this.tsmiUser_MakeListTab,
             this.tsmiUser_OpenBrowser,
+            this.tsmiUser_Clipboard,
             this.toolStripMenuItem3,
             this.tsComboUser});
             this.tsmiUser.Name = "tsmiUser";
@@ -194,47 +198,47 @@
             // tsmiUser_DisplayProfile
             // 
             this.tsmiUser_DisplayProfile.Name = "tsmiUser_DisplayProfile";
-            this.tsmiUser_DisplayProfile.Size = new System.Drawing.Size(181, 22);
-            this.tsmiUser_DisplayProfile.Text = "プロフィールを表示する";
+            this.tsmiUser_DisplayProfile.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_DisplayProfile.Text = "プロフィールを表示する(&P)";
             this.tsmiUser_DisplayProfile.Click += new System.EventHandler(this.tsmiUser_DisplayProfile_Click);
             this.tsmiUser_DisplayProfile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_DisplayTweets
             // 
             this.tsmiUser_DisplayTweets.Name = "tsmiUser_DisplayTweets";
-            this.tsmiUser_DisplayTweets.Size = new System.Drawing.Size(181, 22);
-            this.tsmiUser_DisplayTweets.Text = "発言を表示する";
+            this.tsmiUser_DisplayTweets.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_DisplayTweets.Text = "発言を表示する(&S)";
             this.tsmiUser_DisplayTweets.Click += new System.EventHandler(this.tsmiUser_DisplayTweets_Click);
             this.tsmiUser_DisplayTweets.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_MakeUserTab
             // 
             this.tsmiUser_MakeUserTab.Name = "tsmiUser_MakeUserTab";
-            this.tsmiUser_MakeUserTab.Size = new System.Drawing.Size(181, 22);
-            this.tsmiUser_MakeUserTab.Text = "タブを作成する";
+            this.tsmiUser_MakeUserTab.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_MakeUserTab.Text = "タブを作成する(&T)";
             this.tsmiUser_MakeUserTab.Click += new System.EventHandler(this.tsmiUser_MakeUserTab_Click);
             this.tsmiUser_MakeUserTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_MakeListTab
             // 
             this.tsmiUser_MakeListTab.Name = "tsmiUser_MakeListTab";
-            this.tsmiUser_MakeListTab.Size = new System.Drawing.Size(181, 22);
-            this.tsmiUser_MakeListTab.Text = "リストのタブを作成する";
+            this.tsmiUser_MakeListTab.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_MakeListTab.Text = "リストのタブを作成する(&L)";
             this.tsmiUser_MakeListTab.Click += new System.EventHandler(this.tsmiUser_MakeListTab_Click);
             this.tsmiUser_MakeListTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_OpenBrowser
             // 
             this.tsmiUser_OpenBrowser.Name = "tsmiUser_OpenBrowser";
-            this.tsmiUser_OpenBrowser.Size = new System.Drawing.Size(181, 22);
-            this.tsmiUser_OpenBrowser.Text = "ホームをブラウザで開く";
+            this.tsmiUser_OpenBrowser.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_OpenBrowser.Text = "ホームをブラウザで開く(&B)";
             this.tsmiUser_OpenBrowser.Click += new System.EventHandler(this.tsmiUser_OpenBrowser_Click);
             this.tsmiUser_OpenBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(187, 6);
             // 
             // tsComboUser
             // 
@@ -246,6 +250,7 @@
             // 
             this.tsmiHashtag.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiHashtag_MakeTab,
+            this.tsmiHashtag_Clipboard,
             this.toolStripMenuItem4,
             this.tsComboHashtag});
             this.tsmiHashtag.Name = "tsmiHashtag";
@@ -255,15 +260,22 @@
             // tsmiHashtag_MakeTab
             // 
             this.tsmiHashtag_MakeTab.Name = "tsmiHashtag_MakeTab";
-            this.tsmiHashtag_MakeTab.Size = new System.Drawing.Size(181, 22);
-            this.tsmiHashtag_MakeTab.Text = "タブを作成する";
+            this.tsmiHashtag_MakeTab.Size = new System.Drawing.Size(182, 22);
+            this.tsmiHashtag_MakeTab.Text = "タブを作成する(&T)";
             this.tsmiHashtag_MakeTab.Click += new System.EventHandler(this.tsmiHashtag_MakeTab_Click);
             this.tsmiHashtag_MakeTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
+            // 
+            // tsmiHashtag_Clipboard
+            // 
+            this.tsmiHashtag_Clipboard.Name = "tsmiHashtag_Clipboard";
+            this.tsmiHashtag_Clipboard.Size = new System.Drawing.Size(182, 22);
+            this.tsmiHashtag_Clipboard.Text = "クリップボードにコピー(&C)";
+            this.tsmiHashtag_Clipboard.Click += new System.EventHandler(this.tsmiHashtag_Clipboard_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(179, 6);
             // 
             // tsComboHashtag
             // 
@@ -276,6 +288,7 @@
             this.tsmiURL.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiURL_OpenExternalBrowser,
             this.tsmiURL_OpenInternalBrowser,
+            this.tsmiURL_Clipboard,
             this.toolStripMenuItem5,
             this.tsComboURL});
             this.tsmiURL.Name = "tsmiURL";
@@ -285,23 +298,30 @@
             // tsmiURL_OpenExternalBrowser
             // 
             this.tsmiURL_OpenExternalBrowser.Name = "tsmiURL_OpenExternalBrowser";
-            this.tsmiURL_OpenExternalBrowser.Size = new System.Drawing.Size(181, 22);
-            this.tsmiURL_OpenExternalBrowser.Text = "外部ブラウザで開く";
+            this.tsmiURL_OpenExternalBrowser.Size = new System.Drawing.Size(182, 22);
+            this.tsmiURL_OpenExternalBrowser.Text = "外部ブラウザで開く(&E)";
             this.tsmiURL_OpenExternalBrowser.Click += new System.EventHandler(this.tsmiURL_OpenExternalBrowser_Click);
             this.tsmiURL_OpenExternalBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiURL_OpenInternalBrowser
             // 
             this.tsmiURL_OpenInternalBrowser.Name = "tsmiURL_OpenInternalBrowser";
-            this.tsmiURL_OpenInternalBrowser.Size = new System.Drawing.Size(181, 22);
-            this.tsmiURL_OpenInternalBrowser.Text = "内部ブラウザで開く";
+            this.tsmiURL_OpenInternalBrowser.Size = new System.Drawing.Size(182, 22);
+            this.tsmiURL_OpenInternalBrowser.Text = "内部ブラウザで開く(&I)";
             this.tsmiURL_OpenInternalBrowser.Click += new System.EventHandler(this.tsmiURL_OpenInternalBrowser_Click);
             this.tsmiURL_OpenInternalBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
+            // 
+            // tsmiURL_Clipboard
+            // 
+            this.tsmiURL_Clipboard.Name = "tsmiURL_Clipboard";
+            this.tsmiURL_Clipboard.Size = new System.Drawing.Size(182, 22);
+            this.tsmiURL_Clipboard.Text = "クリップボードにコピー(&C)";
+            this.tsmiURL_Clipboard.Click += new System.EventHandler(this.tsmiURL_Clipboard_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(179, 6);
             // 
             // tsComboURL
             // 
@@ -321,21 +341,21 @@
             // tsmiOpenBrowser_ThisTweet
             // 
             this.tsmiOpenBrowser_ThisTweet.Name = "tsmiOpenBrowser_ThisTweet";
-            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(151, 22);
-            this.tsmiOpenBrowser_ThisTweet.Text = "このツイート";
+            this.tsmiOpenBrowser_ThisTweet.Size = new System.Drawing.Size(167, 22);
+            this.tsmiOpenBrowser_ThisTweet.Text = "このツイート(&T)";
             this.tsmiOpenBrowser_ThisTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ThisTweet_Click);
             // 
             // tsmiOpenBrowser_ReplyTweet
             // 
             this.tsmiOpenBrowser_ReplyTweet.Name = "tsmiOpenBrowser_ReplyTweet";
-            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(151, 22);
-            this.tsmiOpenBrowser_ReplyTweet.Text = "リプライ先ツイート";
+            this.tsmiOpenBrowser_ReplyTweet.Size = new System.Drawing.Size(167, 22);
+            this.tsmiOpenBrowser_ReplyTweet.Text = "リプライ先ツイート(&R)";
             this.tsmiOpenBrowser_ReplyTweet.Click += new System.EventHandler(this.tsmiOpenBrowser_ReplyTweet_Click);
             // 
-            // tsmiSepMoreTweet
+            // toolStripMenuItem1
             // 
-            this.tsmiSepMoreTweet.Name = "tsmiSepMoreTweet";
-            this.tsmiSepMoreTweet.Size = new System.Drawing.Size(222, 6);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiDispRetweeter
             // 
@@ -344,23 +364,23 @@
             this.tsmiDispRetweeter.Text = "リツイートしたユーザーを見る(&R)";
             this.tsmiDispRetweeter.Click += new System.EventHandler(this.tsmiDispRetweeter_Click);
             // 
-            // toolStripMenuItem1
+            // tsmiSepMoreTweet
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(222, 6);
+            this.tsmiSepMoreTweet.Name = "tsmiSepMoreTweet";
+            this.tsmiSepMoreTweet.Size = new System.Drawing.Size(222, 6);
             // 
             // tsmiMoreRecently
             // 
             this.tsmiMoreRecently.Name = "tsmiMoreRecently";
-            this.tsmiMoreRecently.Size = new System.Drawing.Size(225, 22);
-            this.tsmiMoreRecently.Text = "これより新しいツイートを取得する";
+            this.tsmiMoreRecently.Size = new System.Drawing.Size(241, 22);
+            this.tsmiMoreRecently.Text = "これより新しいツイートを取得する(&N)";
             this.tsmiMoreRecently.Click += new System.EventHandler(this.tsmiMoreRecentData_Click);
             // 
             // tsmiOlder
             // 
             this.tsmiOlder.Name = "tsmiOlder";
-            this.tsmiOlder.Size = new System.Drawing.Size(225, 22);
-            this.tsmiOlder.Text = "これより古いツイートを取得する";
+            this.tsmiOlder.Size = new System.Drawing.Size(241, 22);
+            this.tsmiOlder.Text = "これより古いツイートを取得する(&O)";
             this.tsmiOlder.Click += new System.EventHandler(this.tsmiOlderData_Click);
             // 
             // tsmiSpecifyTime
@@ -402,6 +422,13 @@
             this.pnlTweets.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseMove);
             this.pnlTweets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseUp);
             this.pnlTweets.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseWheel);
+            // 
+            // tsmiUser_Clipboard
+            // 
+            this.tsmiUser_Clipboard.Name = "tsmiUser_Clipboard";
+            this.tsmiUser_Clipboard.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_Clipboard.Text = "クリップボードにコピー(&C)";
+            this.tsmiUser_Clipboard.Click += new System.EventHandler(this.tsmiUser_Clipboard_Click);
             // 
             // UctlDispTwit
             // 
@@ -463,5 +490,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiUser_OpenBrowser;
         private System.Windows.Forms.ToolStripMenuItem tsmiDispRetweeter;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiURL_Clipboard;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHashtag_Clipboard;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUser_Clipboard;
     }
 }
