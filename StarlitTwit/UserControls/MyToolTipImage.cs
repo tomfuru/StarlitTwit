@@ -8,6 +8,9 @@ using System.ComponentModel;
 
 namespace StarlitTwit.UserControls
 {
+    /// <summary>
+    /// 画像を表示するToolTipです。
+    /// </summary>
     public class MyToolTipImage : MyToolTipBase
     {
         //-------------------------------------------------------------------------------
@@ -30,6 +33,8 @@ namespace StarlitTwit.UserControls
         private bool _dispLoading = true;
         /// <summary>ロード中画像</summary>
         private Bitmap _loadingimg;
+        /// <summary>アニメーション管理クラス</summary>
+        private ImageAnimation _imageAnimation;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -123,6 +128,10 @@ namespace StarlitTwit.UserControls
         private void Initialize()
         {
             _switchTimer.Elapsed += SwitchTimer_Elapsed;
+
+            _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingL.Clone();
+            _imageAnimation = new ImageAnimation(_loadingimg);
+            _imageAnimation.FrameUpdated += Image_Animate;
         }
         #endregion (Initialize)
 
@@ -157,7 +166,7 @@ namespace StarlitTwit.UserControls
                     DisplayForm.Refresh();
                 }
             }
-            catch (InvalidOperationException) {}
+            catch (InvalidOperationException) { }
         }
         #endregion (SwitchTimer_Elapsed)
         //-------------------------------------------------------------------------------
@@ -190,9 +199,6 @@ namespace StarlitTwit.UserControls
                 Size size;
                 if (_img == null) {
                     if (!_gettingImage) {
-                        if (_loadingimg == null) {
-                            _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingL.Clone();
-                        }
                         _gettingImage = true;
                         Utilization.InvokeTransaction(() => GetImages());
                     }
@@ -241,8 +247,7 @@ namespace StarlitTwit.UserControls
                 g.Clear(c.BackColor);
                 Rectangle drawrect = e.ClipRectangle;
                 g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
-                if (_dispLoading && _gettingImage) { ImageAnimator.UpdateFrames(_loadingimg); }
-                Image img = (_dispLoading && _gettingImage) ? _loadingimg : 
+                Image img = (_dispLoading && _gettingImage) ? _imageAnimation.Image :
                             (_img != null) ? _img[_imgIndex] :
                                              StarlitTwit.Properties.Resources.failed;
                 g.DrawImage(img, PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
@@ -314,8 +319,7 @@ namespace StarlitTwit.UserControls
         /// </summary>
         private void GetImages()
         {
-            EventHandler evh = new EventHandler(Image_Animate);
-            ImageAnimator.Animate(_loadingimg, evh);
+            _imageAnimation.StartAnimation();
 
             List<Image> list = new List<Image>();
             foreach (var url in _imgURLs) {
@@ -338,7 +342,7 @@ namespace StarlitTwit.UserControls
                     }
                 }
             }
-            else { 
+            else {
                 lock (_lockimg) { _img = null; }
                 if (DisplayForm != null) {
                     Size = GetPreferSize(Properties.Resources.failed.Size);
@@ -347,7 +351,7 @@ namespace StarlitTwit.UserControls
                 }
             }
 
-            ImageAnimator.StopAnimate(_loadingimg, evh);
+            _imageAnimation.StopAnimation();
             _gettingImage = false;
         }
         //-------------------------------------------------------------------------------
@@ -379,6 +383,7 @@ namespace StarlitTwit.UserControls
             base.Dispose(disposing);
             if (disposing) {
                 _loadingimg.Dispose();
+                _imageAnimation.Dispose();
             }
         }
         #endregion (#[override]Dispose)

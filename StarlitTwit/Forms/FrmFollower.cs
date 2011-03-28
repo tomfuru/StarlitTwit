@@ -32,6 +32,8 @@ namespace StarlitTwit
         private ImageListWrapper _imageListWrapper = null;
         /// <summary>ロード中画像</summary>
         private Bitmap _loadingimg;
+        /// <summary>アニメーション管理クラス</summary>
+        private ImageAnimation _imageAnimation;
         //-------------------------------------------------------------------------------
         #endregion (Variables)
 
@@ -49,6 +51,10 @@ namespace StarlitTwit
 
             UserScreenName = null;
             RetweetStatusID = -1;
+
+            _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingS.Clone();
+            _imageAnimation = new ImageAnimation(_loadingimg);
+            _imageAnimation.FrameUpdated += Image_Animate;
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -319,14 +325,13 @@ namespace StarlitTwit
         private void lstvList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             if (e.ColumnIndex > 0) { e.DrawDefault = true; return; }
-            ImageAnimator.UpdateFrames(_loadingimg);
             e.DrawBackground();
             Image img = _imageListWrapper.GetImage(_profileList[e.ItemIndex].IconURL);
             if (img != null) {
                 e.Graphics.DrawImage(img, e.Bounds.Location);
             }
-            else if (_loadingimg != null) {
-                e.Graphics.DrawImage(_loadingimg, e.Bounds.Location);
+            else if (_imageAnimation != null) {
+                e.Graphics.DrawImage(_imageAnimation.Image, e.Bounds.Location);
             }
         }
         #endregion (lstvList_DrawSubItem)
@@ -458,10 +463,8 @@ namespace StarlitTwit
         //
         private void GetImages(IEnumerable<Tuple<ListViewItem, string>> data)
         {
-            EventHandler evh = new EventHandler(Image_Animate);
-            _loadingimg = StarlitTwit.Properties.Resources.NowLoadingS;
             try {
-                ImageAnimator.Animate(_loadingimg, evh);
+                _imageAnimation.StartAnimation();
                 foreach (var d in data) {
                     Image img = Utilization.GetImageFromURL(d.Item2);
                     if (img != null) {
@@ -472,9 +475,9 @@ namespace StarlitTwit
                         d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;
                     }
                 }
+                _imageAnimation.StopAnimation();
             }
             catch (InvalidOperationException) { }
-            finally { ImageAnimator.StopAnimate(_loadingimg, evh); }
         }
         #endregion (GetImages)
         //-------------------------------------------------------------------------------

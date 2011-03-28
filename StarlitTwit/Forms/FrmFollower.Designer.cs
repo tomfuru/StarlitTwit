@@ -16,6 +16,9 @@
             if (disposing && (components != null)) {
                 components.Dispose();
             }
+            if (disposing && (_imageAnimation != null)) { // リソース
+                _imageAnimation.Dispose(true);
+            }
             base.Dispose(disposing);
         }
 
@@ -32,8 +35,8 @@
             this.tsmiFollow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiDispFollower = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDispFollowing = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispFollower = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,19 +89,19 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(257, 6);
             // 
-            // tsmiDispFollower
-            // 
-            this.tsmiDispFollower.Name = "tsmiDispFollower";
-            this.tsmiDispFollower.Size = new System.Drawing.Size(260, 22);
-            this.tsmiDispFollower.Text = "フォロワーを見る";
-            this.tsmiDispFollower.Click += new System.EventHandler(this.tsmiDispFollower_Click);
-            // 
             // tsmiDispFollowing
             // 
             this.tsmiDispFollowing.Name = "tsmiDispFollowing";
             this.tsmiDispFollowing.Size = new System.Drawing.Size(260, 22);
             this.tsmiDispFollowing.Text = "フレンドを見る";
             this.tsmiDispFollowing.Click += new System.EventHandler(this.tsmiDispFollowing_Click);
+            // 
+            // tsmiDispFollower
+            // 
+            this.tsmiDispFollower.Name = "tsmiDispFollower";
+            this.tsmiDispFollower.Size = new System.Drawing.Size(260, 22);
+            this.tsmiDispFollower.Text = "フォロワーを見る";
+            this.tsmiDispFollower.Click += new System.EventHandler(this.tsmiDispFollower_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -227,9 +230,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(411, 291);
             this.Controls.Add(this.lblCount);
-            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lstvList);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnAppend);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

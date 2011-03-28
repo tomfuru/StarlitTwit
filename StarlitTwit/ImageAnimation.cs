@@ -8,6 +8,9 @@ using System.Threading;
 
 namespace StarlitTwit
 {
+    /// <summary>
+    /// 画像アニメーションを管理するクラスです。
+    /// </summary>
     public class ImageAnimation : IDisposable
     {
         //-------------------------------------------------------------------------------

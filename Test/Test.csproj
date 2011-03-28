@@ -73,7 +73,6 @@
     <Compile Include="FormListView.Designer.cs">
       <DependentUpon>FormListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageAnimation.cs" />
     <Compile Include="PermanentToolTip.cs">
       <SubType>Component</SubType>
     </Compile>
