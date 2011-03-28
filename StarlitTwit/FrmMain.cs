@@ -1396,30 +1396,34 @@ namespace StarlitTwit
         {
             this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = false));
 
-            btnURLShorten.Enabled = false;
-            string[] urls = Utilization.ExtractURL(rtxtTwit.Text)
-                           .Distinct()
-                           .Where((url) => !URLShortener.IsShortenURL(url))
-                           .ToArray();
-            List<Tuple<string, string>> valList = new List<Tuple<string, string>>();
+            try {
+                btnURLShorten.Enabled = false;
+                string[] urls = Utilization.ExtractURL(rtxtTwit.Text)
+                               .Distinct()
+                               .Where((url) => !URLShortener.IsShortenURL(url))
+                               .ToArray();
+                List<Tuple<string, string>> valList = new List<Tuple<string, string>>();
 
-            Utilization.InvokeTransactionDoingEvents(
-                () =>
-                {
-                    foreach (string url in urls) {
-                        string shorturl = URLShortener.Shorten(url, type);
-                        valList.Add(new Tuple<string, string>(url, shorturl));
+                Utilization.InvokeTransactionDoingEvents(
+                    () =>
+                    {
+                        foreach (string url in urls) {
+                            string shorturl = URLShortener.Shorten(url, type);
+                            valList.Add(new Tuple<string, string>(url, shorturl));
+                        }
                     }
+                );
+
+                string text = rtxtTwit.Text;
+                foreach (var tuple in valList) {
+                    text = text.Replace(tuple.Item1, tuple.Item2);
                 }
-            );
+                rtxtTwit.Text = text;
 
-            string text = rtxtTwit.Text;
-            foreach (var tuple in valList) {
-                text = text.Replace(tuple.Item1, tuple.Item2);
             }
-            rtxtTwit.Text = text;
-
-            this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = true));
+            finally {
+                this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = true));
+            }
         }
         #endregion (TextURLShorten)
 
