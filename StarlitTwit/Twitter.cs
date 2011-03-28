@@ -10,12 +10,31 @@ using System.Xml.Linq;
 using System.Xml;
 using System.Globalization;
 using System.Diagnostics;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Threading;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using System.Drawing;
+
+/* Twitter API Resource 
+ * statuses (Timeline)
+ * statuses (Status)
+ * users
+ * local trends
+ * list
+ * list members
+ * list subscribers
+ * direct messages
+ * friendships
+ * friends and followers
+ * account
+ * favorites
+ * notifications
+ * blocks
+ * spam reporting
+ * oauth
+ * geo
+ * legal
+ * help
+ */
 
 namespace StarlitTwit
 {
@@ -430,10 +449,10 @@ namespace StarlitTwit
         }
         #endregion (statuses_retweet)
         //-------------------------------------------------------------------------------
-        #region +statuses_retweets（未デバッグ）
+        #region +statuses_retweets
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweetsメソッド（未デバッグ）
+        /// statuses/retweetsメソッド
         /// </summary>
         /// <param name="id">リツイートを見る発言のID</param>
         /// <param name="count">[option] &lt;100</param>
@@ -555,6 +574,41 @@ namespace StarlitTwit
         }
         #endregion (users_lookup)
         //-------------------------------------------------------------------------------
+        #region users_profile_image
+        //-------------------------------------------------------------------------------
+        #region EImageSize 列挙体
+        //-------------------------------------------------------------------------------
+        /// <summary>users/profile_imageメソッドで使用する画像サイズ</summary>
+        public enum EImageSize
+        {
+            /// <summary>73*73</summary>
+            bigger,
+            /// <summary>48*48</summary>
+            normal,
+            /// <summary>24*24</summary>
+            mini
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (EImageSize )
+        /// <summary>
+        /// users/profile_image メソッド
+        /// </summary>
+        /// <param name="screen_name"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public Tuple<string,Image> users_profile_image(string screen_name, EImageSize size = EImageSize.normal)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("size", size.ToString());
+            }
+
+            string url = string.Format("{0}users/profile_image/{1}.xml?{2}", URLapi, screen_name,JoinParameters(paramdic));
+
+            return GetByAPIImage(url);
+        }
+        #endregion (users_profile_image)
+        //-------------------------------------------------------------------------------
         #region statuses_friends
         //-------------------------------------------------------------------------------
         /// <summary>
@@ -609,123 +663,21 @@ namespace StarlitTwit
         }
         #endregion (statuses_followers)
         //-------------------------------------------------------------------------------
+        // suggestions
+        // suggestions/slug
+        //-------------------------------------------------------------------------------
         #endregion (users/)
-
-        //-------------------------------------------------------------------------------
-        #region direct_messages/ (ダイレクトメッセージ関連)
-        //-------------------------------------------------------------------------------
-        #region direct_messages
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messagesメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages.xml", GET, paramdic);
-
-            return ConvertToTwitDataArrayDM(GetByAPI(url));
-        }
-        #endregion (direct_messages)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_sent
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/sentメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/sent.xml", GET, paramdic);
-
-            return ConvertToTwitDataArrayDM(GetByAPI(url));
-        }
-        #endregion (direct_messages_sent)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_new
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/newメソッド
-        /// </summary>
-        /// <param name="screen_name">送信先の名前</param>
-        /// <param name="user_id">送信先のユーザーID</param>
-        /// <param name="text">送信テキスト</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("screen_name", screen_name);
-                paramdic.Add("user_id", user_id.ToString());
-                paramdic.Add("text", Utilization.UrlEncode(text));
-
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/new.xml", POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            return ConvertToTwitDataDM(el);
-        }
-        #endregion (direct_messages_new)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_destroy
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/destroyメソッド
-        /// </summary>
-        /// <param name="id">削除先発言ID</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/destroy/" + id.ToString() + ".xml", POST, paramdic);
-            return ConvertToTwitDataDM(PostToAPI(url));
-        }
-        #endregion (direct_messages_destroy)
-        //-------------------------------------------------------------------------------
-        #endregion (direct_messages/)
 
         //-------------------------------------------------------------------------------
         #region list/ (リスト関連)
         //-------------------------------------------------------------------------------
-        #region lists_Add リスト追加（未実装）
+        #region lists_Create リスト作成（未実装）
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// lists リスト追加メソッド
+        /// lists リスト作成メソッド
         /// </summary>
         /// <returns></returns>
-        private object lists_Add()
+        private object lists_Create()
         {
 
             //string url = GetUrlWithOAuthParameters(URL + @"lists.xml", POST, paramdic);
@@ -735,7 +687,7 @@ namespace StarlitTwit
 
             throw new NotImplementedException();
         }
-        #endregion (lists_Add)
+        #endregion (lists_Create)
         //-------------------------------------------------------------------------------
         #region lists_Update リスト更新（未実装）
         //-------------------------------------------------------------------------------
@@ -867,6 +819,111 @@ namespace StarlitTwit
         #endregion (lists_subscriptions)
         //-------------------------------------------------------------------------------
         #endregion (list)
+
+        //-------------------------------------------------------------------------------
+        #region direct_messages/ (ダイレクトメッセージ関連)
+        //-------------------------------------------------------------------------------
+        #region direct_messages
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// direct_messagesメソッド
+        /// </summary>
+        /// <param name="since_id">[option]</param>
+        /// <param name="max_id">[option]</param>
+        /// <param name="count">[option]</param>
+        /// <param name="page">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages.xml", GET, paramdic);
+
+            return ConvertToTwitDataArrayDM(GetByAPI(url));
+        }
+        #endregion (direct_messages)
+        //-------------------------------------------------------------------------------
+        #region direct_messages_sent
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// direct_messages/sentメソッド
+        /// </summary>
+        /// <param name="since_id">[option]</param>
+        /// <param name="max_id">[option]</param>
+        /// <param name="count">[option]</param>
+        /// <param name="page">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/sent.xml", GET, paramdic);
+
+            return ConvertToTwitDataArrayDM(GetByAPI(url));
+        }
+        #endregion (direct_messages_sent)
+        //-------------------------------------------------------------------------------
+        #region direct_messages_new
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// direct_messages/newメソッド
+        /// </summary>
+        /// <param name="screen_name">送信先の名前</param>
+        /// <param name="user_id">送信先のユーザーID</param>
+        /// <param name="text">送信テキスト</param>
+        /// <param name="include_entities">[option]</param>
+        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("screen_name", screen_name);
+                paramdic.Add("user_id", user_id.ToString());
+                paramdic.Add("text", Utilization.UrlEncode(text));
+
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/new.xml", POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToTwitDataDM(el);
+        }
+        #endregion (direct_messages_new)
+        //-------------------------------------------------------------------------------
+        #region direct_messages_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// direct_messages/destroyメソッド
+        /// </summary>
+        /// <param name="id">削除先発言ID</param>
+        /// <param name="include_entities">[option]</param>
+        public TwitData direct_messages_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/destroy/" + id.ToString() + ".xml", POST, paramdic);
+            return ConvertToTwitDataDM(PostToAPI(url));
+        }
+        #endregion (direct_messages_destroy)
+        //-------------------------------------------------------------------------------
+        #endregion (direct_messages/)
 
         //-------------------------------------------------------------------------------
         #region friendships/ (フレンド関連)
@@ -1335,33 +1392,7 @@ namespace StarlitTwit
         //
         private XElement GetByAPI(string uri, bool renewAPIrest = true)
         {
-            WebRequest req = WebRequest.Create(uri);
-            req.Method = GET;
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.Timeout = 10000;
-
-            WebResponse res;
-            try {
-                res = req.GetResponse();
-            }
-            catch (WebException ex) {
-                if (ex.Status == WebExceptionStatus.ProtocolError) {
-                    HttpWebResponse webres = (HttpWebResponse)ex.Response;
-                    throw new TwitterAPIException((int)webres.StatusCode, webres.StatusDescription);
-                }
-                else if (ex.Status == WebExceptionStatus.NameResolutionFailure
-                      || ex.Status == WebExceptionStatus.ConnectFailure) {
-                    throw new TwitterAPIException(0, ex.Message);
-                }
-                else if (ex.Status == WebExceptionStatus.Timeout) {
-                    throw new TwitterAPIException(408, ex.Message);
-                }
-                else {
-                    // 不明な(その他の)エラー
-                    Log.DebugLog(ex);
-                    throw new TwitterAPIException(-1, ex.Message);
-                }
-            }
+            WebResponse res = RequestWeb(uri, GET, renewAPIrest);
 
             if (renewAPIrest && res.Headers.AllKeys.Contains("X-RateLimit-Limit")
                 && res.Headers.AllKeys.Contains("X-RateLimit-Remaining")) {
@@ -1390,38 +1421,50 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (GetByAPI)
         //-------------------------------------------------------------------------------
+        #region -GetByAPIJson APIから取得(Json ver)
+        //-------------------------------------------------------------------------------
+        //
+        private XElement GetByAPIJson(string uri)
+        {
+            WebResponse res = RequestWeb(uri, GET, false);
+
+            using (Stream resStream = res.GetResponseStream()) {
+                using (XmlDictionaryReader xmldreader = JsonReaderWriterFactory.CreateJsonReader(resStream, XmlDictionaryReaderQuotas.Max)) {
+                    try {
+                        return XElement.Load(xmldreader);
+                    }
+                    catch (XmlException ex) {
+                        //Log.DebugLog(ex);
+                        throw new TwitterAPIException(1000, ex.Message);
+                    }
+                }
+            }
+        }
+        #endregion (GetByAPIJson)
+        //-------------------------------------------------------------------------------
+        #region -GetByAPIImage APIから取得(画像ver)
+        //-------------------------------------------------------------------------------
+        //
+        private Tuple<string,Image> GetByAPIImage(string uri)
+        {
+            WebResponse res = RequestWeb(uri, GET, false);
+
+            string imgUrl = res.ResponseUri.ToString();
+            Image img;
+            using (Stream s = res.GetResponseStream()) {
+                img = Image.FromStream(s);
+            }
+
+            return new Tuple<string, Image>(imgUrl, img);
+        }
+        #endregion (GetByAPIImage)
+        //-------------------------------------------------------------------------------
         #region -PostToAPI APIに投稿
         //-------------------------------------------------------------------------------
         //
         private XElement PostToAPI(string uri)
         {
-            WebRequest req = WebRequest.Create(uri);
-            req.Method = POST;
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.Timeout = 10000;
-
-            WebResponse res;
-            try {
-                res = req.GetResponse();
-            }
-            catch (WebException ex) {
-                if (ex.Status == WebExceptionStatus.ProtocolError) {
-                    HttpWebResponse webres = (HttpWebResponse)ex.Response;
-                    throw new TwitterAPIException((int)webres.StatusCode, webres.StatusDescription);
-                }
-                else if (ex.Status == WebExceptionStatus.NameResolutionFailure
-                      || ex.Status == WebExceptionStatus.ConnectFailure) {
-                    throw new TwitterAPIException(0, ex.Message);
-                }
-                else if (ex.Status == WebExceptionStatus.Timeout) {
-                    throw new TwitterAPIException(408, ex.Message);
-                }
-                else {
-                    // 不明な(その他の)エラー
-                    Log.DebugLog(ex);
-                    throw new TwitterAPIException(-1, ex.Message);
-                }
-            }
+            WebResponse res = RequestWeb(uri, POST, false);
 
             using (Stream resStream = res.GetResponseStream()) {
                 using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
@@ -1439,13 +1482,13 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (PostToAPI)
         //-------------------------------------------------------------------------------
-        #region -GetByAPIJson APIから取得(Json ver)
+        #region -RequestWeb 要求
         //-------------------------------------------------------------------------------
         //
-        private XElement GetByAPIJson(string uri)
+        private WebResponse RequestWeb(string uri, string method, bool renewAPIrest)
         {
             WebRequest req = WebRequest.Create(uri);
-            req.Method = GET;
+            req.Method = method;
             req.ContentType = "application/x-www-form-urlencoded";
             req.Timeout = 10000;
 
@@ -1472,21 +1515,10 @@ namespace StarlitTwit
                 }
             }
 
-
-            using (Stream resStream = res.GetResponseStream()) {
-                using (XmlDictionaryReader xmldreader = JsonReaderWriterFactory.CreateJsonReader(resStream, XmlDictionaryReaderQuotas.Max)) {
-                    try {
-                        return XElement.Load(xmldreader);
-                    }
-                    catch (XmlException ex) {
-                        //Log.DebugLog(ex);
-                        throw new TwitterAPIException(1000, ex.Message);
-                    }
-                }
-            }
+            return res;
         }
-        #endregion (GetByAPIJson)
-        //-------------------------------------------------------------------------------
+        #endregion (RequestWeb)
+        //===============================================================================
         #region -GetUrlWithOAuthParameters OAuthのパラメータ情報を付加したURLを取得します。
         //-------------------------------------------------------------------------------
         /// <summary>
