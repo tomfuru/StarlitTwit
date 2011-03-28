@@ -28,7 +28,7 @@ namespace StarlitTwit
         private FrmMain _mainForm = null;
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
-        private int _page = 0;
+        private int _page = 1;
         private ImageListWrapper _imageListWrapper = null;
         /// <summary>ロード中画像</summary>
         private Bitmap _loadingimg;
@@ -391,9 +391,10 @@ namespace StarlitTwit
                 if (p.FolllowRequestSent) { item.SubItems.Add("リクエスト済"); }
                 else { item.SubItems.Add((p.Following) ? "フォロー中" : ""); }
                 items.Add(item);
+
+                _profileList.Add(p);
             }
             lstvList.Items.AddRange(items.ToArray());
-            _profileList.AddRange(profiles);
 
             if (urllist.Count > 0) {
                 Utilization.InvokeTransaction(() => GetImages(urllist));
@@ -411,6 +412,7 @@ namespace StarlitTwit
                 IEnumerable<UserProfile> profiles = null;
                 if (FormType == EFormType.Retweeter) {
                     profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
+                    _page++;
                     this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
                 }
                 else {
