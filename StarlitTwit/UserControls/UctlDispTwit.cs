@@ -228,7 +228,8 @@ namespace StarlitTwit
                 case MenuType.Default:
                     break;
                 case MenuType.RestrictedUser:
-                    /*tsmiDisplayUserTweet.Visible = */tsmiSpecifyTime.Visible = false;
+                    /*tsmiDisplayUserTweet.Visible = */
+                    tsmiSpecifyTime.Visible = false;
                     break;
                 case MenuType.Conversation:
                     tsmiDispConversation.Visible = tsmiSepConversation.Visible = false;
@@ -291,6 +292,12 @@ namespace StarlitTwit
             }
             if (tsmiURL.Visible = (tsComboURL.Items.Count > 0)) {
                 tsComboURL.SelectedIndex = 0;
+                // DropDownの横幅設定
+                int maxwidth = 0;
+                foreach (object o in tsComboURL.Items) {
+                    maxwidth = Math.Max(maxwidth, TextRenderer.MeasureText((string)o, tsComboURL.Font).Width);
+                }
+                tsComboURL.DropDownWidth = maxwidth + 20;
             }
         }
         #endregion (menuRow_Opening)
@@ -1411,6 +1418,8 @@ namespace StarlitTwit
             }
         }
         #endregion (GetIcons)
+
+
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
 
