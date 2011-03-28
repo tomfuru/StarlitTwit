@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -212,7 +213,13 @@ namespace StarlitTwit
                 else { _nowFrameCount++; }
 
                 _timer.Change(FrameDelays[_nowFrameCount] * 10, Timeout.Infinite);
-                _image.SelectActiveFrame(FrameDimension, _nowFrameCount);
+                try {
+                    _image.SelectActiveFrame(FrameDimension, _nowFrameCount);
+                }
+                catch (InvalidOperationException ex) {
+                    Log.DebugLog(ex);
+                    Debug.Assert(false, "Image.SelectActiveFrame失敗");
+                }
 
                 if (FrameUpdated != null) { FrameUpdated(this, EventArgs.Empty); }
             }
