@@ -108,7 +108,7 @@ namespace StarlitTwit
         /// <param name="item">追加する項目</param>
         public static void AddAvoidDup(this ComboBox.ObjectCollection collection, object item)
         {
-            if (!collection.Contains(item)) { collection.Add(item); }
+            if (item != null && !collection.Contains(item)) { collection.Add(item); }
         }
         #endregion (AddAvoidDup)
     }
