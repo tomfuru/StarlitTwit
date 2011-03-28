@@ -1762,6 +1762,7 @@ namespace StarlitTwit
                 };
 
                 data.Entities = GetEntitiesByRegex(data.MainTwitData.Text).ToArray();
+                if (!notRT) { data.RTTwitData.Entities = GetEntitiesByRegex(data.RTTwitData.Text).ToArray(); }
 
                 return data;
             }

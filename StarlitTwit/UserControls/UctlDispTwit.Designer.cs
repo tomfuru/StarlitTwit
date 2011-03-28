@@ -91,9 +91,9 @@
             this.tsmiHashtag,
             this.tsmiURL,
             this.tsmiOpenBrowser,
-            this.tsmiSepMoreTweet,
-            this.tsmiDispRetweeter,
             this.toolStripMenuItem1,
+            this.tsmiDispRetweeter,
+            this.tsmiSepMoreTweet,
             this.tsmiMoreRecently,
             this.tsmiOlder,
             this.tsmiSpecifyTime});
