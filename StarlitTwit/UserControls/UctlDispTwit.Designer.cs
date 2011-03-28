@@ -101,7 +101,7 @@
             this.tsmiOlder,
             this.tsmiSpecifyTime});
             this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(242, 414);
+            this.menuRow.Size = new System.Drawing.Size(223, 414);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiReply
@@ -198,39 +198,39 @@
             // tsmiUser_DisplayProfile
             // 
             this.tsmiUser_DisplayProfile.Name = "tsmiUser_DisplayProfile";
-            this.tsmiUser_DisplayProfile.Size = new System.Drawing.Size(190, 22);
-            this.tsmiUser_DisplayProfile.Text = "プロフィールを表示する(&P)";
+            this.tsmiUser_DisplayProfile.Size = new System.Drawing.Size(189, 22);
+            this.tsmiUser_DisplayProfile.Text = "プロフィール(&P)";
             this.tsmiUser_DisplayProfile.Click += new System.EventHandler(this.tsmiUser_DisplayProfile_Click);
             this.tsmiUser_DisplayProfile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_DisplayTweets
             // 
             this.tsmiUser_DisplayTweets.Name = "tsmiUser_DisplayTweets";
-            this.tsmiUser_DisplayTweets.Size = new System.Drawing.Size(190, 22);
-            this.tsmiUser_DisplayTweets.Text = "発言を表示する(&S)";
+            this.tsmiUser_DisplayTweets.Size = new System.Drawing.Size(189, 22);
+            this.tsmiUser_DisplayTweets.Text = "最近の発言(&S)";
             this.tsmiUser_DisplayTweets.Click += new System.EventHandler(this.tsmiUser_DisplayTweets_Click);
             this.tsmiUser_DisplayTweets.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_MakeUserTab
             // 
             this.tsmiUser_MakeUserTab.Name = "tsmiUser_MakeUserTab";
-            this.tsmiUser_MakeUserTab.Size = new System.Drawing.Size(190, 22);
-            this.tsmiUser_MakeUserTab.Text = "タブを作成する(&T)";
+            this.tsmiUser_MakeUserTab.Size = new System.Drawing.Size(189, 22);
+            this.tsmiUser_MakeUserTab.Text = "タブを作成(&T)";
             this.tsmiUser_MakeUserTab.Click += new System.EventHandler(this.tsmiUser_MakeUserTab_Click);
             this.tsmiUser_MakeUserTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_MakeListTab
             // 
             this.tsmiUser_MakeListTab.Name = "tsmiUser_MakeListTab";
-            this.tsmiUser_MakeListTab.Size = new System.Drawing.Size(190, 22);
-            this.tsmiUser_MakeListTab.Text = "リストのタブを作成する(&L)";
+            this.tsmiUser_MakeListTab.Size = new System.Drawing.Size(189, 22);
+            this.tsmiUser_MakeListTab.Text = "リストのタブを作成(&L)";
             this.tsmiUser_MakeListTab.Click += new System.EventHandler(this.tsmiUser_MakeListTab_Click);
             this.tsmiUser_MakeListTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
             // tsmiUser_OpenBrowser
             // 
             this.tsmiUser_OpenBrowser.Name = "tsmiUser_OpenBrowser";
-            this.tsmiUser_OpenBrowser.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_OpenBrowser.Size = new System.Drawing.Size(189, 22);
             this.tsmiUser_OpenBrowser.Text = "ホームをブラウザで開く(&B)";
             this.tsmiUser_OpenBrowser.Click += new System.EventHandler(this.tsmiUser_OpenBrowser_Click);
             this.tsmiUser_OpenBrowser.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
@@ -238,14 +238,14 @@
             // tsmiUser_Clipboard
             // 
             this.tsmiUser_Clipboard.Name = "tsmiUser_Clipboard";
-            this.tsmiUser_Clipboard.Size = new System.Drawing.Size(190, 22);
+            this.tsmiUser_Clipboard.Size = new System.Drawing.Size(189, 22);
             this.tsmiUser_Clipboard.Text = "クリップボードにコピー(&C)";
             this.tsmiUser_Clipboard.Click += new System.EventHandler(this.tsmiUser_Clipboard_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(187, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(186, 6);
             // 
             // tsComboUser
             // 
@@ -261,14 +261,14 @@
             this.toolStripMenuItem4,
             this.tsComboHashtag});
             this.tsmiHashtag.Name = "tsmiHashtag";
-            this.tsmiHashtag.Size = new System.Drawing.Size(241, 22);
+            this.tsmiHashtag.Size = new System.Drawing.Size(222, 22);
             this.tsmiHashtag.Text = "ハッシュタグ(&H)";
             // 
             // tsmiHashtag_MakeTab
             // 
             this.tsmiHashtag_MakeTab.Name = "tsmiHashtag_MakeTab";
             this.tsmiHashtag_MakeTab.Size = new System.Drawing.Size(182, 22);
-            this.tsmiHashtag_MakeTab.Text = "タブを作成する(&T)";
+            this.tsmiHashtag_MakeTab.Text = "タブを作成(&T)";
             this.tsmiHashtag_MakeTab.Click += new System.EventHandler(this.tsmiHashtag_MakeTab_Click);
             this.tsmiHashtag_MakeTab.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tsmiEntityItem_MouseMove);
             // 
@@ -368,7 +368,7 @@
             // 
             this.tsmiDispRetweeter.Name = "tsmiDispRetweeter";
             this.tsmiDispRetweeter.Size = new System.Drawing.Size(241, 22);
-            this.tsmiDispRetweeter.Text = "リツイートしたユーザーを見る(&R)";
+            this.tsmiDispRetweeter.Text = "リツイートしたユーザー(&R)";
             this.tsmiDispRetweeter.Click += new System.EventHandler(this.tsmiDispRetweeter_Click);
             // 
             // tsmiSepMoreTweet
@@ -379,15 +379,15 @@
             // tsmiMoreRecently
             // 
             this.tsmiMoreRecently.Name = "tsmiMoreRecently";
-            this.tsmiMoreRecently.Size = new System.Drawing.Size(241, 22);
-            this.tsmiMoreRecently.Text = "これより新しいツイートを取得する(&N)";
+            this.tsmiMoreRecently.Size = new System.Drawing.Size(222, 22);
+            this.tsmiMoreRecently.Text = "これより新しいツイートを取得(&N)";
             this.tsmiMoreRecently.Click += new System.EventHandler(this.tsmiMoreRecentData_Click);
             // 
             // tsmiOlder
             // 
             this.tsmiOlder.Name = "tsmiOlder";
-            this.tsmiOlder.Size = new System.Drawing.Size(241, 22);
-            this.tsmiOlder.Text = "これより古いツイートを取得する(&O)";
+            this.tsmiOlder.Size = new System.Drawing.Size(222, 22);
+            this.tsmiOlder.Text = "これより古いツイートを取得(&O)";
             this.tsmiOlder.Click += new System.EventHandler(this.tsmiOlderData_Click);
             // 
             // tsmiSpecifyTime

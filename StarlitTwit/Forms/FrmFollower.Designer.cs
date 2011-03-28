@@ -67,7 +67,7 @@
             this.tsmiDisplayUserTweet,
             this.tsmiOpenBrowserUserHome});
             this.menuRow.Name = "contextMenuStrip1";
-            this.menuRow.Size = new System.Drawing.Size(261, 170);
+            this.menuRow.Size = new System.Drawing.Size(208, 192);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // tsmiFollow
@@ -92,15 +92,15 @@
             // tsmiDispFollowing
             // 
             this.tsmiDispFollowing.Name = "tsmiDispFollowing";
-            this.tsmiDispFollowing.Size = new System.Drawing.Size(260, 22);
-            this.tsmiDispFollowing.Text = "フレンドを見る";
+            this.tsmiDispFollowing.Size = new System.Drawing.Size(207, 22);
+            this.tsmiDispFollowing.Text = "フォローしているユーザー(&D)";
             this.tsmiDispFollowing.Click += new System.EventHandler(this.tsmiDispFollowing_Click);
             // 
             // tsmiDispFollower
             // 
             this.tsmiDispFollower.Name = "tsmiDispFollower";
-            this.tsmiDispFollower.Size = new System.Drawing.Size(260, 22);
-            this.tsmiDispFollower.Text = "フォロワーを見る";
+            this.tsmiDispFollower.Size = new System.Drawing.Size(207, 22);
+            this.tsmiDispFollower.Text = "フォローされているユーザー(&E)";
             this.tsmiDispFollower.Click += new System.EventHandler(this.tsmiDispFollower_Click);
             // 
             // toolStripMenuItem2
@@ -111,22 +111,22 @@
             // tsmiDisplayUserProfile
             // 
             this.tsmiDisplayUserProfile.Name = "tsmiDisplayUserProfile";
-            this.tsmiDisplayUserProfile.Size = new System.Drawing.Size(260, 22);
-            this.tsmiDisplayUserProfile.Text = "このユーザーのプロフィールを表示する(&P)";
+            this.tsmiDisplayUserProfile.Size = new System.Drawing.Size(207, 22);
+            this.tsmiDisplayUserProfile.Text = "プロフィール(&P)";
             this.tsmiDisplayUserProfile.Click += new System.EventHandler(this.tsmiDisplayUserProfile_Click);
             // 
             // tsmiDisplayUserTweet
             // 
             this.tsmiDisplayUserTweet.Name = "tsmiDisplayUserTweet";
-            this.tsmiDisplayUserTweet.Size = new System.Drawing.Size(260, 22);
-            this.tsmiDisplayUserTweet.Text = "このユーザーの発言を表示する(&D)";
+            this.tsmiDisplayUserTweet.Size = new System.Drawing.Size(207, 22);
+            this.tsmiDisplayUserTweet.Text = "最近の発言(&S)";
             this.tsmiDisplayUserTweet.Click += new System.EventHandler(this.tsmiDisplayUserTweet_Click);
             // 
             // tsmiOpenBrowserUserHome
             // 
             this.tsmiOpenBrowserUserHome.Name = "tsmiOpenBrowserUserHome";
-            this.tsmiOpenBrowserUserHome.Size = new System.Drawing.Size(260, 22);
-            this.tsmiOpenBrowserUserHome.Text = "このユーザーのホームをブラウザで見る(&B)";
+            this.tsmiOpenBrowserUserHome.Size = new System.Drawing.Size(207, 22);
+            this.tsmiOpenBrowserUserHome.Text = "ホームをブラウザで開く(&B)";
             this.tsmiOpenBrowserUserHome.Click += new System.EventHandler(this.tsmiOpenBrowserUserHome_Click);
             // 
             // btnAppend

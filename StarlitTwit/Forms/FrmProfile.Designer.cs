@@ -268,7 +268,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 78);
+            this.label9.Location = new System.Drawing.Point(136, 79);
             this.label9.Name = "label9";
             this.label9.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label9.Size = new System.Drawing.Size(67, 12);
@@ -278,7 +278,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(136, 78);
+            this.label10.Location = new System.Drawing.Point(12, 79);
             this.label10.Name = "label10";
             this.label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label10.Size = new System.Drawing.Size(58, 12);
@@ -308,7 +308,7 @@
             // lblFollowerNum
             // 
             this.lblFollowerNum.AutoSize = true;
-            this.lblFollowerNum.Location = new System.Drawing.Point(92, 78);
+            this.lblFollowerNum.Location = new System.Drawing.Point(209, 79);
             this.lblFollowerNum.Name = "lblFollowerNum";
             this.lblFollowerNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblFollowerNum.Size = new System.Drawing.Size(11, 12);
@@ -328,7 +328,7 @@
             // lblFollowingNum
             // 
             this.lblFollowingNum.AutoSize = true;
-            this.lblFollowingNum.Location = new System.Drawing.Point(197, 78);
+            this.lblFollowingNum.Location = new System.Drawing.Point(92, 79);
             this.lblFollowingNum.Name = "lblFollowingNum";
             this.lblFollowingNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblFollowingNum.Size = new System.Drawing.Size(11, 12);
@@ -338,7 +338,7 @@
             // lblStatusNum
             // 
             this.lblStatusNum.AutoSize = true;
-            this.lblStatusNum.Location = new System.Drawing.Point(197, 101);
+            this.lblStatusNum.Location = new System.Drawing.Point(209, 101);
             this.lblStatusNum.Name = "lblStatusNum";
             this.lblStatusNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblStatusNum.Size = new System.Drawing.Size(11, 12);
