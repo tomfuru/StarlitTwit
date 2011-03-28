@@ -78,10 +78,6 @@ namespace StarlitTwit
         private bool _bIsProcessing = false;
         /// <summary>排他処理同時開始抑制用</summary>
         private object _objKeyProcessStart = new object();
-
-        /// <summary>URL短縮処理中かどうか</summary>
-        private bool _bURLShortening = false;
-
         #region 発言状態関連
         //-------------------------------------------------------------------------------
         /// <summary>発言状態かどうか</summary>
@@ -347,10 +343,7 @@ namespace StarlitTwit
                 }
 
                 // URL短縮可否
-                if (!_bURLShortening) {
-                    string[] urls = Utilization.ExtractURL(rtxtTwit.Text).ToArray();
-                    btnURLShorten.Enabled = (urls.Length > 0) && URLShortener.ExistShortenableURL(urls);
-                }
+                ConfigURLShorteningButtonEnable();
             }
             finally { _suspend_rtxtTwit_TextChanged = false; }
         }
@@ -1401,7 +1394,8 @@ namespace StarlitTwit
         /// <param name="type">短縮タイプ</param>
         private void TextURLShorten(URLShortenType type)
         {
-            _bURLShortening = true;
+            this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = false));
+
             btnURLShorten.Enabled = false;
             string[] urls = Utilization.ExtractURL(rtxtTwit.Text)
                            .Distinct()
@@ -1425,7 +1419,7 @@ namespace StarlitTwit
             }
             rtxtTwit.Text = text;
 
-            _bURLShortening = false;
+            this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = true));
         }
         #endregion (TextURLShorten)
 
@@ -1749,6 +1743,7 @@ namespace StarlitTwit
                     this.ActiveControl = null;
                     rtxtTwit.Enabled = false;
                     btnTwit.Enabled = false;
+                    btnURLShorten.Enabled = false;
                 }));
 
                 switch (_stateStatusState) {
@@ -1771,6 +1766,7 @@ namespace StarlitTwit
             catch (TwitterAPIException ex) {
                 tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
+                this.Invoke(new Action(() => ConfigURLShorteningButtonEnable()));
                 return;
             }
             finally {
@@ -1992,6 +1988,17 @@ namespace StarlitTwit
         }
         #endregion (ForAllTab)
 
+        //-------------------------------------------------------------------------------
+        #region -ConfigURLShorteningButtonEnable URL短縮ボタンのEnableを設定します。
+        //-------------------------------------------------------------------------------
+        //
+        private void ConfigURLShorteningButtonEnable()
+        {
+            // URL短縮可否
+            string[] urls = Utilization.ExtractURL(rtxtTwit.Text).ToArray();
+            btnURLShorten.Enabled = (urls.Length > 0) && URLShortener.ExistShortenableURL(urls);
+        }
+        #endregion (ConfigURLShorteningButtonEnable)
         //-------------------------------------------------------------------------------
         #region -SelectedUctlDispTwit 選択されているTabpageから選択されているUctlDispTwitを取得します。
         //-------------------------------------------------------------------------------
