@@ -618,10 +618,11 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region ProcessKey キー処理
         //-------------------------------------------------------------------------------
+        private bool _enableKey = true;
         //
         public void ProcessKey(Keys key)
         {
-            if (_iVisibleRowNum == 0) { return; }
+            if (_iVisibleRowNum == 0 || !_enableKey) { return; }
 
             switch (key) {
                 case Keys.Down:
@@ -716,6 +717,23 @@ namespace StarlitTwit
             }
         }
         #endregion (Row_TweetItemClick)
+        //-------------------------------------------------------------------------------
+        #region Row_TextBoxEnter テキストボックスEnter時
+        //-------------------------------------------------------------------------------
+        //
+        private void Row_TextBoxEnter(object sender,EventArgs e)
+        {
+            _enableKey = false;
+        }
+        #endregion (Row_TextBoxEnter)
+        #region Row_TextBoxLeave テキストボックスLeave時
+        //-------------------------------------------------------------------------------
+        //
+        private void Row_TextBoxLeave(object sender, EventArgs e)
+        {
+            _enableKey = true;
+        }
+        #endregion (Row_TextBoxLeave)
         //-------------------------------------------------------------------------------
         #region pnlflow_MouseWheel マウスホイール時
         //-------------------------------------------------------------------------------
@@ -1193,6 +1211,8 @@ namespace StarlitTwit
             row.MouseMove += pnlflow_MouseMove;
             row.MouseClick += pnlflow_MouseClick;
             row.TweetItemClick += Row_TweetItemClick;
+            row.TextBoxEnter += Row_TextBoxEnter;
+            row.TextBoxLeave += Row_TextBoxLeave;
             return row;
         }
         #endregion (MakeTwitRow)

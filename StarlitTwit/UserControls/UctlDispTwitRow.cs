@@ -189,6 +189,14 @@ namespace StarlitTwit
         [Category("動作")]
         [Description("特殊項目クリック時")]
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
+        /// <summary>テキストボックスフォーカスエンター</summary>
+        [Category("動作")]
+        [Description("テキストボックスがフォーカスされた時")]
+        public event EventHandler TextBoxEnter;
+        /// <summary>テキストボックスフォーカスリーブ</summary>
+        [Category("動作")]
+        [Description("テキストボックスへのフォーカスがなくなった時")]
+        public event EventHandler TextBoxLeave;
         //-------------------------------------------------------------------------------
         #endregion (Public イベント)
         //-------------------------------------------------------------------------------
@@ -298,40 +306,47 @@ namespace StarlitTwit
             Label lbl = (Label)sender;
 
             if (this.Focused && e.Button == MouseButtons.Left) {
+                bool needEventRaise = !rtxtGet.Visible;
+
+                _suspend_rtxtGet_Leave = true;
                 rtxtGet.Visible = false;
+                _suspend_rtxtGet_Leave = false; 
+                
                 // ラベル→ラベルとクリックしても両方消えないように
                 lblName.Visible = lblTweet.Visible = true;
-
-                //rtxtGet.ForeColor = LABEL_FORECOLOR_SELECTED;
-
+                
+                rtxtGet.ForeColor = lbl.ForeColor;
                 rtxtGet.BackColor = GetColor(true);
-
                 rtxtGet.Location = new Point(lbl.Location.X + REVISION_TEXTBOX_LEFT, lbl.Location.Y);
                 rtxtGet.Size = new Size(lbl.Width, lbl.Height);
                 rtxtGet.Font = lbl.Font;
                 rtxtGet.Text = lbl.Text;
-                if (lbl == lblTweet) {
-                    rtxtGet.EnableEntity = true;
+                if (rtxtGet.EnableEntity = (lbl == lblTweet)) {
                     rtxtGet.ChangeFonts(TwitData.Entities);
                 }
-                else { rtxtGet.EnableEntity = false; }
 
                 lbl.Visible = false;
                 rtxtGet.Visible = true;
 
                 rtxtGet.Focus();
                 rtxtGet.Select(0, 0);
+
+                if (needEventRaise && TextBoxEnter != null) { TextBoxEnter(this, EventArgs.Empty); }
             }
         }
         #endregion (Label_DoubleClick)
         //-------------------------------------------------------------------------------
         #region rtxtGet_Leave テキストボックスLeave時
         //-------------------------------------------------------------------------------
+        private bool _suspend_rtxtGet_Leave = false;
         //
         private void rtxtGet_Leave(object sender, EventArgs e)
         {
+            if (_suspend_rtxtGet_Leave) { return; }
+
             lblName.Visible = lblTweet.Visible = true;
             rtxtGet.Visible = false;
+            if (TextBoxLeave != null) { TextBoxLeave(this, EventArgs.Empty); }
         }
         #endregion (txtGet_Leave)
         //-------------------------------------------------------------------------------

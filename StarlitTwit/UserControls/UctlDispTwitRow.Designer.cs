@@ -91,6 +91,7 @@
             this.rtxtGet.BackColor = System.Drawing.SystemColors.Control;
             this.rtxtGet.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtxtGet.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.rtxtGet.EnableEntity = true;
             this.rtxtGet.Location = new System.Drawing.Point(54, 17);
             this.rtxtGet.Name = "rtxtGet";
             this.rtxtGet.ReadOnly = true;
