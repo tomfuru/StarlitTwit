@@ -158,8 +158,6 @@ namespace StarlitTwit
             public TimeSpan Interval;
             /// <summary>強制更新</summary>
             public volatile bool IsForce;
-            /// <summary>取得方法</summary>
-            public GetTweetType GetTweetType;
         }
         //-------------------------------------------------------------------------------
         #endregion (AutoRenewData)
@@ -1331,7 +1329,6 @@ namespace StarlitTwit
             AutoRenewData data = new AutoRenewData() {
                 IsForce = true,
                 Standard = DateTime.Now,
-                GetTweetType = GetTweetType.MostRecent
             };
 
             if (dispTwit == uctlDispHome) { data.Interval = new TimeSpan(0, 0, SettingsData.GetInterval_Home); }
@@ -2246,17 +2243,7 @@ namespace StarlitTwit
                         // 更新
                         string labelText = string.Format(GETTING_FORMAT, tabpage.Text);
                         tssLabel.SetText(labelText);
-                        switch (renewData.GetTweetType) {
-                            case GetTweetType.MostRecent:
-                                GetMostRecentTweets(uctlDisp);
-                                break;
-                            case GetTweetType.MoreRecent:
-                                //GetMoreRecentTweets(uctlDisp);
-                                break;
-                            case GetTweetType.Older:
-                                //GetOlderTweets(uctlDisp);
-                                break;
-                        }
+                        GetMostRecentTweets(uctlDisp);
                         lock (_autoRenewDic) {
                             renewData.IsForce = false;
                             renewData.Standard = DateTime.Now;
