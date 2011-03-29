@@ -40,6 +40,10 @@
             this.tsmiClearTweets = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmi認証 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmi画面設定 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiタブの位置 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsComboTabAlignment = new System.Windows.Forms.ToolStripComboBox();
             this.tsmi_プロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiプロフィール更新 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi自分のプロフィール = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,11 +64,11 @@
             this.tsmiTasktray_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuContainer2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiCon2_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.splContainer = new System.Windows.Forms.SplitContainer();
-            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.menuShortenType = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
+            this.splContainer = new System.Windows.Forms.SplitContainer();
+            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.lblStatuses = new System.Windows.Forms.Label();
             this.lblStatusesl = new System.Windows.Forms.Label();
             this.llblFollower = new System.Windows.Forms.LinkLabel();
@@ -92,11 +96,11 @@
             this.menuTab.SuspendLayout();
             this.menuTasktray.SuspendLayout();
             this.menuContainer2.SuspendLayout();
+            this.menuShortenType.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splContainer)).BeginInit();
             this.splContainer.Panel1.SuspendLayout();
             this.splContainer.Panel2.SuspendLayout();
             this.splContainer.SuspendLayout();
-            this.menuShortenType.SuspendLayout();
             this.tabTwitDisp.SuspendLayout();
             this.tabpgHome.SuspendLayout();
             this.tabpgReply.SuspendLayout();
@@ -153,7 +157,9 @@
             this.tsmiSpecifyTime,
             this.tsmiClearTweets,
             this.toolStripMenuItem2,
-            this.tsmi認証});
+            this.tsmi認証,
+            this.toolStripMenuItem3,
+            this.tsmi画面設定});
             this.tsmi_機能.Name = "tsmi_機能";
             this.tsmi_機能.Size = new System.Drawing.Size(57, 20);
             this.tsmi_機能.Text = "機能(&A)";
@@ -194,6 +200,34 @@
             this.tsmi認証.Size = new System.Drawing.Size(209, 22);
             this.tsmi認証.Text = "認証(&O)";
             this.tsmi認証.Click += new System.EventHandler(this.tsmi認証_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(206, 6);
+            // 
+            // tsmi画面設定
+            // 
+            this.tsmi画面設定.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiタブの位置});
+            this.tsmi画面設定.Name = "tsmi画面設定";
+            this.tsmi画面設定.Size = new System.Drawing.Size(209, 22);
+            this.tsmi画面設定.Text = "画面設定(&C)";
+            // 
+            // tsmiタブの位置
+            // 
+            this.tsmiタブの位置.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsComboTabAlignment});
+            this.tsmiタブの位置.Name = "tsmiタブの位置";
+            this.tsmiタブの位置.Size = new System.Drawing.Size(152, 22);
+            this.tsmiタブの位置.Text = "タブの位置(&T)";
+            // 
+            // tsComboTabAlignment
+            // 
+            this.tsComboTabAlignment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tsComboTabAlignment.Name = "tsComboTabAlignment";
+            this.tsComboTabAlignment.Size = new System.Drawing.Size(121, 20);
+            this.tsComboTabAlignment.SelectedIndexChanged += new System.EventHandler(this.tsComboTabAlignment_SelectedIndexChanged);
             // 
             // tsmi_プロフィール
             // 
@@ -350,6 +384,33 @@
             this.tsmiCon2_MakeTab.Text = "タブの作成(&M)";
             this.tsmiCon2_MakeTab.Click += new System.EventHandler(this.tsmiTab_MakeTab_Click);
             // 
+            // menuShortenType
+            // 
+            this.menuShortenType.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmibit_ly,
+            this.tsmij_mp});
+            this.menuShortenType.Name = "menuShortenType";
+            this.menuShortenType.ShowCheckMargin = true;
+            this.menuShortenType.ShowImageMargin = false;
+            this.menuShortenType.Size = new System.Drawing.Size(95, 48);
+            this.menuShortenType.Opening += new System.ComponentModel.CancelEventHandler(this.menuShortenType_Opening);
+            // 
+            // tsmibit_ly
+            // 
+            this.tsmibit_ly.Name = "tsmibit_ly";
+            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
+            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
+            this.tsmibit_ly.Text = "bit.ly";
+            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
+            // 
+            // tsmij_mp
+            // 
+            this.tsmij_mp.Name = "tsmij_mp";
+            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
+            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
+            this.tsmij_mp.Text = "j.mp";
+            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
+            // 
             // splContainer
             // 
             this.splContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -408,33 +469,6 @@
             this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnURLShorten.UseVisualStyleBackColor = true;
             this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
-            // 
-            // menuShortenType
-            // 
-            this.menuShortenType.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmibit_ly,
-            this.tsmij_mp});
-            this.menuShortenType.Name = "menuShortenType";
-            this.menuShortenType.ShowCheckMargin = true;
-            this.menuShortenType.ShowImageMargin = false;
-            this.menuShortenType.Size = new System.Drawing.Size(95, 48);
-            this.menuShortenType.Opening += new System.ComponentModel.CancelEventHandler(this.menuShortenType_Opening);
-            // 
-            // tsmibit_ly
-            // 
-            this.tsmibit_ly.Name = "tsmibit_ly";
-            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
-            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
-            this.tsmibit_ly.Text = "bit.ly";
-            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
-            // 
-            // tsmij_mp
-            // 
-            this.tsmij_mp.Name = "tsmij_mp";
-            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
-            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
-            this.tsmij_mp.Text = "j.mp";
-            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
             // 
             // lblStatuses
             // 
@@ -579,6 +613,7 @@
             this.tabTwitDisp.Controls.Add(this.tabpgHistory);
             this.tabTwitDisp.Controls.Add(this.tabpgDirect);
             this.tabTwitDisp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabTwitDisp.ItemSize = new System.Drawing.Size(0, 15);
             this.tabTwitDisp.Location = new System.Drawing.Point(0, 0);
             this.tabTwitDisp.Margin = new System.Windows.Forms.Padding(0);
             this.tabTwitDisp.MinMovableIndex = 4;
@@ -595,9 +630,9 @@
             // tabpgHome
             // 
             this.tabpgHome.Controls.Add(this.uctlDispHome);
-            this.tabpgHome.Location = new System.Drawing.Point(4, 21);
+            this.tabpgHome.Location = new System.Drawing.Point(4, 19);
             this.tabpgHome.Name = "tabpgHome";
-            this.tabpgHome.Size = new System.Drawing.Size(480, 482);
+            this.tabpgHome.Size = new System.Drawing.Size(480, 484);
             this.tabpgHome.TabIndex = 3;
             this.tabpgHome.Text = "Home";
             this.tabpgHome.UseVisualStyleBackColor = true;
@@ -611,15 +646,15 @@
             this.uctlDispHome.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHome.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHome.Name = "uctlDispHome";
-            this.uctlDispHome.Size = new System.Drawing.Size(480, 482);
+            this.uctlDispHome.Size = new System.Drawing.Size(480, 484);
             this.uctlDispHome.TabIndex = 2;
             // 
             // tabpgReply
             // 
             this.tabpgReply.Controls.Add(this.uctlDispReply);
-            this.tabpgReply.Location = new System.Drawing.Point(4, 21);
+            this.tabpgReply.Location = new System.Drawing.Point(4, 19);
             this.tabpgReply.Name = "tabpgReply";
-            this.tabpgReply.Size = new System.Drawing.Size(480, 482);
+            this.tabpgReply.Size = new System.Drawing.Size(480, 484);
             this.tabpgReply.TabIndex = 1;
             this.tabpgReply.Text = "Reply";
             this.tabpgReply.UseVisualStyleBackColor = true;
@@ -633,15 +668,15 @@
             this.uctlDispReply.Location = new System.Drawing.Point(0, 0);
             this.uctlDispReply.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispReply.Name = "uctlDispReply";
-            this.uctlDispReply.Size = new System.Drawing.Size(480, 482);
+            this.uctlDispReply.Size = new System.Drawing.Size(480, 484);
             this.uctlDispReply.TabIndex = 1;
             // 
             // tabpgHistory
             // 
             this.tabpgHistory.Controls.Add(this.uctlDispHistory);
-            this.tabpgHistory.Location = new System.Drawing.Point(4, 21);
+            this.tabpgHistory.Location = new System.Drawing.Point(4, 19);
             this.tabpgHistory.Name = "tabpgHistory";
-            this.tabpgHistory.Size = new System.Drawing.Size(480, 482);
+            this.tabpgHistory.Size = new System.Drawing.Size(480, 484);
             this.tabpgHistory.TabIndex = 0;
             this.tabpgHistory.Text = "History";
             this.tabpgHistory.UseVisualStyleBackColor = true;
@@ -655,15 +690,15 @@
             this.uctlDispHistory.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHistory.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHistory.Name = "uctlDispHistory";
-            this.uctlDispHistory.Size = new System.Drawing.Size(480, 482);
+            this.uctlDispHistory.Size = new System.Drawing.Size(480, 484);
             this.uctlDispHistory.TabIndex = 0;
             // 
             // tabpgDirect
             // 
             this.tabpgDirect.Controls.Add(this.uctlDispDirect);
-            this.tabpgDirect.Location = new System.Drawing.Point(4, 21);
+            this.tabpgDirect.Location = new System.Drawing.Point(4, 19);
             this.tabpgDirect.Name = "tabpgDirect";
-            this.tabpgDirect.Size = new System.Drawing.Size(480, 482);
+            this.tabpgDirect.Size = new System.Drawing.Size(480, 484);
             this.tabpgDirect.TabIndex = 4;
             this.tabpgDirect.Text = "Direct";
             this.tabpgDirect.UseVisualStyleBackColor = true;
@@ -677,7 +712,7 @@
             this.uctlDispDirect.Location = new System.Drawing.Point(0, 0);
             this.uctlDispDirect.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispDirect.Name = "uctlDispDirect";
-            this.uctlDispDirect.Size = new System.Drawing.Size(480, 482);
+            this.uctlDispDirect.Size = new System.Drawing.Size(480, 484);
             this.uctlDispDirect.TabIndex = 2;
             // 
             // imageListWrapper
@@ -711,12 +746,12 @@
             this.menuTab.ResumeLayout(false);
             this.menuTasktray.ResumeLayout(false);
             this.menuContainer2.ResumeLayout(false);
+            this.menuShortenType.ResumeLayout(false);
             this.splContainer.Panel1.ResumeLayout(false);
             this.splContainer.Panel1.PerformLayout();
             this.splContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splContainer)).EndInit();
             this.splContainer.ResumeLayout(false);
-            this.menuShortenType.ResumeLayout(false);
             this.tabTwitDisp.ResumeLayout(false);
             this.tabpgHome.ResumeLayout(false);
             this.tabpgReply.ResumeLayout(false);
@@ -787,6 +822,10 @@
         private ImageListWrapper imageListWrapper;
         private StarlitTwit.RichTextBoxEx rtxtTwit;
         private System.Windows.Forms.ToolStripMenuItem tsmi自分のプロフィール;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem tsmi画面設定;
+        private System.Windows.Forms.ToolStripMenuItem tsmiタブの位置;
+        private System.Windows.Forms.ToolStripComboBox tsComboTabAlignment;
 
     }
 }

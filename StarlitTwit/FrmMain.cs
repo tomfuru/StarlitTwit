@@ -36,14 +36,6 @@ namespace StarlitTwit
             System.Net.WebRequest.DefaultWebProxy = null;
 
             DEFAULT_TABPAGES = new TabPage[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
-
-            tsslRestAPI.Text = "";
-            lblTweetStatus.Text = "";
-
-            //tabpgPublic.ToolTipText = "全体";
-
-            imageListWrapper.ImageAdd(STR_IMAGE_CROSS, StarlitTwit.Properties.Resources.cross);
-
             Twitter = new Twitter();
         }
         //-------------------------------------------------------------------------------
@@ -222,15 +214,6 @@ namespace StarlitTwit
         {
             SettingsData = SettingsData.Restore();
 
-            // フォーム関係復元
-            this.Size = SettingsData.WindowSize;
-            if (SettingsData.WindowPosition.X >= 0 && SettingsData.WindowPosition.Y >= 0) {
-                this.Location = SettingsData.WindowPosition;
-            }
-            if (SettingsData.WindowMaximized) { this.WindowState = FormWindowState.Maximized; }
-
-            rtxtTwit.Text = "";
-
             // ↓設定を復元↓
 
             ConfigTabAndUserDispControl(tabpgHome, uctlDispHome);
@@ -260,6 +243,8 @@ namespace StarlitTwit
                 SettingsData.UserInfoList = new List<UserInfo>();
                 _isAuthenticated = false;
             }
+
+            InitializeControls();
 
             // スレッド作成
             _bgThread = new Thread(AutoGetTweet);
@@ -898,6 +883,15 @@ namespace StarlitTwit
         }
         #endregion (tsmi更新_Click)
         //-------------------------------------------------------------------------------
+        #region tsComboTabAlignment_SelectedIndexChanged タブ位置コンボボックス
+        //-------------------------------------------------------------------------------
+        //
+        private void tsComboTabAlignment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SettingsData.TabAlignment = tabTwitDisp.Alignment = (TabAlignment)tsComboTabAlignment.SelectedItem;
+        }
+        #endregion (tsComboTabAlignment_SelectedIndexChanged)
+        //-------------------------------------------------------------------------------
         #region tsmiSpecifyTime_Click 時刻を指定して発言取得
         //-------------------------------------------------------------------------------
         //
@@ -1141,6 +1135,40 @@ namespace StarlitTwit
 
         //===============================================================================
         #region メソッド
+        //-------------------------------------------------------------------------------
+        #region -InitializeControls 初期化
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// コントロールの初期化を行います。設定データを読み込んだ後に読ぶ。
+        /// </summary>
+        private void InitializeControls()
+        {
+            // フォーム関係復元
+            this.Size = SettingsData.WindowSize;
+            if (SettingsData.WindowPosition.X >= 0 && SettingsData.WindowPosition.Y >= 0) {
+                this.Location = SettingsData.WindowPosition;
+            }
+            if (SettingsData.WindowMaximized) { this.WindowState = FormWindowState.Maximized; }
+
+            rtxtTwit.Text = 
+            tsslRestAPI.Text =
+            lblTweetStatus.Text = "";
+
+            //tabpgPublic.ToolTipText = "全体";
+
+            imageListWrapper.ImageAdd(STR_IMAGE_CROSS, StarlitTwit.Properties.Resources.cross);
+
+            foreach (var item in Enum.GetValues(typeof(TabAlignment))) {
+                tsComboTabAlignment.Items.Add(item);
+            }
+            if (Enum.IsDefined(typeof(TabAlignment), SettingsData.TabAlignment)) {
+                tsComboTabAlignment.SelectedItem = tabTwitDisp.Alignment = SettingsData.TabAlignment;
+            }
+            else {
+                SettingsData.TabAlignment = TabAlignment.Top;
+            }
+        }
+        #endregion (InitializeControls)
         //-------------------------------------------------------------------------------
         #region +RegisterUctlDispTwitEvent UctlDispTwitのイベントを登録します。
         //-------------------------------------------------------------------------------

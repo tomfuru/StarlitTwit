@@ -46,6 +46,8 @@ namespace StarlitTwit
         public Point WindowPosition = new Point(-1, -1);
         /// <summary>最大化されていたか</summary>
         public bool WindowMaximized = false;
+        /// <summary>タブの位置</summary>
+        public TabAlignment TabAlignment = TabAlignment.Top;
         //-------------------------------------------------------------------------------
         #endregion (フォーム関係)
 

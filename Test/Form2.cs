@@ -64,6 +64,9 @@ namespace Test
         //-------------------------------------------------------------------------------
         #endregion (ThreadTest1)
 
+        //-------------------------------------------------------------------------------
+        #region AnimationTest
+        //-------------------------------------------------------------------------------
         ImageAnimation anim;
 
         private void f2_1()
@@ -101,6 +104,23 @@ namespace Test
             if (anim != null) {
                 anim.ResetAnimation();
             }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (AnimationTest)
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+            TabRenderer.DrawTabItem(e.Graphics, e.ClipRectangle, System.Windows.Forms.VisualStyles.TabItemState.Normal);
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+            TabRenderer.DrawTabItem(e.Graphics, e.ClipRectangle, System.Windows.Forms.VisualStyles.TabItemState.Hot);
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+            TabRenderer.DrawTabItem(e.Graphics, e.ClipRectangle, System.Windows.Forms.VisualStyles.TabItemState.Selected);
         }
 
 
