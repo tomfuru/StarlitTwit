@@ -393,7 +393,8 @@ namespace StarlitTwit
         //
         private void DispTwit_TweetItemClick(object sender, TweetItemClickEventArgs e)
         {
-            MakeNewTab(e.Type, e.Item);
+            if (e.Type == ItemType.HashTag) { MakeNewTab(e.Type, e.Item); }
+            else { Utilization.ShowUserProfile(this, false, e.Item); }
         }
         #endregion (DispTwit_TweetItemClick)
         //-------------------------------------------------------------------------------
@@ -402,10 +403,7 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (!Utilization.ExistFrmFollower(FrmFollower.EFormType.MyFollowing)) {
-                FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollowing);
-                frm.Show(this);
-            }
+            Utilization.ShowUserListForm(this, imageListWrapper, FrmFollower.EFormType.MyFollowing);
         }
         #endregion (llblFollowing_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -414,10 +412,7 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (!Utilization.ExistFrmFollower(FrmFollower.EFormType.MyFollower)) {
-                FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.MyFollower);
-                frm.Show(this);
-            }
+            Utilization.ShowUserListForm(this, imageListWrapper, FrmFollower.EFormType.MyFollower);
         }
         #endregion (llblFollower_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -651,11 +646,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_Retweeter_Click(object sender, TwitRowMenuEventArgs e)
         {
-            if (!Utilization.ExistFrmFollower(FrmFollower.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID)) {
-                FrmFollower frm = new FrmFollower(this, imageListWrapper, FrmFollower.EFormType.Retweeter);
-                frm.RetweetStatusID = e.TwitData.MainTwitData.StatusID;
-                frm.Show(this);
-            }
+            Utilization.ShowUserListForm(this, imageListWrapper, FrmFollower.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID);
         }
         #endregion (TwitMenu_Retweeter_Click)
         //-------------------------------------------------------------------------------

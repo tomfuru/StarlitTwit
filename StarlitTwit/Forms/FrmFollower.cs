@@ -233,10 +233,11 @@ namespace StarlitTwit
         //
         private void tsmiDispFollowing_Click(object sender, EventArgs e)
         {
-            FrmFollower frm = new FrmFollower(_mainForm, _imageListWrapper, EFormType.UserFollowing) {
-                UserScreenName = ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName
-            };
-            frm.Show(_mainForm);
+            Utilization.ShowUserListForm(_mainForm, _imageListWrapper, EFormType.UserFollowing, ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
+            //FrmFollower frm = new FrmFollower(_mainForm, _imageListWrapper, EFormType.UserFollowing) {
+            //    UserScreenName = ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName
+            //};
+            //frm.Show(_mainForm);
         }
         #endregion (tsmiDispFollowing_Click)
         //-------------------------------------------------------------------------------
@@ -245,10 +246,11 @@ namespace StarlitTwit
         //
         private void tsmiDispFollower_Click(object sender, EventArgs e)
         {
-            FrmFollower frm = new FrmFollower(_mainForm, _imageListWrapper, EFormType.UserFollower) {
-                UserScreenName = ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName
-            };
-            frm.Show(_mainForm);
+            Utilization.ShowUserListForm(_mainForm, _imageListWrapper, EFormType.UserFollower, ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
+            //FrmFollower frm = new FrmFollower(_mainForm, _imageListWrapper, EFormType.UserFollower) {
+            //    UserScreenName = ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName
+            //};
+            //frm.Show(_mainForm);
         }
         #endregion (tsmiDispFollower_Click)
         //-------------------------------------------------------------------------------

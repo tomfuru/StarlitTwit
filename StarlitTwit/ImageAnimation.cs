@@ -234,9 +234,8 @@ namespace StarlitTwit
                     Log.DebugLog(ex);
                     Debug.Assert(false, "Image.SelectActiveFrame失敗");
                 }
-
-                if (FrameUpdated != null) { FrameUpdated(this, EventArgs.Empty); }
             }
+            if (FrameUpdated != null) { FrameUpdated(this, EventArgs.Empty); }
         }
         #endregion (NextFrame)
 

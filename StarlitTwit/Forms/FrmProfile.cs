@@ -13,7 +13,10 @@ namespace StarlitTwit
     {
         private UserProfile _profile;
 
-        bool _canEdit;
+        /// <summary>編集可能かどうか</summary>
+        public bool CanEdit { get; private set; }
+        /// <summary>プロフィールのユーザー名</summary>
+        public string ScreenName { get { return (_profile != null) ? _profile.ScreenName : null; } }
         // 変更確認用
         string _bakName, _bakLoc, _bakUrl, _bakDesc;
 
@@ -24,7 +27,7 @@ namespace StarlitTwit
         public FrmProfile(bool canEdit, UserProfile profile, ImageListWrapper imagelistwrapper)
         {
             InitializeComponent();
-            _canEdit = canEdit;
+            CanEdit = canEdit;
             if (!canEdit) {
                 rtxtDescription.ReadOnly = txtLocation.ReadOnly = txtName.ReadOnly = txtUrl.ReadOnly = true;
                 lblDescriptionRest.Visible = btnRenew.Visible = false;
@@ -46,7 +49,7 @@ namespace StarlitTwit
         {
             Utilization.SetModelessDialogCenter(this);
             SetProfile(_profile);
-            if (_canEdit) { SaveProfileTemporary(); }
+            if (CanEdit) { SaveProfileTemporary(); }
             txtName.Select(0, 0);
         }
         #endregion (FrmProfile_Load)
@@ -57,7 +60,7 @@ namespace StarlitTwit
         //
         private void FrmProfile_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_canEdit && (_bakName != txtName.Text
+            if (CanEdit && (_bakName != txtName.Text
                             || _bakLoc != txtLocation.Text
                             || _bakUrl != txtUrl.Text
                             || _bakDesc != rtxtDescription.Text)) {

@@ -413,6 +413,21 @@ namespace StarlitTwit
         #endregion (Callback)
 
         //-------------------------------------------------------------------------------
+        #region +[static]ShowUserListForm ユーザー一覧フォームを表示します。
+        //-------------------------------------------------------------------------------
+        //
+        public static void ShowUserListForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmFollower.EFormType type, string screen_name = null, long retweet_id = -1)
+        {
+            if (!Utilization.ExistFrmFollower(type, screen_name, retweet_id)) {
+                FrmFollower frm = new FrmFollower(parent, imageListWrapper, type) {
+                    UserScreenName = screen_name,
+                    RetweetStatusID = retweet_id
+                };
+                frm.Show(parent);
+            }
+        }
+        #endregion (+[static]ShowUserListForm)
+        //-------------------------------------------------------------------------------
         #region +[static]ShowUserProfile ユーザープロフィールフォームを表示します。
         //-------------------------------------------------------------------------------
         /// <summary>
@@ -422,7 +437,7 @@ namespace StarlitTwit
         /// <param name="canEdit">自分かどうか</param>
         /// <param name="screen_name">ユーザー名</param>
         /// <returns>プロフィール取得に成功したかどうか</returns>
-        public static bool ShowUserProfile(FrmMain parent,bool canEdit, string screen_name)
+        public static bool ShowUserProfile(FrmMain parent, bool canEdit, string screen_name)
         {
             UserProfile profile = GetProfile(screen_name);
             if (profile != null) {
@@ -439,11 +454,12 @@ namespace StarlitTwit
         /// <param name="screen_name">ユーザー名</param>
         public static void ShowUserProfile(FrmMain parent, bool canEdit, UserProfile profile)
         {
-            FrmProfile frm = new FrmProfile(canEdit, profile, parent.ImageListWrapper);
-            frm.Show(parent);
+            if (!Utilization.ExistFrmProfile(canEdit, profile.ScreenName)) {
+                FrmProfile frm = new FrmProfile(canEdit, profile, parent.ImageListWrapper);
+                frm.Show(parent);
+            }
         }
         #endregion (ShowUserProfile)
-
         //-------------------------------------------------------------------------------
         #region +[static]ShowUserTweet ユーザー発言フォームを表示します。
         //-------------------------------------------------------------------------------
@@ -462,7 +478,25 @@ namespace StarlitTwit
         #endregion (ShowUserTweet)
 
         //-------------------------------------------------------------------------------
-        #region +[static]ExistFrmFollower 既にあるFrmFollowerを探し同じものがあれば
+        #region +[static]ExistFrmProfile すでにあるFrmProfileを探す
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 既にあるFrmProfileと同じものがあるかどうか探し，あれば再前面にします。
+        /// </summary>
+        /// <param name="canEdit">編集可能性</param>
+        /// <param name="screen_name">ユーザー名</param>
+        /// <returns></returns>
+        public static bool ExistFrmProfile(bool canEdit, string screen_name)
+        {
+            Func<FrmProfile, bool> judgeFunc = f =>
+                f.CanEdit == canEdit
+                && f.ScreenName == screen_name;
+
+            return ExistForm<FrmProfile>(judgeFunc);
+        }
+        #endregion (ExistFrmProfile)
+        //-------------------------------------------------------------------------------
+        #region +[static]ExistFrmFollower 既にあるFrmFollowerを探す
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 既にあるFrmFollowerと同じものがあるかどうか探し，あれば最前面にします。
@@ -475,18 +509,26 @@ namespace StarlitTwit
         {
             Func<FrmFollower, bool> judgeFunc = f =>
                 f.FormType == type
-                && !((type == FrmFollower.EFormType.UserFollower && type == FrmFollower.EFormType.UserFollowing) && f.UserScreenName != screen_name)
+                && !((type == FrmFollower.EFormType.UserFollower || type == FrmFollower.EFormType.UserFollowing) && f.UserScreenName != screen_name)
                 && !(type == FrmFollower.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
 
-
-            FrmFollower form = Application.OpenForms
-                                 .OfType<FrmFollower>()
-                                 .FirstOrDefault(judgeFunc);
+            return ExistForm<FrmFollower>(judgeFunc);
+        }
+        #endregion (ExistFrmFollower)
+        //-------------------------------------------------------------------------------
+        #region -[static]ExistForm 既にあるフォームを探す
+        //-------------------------------------------------------------------------------
+        //
+        private static bool ExistForm<F>(Func<F, bool> judgeFunc) where F : Form
+        {
+            F form = Application.OpenForms
+                       .OfType<F>()
+                       .FirstOrDefault(judgeFunc);
 
             if (form != null) { form.BringToFront(); }
             return form != null;
         }
-        #endregion (ExistFrmFollower)
+        #endregion (ExistForm)
 
         //-------------------------------------------------------------------------------
         #region +[static]OpenBrowser URLを開きます。
@@ -540,7 +582,7 @@ namespace StarlitTwit
         /// <returns>URLの配列。</returns>
         public static IEnumerable<string> ExtractURL(string text)
         {
-            #region comment out 
+            #region comment out
             //const string HTTP = @"http://";
             //const string ENDCHARS = " 　";
 
