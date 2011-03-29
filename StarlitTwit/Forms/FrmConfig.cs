@@ -244,13 +244,13 @@ namespace StarlitTwit
         private void InitializeControl()
         {
             // サムネイル設定
-            SetComboBoxEnumValue(cmbThumbimgly,typeof(imglyThumbnailType));
-            SetComboBoxEnumValue(cmbThumbmovapic,typeof(movapicThumbnailType));
-            SetComboBoxEnumValue(cmbThumbowly,typeof(owlyThumbnailType));
-            SetComboBoxEnumValue(cmbThumbPhotozou,typeof(PhotozouThumbnailType));
+            SetComboBoxEnumValue(cmbThumbimgly, typeof(imglyThumbnailType));
+            SetComboBoxEnumValue(cmbThumbmovapic, typeof(movapicThumbnailType));
+            SetComboBoxEnumValue(cmbThumbowly, typeof(owlyThumbnailType));
+            SetComboBoxEnumValue(cmbThumbPhotozou, typeof(PhotozouThumbnailType));
             SetComboBoxEnumValue(cmbThumbplixi, typeof(plixiThumbnailType));
             SetComboBoxEnumValue(cmbThumbTwitpic, typeof(TwitPicThumbnailType));
-            SetComboBoxEnumValue(cmbThumbyFrog,typeof(yFrogThumbnailType));
+            SetComboBoxEnumValue(cmbThumbyFrog, typeof(yFrogThumbnailType));
             SetComboBoxEnumValue(cmbThumbTwipplePhoto, typeof(twipplephotoThumbnailType));
 
             // URL短縮サービスコンボボックス
