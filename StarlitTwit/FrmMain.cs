@@ -829,6 +829,22 @@ namespace StarlitTwit
         }
         #endregion (tsmiファイル_終了_Click)
         //===============================================================================
+        #region tsmiAPIRestriction_Click API制限
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiAPIRestriction_Click(object sender, EventArgs e)
+        {
+            APILimitData? data = GetAPILimitData();
+            if (data.HasValue) {
+                APILimitData d = data.Value;
+                Message.ShowInfoMessage(string.Format("API使用回数情報\n{0}/{1}\n{2}に更新", d.Remaining, d.HourlyLimit, d.ResetTime.ToString(Utilization.STR_DATETIMEFORMAT)));
+            }
+            else {
+                Message.ShowErrorMessage("API使用回数情報取得に失敗しました。");
+            }
+        }
+        #endregion (tsmiAPIRestriction_Click)
+        //-------------------------------------------------------------------------------
         #region tsmi認証_Click 認証メニュー
         //-------------------------------------------------------------------------------
         //
@@ -1150,7 +1166,7 @@ namespace StarlitTwit
             }
             if (SettingsData.WindowMaximized) { this.WindowState = FormWindowState.Maximized; }
 
-            rtxtTwit.Text = 
+            rtxtTwit.Text =
             tsslRestAPI.Text =
             lblTweetStatus.Text = "";
 
@@ -1881,6 +1897,20 @@ namespace StarlitTwit
             return true;
         }
         #endregion (CreateFavorite)
+
+        //-------------------------------------------------------------------------------
+        #region -GetAPILimitData API制限に関する情報を取得 using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private APILimitData? GetAPILimitData()
+        {
+            try {
+                APILimitData data = Twitter.account_rate_limit_status(true);
+                return data;
+            }
+            catch (TwitterAPIException) { return null; }
+        }
+        #endregion (GetAPILimitData)
 
         //===============================================================================
         #region -GetQuoteString 引用の文字列を取得します。

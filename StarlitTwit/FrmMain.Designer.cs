@@ -91,6 +91,7 @@
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
+            this.tsmiAPIRestriction = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -157,6 +158,7 @@
             this.tsmiSpecifyTime,
             this.tsmiClearTweets,
             this.toolStripMenuItem2,
+            this.tsmiAPIRestriction,
             this.tsmi認証,
             this.toolStripMenuItem3,
             this.tsmi画面設定});
@@ -219,7 +221,7 @@
             this.tsmiタブの位置.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsComboTabAlignment});
             this.tsmiタブの位置.Name = "tsmiタブの位置";
-            this.tsmiタブの位置.Size = new System.Drawing.Size(152, 22);
+            this.tsmiタブの位置.Size = new System.Drawing.Size(136, 22);
             this.tsmiタブの位置.Text = "タブの位置(&T)";
             // 
             // tsComboTabAlignment
@@ -724,6 +726,13 @@
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // tsmiAPIRestriction
+            // 
+            this.tsmiAPIRestriction.Name = "tsmiAPIRestriction";
+            this.tsmiAPIRestriction.Size = new System.Drawing.Size(209, 22);
+            this.tsmiAPIRestriction.Text = "API使用回数制限情報(&A)";
+            this.tsmiAPIRestriction.Click += new System.EventHandler(this.tsmiAPIRestriction_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -826,6 +835,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmi画面設定;
         private System.Windows.Forms.ToolStripMenuItem tsmiタブの位置;
         private System.Windows.Forms.ToolStripComboBox tsComboTabAlignment;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAPIRestriction;
 
     }
 }
