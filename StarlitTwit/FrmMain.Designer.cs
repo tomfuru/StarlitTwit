@@ -39,6 +39,7 @@
             this.tsmiSpecifyTime = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiClearTweets = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAPIRestriction = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi認証 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmi画面設定 = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +92,6 @@
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
-            this.tsmiAPIRestriction = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -195,6 +195,14 @@
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(206, 6);
+            // 
+            // tsmiAPIRestriction
+            // 
+            this.tsmiAPIRestriction.Enabled = false;
+            this.tsmiAPIRestriction.Name = "tsmiAPIRestriction";
+            this.tsmiAPIRestriction.Size = new System.Drawing.Size(209, 22);
+            this.tsmiAPIRestriction.Text = "API使用回数制限情報(&A)";
+            this.tsmiAPIRestriction.Click += new System.EventHandler(this.tsmiAPIRestriction_Click);
             // 
             // tsmi認証
             // 
@@ -725,13 +733,6 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // tsmiAPIRestriction
-            // 
-            this.tsmiAPIRestriction.Name = "tsmiAPIRestriction";
-            this.tsmiAPIRestriction.Size = new System.Drawing.Size(209, 22);
-            this.tsmiAPIRestriction.Text = "API使用回数制限情報(&A)";
-            this.tsmiAPIRestriction.Click += new System.EventHandler(this.tsmiAPIRestriction_Click);
             // 
             // FrmMain
             // 

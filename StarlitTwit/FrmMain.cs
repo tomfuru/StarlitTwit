@@ -1365,7 +1365,7 @@ namespace StarlitTwit
 
             tsmi_プロフィール.Enabled = true;
             foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
-            tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
+            tsmiAPIRestriction.Enabled = tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
             tsmi_子画面.Enabled = true;
         }
         #endregion (TransitToAuthenticatedMode)
