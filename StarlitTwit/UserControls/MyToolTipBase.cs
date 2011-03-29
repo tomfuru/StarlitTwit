@@ -163,11 +163,14 @@ namespace StarlitTwit
                 if (_dispControl != null) {
                     _dispControl.MouseLeave -= DispControl_Leave;
                     _dispControl.MouseEnter -= DispControl_Enter;
+                    _dispControl.MouseDown -= DispControl_MouseDown;
+                    _dispControl.Move -= DispControl_Move;
                 }
                 _dispControl = value;
                 _dispControl.MouseLeave += DispControl_Leave;
                 _dispControl.MouseEnter += DispControl_Enter;
                 _dispControl.MouseDown += DispControl_MouseDown;
+                _dispControl.Move += DispControl_Move;
             }
         }
         #endregion (DisplayControl)
@@ -224,6 +227,15 @@ namespace StarlitTwit
         #endregion ((IContainer))
         #endregion (コンストラクタ)
 
+        //-------------------------------------------------------------------------------
+        #region DispControl_Move 表示コントロールが動いた時
+        //-------------------------------------------------------------------------------
+        //
+        private void DispControl_Move(object sender,EventArgs e)
+        {
+            Hide();
+        }
+        #endregion (DispControl_Move)
         //-------------------------------------------------------------------------------
         #region DispControl_MouseDown 表示コントロールでマウスダウン時
         //-------------------------------------------------------------------------------
