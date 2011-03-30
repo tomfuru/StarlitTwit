@@ -1412,6 +1412,7 @@ namespace StarlitTwit
                             action(item.Item1, item.Item2);
                         }
                     }
+                    DateTime dt = DateTime.Now; // for debug
                 }
             });
 
@@ -1464,6 +1465,14 @@ namespace StarlitTwit
                     long delete_id = long.Parse(el.Element("delete").Element("status").Element("id").Value);
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.delete, delete_id);
                 }
+                else if (el.Element("direct_message") != null) {
+                    var dmdata = ConvertToTwitDataDM(el.Element("direct_message"));
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.directmessage, dmdata);
+                }
+                else if (el.Element("limit") != null) {
+                    int value = int.Parse(el.Element("limit").Element("track").Value);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.tracklimit, value);
+                }
                 else {
                     // status
                     var twitdata = ConvertToTwitData(el);
@@ -1476,29 +1485,7 @@ namespace StarlitTwit
             }
         }
         #endregion (ConvertToStreamItem)
-        public enum UserStreamItemType
-        {
-            unknown,
-            friendlist,
-            status,
-            delete,
-            eventdata
-        }
-        public class UserStreamEventData
-        {
-            public UserStreamEventType Type;
-            public DateTime Time;
-            public UserProfile TargetUser;
-            public UserProfile SourceUser;
-            public TwitData TargetTwit;
-        }
-        public enum UserStreamEventType
-        {
-            favorite,
-            unfavorite,
-            follow,
 
-        }
 
         //-------------------------------------------------------------------------------
         #region -JsonToXElement Json文字列をXElementに変換します。
@@ -2633,7 +2620,6 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (RelationShipData)
-
     //-----------------------------------------------------------------------------------
     #region TwitType 列挙体：発言タイプ
     //-------------------------------------------------------------------------------
@@ -2833,6 +2819,76 @@ namespace StarlitTwit
         #endregion (Make)
     }
     #endregion ((Class)Range)
+
+    //-------------------------------------------------------------------------------
+    #region +UserStreamItemType 列挙体
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// UserStreamで送られてくるデータの種類を表します。
+    /// </summary>
+    public enum UserStreamItemType
+    {
+        /// <summary>不明なデータ(object:string)</summary>
+        unknown,
+        /// <summary>フレンドリスト(object:IEnumerable(long))</summary>
+        friendlist,
+        /// <summary>発言・リツイート(object:TwitData)</summary>
+        status,
+        /// <summary>ダイレクトメッセージ(object:TwitData)</summary>
+        directmessage,
+        /// <summary>発言削除(object:long[削除された発言のID])</summary>
+        delete,
+        /// <summary>イベントデータ(object:UserStreamEventData)</summary>
+        eventdata,
+        /// <summary>Track Limit Notices(object:int)</summary>
+        tracklimit
+        // Location Deletion Notices
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (UserStreamItemType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region +UserStreamEventType 列挙体
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// UserStreamで送られてくるイベントの種類です。
+    /// </summary>
+    public enum UserStreamEventType
+    {
+        /// <summary>お気に入り追加</summary>
+        favorite,
+        /// <summary>お気に入り削除</summary>
+        unfavorite,
+        /// <summary>フォロー</summary>
+        follow,
+        /// <summary>ブロック</summary>
+        block,
+        /// <summary>ブロック解除</summary>
+        unblock
+        // その他...
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (UserStreamEventType 列挙体)
+    //-------------------------------------------------------------------------------
+    #region (class)userStreamEventData
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// UserStreamで送られてくるイベントに関するデータです。
+    /// </summary>
+    public class UserStreamEventData
+    {
+        /// <summary>イベントの種類</summary>
+        public UserStreamEventType Type;
+        /// <summary>イベント発生時間</summary>
+        public DateTime Time;
+        /// <summary>ターゲットユーザー情報</summary>
+        public UserProfile TargetUser;
+        /// <summary>ソースユーザー情報</summary>
+        public UserProfile SourceUser;
+        /// <summary>ターゲット発言情報(一部イベントのみ)</summary>
+        public TwitData TargetTwit;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion ((class)userStreamEventData)
 
     //-----------------------------------------------------------------------------------
     #region (Class)TwitterAPIException

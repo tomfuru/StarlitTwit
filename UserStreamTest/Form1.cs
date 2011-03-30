@@ -86,42 +86,53 @@ namespace UserStreamTest
             }));
         }
 
-        private void ActionU(Twitter.UserStreamItemType type, object data)
+        private void ActionU(UserStreamItemType type, object data)
         {
             StringBuilder sb = new StringBuilder("・");
             switch (type) {
-                case Twitter.UserStreamItemType.unknown:
+                case UserStreamItemType.unknown:
                     sb.Append(string.Format("UnknownData(file:{0})", (string)data));
                     break;
-                case Twitter.UserStreamItemType.friendlist:
+                case UserStreamItemType.friendlist:
                     sb.Append(string.Format("FriendList (Num:{0})", ((IEnumerable<long>)data).Count()));
                     break;
-                case Twitter.UserStreamItemType.status:
+                case UserStreamItemType.status:
                     TwitData t = (TwitData)data;
                     sb.Append(string.Format("{0} Status by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
                                                                , t.UserScreenName));
                     break;
-                case Twitter.UserStreamItemType.delete:
+                case UserStreamItemType.delete:
                     sb.Append(string.Format("Delete status_id:{0}", (long)data));
                     break;
-                case Twitter.UserStreamItemType.eventdata:
-                    Twitter.UserStreamEventData d = (Twitter.UserStreamEventData)data;
+                case UserStreamItemType.eventdata:
+                    UserStreamEventData d = (UserStreamEventData)data;
                     switch (d.Type) {
-                        case Twitter.UserStreamEventType.favorite:
+                        case UserStreamEventType.favorite:
                             sb.Append(string.Format(string.Format("{0} {1} fav {2} 's tweet", 
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
-                        case Twitter.UserStreamEventType.unfavorite:
+                        case UserStreamEventType.unfavorite:
                             sb.Append(string.Format(string.Format("{0} {1} unfav {2} 's tweet", 
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
-                        case Twitter.UserStreamEventType.follow:
+                        case UserStreamEventType.follow:
                             sb.Append(string.Format(string.Format("{0} {1} follow {2}", 
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
+                        case UserStreamEventType.block:
+                            sb.Append(string.Format(string.Format("{0} {1} block {2}", 
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case UserStreamEventType.unblock:
+                            sb.Append(string.Format(string.Format("{0} {1} unblock {2}", 
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+
                     }
                     break;
             }
