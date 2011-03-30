@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Drawing;
+using Newtonsoft.Json;
 
 /* Twitter API Resource 
  * statuses (Timeline)
@@ -1373,7 +1374,7 @@ namespace StarlitTwit
         #region userstream_user UserStream
         //-------------------------------------------------------------------------------
         //
-        public CancellationTokenSource userstream_user(Action<string> action, bool all_replies)
+        public CancellationTokenSource userstream_user(Action<UserStreamItemType, object> action, bool all_replies)
         {
             const string URL_SAMPLE = @"https://userstream.twitter.com/2/user.json";
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1398,12 +1399,18 @@ namespace StarlitTwit
                             res.Close();
                             string[] lines = str.Split('\n');
                             for (int i = 0; i < lines.Length - 1; i++) {
-                                if (!string.IsNullOrEmpty(lines[i])) { action(lines[i]); }
+                                if (!string.IsNullOrEmpty(lines[i])) {
+                                    var item = ConvertToStreamItem(JsonToXElement(lines[i]));
+                                    action(item.Item1, item.Item2);
+                                }
                             }
                             return;
                         }
                         string line = sr.ReadLine();
-                        if (!string.IsNullOrEmpty(line)) { action(line); }
+                        if (!string.IsNullOrEmpty(line)) {
+                            var item = ConvertToStreamItem(JsonToXElement(line));
+                            action(item.Item1, item.Item2);
+                        }
                     }
                 }
             });
@@ -1411,6 +1418,111 @@ namespace StarlitTwit
             return cts;
         }
         #endregion (userstream_user)
+
+        //-------------------------------------------------------------------------------
+        #region -ConvertToStreamItem XElementをUserStreamのアイテムに変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private Tuple<UserStreamItemType, object> ConvertToStreamItem(XElement el)
+        {
+            Func<string> Logging = () =>
+            {
+                string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
+                using (StreamWriter writer = new StreamWriter(filename)) {
+                    writer.Write(el.ToString());
+                }
+                return filename;
+            };
+
+            try {
+                if (el.Element("event") != null) {
+                    // event
+                    string eventName = el.Element("event").Value;
+                    UserStreamEventData data = new UserStreamEventData();
+                    data.Type = (UserStreamEventType)Enum.Parse(typeof(UserStreamEventType), eventName);
+
+                    data.Time = StringToDateTime(el.Element("created_at").Value);
+
+                    data.TargetUser = ConvertToUserProfile(el.Element("target"));
+                    data.SourceUser = ConvertToUserProfile(el.Element("source"));
+
+                    switch (data.Type) {
+                        case UserStreamEventType.favorite:
+                        case UserStreamEventType.unfavorite:
+                            data.TargetTwit = ConvertToTwitData(el.Element("target_object"));
+                            break;
+                    }
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.eventdata, data);
+                }
+                else if (el.Element("friends") != null) {
+                    // friend list
+                    IEnumerable<long> friend_ids = from id in el.Elements("friends")
+                                                   select long.Parse(id.Value);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.friendlist, friend_ids);
+                }
+                else if (el.Element("delete") != null) {
+                    long delete_id = long.Parse(el.Element("delete").Element("status").Element("id").Value);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.delete, delete_id);
+                }
+                else {
+                    // status
+                    var twitdata = ConvertToTwitData(el);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.status, twitdata);
+                }
+            }
+            catch (Exception) {
+                string filename = Logging();
+                return new Tuple<UserStreamItemType, object>(UserStreamItemType.unknown, filename);
+            }
+        }
+        #endregion (ConvertToStreamItem)
+        public enum UserStreamItemType
+        {
+            unknown,
+            friendlist,
+            status,
+            delete,
+            eventdata
+        }
+        public class UserStreamEventData
+        {
+            public UserStreamEventType Type;
+            public DateTime Time;
+            public UserProfile TargetUser;
+            public UserProfile SourceUser;
+            public TwitData TargetTwit;
+        }
+        public enum UserStreamEventType
+        {
+            favorite,
+            unfavorite,
+            follow,
+
+        }
+
+        //-------------------------------------------------------------------------------
+        #region -JsonToXElement Json文字列をXElementに変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private XElement JsonToXElement(string jsonStr)
+        {
+            XmlNode node = JsonConvert.DeserializeXmlNode(jsonStr, "item");
+            return XmlNodeToXElement(node);
+        }
+        #endregion (JsonToXElement)
+        //-------------------------------------------------------------------------------
+        #region -XmlNodeToXElement XmlNode->XElement
+        //-------------------------------------------------------------------------------
+        //
+        private XElement XmlNodeToXElement(XmlNode node)
+        {
+            XDocument doc = new XDocument();
+            using (XmlWriter xw = doc.CreateWriter()) {
+                node.WriteTo(xw);
+            }
+            return doc.Root;
+        }
+        #endregion (-XmlNodeToXElement)
 
         //===============================================================================
         #region Private Methods

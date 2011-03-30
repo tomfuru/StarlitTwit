@@ -48,6 +48,8 @@ namespace UserStreamTest
             if (cts == null) {
                 //cts = twitter.userstream_statuses_sample(Action);
                 cts = twitter.userstream_user(ActionU, false);
+                button2.Enabled = false;
+                button3.Enabled = true;
             }
         }
 
@@ -56,6 +58,8 @@ namespace UserStreamTest
             if (cts != null) {
                 cts.Cancel();
                 cts = null;
+                button3.Enabled = false;
+                button2.Enabled = true;
             }
         }
 
@@ -72,28 +76,82 @@ namespace UserStreamTest
 
             this.Invoke(new Action(() =>
             {
+                bool scr = richTextBox1.SelectionStart == richTextBox1.TextLength;
                 richTextBox1.AppendText(str);
                 richTextBox1.AppendText("\n");
+                if (scr) {
+                    richTextBox1.Select(richTextBox1.TextLength, 0);
+                    richTextBox1.ScrollToCaret();
+                }
             }));
         }
 
-        private void ActionU(string str)
+        private void ActionU(Twitter.UserStreamItemType type, object data)
         {
-            XmlNode node = JsonConvert.DeserializeXmlNode(str, "item");
-
-            XElement el = XmlNodeToXElement(node);
-
-            string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
-            using (StreamWriter writer = new StreamWriter(filename)) {
-                writer.Write(el.ToString());
+            StringBuilder sb = new StringBuilder("・");
+            switch (type) {
+                case Twitter.UserStreamItemType.unknown:
+                    sb.Append(string.Format("UnknownData(file:{0})", (string)data));
+                    break;
+                case Twitter.UserStreamItemType.friendlist:
+                    sb.Append(string.Format("FriendList (Num:{0})", ((IEnumerable<long>)data).Count()));
+                    break;
+                case Twitter.UserStreamItemType.status:
+                    TwitData t = (TwitData)data;
+                    sb.Append(string.Format("{0} Status by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                               , t.UserScreenName));
+                    break;
+                case Twitter.UserStreamItemType.delete:
+                    sb.Append(string.Format("Delete status_id:{0}", (long)data));
+                    break;
+                case Twitter.UserStreamItemType.eventdata:
+                    Twitter.UserStreamEventData d = (Twitter.UserStreamEventData)data;
+                    switch (d.Type) {
+                        case Twitter.UserStreamEventType.favorite:
+                            sb.Append(string.Format(string.Format("{0} {1} fav {2} 's tweet", 
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case Twitter.UserStreamEventType.unfavorite:
+                            sb.Append(string.Format(string.Format("{0} {1} unfav {2} 's tweet", 
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case Twitter.UserStreamEventType.follow:
+                            sb.Append(string.Format(string.Format("{0} {1} follow {2}", 
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                    }
+                    break;
             }
 
             this.Invoke(new Action(() =>
             {
-                richTextBox1.AppendText(str);
+                richTextBox1.AppendText(sb.ToString());
                 richTextBox1.AppendText("\n");
+                richTextBox1.Invalidate();
             }));
         }
+
+        //-------------------------------------------------------------------------------
+        #region -ConvertToStreamItem XElementをUserStreamのアイテムに変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private object ConvertToStreamItem(XElement el)
+        {
+            if (el.Element("event") != null) {
+                // status
+
+            }
+            else {
+                // event
+
+            }
+
+            return null;
+        }
+        #endregion (ConvertToStreamItem)
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -107,6 +165,10 @@ namespace UserStreamTest
             }
         }
 
+        //-------------------------------------------------------------------------------
+        #region -XmlNodeToXElement XmlNode->XElement
+        //-------------------------------------------------------------------------------
+        //
         private XElement XmlNodeToXElement(XmlNode node)
         {
             XDocument doc = new XDocument();
@@ -115,5 +177,6 @@ namespace UserStreamTest
             }
             return doc.Root;
         }
+        #endregion (-XmlNodeToXElement)
     }
 }
