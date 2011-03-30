@@ -101,6 +101,15 @@ namespace UserStreamTest
                     sb.Append(string.Format("{0} Status by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
                                                                , t.UserScreenName));
                     break;
+                case UserStreamItemType.directmessage:
+                    TwitData dm = (TwitData)data;
+                    sb.Append(string.Format("{0} {1} send DirectMessage to {2}", dm.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                               , dm.UserScreenName, dm.DMScreenName));
+                    break;
+                case UserStreamItemType.tracklimit:
+                    int value = (int)data;
+                    sb.Append(string.Format("Track Limit Notation (value:{0})", value));
+                    break;
                 case UserStreamItemType.delete:
                     sb.Append(string.Format("Delete status_id:{0}", (long)data));
                     break;
@@ -108,27 +117,27 @@ namespace UserStreamTest
                     UserStreamEventData d = (UserStreamEventData)data;
                     switch (d.Type) {
                         case UserStreamEventType.favorite:
-                            sb.Append(string.Format(string.Format("{0} {1} fav {2} 's tweet", 
+                            sb.Append(string.Format(string.Format("{0} {1} fav {2} 's tweet",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
                         case UserStreamEventType.unfavorite:
-                            sb.Append(string.Format(string.Format("{0} {1} unfav {2} 's tweet", 
+                            sb.Append(string.Format(string.Format("{0} {1} unfav {2} 's tweet",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
                         case UserStreamEventType.follow:
-                            sb.Append(string.Format(string.Format("{0} {1} follow {2}", 
+                            sb.Append(string.Format(string.Format("{0} {1} follow {2}",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
                         case UserStreamEventType.block:
-                            sb.Append(string.Format(string.Format("{0} {1} block {2}", 
+                            sb.Append(string.Format(string.Format("{0} {1} block {2}",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
                         case UserStreamEventType.unblock:
-                            sb.Append(string.Format(string.Format("{0} {1} unblock {2}", 
+                            sb.Append(string.Format(string.Format("{0} {1} unblock {2}",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
                                                         d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
                             break;
