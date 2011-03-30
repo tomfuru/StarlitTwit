@@ -596,14 +596,14 @@ namespace StarlitTwit
         /// <param name="screen_name"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public Tuple<string,Image> users_profile_image(string screen_name, EImageSize size = EImageSize.normal)
+        public Tuple<string, Image> users_profile_image(string screen_name, EImageSize size = EImageSize.normal)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 paramdic.Add("size", size.ToString());
             }
 
-            string url = string.Format("{0}users/profile_image/{1}.xml?{2}", URLapi, screen_name,JoinParameters(paramdic));
+            string url = string.Format("{0}users/profile_image/{1}.xml?{2}", URLapi, screen_name, JoinParameters(paramdic));
 
             return GetByAPIImage(url);
         }
@@ -1332,12 +1332,12 @@ namespace StarlitTwit
         #endregion (oauth/)
 
         //===============================================================================
-        #region UserStream　(test)
+        #region stream_statuses_sample (test)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// テスト
         /// </summary>
-        public CancellationTokenSource userstream_statuses_sample(Action<string> action)
+        public CancellationTokenSource stream_statuses_sample(Action<string> action)
         {
             const string URL_SAMPLE = @"http://stream.twitter.com/1/statuses/sample.json";
             string url = GetUrlWithOAuthParameters(URL_SAMPLE, GET, null);
@@ -1350,19 +1350,6 @@ namespace StarlitTwit
             {
                 WebRequest req = WebRequest.Create(url);
                 WebResponse res = req.GetResponse();
-                //using (Stream stream = res.GetResponseStream())
-                //using (StreamReader sr = new StreamReader(stream)) {
-                //    while (!sr.EndOfStream) {
-                //        if (token.IsCancellationRequested) {
-                //            string str = sr.ReadToEnd();
-                //            res.Close();
-                //            break;
-                //        }
-                //        string line = sr.ReadLine();
-                //        action(line);
-                //        //Console.WriteLine(line);
-                //    }
-                //}
 
                 using (Stream stream = res.GetResponseStream())
                 using (StreamReader sr = new StreamReader(stream)) {
@@ -1374,7 +1361,6 @@ namespace StarlitTwit
                         }
                         string line = sr.ReadLine();
                         action(line);
-                        //Console.WriteLine(line);
                     }
                 }
             });
@@ -1382,7 +1368,49 @@ namespace StarlitTwit
             return cts;
         }
         //-------------------------------------------------------------------------------
-        #endregion (UserStream)
+        #endregion (stream_statuses_sample)
+        //-------------------------------------------------------------------------------
+        #region userstream_user UserStream
+        //-------------------------------------------------------------------------------
+        //
+        public CancellationTokenSource userstream_user(Action<string> action, bool all_replies)
+        {
+            const string URL_SAMPLE = @"https://userstream.twitter.com/2/user.json";
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (all_replies) { paramdic.Add("replies", "all"); }
+            }
+            string url = GetUrlWithOAuthParameters(URL_SAMPLE, GET, paramdic);
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
+
+            Utilization.InvokeTransaction(() =>
+            {
+                WebRequest req = WebRequest.Create(url); // User-Agent?
+                WebResponse res = req.GetResponse();
+
+                using (Stream stream = res.GetResponseStream())
+                using (StreamReader sr = new StreamReader(stream)) {
+                    while (!sr.EndOfStream) {
+                        if (token.IsCancellationRequested) {
+                            string str = sr.ReadToEnd();
+                            res.Close();
+                            string[] lines = str.Split('\n');
+                            for (int i = 0; i < lines.Length - 1; i++) {
+                                if (!string.IsNullOrEmpty(lines[i])) { action(lines[i]); }
+                            }
+                            return;
+                        }
+                        string line = sr.ReadLine();
+                        if (!string.IsNullOrEmpty(line)) { action(line); }
+                    }
+                }
+            });
+
+            return cts;
+        }
+        #endregion (userstream_user)
 
         //===============================================================================
         #region Private Methods
@@ -1445,7 +1473,7 @@ namespace StarlitTwit
         #region -GetByAPIImage APIから取得(画像ver)
         //-------------------------------------------------------------------------------
         //
-        private Tuple<string,Image> GetByAPIImage(string uri)
+        private Tuple<string, Image> GetByAPIImage(string uri)
         {
             WebResponse res = RequestWeb(uri, GET, false);
 

@@ -46,7 +46,8 @@ namespace UserStreamTest
         private void button2_Click(object sender, EventArgs e)
         {
             if (cts == null) {
-                cts = twitter.userstream_statuses_sample(Action);
+                //cts = twitter.userstream_statuses_sample(Action);
+                cts = twitter.userstream_user(ActionU, false);
             }
         }
 
@@ -60,11 +61,29 @@ namespace UserStreamTest
 
         private void Action(string str)
         {
-            XmlNode node = JsonConvert.DeserializeXmlNode(str,"status");
+            XmlNode node = JsonConvert.DeserializeXmlNode(str, "status");
 
             XElement el = XmlNodeToXElement(node);
 
-            string filename = string.Format("Xml/{0}.xml",DateTime.Now.ToString("yyMMddHHmmssffff"));
+            string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
+            using (StreamWriter writer = new StreamWriter(filename)) {
+                writer.Write(el.ToString());
+            }
+
+            this.Invoke(new Action(() =>
+            {
+                richTextBox1.AppendText(str);
+                richTextBox1.AppendText("\n");
+            }));
+        }
+
+        private void ActionU(string str)
+        {
+            XmlNode node = JsonConvert.DeserializeXmlNode(str, "item");
+
+            XElement el = XmlNodeToXElement(node);
+
+            string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
             using (StreamWriter writer = new StreamWriter(filename)) {
                 writer.Write(el.ToString());
             }
@@ -81,7 +100,7 @@ namespace UserStreamTest
             using (OpenFileDialog ofd = new OpenFileDialog()) {
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     string filename = ofd.FileName;
-                    using (StreamWriter sw = new StreamWriter(filename,false)) {
+                    using (StreamWriter sw = new StreamWriter(filename, false)) {
                         sw.Write(richTextBox1.Text);
                     }
                 }
