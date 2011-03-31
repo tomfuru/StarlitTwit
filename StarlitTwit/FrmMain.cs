@@ -111,6 +111,7 @@ namespace StarlitTwit
         /// <summary>残りAPI表示フォーマット</summary>
         private const string REST_API_FORMAT = "API残: {0}/{1}";
         /// <summary>取得中表示フォーマット</summary>
+        private const string STR_GETTING_PROFILE = "プロフィール取得中...";
         private const string GETTING_FORMAT = "タブ:{0} 取得中...";
         private const string STR_FIRST_GET_NUM = "初期取得件数:";
         private const string STR_RENEW_GET_NUM = "追加取得件数:";
@@ -2188,6 +2189,22 @@ namespace StarlitTwit
         {
             while (!_isAuthenticated) { Thread.Sleep(1000); } // 未認証時はストップ
 
+            Action<DateTime> GetProfile = (dt) =>
+            {
+                string labelText = STR_GETTING_PROFILE;
+                tssLabel.SetText(labelText);
+                UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
+                this.Invoke(new Action(() =>
+                {
+                    if (profile != null) { SetProfileData(profile); }
+                    else { tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
+                    tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                }));
+                _profileRenew_IsForce = false;
+                _profileRenew_Standard = dt;
+                tssLabel.RemoveText(labelText);
+            };
+
             try {
                 while (true) {
                     // タブ使用イベントSTOP
@@ -2198,28 +2215,12 @@ namespace StarlitTwit
                     DateTime now = DateTime.Now;
                     // プロフィール更新
                     if (_profileRenew_IsForce) {
-                        UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
-                        this.Invoke(new Action(() =>
-                        {
-                            if (profile != null) { SetProfileData(profile); }
-                            else { tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
-                            tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
-                        }));
-                        _profileRenew_IsForce = false;
-                        _profileRenew_Standard = now;
+                        GetProfile(now);
                     }
                     else if (SettingsData.GetInterval_Profile != 0) {
                         TimeSpan ts = now.Subtract(_profileRenew_Standard);
                         if (ts.TotalSeconds > SettingsData.GetInterval_Profile) {
-                            this.Invoke(new Action(() =>
-                            {
-                                UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
-                                if (profile != null) { SetProfileData(profile); }
-                                else { tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
-                                tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
-                            }));
-                            _profileRenew_IsForce = false;
-                            _profileRenew_Standard = now;
+                            GetProfile(now);
                         }
                     }
 
@@ -2248,8 +2249,8 @@ namespace StarlitTwit
                         lock (_autoRenewDic) {
                             renewData.IsForce = false;
                             renewData.Standard = DateTime.Now;
-                            tssLabel.RemoveText(labelText);
                         }
+                        tssLabel.RemoveText(labelText);
                     }
                     Thread.Sleep(100);
                 }
