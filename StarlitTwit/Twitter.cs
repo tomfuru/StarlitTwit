@@ -1386,7 +1386,7 @@ namespace StarlitTwit
             CancellationTokenSource cts = new CancellationTokenSource();
             CancellationToken token = cts.Token;
 
-            Utilization.InvokeTransaction(() =>
+            ThreadStart ReadStreaming = () =>
             {
                 WebRequest req = WebRequest.Create(url); // User-Agent?
                 WebResponse res;
@@ -1397,18 +1397,7 @@ namespace StarlitTwit
                     using (StreamReader sr = new StreamReader(stream)) {
                         while (!sr.EndOfStream) {
                             if (token.IsCancellationRequested) {
-                                try {
-                                    string str = sr.ReadToEnd();
-                                    res.Close();
-                                    string[] lines = str.Split('\n');
-                                    for (int i = 0; i < lines.Length - 1; i++) {
-                                        if (!string.IsNullOrEmpty(lines[i])) {
-                                            var item = ConvertToStreamItem(JsonToXElement(lines[i]));
-                                            action(item.Item1, item.Item2);
-                                        }
-                                    }
-                                }
-                                catch (WebException) { }
+                                req.Abort();
                                 return;
                             }
                             string line = sr.ReadLine();
@@ -1423,7 +1412,12 @@ namespace StarlitTwit
                 catch (WebException) {
 
                 }
-            }, endact);
+                finally { endact(); }
+            };
+
+            Thread thread = new Thread(ReadStreaming);
+            thread.IsBackground = true;
+            thread.Start();
 
             return cts;
         }

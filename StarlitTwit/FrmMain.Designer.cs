@@ -54,6 +54,7 @@
             this.tsmiUserStreamStart = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUserStreamEnd = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUserStreamLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUserStreamAllRepliesEnable = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -96,6 +97,7 @@
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -292,6 +294,8 @@
             this.tsmiUserStream.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiUserStreamStart,
             this.tsmiUserStreamEnd,
+            this.toolStripMenuItem4,
+            this.tsmiUserStreamAllRepliesEnable,
             this.tsmiUserStreamLog});
             this.tsmiUserStream.Enabled = false;
             this.tsmiUserStream.Name = "tsmiUserStream";
@@ -303,7 +307,7 @@
             // 
             this.tsmiUserStreamStart.Enabled = false;
             this.tsmiUserStreamStart.Name = "tsmiUserStreamStart";
-            this.tsmiUserStreamStart.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamStart.Size = new System.Drawing.Size(203, 22);
             this.tsmiUserStreamStart.Text = "開始(&S)";
             this.tsmiUserStreamStart.Click += new System.EventHandler(this.tsmiUserStreamStart_Click);
             // 
@@ -311,7 +315,7 @@
             // 
             this.tsmiUserStreamEnd.Enabled = false;
             this.tsmiUserStreamEnd.Name = "tsmiUserStreamEnd";
-            this.tsmiUserStreamEnd.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamEnd.Size = new System.Drawing.Size(203, 22);
             this.tsmiUserStreamEnd.Text = "終了(&E)";
             this.tsmiUserStreamEnd.Click += new System.EventHandler(this.tsmiUserStreamEnd_Click);
             // 
@@ -319,9 +323,19 @@
             // 
             this.tsmiUserStreamLog.Enabled = false;
             this.tsmiUserStreamLog.Name = "tsmiUserStreamLog";
-            this.tsmiUserStreamLog.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamLog.Size = new System.Drawing.Size(203, 22);
             this.tsmiUserStreamLog.Text = "ログ(&L)";
             this.tsmiUserStreamLog.Click += new System.EventHandler(this.tsmiUserStreamLog_Click);
+            // 
+            // tsmiUserStreamAllRepliesEnable
+            // 
+            this.tsmiUserStreamAllRepliesEnable.Checked = true;
+            this.tsmiUserStreamAllRepliesEnable.CheckOnClick = true;
+            this.tsmiUserStreamAllRepliesEnable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiUserStreamAllRepliesEnable.Enabled = false;
+            this.tsmiUserStreamAllRepliesEnable.Name = "tsmiUserStreamAllRepliesEnable";
+            this.tsmiUserStreamAllRepliesEnable.Size = new System.Drawing.Size(203, 22);
+            this.tsmiUserStreamAllRepliesEnable.Text = "All_Repliesを有効にする(&A)";
             // 
             // statusStrip
             // 
@@ -775,6 +789,11 @@
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(200, 6);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -882,6 +901,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamStart;
         private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamEnd;
         private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamLog;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamAllRepliesEnable;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 
     }
 }

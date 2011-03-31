@@ -1026,7 +1026,7 @@ namespace StarlitTwit
         //
         private void tsmiUserStreamStart_Click(object sender, EventArgs e)
         {
-            StartUserStream(false);
+            StartUserStream(tsmiUserStreamAllRepliesEnable.Checked);
         }
         #endregion (tsmiUserStreamStart_Click)
         //-------------------------------------------------------------------------------
@@ -1045,7 +1045,10 @@ namespace StarlitTwit
         private void tsmiUserStreamLog_Click(object sender, EventArgs e)
         {
             Debug.Assert(_frmUserStreamWatch != null);
-            _frmUserStreamWatch.Show(this);
+            if (_frmUserStreamWatch.Visible) {
+                _frmUserStreamWatch.BringToFront();
+            }
+            else { _frmUserStreamWatch.Show(this); }
         }
         #endregion (tsmiUserStreamLog_Click)
         //-------------------------------------------------------------------------------
@@ -1403,7 +1406,7 @@ namespace StarlitTwit
             tsmi_プロフィール.Enabled = true;
             foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
             tsmiUserStream.Enabled = true;
-            tsmiUserStreamEnd.Enabled = tsmiUserStreamStart.Enabled = true;
+            tsmiUserStreamAllRepliesEnable.Enabled = tsmiUserStreamEnd.Enabled = tsmiUserStreamStart.Enabled = true;
             tsmiAPIRestriction.Enabled = tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
             tsmi_子画面.Enabled = true;
         }
@@ -1516,7 +1519,7 @@ namespace StarlitTwit
         //
         private void StartUserStream(bool all_replies)
         {
-            tsmiUserStreamEnd.Enabled = false;
+            tsmiUserStreamAllRepliesEnable.Enabled = tsmiUserStreamEnd.Enabled = false;
             _usingUserStream = true;
             // RESTによるデータ取り込み
             Utilization.InvokeTransactionDoingEvents(() =>
@@ -1572,6 +1575,10 @@ namespace StarlitTwit
                             if (twitdata.MainTwitData.Text.Contains('@' + Twitter.ScreenName)
                              || twitdata.MainTwitData.Mention_UserID == Twitter.ID) {
                                 this.Invoke(new Action(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true)));
+                                string baloontext = Utilization.InterpretFormat(twitdata) + '\n' + twitdata.Text;
+                                tasktray.BalloonTipTitle = tasktray.Text + "：Reply 新着有り";
+                                tasktray.BalloonTipText = baloontext;
+                                tasktray.ShowBalloonTip(BALOON_DURATION);
                             }
                             // History
                             if (twitdata.MainTwitData.UserID == Twitter.ID) {
@@ -1582,6 +1589,10 @@ namespace StarlitTwit
                     case UserStreamItemType.directmessage: {
                             TwitData twitdata = (TwitData)data;
                             this.Invoke(new Action(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
+                            string baloontext = Utilization.InterpretFormat(twitdata) + '\n' + twitdata.Text;
+                            tasktray.BalloonTipTitle = tasktray.Text + "：DirectMessage 新着有り";
+                            tasktray.BalloonTipText = baloontext;
+                            tasktray.ShowBalloonTip(BALOON_DURATION);
                         }
                         break;
                     case UserStreamItemType.status_delete: {
@@ -1649,15 +1660,10 @@ namespace StarlitTwit
         //
         private void UserStreamEndEvent()
         {
-            tsmiUserStreamLog.Enabled = false;
-            _usingUserStream = false;
-
-            _frmUserStreamWatch.Hide();
-            _frmUserStreamWatch.Dispose();
-
-            _userStreamCancellationTS.Cancel();
-
-            tsmiUserStreamStart.Enabled = true;
+            this.Invoke(new Action(() =>
+            {
+                tsmiUserStreamAllRepliesEnable.Enabled = tsmiUserStreamStart.Enabled = true;
+            }));
         }
         #endregion (UserStreamEndEvent)
         //-------------------------------------------------------------------------------
@@ -1676,8 +1682,14 @@ namespace StarlitTwit
                     break;
                 case UserStreamItemType.status:
                     TwitData t = (TwitData)data;
-                    sb.Append(string.Format("{0} Status by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
-                                                               , t.UserScreenName));
+                    if (t.IsRT()) {
+                        sb.Append(string.Format("{0} Retweet Status of {2} by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                   , t.UserScreenName, t.RTTwitData.UserScreenName));
+                    }
+                    else {
+                        sb.Append(string.Format("{0} Status by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                   , t.UserScreenName));
+                    }
                     break;
                 case UserStreamItemType.directmessage:
                     TwitData dm = (TwitData)data;
@@ -1808,7 +1820,7 @@ namespace StarlitTwit
                     }
                     else if (uctldisp == uctlDispDirect && SettingsData.DisplayDMBaloon) {
                         if (!string.IsNullOrEmpty(baloontext)) {
-                            tasktray.BalloonTipTitle = tasktray.Text + "：Direct Message 新着有り";
+                            tasktray.BalloonTipTitle = tasktray.Text + "：DirectMessage 新着有り";
                             tasktray.BalloonTipText = baloontext;
                             tasktray.ShowBalloonTip(BALOON_DURATION);
                         }
