@@ -50,6 +50,10 @@
             this.tsmi自分のプロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUserStream = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUserStreamStart = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUserStreamEnd = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUserStreamLog = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -115,7 +119,8 @@
             this.tsmi_ファイル,
             this.tsmi_機能,
             this.tsmi_プロフィール,
-            this.tsmi_子画面});
+            this.tsmi_子画面,
+            this.tsmiUserStream});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(492, 24);
@@ -281,6 +286,42 @@
             this.tsmi子画面_nothing.Name = "tsmi子画面_nothing";
             this.tsmi子画面_nothing.Size = new System.Drawing.Size(97, 22);
             this.tsmi子画面_nothing.Text = "(なし)";
+            // 
+            // tsmiUserStream
+            // 
+            this.tsmiUserStream.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiUserStreamStart,
+            this.tsmiUserStreamEnd,
+            this.tsmiUserStreamLog});
+            this.tsmiUserStream.Enabled = false;
+            this.tsmiUserStream.Name = "tsmiUserStream";
+            this.tsmiUserStream.Size = new System.Drawing.Size(93, 20);
+            this.tsmiUserStream.Text = "UserStream(&U)";
+            this.tsmiUserStream.DropDownOpening += new System.EventHandler(this.tsmiUserStream_DropDownOpening);
+            // 
+            // tsmiUserStreamStart
+            // 
+            this.tsmiUserStreamStart.Enabled = false;
+            this.tsmiUserStreamStart.Name = "tsmiUserStreamStart";
+            this.tsmiUserStreamStart.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamStart.Text = "開始(&S)";
+            this.tsmiUserStreamStart.Click += new System.EventHandler(this.tsmiUserStreamStart_Click);
+            // 
+            // tsmiUserStreamEnd
+            // 
+            this.tsmiUserStreamEnd.Enabled = false;
+            this.tsmiUserStreamEnd.Name = "tsmiUserStreamEnd";
+            this.tsmiUserStreamEnd.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamEnd.Text = "終了(&E)";
+            this.tsmiUserStreamEnd.Click += new System.EventHandler(this.tsmiUserStreamEnd_Click);
+            // 
+            // tsmiUserStreamLog
+            // 
+            this.tsmiUserStreamLog.Enabled = false;
+            this.tsmiUserStreamLog.Name = "tsmiUserStreamLog";
+            this.tsmiUserStreamLog.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamLog.Text = "ログ(&L)";
+            this.tsmiUserStreamLog.Click += new System.EventHandler(this.tsmiUserStreamLog_Click);
             // 
             // statusStrip
             // 
@@ -837,6 +878,10 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiタブの位置;
         private System.Windows.Forms.ToolStripComboBox tsComboTabAlignment;
         private System.Windows.Forms.ToolStripMenuItem tsmiAPIRestriction;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUserStream;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamStart;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamEnd;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamLog;
 
     }
 }

@@ -70,6 +70,12 @@ namespace StarlitTwit
         private bool _bIsProcessing = false;
         /// <summary>排他処理同時開始抑制用</summary>
         private object _objKeyProcessStart = new object();
+        /// <summary>UserStream中かどうか</summary>
+        private volatile bool _usingUserStream = false;
+        /// <summary>UserStreamをキャンセルするクラス</summary>
+        private CancellationTokenSource _userStreamCancellationTS;
+        /// <summary>UserStreamログ監視フォーム</summary>
+        private FrmUserStreamWatch _frmUserStreamWatch;
         #region 発言状態関連
         //-------------------------------------------------------------------------------
         /// <summary>発言状態かどうか</summary>
@@ -112,6 +118,7 @@ namespace StarlitTwit
         private const string REST_API_FORMAT = "API残: {0}/{1}";
         /// <summary>取得中表示フォーマット</summary>
         private const string STR_GETTING_PROFILE = "プロフィール取得中...";
+        private const string GETTING_FORMAT_FOR_USERSTREAM = "UserStream開始のために タブ:{0} 取得中...";
         private const string GETTING_FORMAT = "タブ:{0} 取得中...";
         private const string STR_FIRST_GET_NUM = "初期取得件数:";
         private const string STR_RENEW_GET_NUM = "追加取得件数:";
@@ -880,6 +887,9 @@ namespace StarlitTwit
         {
             UctlDispTwit uctldisp = SelectedUctlDispTwit();
 
+            // UserStream中はHome,Reply,History,Directは更新されない
+            if (_usingUserStream && DEFAULT_TABPAGES.Select(tabpg => _dispTwitDic[tabpg]).Contains(uctldisp)) { return; }
+
             tssLabel.SetText(STR_WAITING_RENEW);
             LockAndProcess(_autoRenewDic, () =>
             {
@@ -1000,6 +1010,44 @@ namespace StarlitTwit
             form.BringToFront();
         }
         #endregion (tsmi小画面_Dialog_Click)
+        //===============================================================================
+        #region tsmiUserStream_DropDownOpening UserStreamメニューオープン時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUserStream_DropDownOpening(object sender, EventArgs e)
+        {
+            tsmiUserStreamStart.Visible = !_usingUserStream;
+            tsmiUserStreamEnd.Visible = _usingUserStream;
+        }
+        #endregion (tsmiUserStream_DropDownOpening)
+        //-------------------------------------------------------------------------------
+        #region tsmiUserStreamStart_Click UserStream開始クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUserStreamStart_Click(object sender, EventArgs e)
+        {
+            StartUserStream(false);
+        }
+        #endregion (tsmiUserStreamStart_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiUserStreamEnd_Click UserStream終了クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUserStreamEnd_Click(object sender, EventArgs e)
+        {
+            EndUserStream();
+        }
+        #endregion (tsmiUserStreamEnd_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiUserStreamLog_Click UserStreamログクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUserStreamLog_Click(object sender, EventArgs e)
+        {
+            Debug.Assert(_frmUserStreamWatch != null);
+            _frmUserStreamWatch.Show(this);
+        }
+        #endregion (tsmiUserStreamLog_Click)
         //-------------------------------------------------------------------------------
         #endregion (メニュー)
         //===============================================================================
@@ -1354,6 +1402,8 @@ namespace StarlitTwit
 
             tsmi_プロフィール.Enabled = true;
             foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
+            tsmiUserStream.Enabled = true;
+            tsmiUserStreamEnd.Enabled = tsmiUserStreamStart.Enabled = true;
             tsmiAPIRestriction.Enabled = tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
             tsmi_子画面.Enabled = true;
         }
@@ -1459,6 +1509,226 @@ namespace StarlitTwit
             }
         }
         #endregion (TextURLShorten)
+
+        //-------------------------------------------------------------------------------
+        #region -StartUserStream UserStreamを開始します。 using Twitter API
+        //-------------------------------------------------------------------------------
+        //
+        private void StartUserStream(bool all_replies)
+        {
+            tsmiUserStreamEnd.Enabled = false;
+            _usingUserStream = true;
+            // RESTによるデータ取り込み
+            Utilization.InvokeTransactionDoingEvents(() =>
+            {
+                foreach (var tabpage in DEFAULT_TABPAGES) {
+                    UctlDispTwit uctlDisp = _dispTwitDic[tabpage];
+                    string labelText = string.Format(GETTING_FORMAT_FOR_USERSTREAM, tabpage.Text);
+                    tssLabel.SetText(labelText);
+                    GetMostRecentTweets(uctlDisp);
+                    tssLabel.RemoveText(labelText);
+                }
+            });
+
+            _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
+            _frmUserStreamWatch = new FrmUserStreamWatch();
+            tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
+        }
+        #endregion (StartUserStream)
+        //-------------------------------------------------------------------------------
+        #region -EndUserStream UserStreamを終了します。
+        //-------------------------------------------------------------------------------
+        //
+        private void EndUserStream()
+        {
+            tsmiUserStreamStart.Enabled = tsmiUserStreamLog.Enabled = false;
+            _usingUserStream = false;
+
+            _frmUserStreamWatch.Hide();
+            _frmUserStreamWatch.Dispose();
+
+            _userStreamCancellationTS.Cancel();
+        }
+        #endregion (EndUserStream)
+        //-------------------------------------------------------------------------------
+        #region -UserStreamTransaction UserStreamのメイン処理
+        //-------------------------------------------------------------------------------
+        private long[] _friendList;
+        //
+        private void UserStreamTransaction(UserStreamItemType type, object data)
+        {
+            try {
+                switch (type) {
+                    case UserStreamItemType.friendlist:
+                        _friendList = ((IEnumerable<long>)data).ToArray();
+                        break;
+                    case UserStreamItemType.status: {
+                            TwitData twitdata = (TwitData)data;
+                            // Home
+                            //if (_friendList.Contains(twitdata.UserID)) {
+                            this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true)));
+                            //}
+                            // Reply
+                            if (twitdata.MainTwitData.Text.Contains('@' + Twitter.ScreenName)
+                             || twitdata.MainTwitData.Mention_UserID == Twitter.ID) {
+                                this.Invoke(new Action(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true)));
+                            }
+                            // History
+                            if (twitdata.MainTwitData.UserID == Twitter.ID) {
+                                this.Invoke(new Action(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
+                            }
+                        }
+                        break;
+                    case UserStreamItemType.directmessage: {
+                            TwitData twitdata = (TwitData)data;
+                            this.Invoke(new Action(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
+                        }
+                        break;
+                    case UserStreamItemType.status_delete: {
+                            long id = (long)data;
+                            this.Invoke(new Action(() =>
+                            {
+                                uctlDispHome.RemoveTweet(id);
+                                uctlDispReply.RemoveTweet(id);
+                                uctlDispHistory.RemoveTweet(id);
+                            }));
+                        }
+                        break;
+                    case UserStreamItemType.directmessage_delete: {
+                            long id = (long)data;
+                            this.Invoke(new Action(() => uctlDispDirect.RemoveTweet(id)));
+                        }
+                        break;
+                    case UserStreamItemType.eventdata: {
+                            UserStreamEventData d = (UserStreamEventData)data;
+                            switch (d.Type) {
+                                case UserStreamEventType.favorite:
+                                    break;
+                                case UserStreamEventType.unfavorite:
+                                    break;
+                                case UserStreamEventType.follow:
+                                    break;
+                                case UserStreamEventType.block:
+                                    break;
+                                case UserStreamEventType.unblock:
+                                    break;
+                                case UserStreamEventType.list_member_added:
+                                    break;
+                                case UserStreamEventType.list_member_removed:
+                                    break;
+                                case UserStreamEventType.list_created:
+                                    break;
+                                case UserStreamEventType.list_updated:
+                                    break;
+                                case UserStreamEventType.list_destroyed:
+                                    break;
+                                case UserStreamEventType.list_user_subscribed:
+                                    break;
+                                case UserStreamEventType.list_user_unsubscribed:
+                                    break;
+                                case UserStreamEventType.user_update:
+                                    break;
+                            }
+                        }
+                        break;
+                    case UserStreamItemType.tracklimit:
+                        break;
+                }
+
+                // ログ
+                _frmUserStreamWatch.AddItem(MakeUserStreamItemLogText(type, data));
+            }
+            catch (Exception ex) {
+                Log.DebugLog(ex);
+            }
+        }
+        #endregion (UserStreamTransaction)
+        //-------------------------------------------------------------------------------
+        #region -UserStreamEndEvent UserStreamの接続が終了した時に実行される
+        //-------------------------------------------------------------------------------
+        //
+        private void UserStreamEndEvent()
+        {
+            tsmiUserStreamLog.Enabled = false;
+            _usingUserStream = false;
+
+            _frmUserStreamWatch.Hide();
+            _frmUserStreamWatch.Dispose();
+
+            _userStreamCancellationTS.Cancel();
+
+            tsmiUserStreamStart.Enabled = true;
+        }
+        #endregion (UserStreamEndEvent)
+        //-------------------------------------------------------------------------------
+        #region -MakeUserStreamItemLogText UserStreamのメッセージのログテキストを作成します。
+        //-------------------------------------------------------------------------------
+        //
+        private string MakeUserStreamItemLogText(UserStreamItemType type, object data)
+        {
+            StringBuilder sb = new StringBuilder("・");
+            switch (type) {
+                case UserStreamItemType.unknown:
+                    sb.Append(string.Format("UnknownData(file:{0})", (string)data));
+                    break;
+                case UserStreamItemType.friendlist:
+                    sb.Append(string.Format("FriendList (Num:{0})", ((IEnumerable<long>)data).Count()));
+                    break;
+                case UserStreamItemType.status:
+                    TwitData t = (TwitData)data;
+                    sb.Append(string.Format("{0} Status by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                               , t.UserScreenName));
+                    break;
+                case UserStreamItemType.directmessage:
+                    TwitData dm = (TwitData)data;
+                    sb.Append(string.Format("{0} {1} send DirectMessage to {2}", dm.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                               , dm.UserScreenName, dm.DMScreenName));
+                    break;
+                case UserStreamItemType.tracklimit:
+                    int value = (int)data;
+                    sb.Append(string.Format("Track Limit Notation (value:{0})", value));
+                    break;
+                case UserStreamItemType.status_delete:
+                    sb.Append(string.Format("Delete Status id:{0}", (long)data));
+                    break;
+                case UserStreamItemType.directmessage_delete:
+                    sb.Append(string.Format("Delete DirectMessage id:{0}", (long)data));
+                    break;
+                case UserStreamItemType.eventdata:
+                    UserStreamEventData d = (UserStreamEventData)data;
+                    switch (d.Type) {
+                        case UserStreamEventType.favorite:
+                            sb.Append(string.Format(string.Format("{0} {1} fav {2} 's tweet",
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case UserStreamEventType.unfavorite:
+                            sb.Append(string.Format(string.Format("{0} {1} unfav {2} 's tweet",
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case UserStreamEventType.follow:
+                            sb.Append(string.Format(string.Format("{0} {1} follow {2}",
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case UserStreamEventType.block:
+                            sb.Append(string.Format(string.Format("{0} {1} block {2}",
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+                        case UserStreamEventType.unblock:
+                            sb.Append(string.Format(string.Format("{0} {1} unblock {2}",
+                                                        d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                            break;
+
+                    }
+                    break;
+            }
+            return sb.ToString();
+        }
+        #endregion (MakeUserStreamItemLogText)
 
         //===============================================================================
         #region -GetMostRecentTweets 最新のツイートを取得します。 using TwitterAPI
@@ -1801,7 +2071,8 @@ namespace StarlitTwit
                         break;
                 }
 
-                if (renewUctlDisp != null) {
+                // UserStream中は更新されない
+                if (!_usingUserStream && renewUctlDisp != null) {
                     lock (_autoRenewDic) {
                         _autoRenewDic[renewUctlDisp].IsForce = true;
                     }
@@ -2226,6 +2497,8 @@ namespace StarlitTwit
 
                     foreach (TabPage tabpage in _dispTwitDic.Keys) {
                         if (!_mreThreadTabRun.IsSet) { break; } // タブ変更機能使用時にforeachから抜ける
+                        // UserStream中はHome,Reply,History,Directは更新しない
+                        if (_usingUserStream && DEFAULT_TABPAGES.Contains(tabpage)) { continue; }
                         // タブ未使用イベントSTOP
                         _mreThreadConfirm.Set();
                         _mreThreadRun.Wait();

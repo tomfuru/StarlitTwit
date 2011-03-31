@@ -111,5 +111,20 @@ namespace StarlitTwit
             if (item != null && !collection.Contains(item)) { collection.Add(item); }
         }
         #endregion (AddAvoidDup)
+
+        //-------------------------------------------------------------------------------
+        #region +[extension]object.AsEnumerable 単数オブジェクトをIEnumerableとして扱います。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// オブジェクトを単一オブジェクトのみを返すIEnumerableに変換します。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> AsEnumerable<T>(this T obj)
+        {
+            yield return obj;
+        }
+        #endregion (object.AsEnumerable)
     }
 }
