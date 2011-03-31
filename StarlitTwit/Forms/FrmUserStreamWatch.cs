@@ -16,11 +16,6 @@ namespace StarlitTwit
             InitializeComponent();
         }
 
-        private void FrmUserStreamWatch_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.Hide();
-        }
-
         public void AddItem(string item)
         {
             Action action = () =>
@@ -35,6 +30,11 @@ namespace StarlitTwit
                 listBox.Invoke(action);
             }
             else { action(); }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Hide();
         }
     }
 }

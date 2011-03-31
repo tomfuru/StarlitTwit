@@ -35,12 +35,13 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(228, 231);
+            this.btnClose.Location = new System.Drawing.Point(284, 254);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "閉じる";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // listBox
             // 
@@ -51,15 +52,16 @@
             this.listBox.ItemHeight = 12;
             this.listBox.Location = new System.Drawing.Point(0, 0);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(319, 220);
+            this.listBox.Size = new System.Drawing.Size(375, 232);
             this.listBox.TabIndex = 2;
             // 
             // chbAutoScroll
             // 
+            this.chbAutoScroll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chbAutoScroll.AutoSize = true;
             this.chbAutoScroll.Checked = true;
             this.chbAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chbAutoScroll.Location = new System.Drawing.Point(12, 231);
+            this.chbAutoScroll.Location = new System.Drawing.Point(12, 254);
             this.chbAutoScroll.Name = "chbAutoScroll";
             this.chbAutoScroll.Size = new System.Drawing.Size(94, 16);
             this.chbAutoScroll.TabIndex = 3;
@@ -70,7 +72,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(319, 261);
+            this.ClientSize = new System.Drawing.Size(375, 284);
+            this.ControlBox = false;
             this.Controls.Add(this.chbAutoScroll);
             this.Controls.Add(this.listBox);
             this.Controls.Add(this.btnClose);
@@ -78,7 +81,6 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "UserStream ログ";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmUserStreamWatch_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

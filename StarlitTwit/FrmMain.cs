@@ -1576,9 +1576,7 @@ namespace StarlitTwit
                              || twitdata.MainTwitData.Mention_UserID == Twitter.ID) {
                                 this.Invoke(new Action(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true)));
                                 string baloontext = Utilization.InterpretFormat(twitdata) + '\n' + twitdata.Text;
-                                tasktray.BalloonTipTitle = tasktray.Text + "：Reply 新着有り";
-                                tasktray.BalloonTipText = baloontext;
-                                tasktray.ShowBalloonTip(BALOON_DURATION);
+                                PopupTasktray(tasktray.Text + "：Reply 新着有り", baloontext);
                             }
                             // History
                             if (twitdata.MainTwitData.UserID == Twitter.ID) {
@@ -1590,9 +1588,7 @@ namespace StarlitTwit
                             TwitData twitdata = (TwitData)data;
                             this.Invoke(new Action(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
                             string baloontext = Utilization.InterpretFormat(twitdata) + '\n' + twitdata.Text;
-                            tasktray.BalloonTipTitle = tasktray.Text + "：DirectMessage 新着有り";
-                            tasktray.BalloonTipText = baloontext;
-                            tasktray.ShowBalloonTip(BALOON_DURATION);
+                            PopupTasktray(tasktray.Text + "：DirectMessage 新着有り", baloontext);
                         }
                         break;
                     case UserStreamItemType.status_delete: {
@@ -1710,31 +1706,53 @@ namespace StarlitTwit
                     UserStreamEventData d = (UserStreamEventData)data;
                     switch (d.Type) {
                         case UserStreamEventType.favorite:
-                            sb.Append(string.Format(string.Format("{0} {1} fav {2} 's tweet",
+                            sb.Append(string.Format("{0} {1} fav {2} 's tweet",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
-                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName));
                             break;
                         case UserStreamEventType.unfavorite:
-                            sb.Append(string.Format(string.Format("{0} {1} unfav {2} 's tweet",
+                            sb.Append(string.Format("{0} {1} unfav {2} 's tweet",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
-                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName));
                             break;
                         case UserStreamEventType.follow:
-                            sb.Append(string.Format(string.Format("{0} {1} follow {2}",
+                            sb.Append(string.Format("{0} {1} follow {2}",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
-                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName));
                             break;
                         case UserStreamEventType.block:
-                            sb.Append(string.Format(string.Format("{0} {1} block {2}",
+                            sb.Append(string.Format("{0} {1} block {2}",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
-                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName));
                             break;
                         case UserStreamEventType.unblock:
-                            sb.Append(string.Format(string.Format("{0} {1} unblock {2}",
+                            sb.Append(string.Format("{0} {1} unblock {2}",
                                                         d.Time.ToString(Utilization.STR_DATETIMEFORMAT),
-                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName)));
+                                                        d.SourceUser.ScreenName, d.TargetUser.ScreenName));
                             break;
-
+                        case UserStreamEventType.list_created:
+                            sb.Append(string.Format("{0} List {1} is created", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                             , d.TargetList.Name));
+                            break;
+                        case UserStreamEventType.list_updated:
+                            sb.Append(string.Format("{0} List {1} is updated", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                             , d.TargetList.Name));
+                            break;
+                        case UserStreamEventType.list_destroyed:
+                            sb.Append(string.Format("{0} List {1} is destroyed", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                             , d.TargetList.Name));
+                            break;
+                        case UserStreamEventType.list_user_subscribed:
+                            sb.Append(string.Format("{0} {1} subscribe List {1}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                , d.SourceUser.ScreenName, d.TargetList.Name));
+                            break;
+                        case UserStreamEventType.list_user_unsubscribed:
+                            sb.Append(string.Format("{0} {1} unsubscribe List {1}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                , d.SourceUser.ScreenName, d.TargetList.Name));
+                            break;
+                        case UserStreamEventType.user_update:
+                            sb.Append(string.Format("{0} Profile Update", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)));
+                            break;
                     }
                     break;
             }
@@ -1813,16 +1831,12 @@ namespace StarlitTwit
                 if (!isFirst) {
                     if (uctldisp == uctlDispReply && SettingsData.DisplayReplyBaloon) {
                         if (!string.IsNullOrEmpty(baloontext)) {
-                            tasktray.BalloonTipTitle = tasktray.Text + "：Reply 新着有り";
-                            tasktray.BalloonTipText = baloontext;
-                            tasktray.ShowBalloonTip(BALOON_DURATION);
+                            PopupTasktray(tasktray.Text + "：Reply 新着有り", baloontext);
                         }
                     }
                     else if (uctldisp == uctlDispDirect && SettingsData.DisplayDMBaloon) {
                         if (!string.IsNullOrEmpty(baloontext)) {
-                            tasktray.BalloonTipTitle = tasktray.Text + "：DirectMessage 新着有り";
-                            tasktray.BalloonTipText = baloontext;
-                            tasktray.ShowBalloonTip(BALOON_DURATION);
+                            PopupTasktray(tasktray.Text + "：DirectMessage 新着有り", baloontext);
                         }
                     }
                 }
@@ -2331,6 +2345,21 @@ namespace StarlitTwit
             }
         }
         #endregion (ForAllTab)
+        //-------------------------------------------------------------------------------
+        #region -PopupTasktray タスクトレイのバルーンをポップアップさせます。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// タスクトレイのバルーンをポップアップさせます。
+        /// </summary>
+        /// <param name="title">タイトル</param>
+        /// <param name="text">テキスト</param>
+        private void PopupTasktray(string title, string text)
+        {
+            tasktray.BalloonTipTitle = title;
+            tasktray.BalloonTipText = text;
+            tasktray.ShowBalloonTip(BALOON_DURATION);
+        }
+        #endregion (PopupTasktray)
 
         //-------------------------------------------------------------------------------
         #region -ConfigURLShorteningButtonEnable URL短縮ボタンのEnableを設定します。
