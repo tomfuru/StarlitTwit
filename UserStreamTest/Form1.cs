@@ -110,8 +110,11 @@ namespace UserStreamTest
                     int value = (int)data;
                     sb.Append(string.Format("Track Limit Notation (value:{0})", value));
                     break;
-                case UserStreamItemType.delete:
-                    sb.Append(string.Format("Delete status_id:{0}", (long)data));
+                case UserStreamItemType.status_delete:
+                    sb.Append(string.Format("Delete Status id:{0}", (long)data));
+                    break;
+                case UserStreamItemType.directmessage_delete:
+                    sb.Append(string.Format("Delete DirectMessage id:{0}", (long)data));
                     break;
                 case UserStreamItemType.eventdata:
                     UserStreamEventData d = (UserStreamEventData)data;

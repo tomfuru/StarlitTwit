@@ -2179,8 +2179,15 @@ namespace StarlitTwit
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.friendlist, friend_ids);
                 }
                 else if (el.Element("delete") != null) {
-                    long delete_id = long.Parse(el.Element("delete").Element("status").Element("id").Value);
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.delete, delete_id);
+                    XElement del = el.Element("delete");
+                    if (del.Element("direct_message") != null) {
+                        long delete_id = long.Parse(del.Element("direct_message").Element("id").Value);
+                        return new Tuple<UserStreamItemType, object>(UserStreamItemType.directmessage_delete, delete_id);
+                    }
+                    else {
+                        long delete_id = long.Parse(del.Element("status").Element("id").Value);
+                        return new Tuple<UserStreamItemType, object>(UserStreamItemType.status_delete, delete_id);
+                    }
                 }
                 else if (el.Element("direct_message") != null) {
                     var dmdata = ConvertToTwitDataDM(el.Element("direct_message"));
@@ -2865,7 +2872,9 @@ namespace StarlitTwit
         /// <summary>ダイレクトメッセージ(object:TwitData)</summary>
         directmessage,
         /// <summary>発言削除(object:long[削除された発言のID])</summary>
-        delete,
+        status_delete,
+        /// <summary>ダイレクトメッセージ削除(object:long[削除された発言のID])</summary>
+        directmessage_delete,
         /// <summary>イベントデータ(object:UserStreamEventData)</summary>
         eventdata,
         /// <summary>Track Limit Notices(object:int)</summary>
