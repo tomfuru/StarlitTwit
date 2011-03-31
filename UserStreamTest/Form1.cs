@@ -47,7 +47,7 @@ namespace UserStreamTest
         {
             if (cts == null) {
                 //cts = twitter.userstream_statuses_sample(Action);
-                cts = twitter.userstream_user(ActionU, false);
+                cts = twitter.userstream_user(false, ActionU, EndAction);
                 button2.Enabled = false;
                 button3.Enabled = true;
             }
@@ -150,8 +150,13 @@ namespace UserStreamTest
             {
                 richTextBox1.AppendText(sb.ToString());
                 richTextBox1.AppendText("\n");
-                richTextBox1.Invalidate();
+                richTextBox1.Focus();
             }));
+        }
+
+        private void EndAction()
+        {
+
         }
 
         //-------------------------------------------------------------------------------

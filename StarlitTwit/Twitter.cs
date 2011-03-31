@@ -728,7 +728,7 @@ namespace StarlitTwit
 
             XElement el = GetByAPI(url);
 
-            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListData(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListDataArray(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
@@ -1374,7 +1374,7 @@ namespace StarlitTwit
         #region userstream_user UserStream
         //-------------------------------------------------------------------------------
         //
-        public CancellationTokenSource userstream_user(Action<UserStreamItemType, object> action, bool all_replies)
+        public CancellationTokenSource userstream_user(bool all_replies, Action<UserStreamItemType, object> action, Action endact = null)
         {
             const string URL_SAMPLE = @"https://userstream.twitter.com/2/user.json";
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1389,127 +1389,46 @@ namespace StarlitTwit
             Utilization.InvokeTransaction(() =>
             {
                 WebRequest req = WebRequest.Create(url); // User-Agent?
-                WebResponse res = req.GetResponse();
+                WebResponse res;
+                try {
+                    res = req.GetResponse();
 
-                using (Stream stream = res.GetResponseStream())
-                using (StreamReader sr = new StreamReader(stream)) {
-                    while (!sr.EndOfStream) {
-                        if (token.IsCancellationRequested) {
-                            string str = sr.ReadToEnd();
-                            res.Close();
-                            string[] lines = str.Split('\n');
-                            for (int i = 0; i < lines.Length - 1; i++) {
-                                if (!string.IsNullOrEmpty(lines[i])) {
-                                    var item = ConvertToStreamItem(JsonToXElement(lines[i]));
-                                    action(item.Item1, item.Item2);
+                    using (Stream stream = res.GetResponseStream())
+                    using (StreamReader sr = new StreamReader(stream)) {
+                        while (!sr.EndOfStream) {
+                            if (token.IsCancellationRequested) {
+                                try {
+                                    string str = sr.ReadToEnd();
+                                    res.Close();
+                                    string[] lines = str.Split('\n');
+                                    for (int i = 0; i < lines.Length - 1; i++) {
+                                        if (!string.IsNullOrEmpty(lines[i])) {
+                                            var item = ConvertToStreamItem(JsonToXElement(lines[i]));
+                                            action(item.Item1, item.Item2);
+                                        }
+                                    }
                                 }
+                                catch (WebException) { }
+                                return;
                             }
-                            return;
+                            string line = sr.ReadLine();
+                            if (!string.IsNullOrEmpty(line)) {
+                                var item = ConvertToStreamItem(JsonToXElement(line));
+                                action(item.Item1, item.Item2);
+                            }
                         }
-                        string line = sr.ReadLine();
-                        if (!string.IsNullOrEmpty(line)) {
-                            var item = ConvertToStreamItem(JsonToXElement(line));
-                            action(item.Item1, item.Item2);
-                        }
+                        DateTime dt = DateTime.Now; // for debug
                     }
-                    DateTime dt = DateTime.Now; // for debug
                 }
-            });
+                catch (WebException) {
+
+                }
+            }, endact);
 
             return cts;
         }
         #endregion (userstream_user)
 
-        //-------------------------------------------------------------------------------
-        #region -ConvertToStreamItem XElementをUserStreamのアイテムに変換します。
-        //-------------------------------------------------------------------------------
-        //
-        private Tuple<UserStreamItemType, object> ConvertToStreamItem(XElement el)
-        {
-            Func<string> Logging = () =>
-            {
-                string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
-                using (StreamWriter writer = new StreamWriter(filename)) {
-                    writer.Write(el.ToString());
-                }
-                return filename;
-            };
-
-            try {
-                if (el.Element("event") != null) {
-                    // event
-                    string eventName = el.Element("event").Value;
-                    UserStreamEventData data = new UserStreamEventData();
-                    data.Type = (UserStreamEventType)Enum.Parse(typeof(UserStreamEventType), eventName);
-
-                    data.Time = StringToDateTime(el.Element("created_at").Value);
-
-                    data.TargetUser = ConvertToUserProfile(el.Element("target"));
-                    data.SourceUser = ConvertToUserProfile(el.Element("source"));
-
-                    switch (data.Type) {
-                        case UserStreamEventType.favorite:
-                        case UserStreamEventType.unfavorite:
-                            data.TargetTwit = ConvertToTwitData(el.Element("target_object"));
-                            break;
-                    }
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.eventdata, data);
-                }
-                else if (el.Element("friends") != null) {
-                    // friend list
-                    IEnumerable<long> friend_ids = from id in el.Elements("friends")
-                                                   select long.Parse(id.Value);
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.friendlist, friend_ids);
-                }
-                else if (el.Element("delete") != null) {
-                    long delete_id = long.Parse(el.Element("delete").Element("status").Element("id").Value);
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.delete, delete_id);
-                }
-                else if (el.Element("direct_message") != null) {
-                    var dmdata = ConvertToTwitDataDM(el.Element("direct_message"));
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.directmessage, dmdata);
-                }
-                else if (el.Element("limit") != null) {
-                    int value = int.Parse(el.Element("limit").Element("track").Value);
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.tracklimit, value);
-                }
-                else {
-                    // status
-                    var twitdata = ConvertToTwitData(el);
-                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.status, twitdata);
-                }
-            }
-            catch (Exception) {
-                string filename = Logging();
-                return new Tuple<UserStreamItemType, object>(UserStreamItemType.unknown, filename);
-            }
-        }
-        #endregion (ConvertToStreamItem)
-
-
-        //-------------------------------------------------------------------------------
-        #region -JsonToXElement Json文字列をXElementに変換します。
-        //-------------------------------------------------------------------------------
-        //
-        private XElement JsonToXElement(string jsonStr)
-        {
-            XmlNode node = JsonConvert.DeserializeXmlNode(jsonStr, "item");
-            return XmlNodeToXElement(node);
-        }
-        #endregion (JsonToXElement)
-        //-------------------------------------------------------------------------------
-        #region -XmlNodeToXElement XmlNode->XElement
-        //-------------------------------------------------------------------------------
-        //
-        private XElement XmlNodeToXElement(XmlNode node)
-        {
-            XDocument doc = new XDocument();
-            using (XmlWriter xw = doc.CreateWriter()) {
-                node.WriteTo(xw);
-            }
-            return doc.Root;
-        }
-        #endregion (-XmlNodeToXElement)
 
         //===============================================================================
         #region Private Methods
@@ -1970,33 +1889,42 @@ namespace StarlitTwit
         }
         #endregion (ConvertToTwitDataArrayDM)
         //-------------------------------------------------------------------------------
-        #region -ConvertToListData XElementからListDataの配列型に変換します。
+        #region -ConvertToListData XElementからListDataに変換します。
         //-------------------------------------------------------------------------------
-        /// <summary>
-        /// XElementからListDataの配列型に変換します。
-        /// </summary>
-        /// <param name="el"></param>
-        /// <returns></returns>
-        private IEnumerable<ListData> ConvertToListData(XElement el)
+        //
+        private ListData ConvertToListData(XElement el)
         {
             try {
-                return from stat in el.Elements("list")
-                       select new ListData() {
-                           ID = long.Parse(stat.Element("id").Value),
-                           Name = stat.Element("slug").Value,
-                           Description = stat.Element("description").Value,
-                           SubscriberCount = int.Parse(stat.Element("subscriber_count").Value),
-                           MemberCount = int.Parse(stat.Element("member_count").Value),
-                           Public = stat.Element("mode").Value.Equals("public"),
-                           OwnerID = long.Parse(stat.Element("user").Element("id").Value),
-                           OwnerScreenName = stat.Element("user").Element("screen_name").Value
-                       };
+                return new ListData() {
+                    ID = long.Parse(el.Element("id").Value),
+                    Name = el.Element("slug").Value,
+                    Description = el.Element("description").Value,
+                    SubscriberCount = int.Parse(el.Element("subscriber_count").Value),
+                    MemberCount = int.Parse(el.Element("member_count").Value),
+                    Public = el.Element("mode").Value.Equals("public"),
+                    OwnerID = long.Parse(el.Element("user").Element("id").Value),
+                    OwnerScreenName = el.Element("user").Element("screen_name").Value
+                };
             }
             catch (NullReferenceException ex) {
                 Log.DebugLog(ex);
                 Log.DebugLog(el.ToString());
                 throw new TwitterAPIException(1001, "予期しないXmlです。");
             }
+        }
+        #endregion (ConvertToListData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToListDataArray XElementからListDataの配列型に変換します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// XElementからListDataの配列型に変換します。
+        /// </summary>
+        /// <param name="el"></param>
+        /// <returns></returns>
+        private IEnumerable<ListData> ConvertToListDataArray(XElement el)
+        {
+            return from stat in el.Elements("list")
+                   select ConvertToListData(stat);
         }
         #endregion (ConvertToListData)
         //-------------------------------------------------------------------------------
@@ -2059,6 +1987,7 @@ namespace StarlitTwit
                     FollowerNum = int.Parse(el.Element("followers_count").Value),
                     FollowingNum = int.Parse(el.Element("friends_count").Value),
                     StatusNum = int.Parse(el.Element("statuses_count").Value),
+                    ListedNum = int.Parse(el.Element("listed_count").Value),
                     FavoriteNum = int.Parse(el.Element("favourites_count").Value),
                     RegisterTime = StringToDateTime(el.Element("created_at").Value),
                     TimeZone = el.Element("time_zone").Value
@@ -2199,6 +2128,103 @@ namespace StarlitTwit
             foreach (var item in urls) { yield return item; }
         }
         #endregion (ConvertToEntityData)
+        //===============================================================================
+        #region -ConvertToStreamItem XElementをUserStreamのアイテムに変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private Tuple<UserStreamItemType, object> ConvertToStreamItem(XElement el)
+        {
+            Func<string> Logging = () =>
+            {
+                string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
+                using (StreamWriter writer = new StreamWriter(filename)) {
+                    writer.Write(el.ToString());
+                }
+                return filename;
+            };
+
+            try {
+                if (el.Element("event") != null) {
+                    // event
+                    string eventName = el.Element("event").Value;
+                    UserStreamEventData data = new UserStreamEventData();
+                    data.Type = (UserStreamEventType)Enum.Parse(typeof(UserStreamEventType), eventName);
+
+                    data.Time = StringToDateTime(el.Element("created_at").Value);
+
+                    data.TargetUser = ConvertToUserProfile(el.Element("target"));
+                    data.SourceUser = ConvertToUserProfile(el.Element("source"));
+
+                    switch (data.Type) {
+                        case UserStreamEventType.favorite:
+                        case UserStreamEventType.unfavorite:
+                            data.TargetTwit = ConvertToTwitData(el.Element("target_object"));
+                            break;
+                        case UserStreamEventType.list_created:
+                        case UserStreamEventType.list_destroyed:
+                        case UserStreamEventType.list_member_added:
+                        case UserStreamEventType.list_member_removed:
+                        case UserStreamEventType.list_updated:
+                        case UserStreamEventType.list_user_subscribed:
+                        case UserStreamEventType.list_user_unsubscribed:
+                            data.TargetList = ConvertToListData(el.Element("target_object"));
+                            break;
+                    }
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.eventdata, data);
+                }
+                else if (el.Element("friends") != null) {
+                    // friend list
+                    IEnumerable<long> friend_ids = from id in el.Elements("friends")
+                                                   select long.Parse(id.Value);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.friendlist, friend_ids);
+                }
+                else if (el.Element("delete") != null) {
+                    long delete_id = long.Parse(el.Element("delete").Element("status").Element("id").Value);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.delete, delete_id);
+                }
+                else if (el.Element("direct_message") != null) {
+                    var dmdata = ConvertToTwitDataDM(el.Element("direct_message"));
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.directmessage, dmdata);
+                }
+                else if (el.Element("limit") != null) {
+                    int value = int.Parse(el.Element("limit").Element("track").Value);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.tracklimit, value);
+                }
+                else {
+                    // status
+                    var twitdata = ConvertToTwitData(el);
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.status, twitdata);
+                }
+            }
+            catch (Exception) {
+                string filename = Logging();
+                return new Tuple<UserStreamItemType, object>(UserStreamItemType.unknown, filename);
+            }
+        }
+        #endregion (ConvertToStreamItem)
+        //-------------------------------------------------------------------------------
+        #region -JsonToXElement Json文字列をXElementに変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private XElement JsonToXElement(string jsonStr)
+        {
+            XmlNode node = JsonConvert.DeserializeXmlNode(jsonStr, "item");
+            return XmlNodeToXElement(node);
+        }
+        #endregion (JsonToXElement)
+        //-------------------------------------------------------------------------------
+        #region -XmlNodeToXElement XmlNode->XElement
+        //-------------------------------------------------------------------------------
+        //
+        private XElement XmlNodeToXElement(XmlNode node)
+        {
+            XDocument doc = new XDocument();
+            using (XmlWriter xw = doc.CreateWriter()) {
+                node.WriteTo(xw);
+            }
+            return doc.Root;
+        }
+        #endregion (-XmlNodeToXElement)
         //===============================================================================
         #region -TryParseLong 文字列をlongに変換します。
         //-------------------------------------------------------------------------------
@@ -2513,6 +2539,8 @@ namespace StarlitTwit
         public int FollowerNum;
         /// <summary>発言数</summary>
         public int StatusNum;
+        /// <summary>リストされている数</summary>
+        public int ListedNum;
         /// <summary>お気に入り数</summary>
         public int FavoriteNum;
         /// <summary>プロテクト中か</summary>
@@ -2863,8 +2891,23 @@ namespace StarlitTwit
         /// <summary>ブロック</summary>
         block,
         /// <summary>ブロック解除</summary>
-        unblock
-        // その他...
+        unblock,
+        /// <summary>リストメンバー追加</summary>
+        list_member_added,
+        /// <summary>リストメンバー削除</summary>
+        list_member_removed,
+        /// <summary>リスト作成</summary>
+        list_created,
+        /// <summary>リスト更新</summary>
+        list_updated,
+        /// <summary>リスト削除</summary>
+        list_destroyed,
+        /// <summary>リストフォロー追加</summary>
+        list_user_subscribed,
+        /// <summary>リストフォロー削除</summary>
+        list_user_unsubscribed,
+        /// <summary>プロフィール更新</summary>
+        user_update
     }
     //-------------------------------------------------------------------------------
     #endregion (UserStreamEventType 列挙体)
@@ -2886,6 +2929,8 @@ namespace StarlitTwit
         public UserProfile SourceUser;
         /// <summary>ターゲット発言情報(一部イベントのみ)</summary>
         public TwitData TargetTwit;
+        /// <summary>ターゲットリスト情報(一部イベントのみ)</summary>
+        public ListData TargetList;
     }
     //-------------------------------------------------------------------------------
     #endregion ((class)userStreamEventData)
