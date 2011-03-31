@@ -636,7 +636,7 @@ namespace StarlitTwit
         private void TwitMenu_Delete_Click(object sender, TwitRowMenuEventArgs e)
         {
             if (Message.ShowQuestionMessage("削除してよろしいですか？") == DialogResult.Yes) {
-                Delete(e.TwitData.StatusID);
+                Delete(e.TwitData.StatusID, e.TwitData.IsDM());
             }
         }
         #endregion (TwitMenu_Delete_Click)
@@ -1782,21 +1782,28 @@ namespace StarlitTwit
                     btnURLShorten.Enabled = false;
                 }));
 
+                UctlDispTwit renewUctlDisp = null;
+
                 switch (_stateStatusState) {
                     case StatusState.Normal:
                     case StatusState.MultiReply:
                         Twitter.statuses_update(text);
+                        renewUctlDisp = uctlDispHome;
                         break;
                     case StatusState.Reply:
                         Twitter.statuses_update(text, _statlID);
+                        renewUctlDisp = uctlDispHome;
                         break;
                     case StatusState.DirectMessage:
                         Twitter.direct_messages_new(_RecipiantName, _statlID, text);
+                        renewUctlDisp = uctlDispDirect;
                         break;
                 }
 
-                lock (_autoRenewDic) {
-                    _autoRenewDic[uctlDispHome].IsForce = true;
+                if (renewUctlDisp != null) {
+                    lock (_autoRenewDic) {
+                        _autoRenewDic[renewUctlDisp].IsForce = true;
+                    }
                 }
             }
             catch (TwitterAPIException ex) {
@@ -1826,10 +1833,13 @@ namespace StarlitTwit
         #region -Delete 投稿の削除を行います using TwitterAPI
         //-------------------------------------------------------------------------------
         //
-        private void Delete(long statusid)
+        private void Delete(long statusid, bool isDirectMessage)
         {
             try {
-                Twitter.statuses_destroy(statusid);
+                if (isDirectMessage) {
+                    Twitter.direct_messages_destroy(statusid);
+                }
+                else { Twitter.statuses_destroy(statusid); }
             }
             catch (TwitterAPIException ex) {
                 tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);

@@ -258,6 +258,8 @@ namespace StarlitTwit
 
             tsmiDelete.Enabled = isMine;
 
+            tsmiDispRetweeter.Enabled = !isDirect;
+
             tsmiMoreRecently.Visible = false; // 暫定
 
             // コンボボックス項目設定
