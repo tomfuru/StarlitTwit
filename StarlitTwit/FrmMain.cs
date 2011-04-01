@@ -1651,6 +1651,7 @@ namespace StarlitTwit
                 // ログ
                 _frmUserStreamWatch.AddItem(MakeUserStreamItemLogText(type, data));
             }
+            catch (InvalidOperationException) { }
             catch (Exception ex) {
                 Log.DebugLog(ex);
             }
@@ -1662,10 +1663,13 @@ namespace StarlitTwit
         //
         private void UserStreamEndEvent()
         {
-            this.Invoke(new Action(() =>
-            {
-                tsmiUserStreamStart.Enabled = true;
-            }));
+            try {
+                this.Invoke(new Action(() =>
+                {
+                    tsmiUserStreamStart.Enabled = true;
+                }));
+            }
+            catch (InvalidOperationException) { }
         }
         #endregion (UserStreamEndEvent)
         //-------------------------------------------------------------------------------
