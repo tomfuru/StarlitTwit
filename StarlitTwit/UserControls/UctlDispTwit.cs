@@ -45,6 +45,8 @@ namespace StarlitTwit
         public long MinTweetID { get; private set; }
         /// <summary>各発言の情報</summary>
         private SortedList<long, RowData> _rowDataList;
+        /// <summary>RTのID一覧</summary>
+        private SortedSet<long> _RTidSet;
         /// <summary>発言コントロールリスト</summary>
         private List<UctlDispTwitRow> _rowList = new List<UctlDispTwitRow>();
         /// <summary>少しでも見えている行数</summary>
@@ -188,6 +190,7 @@ namespace StarlitTwit
             InitializeComponent();
 
             _rowDataList = new SortedList<long, RowData>(CLONGCOMP);
+            _RTidSet = new SortedSet<long>();
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -723,7 +726,7 @@ namespace StarlitTwit
         #region Row_TextBoxEnter テキストボックスEnter時
         //-------------------------------------------------------------------------------
         //
-        private void Row_TextBoxEnter(object sender,EventArgs e)
+        private void Row_TextBoxEnter(object sender, EventArgs e)
         {
             _enableKey = false;
         }
@@ -802,18 +805,22 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="data">発言データ配列。StatusID降順推奨。</param>
         /// <param name="suspendSetBoundary">[option]境界セットを抑制する時true</param>
+        /// <param name="checkRetweetDup">[option]RTのための重複確認をするかどうか</param>
         /// <returns>最初のツイートのデータ</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public string AddData(IEnumerable<TwitData> data, bool suspendSetBoundary = false)
+        public string AddData(IEnumerable<TwitData> data, bool suspendSetBoundary = false, bool checkRetweetDup = false)
         {
             lock (_lockObj) {
                 string retText = "";
 
                 // 選択保存用
-                long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ? _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
+                long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ?
+                                       _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
                 ChangeSelectRow(null);
                 // 位置保存用
-                long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ? (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID : _rowList[0].TwitData.StatusID : -1;
+                long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ?
+                                (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID :
+                                                        _rowList[0].TwitData.StatusID : -1;
 
                 List<string> imageURLList = new List<string>();
                 //-----内部情報設定-----
@@ -821,7 +828,7 @@ namespace StarlitTwit
                 TwitData lastdata = data.LastOrDefault();
                 foreach (TwitData t in data) {
                     // 重複排除
-                    if (_rowDataList.ContainsKey(t.StatusID)) {
+                    if (_rowDataList.ContainsKey(t.StatusID) || (checkRetweetDup && CheckRTDup(t))) {
                         if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastdata.StatusID); }
                         continue;
                     }
@@ -832,9 +839,7 @@ namespace StarlitTwit
                     };
 
                     // 返り値用
-                    if (string.IsNullOrEmpty(retText)) {
-                        retText = Utilization.InterpretFormat(t) + '\n' + t.Text;
-                    }
+                    if (string.IsNullOrEmpty(retText)) { retText = Utilization.MakePopupText(t); }
 
                     // 画像URL登録
                     string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
@@ -844,6 +849,7 @@ namespace StarlitTwit
 
                     addrowList.Add(rowdata);
                     _rowDataList.Add(t.StatusID, rowdata);
+                    if (t.IsRT()) { _RTidSet.Add(t.RTTwitData.StatusID); } // RT元データを集合に追加
 
                     //Console.WriteLine(t.StatusID);
 
@@ -1257,6 +1263,23 @@ namespace StarlitTwit
             row.SetControlLocation();
         }
         #endregion (ConfigRow)
+        //-------------------------------------------------------------------------------
+        #region -CheckRTDup Retweetの重複を調べます。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// Retweetの重複を調べます。
+        /// </summary>
+        /// <param name="twitdata"></param>
+        /// <returns></returns>
+        private bool CheckRTDup(TwitData twitdata)
+        {
+            if (twitdata.IsRT()) {
+                long id = twitdata.RTTwitData.StatusID;
+                return _rowDataList.ContainsKey(id) || _RTidSet.Contains(id);
+            }
+            return false;
+        }
+        #endregion (CheckRTDup)
         //-------------------------------------------------------------------------------
         #region -SetRowReplyText 行リプライ先テキストを表示します。
         //-------------------------------------------------------------------------------

@@ -431,6 +431,14 @@ namespace StarlitTwit
             //-------------------------------------------------------------------------------
             #endregion (■■サムネイル設定■■)
 
+            #region ■■UserStream設定■■
+            //-------------------------------------------------------------------------------
+            chbUStStartUp.Checked = SettingsData.UserStreamStartUp;
+            chbUStEnableAllReplies.Checked = SettingsData.UserStreamAllReplies;
+            chbUStAutoOpenLog.Checked = SettingsData.UserStreamAutoOpenLog;
+            //-------------------------------------------------------------------------------
+            #endregion (■■UserStream設定■■)
+
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------
             txtHeader.Text = SettingsData.Header;
@@ -540,6 +548,14 @@ namespace StarlitTwit
             SettingsData.ThumbType_twipplephoto = (twipplephotoThumbnailType)cmbThumbTwipplePhoto.SelectedItem;
             //-------------------------------------------------------------------------------
             #endregion (■■サムネイル設定■■)
+
+            #region ■■UserStream設定■■
+            //-------------------------------------------------------------------------------
+            SettingsData.UserStreamStartUp = chbUStStartUp.Checked;
+            SettingsData.UserStreamAllReplies = chbUStEnableAllReplies.Checked;
+            SettingsData.UserStreamAutoOpenLog = chbUStAutoOpenLog.Checked;
+            //-------------------------------------------------------------------------------
+            #endregion (■■UserStream設定■■)
 
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------

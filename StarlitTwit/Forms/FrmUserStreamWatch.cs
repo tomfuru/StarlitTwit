@@ -16,6 +16,14 @@ namespace StarlitTwit
             InitializeComponent();
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            e.Cancel = true;
+            Hide();
+        }
+
         public void AddItem(string item)
         {
             Action action = () =>

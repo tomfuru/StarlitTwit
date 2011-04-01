@@ -173,6 +173,11 @@
             this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
             this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
             this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
+            this.tabpgUserStream = new System.Windows.Forms.TabPage();
+            this.chbUStStartUp = new System.Windows.Forms.CheckBox();
+            this.chbUStEnableAllReplies = new System.Windows.Forms.CheckBox();
+            this.chbUStAutoOpenLog = new System.Windows.Forms.CheckBox();
+            this.grbUStPopup = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -198,6 +203,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).BeginInit();
+            this.tabpgUserStream.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -209,6 +215,7 @@
             this.tabControl1.Controls.Add(this.tabpgDisp);
             this.tabControl1.Controls.Add(this.tabpgFontAndColor);
             this.tabControl1.Controls.Add(this.tabpgThumbnail);
+            this.tabControl1.Controls.Add(this.tabpgUserStream);
             this.tabControl1.Controls.Add(this.tabpgElse);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -1515,7 +1522,7 @@
             // 
             this.cmbURLShortenType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbURLShortenType.FormattingEnabled = true;
-            this.cmbURLShortenType.Location = new System.Drawing.Point(210, 225);
+            this.cmbURLShortenType.Location = new System.Drawing.Point(210, 192);
             this.cmbURLShortenType.Name = "cmbURLShortenType";
             this.cmbURLShortenType.Size = new System.Drawing.Size(89, 20);
             this.cmbURLShortenType.TabIndex = 8;
@@ -1523,7 +1530,7 @@
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(32, 228);
+            this.label40.Location = new System.Drawing.Point(32, 194);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(88, 12);
             this.label40.TabIndex = 14;
@@ -1531,7 +1538,7 @@
             // 
             // btnSelectWebBrowser
             // 
-            this.btnSelectWebBrowser.Location = new System.Drawing.Point(334, 290);
+            this.btnSelectWebBrowser.Location = new System.Drawing.Point(334, 257);
             this.btnSelectWebBrowser.Name = "btnSelectWebBrowser";
             this.btnSelectWebBrowser.Size = new System.Drawing.Size(21, 22);
             this.btnSelectWebBrowser.TabIndex = 11;
@@ -1542,7 +1549,7 @@
             // chbUseInternalWebBrowser
             // 
             this.chbUseInternalWebBrowser.AutoSize = true;
-            this.chbUseInternalWebBrowser.Location = new System.Drawing.Point(20, 248);
+            this.chbUseInternalWebBrowser.Location = new System.Drawing.Point(20, 214);
             this.chbUseInternalWebBrowser.Name = "chbUseInternalWebBrowser";
             this.chbUseInternalWebBrowser.Size = new System.Drawing.Size(161, 16);
             this.chbUseInternalWebBrowser.TabIndex = 9;
@@ -1553,7 +1560,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(21, 276);
+            this.label33.Location = new System.Drawing.Point(21, 242);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(90, 12);
             this.label33.TabIndex = 13;
@@ -1561,7 +1568,7 @@
             // 
             // txtWebBrowserPath
             // 
-            this.txtWebBrowserPath.Location = new System.Drawing.Point(20, 291);
+            this.txtWebBrowserPath.Location = new System.Drawing.Point(20, 257);
             this.txtWebBrowserPath.Name = "txtWebBrowserPath";
             this.txtWebBrowserPath.Size = new System.Drawing.Size(314, 19);
             this.txtWebBrowserPath.TabIndex = 10;
@@ -1600,7 +1607,7 @@
             // 
             // numReplyTooltipDepth
             // 
-            this.numReplyTooltipDepth.Location = new System.Drawing.Point(238, 158);
+            this.numReplyTooltipDepth.Location = new System.Drawing.Point(238, 125);
             this.numReplyTooltipDepth.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1613,7 +1620,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(32, 160);
+            this.label30.Location = new System.Drawing.Point(32, 126);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(120, 12);
             this.label30.TabIndex = 5;
@@ -1622,7 +1629,7 @@
             // chbDispDMBaloon
             // 
             this.chbDispDMBaloon.AutoSize = true;
-            this.chbDispDMBaloon.Location = new System.Drawing.Point(20, 204);
+            this.chbDispDMBaloon.Location = new System.Drawing.Point(20, 170);
             this.chbDispDMBaloon.Name = "chbDispDMBaloon";
             this.chbDispDMBaloon.Size = new System.Drawing.Size(182, 16);
             this.chbDispDMBaloon.TabIndex = 7;
@@ -1632,7 +1639,7 @@
             // chbDispReplyBaloon
             // 
             this.chbDispReplyBaloon.AutoSize = true;
-            this.chbDispReplyBaloon.Location = new System.Drawing.Point(20, 180);
+            this.chbDispReplyBaloon.Location = new System.Drawing.Point(20, 146);
             this.chbDispReplyBaloon.Name = "chbDispReplyBaloon";
             this.chbDispReplyBaloon.Size = new System.Drawing.Size(198, 16);
             this.chbDispReplyBaloon.TabIndex = 6;
@@ -1642,7 +1649,7 @@
             // chbDispReplyTooltip
             // 
             this.chbDispReplyTooltip.AutoSize = true;
-            this.chbDispReplyTooltip.Location = new System.Drawing.Point(20, 136);
+            this.chbDispReplyTooltip.Location = new System.Drawing.Point(20, 102);
             this.chbDispReplyTooltip.Name = "chbDispReplyTooltip";
             this.chbDispReplyTooltip.Size = new System.Drawing.Size(173, 16);
             this.chbDispReplyTooltip.TabIndex = 4;
@@ -1999,6 +2006,60 @@
             0});
             this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
             // 
+            // tabpgUserStream
+            // 
+            this.tabpgUserStream.Controls.Add(this.grbUStPopup);
+            this.tabpgUserStream.Controls.Add(this.chbUStAutoOpenLog);
+            this.tabpgUserStream.Controls.Add(this.chbUStEnableAllReplies);
+            this.tabpgUserStream.Controls.Add(this.chbUStStartUp);
+            this.tabpgUserStream.Location = new System.Drawing.Point(4, 21);
+            this.tabpgUserStream.Name = "tabpgUserStream";
+            this.tabpgUserStream.Padding = new System.Windows.Forms.Padding(3);
+            this.tabpgUserStream.Size = new System.Drawing.Size(386, 325);
+            this.tabpgUserStream.TabIndex = 5;
+            this.tabpgUserStream.Text = "UserStream";
+            this.tabpgUserStream.UseVisualStyleBackColor = true;
+            // 
+            // chbUStStartUp
+            // 
+            this.chbUStStartUp.AutoSize = true;
+            this.chbUStStartUp.Location = new System.Drawing.Point(20, 6);
+            this.chbUStStartUp.Name = "chbUStStartUp";
+            this.chbUStStartUp.Size = new System.Drawing.Size(201, 16);
+            this.chbUStStartUp.TabIndex = 0;
+            this.chbUStStartUp.Text = "起動と同時にUserStreamを開始する";
+            this.chbUStStartUp.UseVisualStyleBackColor = true;
+            // 
+            // chbUStEnableAllReplies
+            // 
+            this.chbUStEnableAllReplies.AutoSize = true;
+            this.chbUStEnableAllReplies.Location = new System.Drawing.Point(20, 28);
+            this.chbUStEnableAllReplies.Name = "chbUStEnableAllReplies";
+            this.chbUStEnableAllReplies.Size = new System.Drawing.Size(141, 16);
+            this.chbUStEnableAllReplies.TabIndex = 1;
+            this.chbUStEnableAllReplies.Text = "All Repliesを有効にする";
+            this.chbUStEnableAllReplies.UseVisualStyleBackColor = true;
+            // 
+            // chbUStAutoOpenLog
+            // 
+            this.chbUStAutoOpenLog.AutoSize = true;
+            this.chbUStAutoOpenLog.Location = new System.Drawing.Point(20, 303);
+            this.chbUStAutoOpenLog.Name = "chbUStAutoOpenLog";
+            this.chbUStAutoOpenLog.Size = new System.Drawing.Size(223, 16);
+            this.chbUStAutoOpenLog.TabIndex = 2;
+            this.chbUStAutoOpenLog.Text = "UserStream開始時にログ画面を表示する";
+            this.chbUStAutoOpenLog.UseVisualStyleBackColor = true;
+            // 
+            // grbUStPopup
+            // 
+            this.grbUStPopup.Location = new System.Drawing.Point(20, 63);
+            this.grbUStPopup.Name = "grbUStPopup";
+            this.grbUStPopup.Size = new System.Drawing.Size(255, 179);
+            this.grbUStPopup.TabIndex = 3;
+            this.grbUStPopup.TabStop = false;
+            this.grbUStPopup.Text = "タスクトレイバルーン表示";
+            this.grbUStPopup.Visible = false;
+            // 
             // FrmConfig
             // 
             this.AcceptButton = this.btnOK;
@@ -2049,6 +2110,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).EndInit();
+            this.tabpgUserStream.ResumeLayout(false);
+            this.tabpgUserStream.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2201,5 +2264,10 @@
         private System.Windows.Forms.NumericUpDown numThumbnailInterval;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.CheckBox chbDispThumbnail;
+        private System.Windows.Forms.TabPage tabpgUserStream;
+        private System.Windows.Forms.GroupBox grbUStPopup;
+        private System.Windows.Forms.CheckBox chbUStAutoOpenLog;
+        private System.Windows.Forms.CheckBox chbUStEnableAllReplies;
+        private System.Windows.Forms.CheckBox chbUStStartUp;
     }
 }

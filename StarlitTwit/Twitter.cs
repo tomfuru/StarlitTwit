@@ -2464,6 +2464,19 @@ namespace StarlitTwit
         }
         #endregion (IsDM)
         //-------------------------------------------------------------------------------
+        #region +TextIncludeUserMention TextにUserへの言及が含まれているかどうかを取得します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// TextにUserへの言及[@(ScreenName)]が含まれているかどうかを取得します。
+        /// </summary>
+        /// <param name="screen_name"></param>
+        /// <returns></returns>
+        public bool TextIncludeUserMention(string screen_name)
+        {
+            return Text.Contains('@' + screen_name);
+        }
+        #endregion (TextIncludeUserMention)
+        //-------------------------------------------------------------------------------
         #region +[override]ToString 文字列へ
         //-------------------------------------------------------------------------------
         /// <summary>

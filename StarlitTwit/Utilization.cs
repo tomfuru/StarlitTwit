@@ -252,6 +252,19 @@ namespace StarlitTwit
         #endregion ((TwitData, string))
         //-------------------------------------------------------------------------------
         #endregion (InterpretFormat)
+        //-------------------------------------------------------------------------------
+        #region +[static]MakePopupText TwitDataからPopupに使われるTextを作成して返します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// TwitDataからPopupに使われるTextを作成して返します。
+        /// </summary>
+        /// <param name="twitdata">Textの元になるTwitData</param>
+        /// <returns></returns>
+        public static string MakePopupText(TwitData twitdata)
+        {
+            return Utilization.InterpretFormat(twitdata) + '\n' + twitdata.Text;
+        }
+        #endregion (MakePopupText)
 
         //-------------------------------------------------------------------------------
         #region +[static]GetImageFromURL 画像取得

@@ -183,6 +183,18 @@ namespace StarlitTwit
         #endregion (ツイート取得関係)
 
         //-------------------------------------------------------------------------------
+        #region UserStream関係
+        //-------------------------------------------------------------------------------
+        /// <summary>UserStreamのスタートアップ</summary>
+        public bool UserStreamStartUp = false;
+        /// <summary>UserStreamのAll_Repliesオプション</summary>
+        public bool UserStreamAllReplies = false;
+        /// <summary>UserStream開始と同時にログ画面表示</summary>
+        public bool UserStreamAutoOpenLog = false;
+        //-------------------------------------------------------------------------------
+        #endregion (UserStream関係)
+
+        //-------------------------------------------------------------------------------
         #region URL関係
         //-------------------------------------------------------------------------------
         /// <summary>ウェブブラウザパス</summary>

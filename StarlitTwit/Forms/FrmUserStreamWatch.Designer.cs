@@ -73,10 +73,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 284);
-            this.ControlBox = false;
             this.Controls.Add(this.chbAutoScroll);
             this.Controls.Add(this.listBox);
             this.Controls.Add(this.btnClose);
+            this.MinimizeBox = false;
             this.Name = "FrmUserStreamWatch";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
