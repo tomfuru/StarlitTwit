@@ -254,6 +254,9 @@
     <EmbeddedResource Include="UserControls\RichTextBoxHash.resx">
       <DependentUpon>RichTextBoxHash.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TabControlEx.resx">
+      <DependentUpon>TabControlEx.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UctlDispTwit.resx">
       <DependentUpon>UctlDispTwit.cs</DependentUpon>
     </EmbeddedResource>
