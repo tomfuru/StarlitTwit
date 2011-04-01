@@ -32,7 +32,6 @@
             this.tsmiCut = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,17 +61,10 @@
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiCopy,
             this.tsmiCut,
-            this.tsmiPaste,
-            this.toolStripMenuItem1});
+            this.tsmiPaste});
             this.contextMenu.Name = "contextMenu";
             this.contextMenu.Size = new System.Drawing.Size(165, 70);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
-            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
             // 
             // RichTextBoxHash
             // 
@@ -94,7 +86,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiCut;
         private System.Windows.Forms.ToolStripMenuItem tsmiPaste;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 
     }
 }
