@@ -142,6 +142,7 @@ namespace StarlitTwit
             lblFollowingNum.Text = profile.FollowingNum.ToString();
             lblFavoriteNum.Text = profile.FavoriteNum.ToString();
             lblStatusNum.Text = profile.StatusNum.ToString();
+            lblListedNum.Text = profile.ListedNum.ToString();
 
             lblTimeZone.Text = profile.TimeZone;
 
