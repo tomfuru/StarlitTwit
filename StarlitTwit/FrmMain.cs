@@ -144,6 +144,10 @@ namespace StarlitTwit
         private const string STR_GETING_OLDERSTATUS = "より古いデータ取得中...";
         private const string STR_GETING_NEWERSTATUS = "より新しいデータ取得中...";
 
+        private const string STR_USERSTREAM_STARTING = "UserStream開始中...";
+        private const string STR_USERSTREAM = "UserStream利用中";
+        private const string STR_USERSTREAM_ENDING = "UserStream終了中...";
+
         private const string FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
 
         private const int ERROR_STATUSBAR_DISP_TIMES = 1;
@@ -1233,7 +1237,8 @@ namespace StarlitTwit
 
             rtxtTwit.Text =
             tsslRestAPI.Text =
-            lblTweetStatus.Text = "";
+            lblTweetStatus.Text = 
+            lblUserStreamInfo.Text = "";
 
             //tabpgPublic.ToolTipText = "全体";
 
@@ -1543,6 +1548,7 @@ namespace StarlitTwit
         //
         private void StartUserStream(bool all_replies)
         {
+            lblUserStreamInfo.Text = STR_USERSTREAM_STARTING;
             tsmiUserStreamEnd.Enabled = false;
             _usingUserStream = true;
             try {
@@ -1559,7 +1565,9 @@ namespace StarlitTwit
                 });
 
                 _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
-                
+
+                lblUserStreamInfo.Text = STR_USERSTREAM;
+
                 _frmUserStreamWatch = new FrmUserStreamWatch();
                 if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
             }
@@ -1573,6 +1581,7 @@ namespace StarlitTwit
         //
         private void EndUserStream()
         {
+            lblUserStreamInfo.Text = STR_USERSTREAM_ENDING;
             tsmiUserStreamStart.Enabled = tsmiUserStreamLog.Enabled = false;
             _usingUserStream = false;
 
@@ -1691,6 +1700,7 @@ namespace StarlitTwit
                 _usingUserStream = false;
                 this.Invoke(new Action(() =>
                 {
+                    lblUserStreamInfo.Text = "";
                     tsmiUserStreamStart.Enabled = true;
                 }));
             }

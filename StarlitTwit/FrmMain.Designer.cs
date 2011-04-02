@@ -48,13 +48,13 @@
             this.tsmi_プロフィール = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiプロフィール更新 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi自分のプロフィール = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUserStream = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUserStreamStart = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUserStreamEnd = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiUserStreamLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_子画面 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi子画面_nothing = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -97,6 +97,7 @@
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
+            this.lblUserStreamInfo = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -271,23 +272,6 @@
             this.tsmi自分のプロフィール.Text = "自分のプロフィール(&M)";
             this.tsmi自分のプロフィール.Click += new System.EventHandler(this.tsmi自分のプロフィール_Click);
             // 
-            // tsmi_子画面
-            // 
-            this.tsmi_子画面.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmi子画面_nothing});
-            this.tsmi_子画面.Enabled = false;
-            this.tsmi_子画面.Name = "tsmi_子画面";
-            this.tsmi_子画面.Size = new System.Drawing.Size(69, 20);
-            this.tsmi_子画面.Text = "子画面(&C)";
-            this.tsmi_子画面.DropDownOpening += new System.EventHandler(this.tsmi_子画面_DropDownOpening);
-            // 
-            // tsmi子画面_nothing
-            // 
-            this.tsmi子画面_nothing.Enabled = false;
-            this.tsmi子画面_nothing.Name = "tsmi子画面_nothing";
-            this.tsmi子画面_nothing.Size = new System.Drawing.Size(152, 22);
-            this.tsmi子画面_nothing.Text = "(なし)";
-            // 
             // tsmiUserStream
             // 
             this.tsmiUserStream.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -305,7 +289,7 @@
             // 
             this.tsmiUserStreamStart.Enabled = false;
             this.tsmiUserStreamStart.Name = "tsmiUserStreamStart";
-            this.tsmiUserStreamStart.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamStart.Size = new System.Drawing.Size(109, 22);
             this.tsmiUserStreamStart.Text = "開始(&S)";
             this.tsmiUserStreamStart.Click += new System.EventHandler(this.tsmiUserStreamStart_Click);
             // 
@@ -313,22 +297,39 @@
             // 
             this.tsmiUserStreamEnd.Enabled = false;
             this.tsmiUserStreamEnd.Name = "tsmiUserStreamEnd";
-            this.tsmiUserStreamEnd.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamEnd.Size = new System.Drawing.Size(109, 22);
             this.tsmiUserStreamEnd.Text = "終了(&E)";
             this.tsmiUserStreamEnd.Click += new System.EventHandler(this.tsmiUserStreamEnd_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(106, 6);
             // 
             // tsmiUserStreamLog
             // 
             this.tsmiUserStreamLog.Enabled = false;
             this.tsmiUserStreamLog.Name = "tsmiUserStreamLog";
-            this.tsmiUserStreamLog.Size = new System.Drawing.Size(152, 22);
+            this.tsmiUserStreamLog.Size = new System.Drawing.Size(109, 22);
             this.tsmiUserStreamLog.Text = "ログ(&L)";
             this.tsmiUserStreamLog.Click += new System.EventHandler(this.tsmiUserStreamLog_Click);
+            // 
+            // tsmi_子画面
+            // 
+            this.tsmi_子画面.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi子画面_nothing});
+            this.tsmi_子画面.Enabled = false;
+            this.tsmi_子画面.Name = "tsmi_子画面";
+            this.tsmi_子画面.Size = new System.Drawing.Size(69, 20);
+            this.tsmi_子画面.Text = "子画面(&C)";
+            this.tsmi_子画面.DropDownOpening += new System.EventHandler(this.tsmi_子画面_DropDownOpening);
+            // 
+            // tsmi子画面_nothing
+            // 
+            this.tsmi子画面_nothing.Enabled = false;
+            this.tsmi子画面_nothing.Name = "tsmi子画面_nothing";
+            this.tsmi子画面_nothing.Size = new System.Drawing.Size(97, 22);
+            this.tsmi子画面_nothing.Text = "(なし)";
             // 
             // statusStrip
             // 
@@ -481,6 +482,7 @@
             // 
             // splContainer.Panel1
             // 
+            this.splContainer.Panel1.Controls.Add(this.lblUserStreamInfo);
             this.splContainer.Panel1.Controls.Add(this.btnURLShorten);
             this.splContainer.Panel1.Controls.Add(this.lblStatuses);
             this.splContainer.Panel1.Controls.Add(this.lblStatusesl);
@@ -502,7 +504,7 @@
             this.splContainer.Panel2.Controls.Add(this.tabTwitDisp);
             this.splContainer.Panel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.splContainer_Panel2_MouseClick);
             this.splContainer.Size = new System.Drawing.Size(492, 619);
-            this.splContainer.SplitterDistance = 106;
+            this.splContainer.SplitterDistance = 98;
             this.splContainer.SplitterWidth = 2;
             this.splContainer.TabIndex = 0;
             this.splContainer.TabStop = false;
@@ -518,7 +520,7 @@
             this.btnURLShorten.HoverImage = "Hover";
             this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnURLShorten.ImageKey = "Normal";
-            this.btnURLShorten.Location = new System.Drawing.Point(409, 58);
+            this.btnURLShorten.Location = new System.Drawing.Point(409, 55);
             this.btnURLShorten.Name = "btnURLShorten";
             this.btnURLShorten.NormalImage = "Normal";
             this.btnURLShorten.Size = new System.Drawing.Size(75, 20);
@@ -606,7 +608,7 @@
             this.btnStateReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnStateReset.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnStateReset.Font = new System.Drawing.Font("MS UI Gothic", 8F);
-            this.btnStateReset.Location = new System.Drawing.Point(4, 84);
+            this.btnStateReset.Location = new System.Drawing.Point(4, 76);
             this.btnStateReset.Name = "btnStateReset";
             this.btnStateReset.Size = new System.Drawing.Size(17, 17);
             this.btnStateReset.TabIndex = 5;
@@ -621,7 +623,7 @@
             this.lblTweetStatus.AutoSize = true;
             this.lblTweetStatus.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.lblTweetStatus.ForeColor = System.Drawing.Color.Red;
-            this.lblTweetStatus.Location = new System.Drawing.Point(21, 90);
+            this.lblTweetStatus.Location = new System.Drawing.Point(21, 82);
             this.lblTweetStatus.Name = "lblTweetStatus";
             this.lblTweetStatus.Size = new System.Drawing.Size(14, 12);
             this.lblTweetStatus.TabIndex = 4;
@@ -631,7 +633,7 @@
             // 
             this.lblRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblRest.AutoSize = true;
-            this.lblRest.Location = new System.Drawing.Point(380, 87);
+            this.lblRest.Location = new System.Drawing.Point(380, 79);
             this.lblRest.Name = "lblRest";
             this.lblRest.Size = new System.Drawing.Size(23, 12);
             this.lblRest.TabIndex = 2;
@@ -640,7 +642,7 @@
             // btnTwit
             // 
             this.btnTwit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTwit.Location = new System.Drawing.Point(409, 37);
+            this.btnTwit.Location = new System.Drawing.Point(409, 34);
             this.btnTwit.Name = "btnTwit";
             this.btnTwit.Size = new System.Drawing.Size(75, 20);
             this.btnTwit.TabIndex = 3;
@@ -657,7 +659,7 @@
             this.rtxtTwit.Location = new System.Drawing.Point(3, 37);
             this.rtxtTwit.Name = "rtxtTwit";
             this.rtxtTwit.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtxtTwit.Size = new System.Drawing.Size(400, 47);
+            this.rtxtTwit.Size = new System.Drawing.Size(400, 39);
             this.rtxtTwit.TabIndex = 2;
             this.rtxtTwit.Text = "";
             this.rtxtTwit.TextChanged += new System.EventHandler(this.rtxtTwit_TextChanged);
@@ -680,7 +682,7 @@
             this.tabTwitDisp.Padding = new System.Drawing.Point(0, 0);
             this.tabTwitDisp.SelectedIndex = 0;
             this.tabTwitDisp.ShowToolTips = true;
-            this.tabTwitDisp.Size = new System.Drawing.Size(488, 507);
+            this.tabTwitDisp.Size = new System.Drawing.Size(488, 515);
             this.tabTwitDisp.TabIndex = 0;
             this.tabTwitDisp.TabExchanged += new System.EventHandler<StarlitTwit.TabMoveEventArgs>(this.tabTwitDisp_TabMoved);
             this.tabTwitDisp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabTwitDisp_MouseDown);
@@ -690,7 +692,7 @@
             this.tabpgHome.Controls.Add(this.uctlDispHome);
             this.tabpgHome.Location = new System.Drawing.Point(4, 19);
             this.tabpgHome.Name = "tabpgHome";
-            this.tabpgHome.Size = new System.Drawing.Size(480, 484);
+            this.tabpgHome.Size = new System.Drawing.Size(480, 492);
             this.tabpgHome.TabIndex = 3;
             this.tabpgHome.Text = "Home";
             this.tabpgHome.UseVisualStyleBackColor = true;
@@ -704,7 +706,7 @@
             this.uctlDispHome.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHome.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHome.Name = "uctlDispHome";
-            this.uctlDispHome.Size = new System.Drawing.Size(480, 484);
+            this.uctlDispHome.Size = new System.Drawing.Size(480, 492);
             this.uctlDispHome.TabIndex = 2;
             // 
             // tabpgReply
@@ -781,6 +783,16 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // lblUserStreamInfo
+            // 
+            this.lblUserStreamInfo.AutoSize = true;
+            this.lblUserStreamInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblUserStreamInfo.Location = new System.Drawing.Point(380, 4);
+            this.lblUserStreamInfo.Name = "lblUserStreamInfo";
+            this.lblUserStreamInfo.Size = new System.Drawing.Size(14, 12);
+            this.lblUserStreamInfo.TabIndex = 13;
+            this.lblUserStreamInfo.Text = "...";
             // 
             // FrmMain
             // 
@@ -888,6 +900,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamEnd;
         private System.Windows.Forms.ToolStripMenuItem tsmiUserStreamLog;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.Label lblUserStreamInfo;
 
     }
 }
