@@ -63,9 +63,9 @@
             this.label15 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.btnImageChange = new System.Windows.Forms.Button();
+            this.tsmiRenew = new System.Windows.Forms.ToolStripMenuItem();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
-            this.tsmiRenew = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
@@ -465,6 +465,14 @@
             this.btnImageChange.UseVisualStyleBackColor = true;
             this.btnImageChange.Click += new System.EventHandler(this.btnImageChange_Click);
             // 
+            // tsmiRenew
+            // 
+            this.tsmiRenew.Name = "tsmiRenew";
+            this.tsmiRenew.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.tsmiRenew.Size = new System.Drawing.Size(62, 20);
+            this.tsmiRenew.Text = "更新(F5)";
+            this.tsmiRenew.Click += new System.EventHandler(this.tsmiRenew_Click);
+            // 
             // rtxtDescription
             // 
             this.rtxtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -487,14 +495,6 @@
             this.picbIcon.Size = new System.Drawing.Size(48, 48);
             this.picbIcon.TabIndex = 12;
             this.picbIcon.TabStop = false;
-            // 
-            // tsmiRenew
-            // 
-            this.tsmiRenew.Name = "tsmiRenew";
-            this.tsmiRenew.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.tsmiRenew.Size = new System.Drawing.Size(41, 20);
-            this.tsmiRenew.Text = "更新";
-            this.tsmiRenew.Click += new System.EventHandler(this.tsmiRenew_Click);
             // 
             // FrmProfile
             // 
