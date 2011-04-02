@@ -74,6 +74,7 @@
             this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.splContainer = new System.Windows.Forms.SplitContainer();
+            this.lblUserStreamInfo = new System.Windows.Forms.Label();
             this.btnURLShorten = new StarlitTwit.SplitButton();
             this.lblStatuses = new System.Windows.Forms.Label();
             this.lblStatusesl = new System.Windows.Forms.Label();
@@ -97,7 +98,6 @@
             this.tabpgDirect = new System.Windows.Forms.TabPage();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
-            this.lblUserStreamInfo = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -509,6 +509,17 @@
             this.splContainer.TabIndex = 0;
             this.splContainer.TabStop = false;
             // 
+            // lblUserStreamInfo
+            // 
+            this.lblUserStreamInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblUserStreamInfo.AutoSize = true;
+            this.lblUserStreamInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblUserStreamInfo.Location = new System.Drawing.Point(380, 4);
+            this.lblUserStreamInfo.Name = "lblUserStreamInfo";
+            this.lblUserStreamInfo.Size = new System.Drawing.Size(14, 12);
+            this.lblUserStreamInfo.TabIndex = 13;
+            this.lblUserStreamInfo.Text = "...";
+            // 
             // btnURLShorten
             // 
             this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -714,7 +725,7 @@
             this.tabpgReply.Controls.Add(this.uctlDispReply);
             this.tabpgReply.Location = new System.Drawing.Point(4, 19);
             this.tabpgReply.Name = "tabpgReply";
-            this.tabpgReply.Size = new System.Drawing.Size(480, 484);
+            this.tabpgReply.Size = new System.Drawing.Size(480, 492);
             this.tabpgReply.TabIndex = 1;
             this.tabpgReply.Text = "Reply";
             this.tabpgReply.UseVisualStyleBackColor = true;
@@ -736,7 +747,7 @@
             this.tabpgHistory.Controls.Add(this.uctlDispHistory);
             this.tabpgHistory.Location = new System.Drawing.Point(4, 19);
             this.tabpgHistory.Name = "tabpgHistory";
-            this.tabpgHistory.Size = new System.Drawing.Size(480, 484);
+            this.tabpgHistory.Size = new System.Drawing.Size(480, 492);
             this.tabpgHistory.TabIndex = 0;
             this.tabpgHistory.Text = "History";
             this.tabpgHistory.UseVisualStyleBackColor = true;
@@ -758,7 +769,7 @@
             this.tabpgDirect.Controls.Add(this.uctlDispDirect);
             this.tabpgDirect.Location = new System.Drawing.Point(4, 19);
             this.tabpgDirect.Name = "tabpgDirect";
-            this.tabpgDirect.Size = new System.Drawing.Size(480, 484);
+            this.tabpgDirect.Size = new System.Drawing.Size(480, 492);
             this.tabpgDirect.TabIndex = 4;
             this.tabpgDirect.Text = "Direct";
             this.tabpgDirect.UseVisualStyleBackColor = true;
@@ -783,16 +794,6 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // lblUserStreamInfo
-            // 
-            this.lblUserStreamInfo.AutoSize = true;
-            this.lblUserStreamInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblUserStreamInfo.Location = new System.Drawing.Point(380, 4);
-            this.lblUserStreamInfo.Name = "lblUserStreamInfo";
-            this.lblUserStreamInfo.Size = new System.Drawing.Size(14, 12);
-            this.lblUserStreamInfo.TabIndex = 13;
-            this.lblUserStreamInfo.Text = "...";
             // 
             // FrmMain
             // 
