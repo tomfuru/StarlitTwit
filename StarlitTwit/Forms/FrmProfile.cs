@@ -30,7 +30,7 @@ namespace StarlitTwit
             CanEdit = canEdit;
             if (!canEdit) {
                 rtxtDescription.ReadOnly = txtLocation.ReadOnly = txtName.ReadOnly = txtUrl.ReadOnly = true;
-                lblDescriptionRest.Visible = btnRenew.Visible = false;
+                btnImageChange.Visible = lblDescriptionRest.Visible = btnRenew.Visible = false;
                 txtUrl.Visible = false;
             }
             else {

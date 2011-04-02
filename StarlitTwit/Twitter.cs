@@ -14,6 +14,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using Newtonsoft.Json;
+using System.Drawing.Imaging;
 
 /* Twitter API Resource 
  * statuses (Timeline)
@@ -1093,6 +1094,31 @@ namespace StarlitTwit
             return ConvertToUserProfile(el);
         }
         #endregion (account_update_profile)
+        //-------------------------------------------------------------------------------
+        #region account_update_profile_image 画像更新
+        //-------------------------------------------------------------------------------
+        //
+        public object account_update_profile_image(string imgfilename, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            string contentType;
+            Guid guid = image.RawFormat.Guid;
+            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jepg"; }
+            else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
+            else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
+            else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
+
+            XElement el = PostImageToAPI(url, imgfilename, image, contentType);
+
+            return null;
+        }
+        #endregion (account_update_profile_image)
 
         //-------------------------------------------------------------------------------
         #endregion (account/ (アカウント関連))
@@ -1383,34 +1409,75 @@ namespace StarlitTwit
             }
             string url = GetUrlWithOAuthParameters(URL_SAMPLE, GET, paramdic);
 
-            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationTokenSource cts = new CancellationTokenSource(); // Cancelのためのオブジェクト
             CancellationToken token = cts.Token;
 
             ThreadStart ReadStreaming = () =>
             {
-                WebRequest req = WebRequest.Create(url); // User-Agent?
-                WebResponse res;
-                try {
-                    res = req.GetResponse();
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url); // User-Agent?
+                req.ReadWriteTimeout = 90000;
 
-                    using (Stream stream = res.GetResponseStream())
-                    using (StreamReader sr = new StreamReader(stream)) {
-                        while (!sr.EndOfStream) {
-                            if (token.IsCancellationRequested) {
-                                req.Abort();
-                                return;
+                Encoding enc = Encoding.UTF8;
+
+                HttpWebResponse res;
+                try {
+                    res = (HttpWebResponse)req.GetResponse();
+                    byte[] b = new byte[0x4000];            // 16KBの受信バッファ
+                    StringBuilder sb = new StringBuilder(); // 受信文字列バッファ
+
+                    const string NEWLINE = "\r\n";
+                    // データ受信時コールバック
+                    bool canceled = false;
+                    AsyncCallback callback = null;
+                    callback = ar =>
+                    {
+                        Stream stream = (Stream)ar.AsyncState;
+                        try {
+                            int len = stream.EndRead(ar);
+                            if (len > 0) {
+                                sb.Append(enc.GetString(b, 0, len));
+                                stream.BeginRead(b, 0, b.Length, callback, stream);
+                                // 受信文字列解析
+                                while (true) {
+                                    string str = sb.ToString();
+                                    int newline = str.IndexOf(NEWLINE);
+                                    if (newline == 0) {
+                                        sb.Remove(0, NEWLINE.Length);
+                                    }
+                                    else if (newline > 0) {
+                                        string line = sb.ToString(0, newline);
+                                        sb.Remove(0, newline + NEWLINE.Length);
+                                        var item = ConvertToStreamItem(JsonToXElement(line));　// XElement取得
+                                        action(item.Item1, item.Item2); // イベント
+                                    }
+                                    else { break; }
+                                }
                             }
-                            string line = sr.ReadLine();
-                            if (!string.IsNullOrEmpty(line)) {
-                                var item = ConvertToStreamItem(JsonToXElement(line));
-                                action(item.Item1, item.Item2);
-                            }
+                            else { canceled = true; }　// 接続きれた
                         }
-                        DateTime dt = DateTime.Now; // for debug
+                        catch (WebException ex) {
+                            if (ex.Status == WebExceptionStatus.RequestCanceled) { return; } // キャンセルした時
+                        }
+                    };
+
+                    Stream resStream = res.GetResponseStream();
+                    resStream.BeginRead(b, 0, b.Length, callback, resStream);
+
+                    while (true) { // キャンセル確認ループ
+                        if (token.IsCancellationRequested) {
+                            req.Abort();
+                            canceled = true;
+                            break;
+                        }
+                        if (canceled) { break; }
+                        Thread.Sleep(10);
                     }
                 }
                 catch (WebException) {
 
+                }
+                catch (Exception ex) {
+                    Log.DebugLog(ex);
                 }
                 finally { endact(); }
             };
@@ -1558,6 +1625,78 @@ namespace StarlitTwit
             return res;
         }
         #endregion (RequestWeb)
+        //-------------------------------------------------------------------------------
+        #region -PostImageToAPI 画像を投稿
+        //-------------------------------------------------------------------------------
+        //
+        private XElement PostImageToAPI(string uri, string filepath, Image image, string imageContentType)
+        {
+            Encoding enc = Encoding.UTF8;
+
+            string boundary = Environment.TickCount.ToString();
+
+            WebRequest req = WebRequest.Create(uri);
+            req.Method = POST;
+            req.Timeout = 20000;
+            req.ContentType = "multipart/form-data; boundary=" + boundary;
+
+            Stream reqStream = req.GetRequestStream();
+            {
+                StringBuilder startsb = new StringBuilder();
+                startsb.Append("--");
+                startsb.AppendLine(boundary);
+                startsb.AppendFormat("Content-Disposition: form-data; name=\"image\"; filename=\"{0}\"", filepath);
+                startsb.AppendLine();
+                startsb.Append("Content-Type: image/");
+                startsb.AppendLine(imageContentType);
+                string startData = startsb.ToString();
+
+                byte[] d = enc.GetBytes(startData);
+                reqStream.Write(d, 0, d.Length);
+            }
+            image.Save(reqStream, image.RawFormat);
+            {
+                string endData = "--" + boundary + "--";
+
+                byte[] d = enc.GetBytes(endData);
+                reqStream.Write(d, 0, d.Length);
+            }
+
+            WebResponse res;
+            try {
+                res = req.GetResponse();
+            }
+            catch (WebException ex) {
+                if (ex.Status == WebExceptionStatus.ProtocolError) {
+                    HttpWebResponse webres = (HttpWebResponse)ex.Response;
+                    throw new TwitterAPIException((int)webres.StatusCode, webres.StatusDescription);
+                }
+                else if (ex.Status == WebExceptionStatus.NameResolutionFailure
+                      || ex.Status == WebExceptionStatus.ConnectFailure) {
+                    throw new TwitterAPIException(0, ex.Message);
+                }
+                else if (ex.Status == WebExceptionStatus.Timeout) {
+                    throw new TwitterAPIException(408, ex.Message);
+                }
+                else {
+                    // 不明な(その他の)エラー
+                    Log.DebugLog(ex);
+                    throw new TwitterAPIException(-1, ex.Message);
+                }
+            }
+
+            using (Stream resStream = res.GetResponseStream()) {
+                using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
+                    try {
+                        return XElement.Load(reader);
+                    }
+                    catch (XmlException ex) {
+                        throw new TwitterAPIException(1000, ex.Message);
+                    }
+                }
+            }
+        }
+        #endregion (PostImageToAPI)
         //===============================================================================
         #region -GetUrlWithOAuthParameters OAuthのパラメータ情報を付加したURLを取得します。
         //-------------------------------------------------------------------------------

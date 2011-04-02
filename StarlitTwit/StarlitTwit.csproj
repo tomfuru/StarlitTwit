@@ -91,6 +91,12 @@
     <Compile Include="Forms\FrmProfile.Designer.cs">
       <DependentUpon>FrmProfile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmRenewProfileImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmRenewProfileImage.Designer.cs">
+      <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmUserStreamWatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -219,6 +225,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmProfile.resx">
       <DependentUpon>FrmProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmRenewProfileImage.resx">
+      <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmUserStreamWatch.resx">
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>

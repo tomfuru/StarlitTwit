@@ -213,11 +213,13 @@ namespace StarlitTwit
         //===============================================================================
         #region イベント
         //-------------------------------------------------------------------------------
-        #region FrmMain_Load フォームロード時
+        #region OnLoad フォームロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmMain_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             SettingsData = SettingsData.Restore();
 
             // ↓設定を復元↓
@@ -265,11 +267,27 @@ namespace StarlitTwit
         }
         #endregion (FrmMain_Load)
         //-------------------------------------------------------------------------------
-        #region FrmMain_FormClosed フォームクローズ時
+        #region OnFormClosing フォームクローズ前
         //-------------------------------------------------------------------------------
         //
-        private void FrmMain_FormClosed(object sender, FormClosedEventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            // UserStream終了を待つ
+            if (_usingUserStream && _userStreamCancellationTS != null) {
+                _userStreamCancellationTS.Cancel();
+                while (_usingUserStream) { Thread.Sleep(10); }
+            }
+
+            base.OnFormClosing(e);
+        }
+        #endregion (OnFormClosing)
+        //-------------------------------------------------------------------------------
+        #region OnClosed フォームクローズ後
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
             // フォーム情報保存
             SettingsData.WindowPosition = this.Location;
             SettingsData.WindowSize = this.Size;
@@ -279,7 +297,7 @@ namespace StarlitTwit
 
             tasktray.Visible = false;
         }
-        #endregion (FrmMain_FormClosed)
+        #endregion (OnClosed)
         //-------------------------------------------------------------------------------
         #region ↓諸コントロール
         //-------------------------------------------------------------------------------
@@ -1525,21 +1543,25 @@ namespace StarlitTwit
         {
             tsmiUserStreamEnd.Enabled = false;
             _usingUserStream = true;
-            // RESTによるデータ取り込み
-            Utilization.InvokeTransactionDoingEvents(() =>
-            {
-                foreach (var tabpage in DEFAULT_TABPAGES) {
-                    UctlDispTwit uctlDisp = _dispTwitDic[tabpage];
-                    string labelText = string.Format(GETTING_FORMAT_FOR_USERSTREAM, tabpage.Text);
-                    tssLabel.SetText(labelText);
-                    GetMostRecentTweets(uctlDisp);
-                    tssLabel.RemoveText(labelText);
-                }
-            });
+            try {
+                // RESTによるデータ取り込み
+                Utilization.InvokeTransactionDoingEvents(() =>
+                {
+                    foreach (var tabpage in DEFAULT_TABPAGES) {
+                        UctlDispTwit uctlDisp = _dispTwitDic[tabpage];
+                        string labelText = string.Format(GETTING_FORMAT_FOR_USERSTREAM, tabpage.Text);
+                        tssLabel.SetText(labelText);
+                        GetMostRecentTweets(uctlDisp);
+                        tssLabel.RemoveText(labelText);
+                    }
+                });
 
-            _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
-            _frmUserStreamWatch = new FrmUserStreamWatch();
-            if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
+                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
+                
+                _frmUserStreamWatch = new FrmUserStreamWatch();
+                if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
+            }
+            catch (InvalidOperationException) { }
             tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
         }
         #endregion (StartUserStream)
@@ -1664,6 +1686,7 @@ namespace StarlitTwit
         private void UserStreamEndEvent()
         {
             try {
+                _usingUserStream = false;
                 this.Invoke(new Action(() =>
                 {
                     tsmiUserStreamStart.Enabled = true;

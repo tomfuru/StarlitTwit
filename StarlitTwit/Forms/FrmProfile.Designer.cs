@@ -61,9 +61,10 @@
             this.llblWeb = new System.Windows.Forms.LinkLabel();
             this.lblListedNum = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.btnImageChange = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -440,6 +441,14 @@
             this.label15.TabIndex = 35;
             this.label15.Text = "リスト：";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(257, 24);
+            this.menuStrip1.TabIndex = 37;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
             // rtxtDescription
             // 
             this.rtxtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -463,19 +472,23 @@
             this.picbIcon.TabIndex = 12;
             this.picbIcon.TabStop = false;
             // 
-            // menuStrip1
+            // btnImageChange
             // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(257, 24);
-            this.menuStrip1.TabIndex = 37;
-            this.menuStrip1.Text = "menuStrip1";
+            this.btnImageChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnImageChange.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnImageChange.Location = new System.Drawing.Point(14, 79);
+            this.btnImageChange.Name = "btnImageChange";
+            this.btnImageChange.Size = new System.Drawing.Size(48, 18);
+            this.btnImageChange.TabIndex = 38;
+            this.btnImageChange.Text = "変更";
+            this.btnImageChange.UseVisualStyleBackColor = true;
             // 
             // FrmProfile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(257, 486);
+            this.Controls.Add(this.btnImageChange);
             this.Controls.Add(this.lblListedNum);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.llblWeb);
@@ -569,5 +582,6 @@
         private System.Windows.Forms.Label lblListedNum;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.Button btnImageChange;
     }
 }
