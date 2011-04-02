@@ -62,9 +62,11 @@
             this.lblListedNum = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.btnImageChange = new System.Windows.Forms.Button();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
-            this.btnImageChange = new System.Windows.Forms.Button();
+            this.tsmiRenew = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -443,11 +445,25 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRenew});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(257, 24);
             this.menuStrip1.TabIndex = 37;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // btnImageChange
+            // 
+            this.btnImageChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnImageChange.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnImageChange.Location = new System.Drawing.Point(14, 79);
+            this.btnImageChange.Name = "btnImageChange";
+            this.btnImageChange.Size = new System.Drawing.Size(48, 18);
+            this.btnImageChange.TabIndex = 38;
+            this.btnImageChange.Text = "変更";
+            this.btnImageChange.UseVisualStyleBackColor = true;
+            this.btnImageChange.Click += new System.EventHandler(this.btnImageChange_Click);
             // 
             // rtxtDescription
             // 
@@ -472,16 +488,13 @@
             this.picbIcon.TabIndex = 12;
             this.picbIcon.TabStop = false;
             // 
-            // btnImageChange
+            // tsmiRenew
             // 
-            this.btnImageChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnImageChange.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnImageChange.Location = new System.Drawing.Point(14, 79);
-            this.btnImageChange.Name = "btnImageChange";
-            this.btnImageChange.Size = new System.Drawing.Size(48, 18);
-            this.btnImageChange.TabIndex = 38;
-            this.btnImageChange.Text = "変更";
-            this.btnImageChange.UseVisualStyleBackColor = true;
+            this.tsmiRenew.Name = "tsmiRenew";
+            this.tsmiRenew.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.tsmiRenew.Size = new System.Drawing.Size(41, 20);
+            this.tsmiRenew.Text = "更新";
+            this.tsmiRenew.Click += new System.EventHandler(this.tsmiRenew_Click);
             // 
             // FrmProfile
             // 
@@ -537,6 +550,8 @@
             this.Text = "...";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmProfile_FormClosing);
             this.Load += new System.EventHandler(this.FrmProfile_Load);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -583,5 +598,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Button btnImageChange;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRenew;
     }
 }

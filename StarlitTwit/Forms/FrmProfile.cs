@@ -72,6 +72,18 @@ namespace StarlitTwit
         #endregion (FrmProfile_FormClosing)
 
         //-------------------------------------------------------------------------------
+        #region btnImageChange_Click (画像)変更ボタンクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void btnImageChange_Click(object sender, EventArgs e)
+        {
+            using (FrmRenewProfileImage frm = new FrmRenewProfileImage()) {
+                frm.ShowDialog(this);
+            }
+        }
+        #endregion (btnImageChange_Click)
+
+        //-------------------------------------------------------------------------------
         #region btnRenew_Click 更新ボタン using Twitter API
         //-------------------------------------------------------------------------------
         //
@@ -121,6 +133,24 @@ namespace StarlitTwit
             lblDescriptionRest.Text = string.Format(FORMAT, MAX_DESCRIPTION_LENGTH - rtxtDescription.TextLength);
         }
         #endregion (rtxtDescription_TextChanged)
+
+        //-------------------------------------------------------------------------------
+        #region tsmiRenew_Click 更新メニュークリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiRenew_Click(object sender, EventArgs e)
+        {
+            UserProfile profile;
+            try {
+                profile = Utilization.GetProfile(_profile.ScreenName);
+                _profile = profile;
+                SetProfile(profile);
+            }
+            catch (TwitterAPIException ex) {
+                Message.ShowWarningMessage("更新に失敗しました。", Utilization.SubTwitterAPIExceptionStr(ex));
+            }
+        }
+        #endregion (tsmiRenew_Click)
 
         //-------------------------------------------------------------------------------
         #region -SetProfile プロフィールセット

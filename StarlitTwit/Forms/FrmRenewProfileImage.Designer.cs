@@ -1,4 +1,4 @@
-﻿namespace StarlitTwit.Forms
+﻿namespace StarlitTwit
 {
     partial class FrmRenewProfileImage
     {
@@ -37,9 +37,11 @@
             // 
             // picbImage
             // 
-            this.picbImage.Location = new System.Drawing.Point(12, 12);
+            this.picbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picbImage.Location = new System.Drawing.Point(10, 12);
             this.picbImage.Name = "picbImage";
-            this.picbImage.Size = new System.Drawing.Size(48, 48);
+            this.picbImage.Size = new System.Drawing.Size(50, 50);
+            this.picbImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picbImage.TabIndex = 0;
             this.picbImage.TabStop = false;
             // 
@@ -95,6 +97,9 @@
             this.Controls.Add(this.picbImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmRenewProfileImage";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "プロフィール画像更新";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmRenewProfileImage_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.picbImage)).EndInit();

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
-using System.Xml.Linq;
-using System.Xml;
-using System.Globalization;
-using System.Diagnostics;
-using System.Threading;
 using System.Text.RegularExpressions;
-using System.Drawing;
+using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using Newtonsoft.Json;
-using System.Drawing.Imaging;
 
 /* Twitter API Resource 
  * statuses (Timeline)
@@ -1097,12 +1097,19 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region account_update_profile_image 画像更新
         //-------------------------------------------------------------------------------
-        //
-        public object account_update_profile_image(string imgfilename, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        /// <summary>
+        /// <para>account/update_profile_image メソッド</para>　
+        /// <para>返り値のUserProfileではURLが反映されてない可能性があるので，最低5秒待ってから取得する。</para>
+        /// </summary>
+        /// <param name="imgFileName">画像ファイルパス</param>
+        /// <param name="image">画像</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile account_update_profile_image(string imgFileName, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             string contentType;
             Guid guid = image.RawFormat.Guid;
-            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jepg"; }
+            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
             else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
             else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
             else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
@@ -1114,9 +1121,7 @@ namespace StarlitTwit
 
             string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
 
-            XElement el = PostImageToAPI(url, imgfilename, image, contentType);
-
-            return null;
+            return ConvertToUserProfile(PostImageToAPI(url, imgFileName, image, contentType));
         }
         #endregion (account_update_profile_image)
 
@@ -1397,7 +1402,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (stream_statuses_sample)
         //-------------------------------------------------------------------------------
-        #region userstream_user UserStream
+        #region userstream_user
         //-------------------------------------------------------------------------------
         //
         public CancellationTokenSource userstream_user(bool all_replies, Action<UserStreamItemType, object> action, Action endact = null)
@@ -1629,7 +1634,7 @@ namespace StarlitTwit
         #region -PostImageToAPI 画像を投稿
         //-------------------------------------------------------------------------------
         //
-        private XElement PostImageToAPI(string uri, string filepath, Image image, string imageContentType)
+        private XElement PostImageToAPI(string uri, string filename, Image image, string imageContentType)
         {
             Encoding enc = Encoding.UTF8;
 
@@ -1645,10 +1650,11 @@ namespace StarlitTwit
                 StringBuilder startsb = new StringBuilder();
                 startsb.Append("--");
                 startsb.AppendLine(boundary);
-                startsb.AppendFormat("Content-Disposition: form-data; name=\"image\"; filename=\"{0}\"", filepath);
+                startsb.AppendFormat("Content-Disposition: form-data; name=\"image\"; filename=\"{0}\"", filename);
                 startsb.AppendLine();
                 startsb.Append("Content-Type: image/");
                 startsb.AppendLine(imageContentType);
+                startsb.AppendLine();
                 string startData = startsb.ToString();
 
                 byte[] d = enc.GetBytes(startData);
@@ -1656,7 +1662,7 @@ namespace StarlitTwit
             }
             image.Save(reqStream, image.RawFormat);
             {
-                string endData = "--" + boundary + "--";
+                string endData = "\n--" + boundary + "--";
 
                 byte[] d = enc.GetBytes(endData);
                 reqStream.Write(d, 0, d.Length);

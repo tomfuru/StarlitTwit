@@ -10,11 +10,13 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Diagnostics;
 
-namespace StarlitTwit.Forms
+namespace StarlitTwit
 {
     public partial class FrmRenewProfileImage : Form
     {
         Image _image = null;
+
+        public bool ProfileImageChanged { get; private set; }
 
         //-------------------------------------------------------------------------------
         #region Constructor
@@ -23,6 +25,7 @@ namespace StarlitTwit.Forms
         public FrmRenewProfileImage()
         {
             InitializeComponent();
+            ProfileImageChanged = false;
         }
         #endregion (Constructor)
 
@@ -53,10 +56,12 @@ namespace StarlitTwit.Forms
             Debug.Assert(_image != null);
 
             try {
-                FrmMain.Twitter.account_update_profile_image(txtImagePath.Text, _image);
+                FrmMain.Twitter.account_update_profile_image(Path.GetFileName(txtImagePath.Text), _image);
+                Message.ShowInfoMessage("更新しました。");
+                ProfileImageChanged = true;
             }
-            catch (TwitterAPIException) {
-                Message.ShowErrorMessage("更新に失敗しました。");
+            catch (TwitterAPIException ex) {
+                Message.ShowWarningMessage("更新に失敗しました。", Utilization.SubTwitterAPIExceptionStr(ex));
             }
         }
         #endregion (btnUpdateImage_Click)
@@ -110,6 +115,8 @@ namespace StarlitTwit.Forms
                 _image = (Image)img.Clone();
                 picbImage.Image = _image;
                 btnUpdateImage.Enabled = true;
+                img.Dispose();
+                success = true;
             }
             finally {
                 if (!success) {

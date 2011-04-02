@@ -34,6 +34,7 @@ namespace StarlitTwit
             // 初期設定
             System.Net.ServicePointManager.Expect100Continue = false;
             System.Net.WebRequest.DefaultWebProxy = null;
+            //System.Net.WebRequest.DefaultWebProxy = new System.Net.WebProxy("localhost",8888); // HttpDebug用
 
             DEFAULT_TABPAGES = new TabPage[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
             Twitter = new Twitter();
@@ -277,6 +278,7 @@ namespace StarlitTwit
                 _userStreamCancellationTS.Cancel();
                 while (_usingUserStream) { Thread.Sleep(10); }
             }
+            e.Cancel = false;
 
             base.OnFormClosing(e);
         }
