@@ -514,7 +514,7 @@
             this.lblUserStreamInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblUserStreamInfo.AutoSize = true;
             this.lblUserStreamInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblUserStreamInfo.Location = new System.Drawing.Point(380, 4);
+            this.lblUserStreamInfo.Location = new System.Drawing.Point(362, 4);
             this.lblUserStreamInfo.Name = "lblUserStreamInfo";
             this.lblUserStreamInfo.Size = new System.Drawing.Size(14, 12);
             this.lblUserStreamInfo.TabIndex = 13;

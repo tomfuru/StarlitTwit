@@ -1462,6 +1462,8 @@ namespace StarlitTwit
                         }
                         catch (WebException ex) {
                             if (ex.Status == WebExceptionStatus.RequestCanceled) { return; } // キャンセルした時
+                            // TODO:切断された時
+
                         }
                     };
 
@@ -1479,7 +1481,8 @@ namespace StarlitTwit
                     }
                 }
                 catch (WebException) {
-
+                    // TODO:既に接続が切れていた時
+                    
                 }
                 catch (Exception ex) {
                     Log.DebugLog(ex);
@@ -1494,7 +1497,6 @@ namespace StarlitTwit
             return cts;
         }
         #endregion (userstream_user)
-
 
         //===============================================================================
         #region Private Methods
@@ -2212,9 +2214,9 @@ namespace StarlitTwit
                 XElement target = el.Element("target");
                 return new RelationshipData() {
                     Source_ScreenName = source.Element("screen_name").Value,
-                    Source_UserID = long.Parse(source.Element("id").Value),
+                    Source_UserID = long.Parse(source.Element("id_str").Value),
                     Target_ScreenName = target.Element("screen_name").Value,
-                    Target_UserID = long.Parse(target.Element("id").Value),
+                    Target_UserID = long.Parse(target.Element("id_str").Value),
                     Following = bool.Parse(source.Element("following").Value),
                     Followed = bool.Parse(source.Element("followed_by").Value),
                     AllReplies = ParseBoolConsideringNil(source.Element("all_replies")),

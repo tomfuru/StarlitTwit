@@ -1001,7 +1001,7 @@ namespace StarlitTwit
 
             int count = 0;
             foreach (Form form in Application.OpenForms) {
-                if (form == this || form is MyToolTipBase.FrmDisp) { continue; }
+                if (form == this || form is MyToolTipBase.FrmDisp || !form.Visible) { continue; }
                 ToolStripMenuItem tsmi;
                 if (menuDic != null && menuDic.ContainsKey(form)) {
                     tsmi = menuDic[form];
@@ -1028,7 +1028,7 @@ namespace StarlitTwit
         }
         #endregion (tsmi_子画面_DropDownOpening)
         //-------------------------------------------------------------------------------
-        #region tsmi小画面_Dialog_Click 小画面ダイアログメニュークリック時
+        #region tsmi小画面_Dialog_Click 子画面ダイアログメニュークリック時
         //-------------------------------------------------------------------------------
         //
         private void tsmi小画面_Dialog_Click(object sender, EventArgs e)
