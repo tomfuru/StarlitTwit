@@ -7,7 +7,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace StarlitTwit
 {
-    // 利用： http://d.hatena.ne.jp/barycentric/20091022/1256225627
+    // 交換について　利用： http://d.hatena.ne.jp/barycentric/20091022/1256225627
     public class TabControlEx : TabControl
     {
         //-------------------------------------------------------------------------------

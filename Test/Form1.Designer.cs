@@ -389,6 +389,7 @@
             this.anisTabControl1.Controls.Add(this.tabPage2);
             this.anisTabControl1.Controls.Add(this.tabPage3);
             this.anisTabControl1.Controls.Add(this.tabPage4);
+            this.anisTabControl1.HotTrack = true;
             this.anisTabControl1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.anisTabControl1.Location = new System.Drawing.Point(102, 93);
             this.anisTabControl1.Name = "anisTabControl1";
