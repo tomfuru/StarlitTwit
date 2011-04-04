@@ -1798,7 +1798,14 @@ namespace StarlitTwit
                         case UserStreamEventType.user_update:
                             sb.Append(string.Format("{0} Profile Update", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)));
                             break;
+                        default: // Unknown
+                            sb.Append(string.Format("{0} unknown UserStreamEventType {1}",
+                                      d.Time.ToString(Utilization.STR_DATETIMEFORMAT), (int)d.Type));
+                            break;
                     }
+                    break;
+                default: // Unknown
+                    sb.Append(string.Format("unknown UserStreamItemType {0}", data.ToString()));
                     break;
             }
             return sb.ToString();
