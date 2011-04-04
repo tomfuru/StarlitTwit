@@ -1126,7 +1126,7 @@ namespace StarlitTwit
         private void tsmiTab_EditTab_Click(object sender, EventArgs e)
         {
             tssLabel.SetText(STR_WAITING_TABEDIT);
-            TabPage tabpg = tabTwitDisp.SelectedTab;
+            TabPageEx tabpg = tabTwitDisp.SelectedTab;
             LockAndProcess(_mreThreadConfirm, _mreThreadRun, () =>
             {
                 tssLabel.RemoveText(STR_WAITING_TABEDIT);
@@ -1166,7 +1166,7 @@ namespace StarlitTwit
         //
         private void tsmiTab_DeleteTab_Click(object sender, EventArgs e)
         {
-            TabPage tabpg = tabTwitDisp.SelectedTab;
+            TabPageEx tabpg = tabTwitDisp.SelectedTab;
             if (Message.ShowQuestionMessage("本当に削除してよろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
                 tssLabel.SetText(STR_WAITING_DELETETAB);
                 LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
@@ -1357,7 +1357,7 @@ namespace StarlitTwit
         /// <param name="selectTab">タブを選択するか</param>
         private void MakeTab(TabData tabdata, bool selectTab)
         {
-            TabPage newtabpg = new TabPage(tabdata.TabName) {
+            TabPageEx newtabpg = new TabPageEx(tabdata.TabName) {
                 Tag = tabdata.TabName
             };
             UctlDispTwit newDispTwit = new UctlDispTwit() {

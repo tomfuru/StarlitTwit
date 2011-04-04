@@ -170,6 +170,12 @@
     <Compile Include="UserControls\RichTextBoxHash.Designer.cs">
       <DependentUpon>RichTextBoxHash.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TabControlEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\TabPageEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\ToolStripStatusLabelEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -188,9 +194,6 @@
     </Compile>
     <Compile Include="UserControls\SplitButton.designer.cs">
       <DependentUpon>SplitButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\TabControlEx.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\UctlDispTwit.cs">
       <SubType>UserControl</SubType>

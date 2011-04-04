@@ -184,6 +184,11 @@ namespace Test
         {
             richTextBox3.ChangeFonts(null);
         }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            label8.Text = string.Format("Width:{0}", TextRenderer.MeasureText(textBox2.Text,textBox2.Font));
+        }
     }
 }
 

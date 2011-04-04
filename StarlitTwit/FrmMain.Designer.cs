@@ -89,13 +89,13 @@
             this.btnTwit = new System.Windows.Forms.Button();
             this.rtxtTwit = new StarlitTwit.RichTextBoxEx();
             this.tabTwitDisp = new StarlitTwit.TabControlEx();
-            this.tabpgHome = new System.Windows.Forms.TabPage();
+            this.tabpgHome = new TabPageEx();
             this.uctlDispHome = new StarlitTwit.UctlDispTwit();
-            this.tabpgReply = new System.Windows.Forms.TabPage();
+            this.tabpgReply = new TabPageEx();
             this.uctlDispReply = new StarlitTwit.UctlDispTwit();
-            this.tabpgHistory = new System.Windows.Forms.TabPage();
+            this.tabpgHistory = new TabPageEx();
             this.uctlDispHistory = new StarlitTwit.UctlDispTwit();
-            this.tabpgDirect = new System.Windows.Forms.TabPage();
+            this.tabpgDirect = new TabPageEx();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
             this.menuStrip.SuspendLayout();
@@ -835,16 +835,16 @@
 
         private System.Windows.Forms.Button btnTwit;
         private TabControlEx tabTwitDisp;
-        private System.Windows.Forms.TabPage tabpgHistory;
+        private TabPageEx tabpgHistory;
         private System.Windows.Forms.SplitContainer splContainer;
         private UctlDispTwit uctlDispHistory;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem tsmi_ファイル;
         private System.Windows.Forms.ToolStripMenuItem tsmi_機能;
         private System.Windows.Forms.ToolStripMenuItem tsmi認証;
-        private System.Windows.Forms.TabPage tabpgReply;
+        private TabPageEx tabpgReply;
         private UctlDispTwit uctlDispReply;
-        private System.Windows.Forms.TabPage tabpgHome;
+        private TabPageEx tabpgHome;
         private UctlDispTwit uctlDispHome;
         private System.Windows.Forms.ToolStripMenuItem tsmiファイル_終了;
         private System.Windows.Forms.ToolStripMenuItem tsmiファイル_設定;
@@ -854,7 +854,7 @@
         private ToolStripStatusLabelEx tssLabel;
         private System.Windows.Forms.ToolStripMenuItem tsmi更新;
         private System.Windows.Forms.Label lblTweetStatus;
-        private System.Windows.Forms.TabPage tabpgDirect;
+        private TabPageEx tabpgDirect;
         private UctlDispTwit uctlDispDirect;
         private System.Windows.Forms.ContextMenuStrip menuTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiTab_MakeTab;

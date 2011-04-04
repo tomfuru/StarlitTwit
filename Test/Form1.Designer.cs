@@ -42,6 +42,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelEx1 = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.button2 = new System.Windows.Forms.Button();
@@ -51,15 +52,14 @@
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.richTextBox3 = new StarlitTwit.RichTextBoxHash();
-            this.toolStripStatusLabelEx1 = new StarlitTwit.ToolStripStatusLabelEx();
             this.tabControlEx1 = new StarlitTwit.TabControlEx();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage5 = new StarlitTwit.TabPageEx();
             this.label7 = new System.Windows.Forms.Label();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new StarlitTwit.TabPageEx();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new StarlitTwit.TabPageEx();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.tabPage8 = new StarlitTwit.TabPageEx();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.anisTabControl1 = new Anis.Controls.AnisTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -69,6 +69,8 @@
             this.toolTip2 = new StarlitTwit.ToolTipPicture(this.components);
             this.toolTip3 = new StarlitTwit.PermanentToolTip(this.components);
             this.testPermanentToolTip1 = new Test.TestPermanentToolTip();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -214,6 +216,11 @@
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // toolStripStatusLabelEx1
+            // 
+            this.toolStripStatusLabelEx1.Name = "toolStripStatusLabelEx1";
+            this.toolStripStatusLabelEx1.Size = new System.Drawing.Size(0, 17);
+            // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
@@ -287,11 +294,6 @@
             this.richTextBox3.Text = "";
             this.richTextBox3.TextChanged += new System.EventHandler(this.richTextBox3_TextChanged);
             // 
-            // toolStripStatusLabelEx1
-            // 
-            this.toolStripStatusLabelEx1.Name = "toolStripStatusLabelEx1";
-            this.toolStripStatusLabelEx1.Size = new System.Drawing.Size(0, 0);
-            // 
             // tabControlEx1
             // 
             this.tabControlEx1.AllowDrop = true;
@@ -300,7 +302,7 @@
             this.tabControlEx1.Controls.Add(this.tabPage7);
             this.tabControlEx1.Controls.Add(this.tabPage8);
             this.tabControlEx1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tabControlEx1.ItemSize = new System.Drawing.Size(59, 18);
+            this.tabControlEx1.ItemSize = new System.Drawing.Size(0, 18);
             this.tabControlEx1.Location = new System.Drawing.Point(102, 211);
             this.tabControlEx1.Name = "tabControlEx1";
             this.tabControlEx1.SelectedIndex = 0;
@@ -315,7 +317,6 @@
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(371, 74);
             this.tabPage5.TabIndex = 0;
-            this.tabPage5.Text = "tabPage5";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -335,7 +336,7 @@
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(371, 74);
             this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "tabPage6";
+            this.tabPage6.Text = "わたしですあｄさ";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // checkedListBox1
@@ -354,7 +355,6 @@
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage7.Size = new System.Drawing.Size(371, 74);
             this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "tabPage7";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // maskedTextBox1
@@ -372,7 +372,6 @@
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage8.Size = new System.Drawing.Size(371, 74);
             this.tabPage8.TabIndex = 3;
-            this.tabPage8.Text = "tabPage8";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // comboBox1
@@ -405,7 +404,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(317, 75);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "tab";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -461,6 +460,23 @@
             this.testPermanentToolTip1.ReshowDelay = 100;
             this.testPermanentToolTip1.ShowAlways = true;
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(560, 247);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(394, 19);
+            this.textBox2.TabIndex = 19;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(769, 269);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(35, 12);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "label8";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -468,6 +484,8 @@
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.ClientSize = new System.Drawing.Size(997, 581);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.richTextBox3);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.propertyGrid1);
@@ -530,10 +548,10 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private StarlitTwit.TabControlEx tabControlEx1;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.TabPage tabPage7;
-        private System.Windows.Forms.TabPage tabPage8;
+        private StarlitTwit.TabPageEx tabPage5;
+        private StarlitTwit.TabPageEx tabPage6;
+        private StarlitTwit.TabPageEx tabPage7;
+        private StarlitTwit.TabPageEx tabPage8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
@@ -551,6 +569,8 @@
         private TestPermanentToolTip testPermanentToolTip1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private StarlitTwit.RichTextBoxHash richTextBox3;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label8;
     }
 }
 

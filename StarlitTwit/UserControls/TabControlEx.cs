@@ -4,6 +4,7 @@ using System.Drawing;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms.VisualStyles;
+using System.Collections.Generic;
 
 namespace StarlitTwit
 {
@@ -37,6 +38,7 @@ namespace StarlitTwit
         //
         public TabControlEx()
         {
+            _tabpageCollection = new TabPageExCollection(base.TabPages);
             MinMovableIndex = 0;
             MaxMovableIndex = int.MaxValue;
 
@@ -54,6 +56,31 @@ namespace StarlitTwit
         #endregion (Constructor)
 
         //-------------------------------------------------------------------------------
+        #region OnControlAdded
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnControlAdded(ControlEventArgs e)
+        {
+            base.OnControlAdded(e);
+            if (e.Control is TabPageEx) { // Controls.AddでAddされるように
+                this.TabPages.AddListOnly((TabPageEx)e.Control);
+            }
+        }
+        #endregion (OnControlAdded)
+        //-------------------------------------------------------------------------------
+        #region OnControlRemoved
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnControlRemoved(ControlEventArgs e)
+        {
+            base.OnControlRemoved(e);
+            if (e.Control is TabPageEx) {
+                this.TabPages.RemoveListOnly((TabPageEx)e.Control);
+            }
+        }
+        #endregion (OnControlRemoved)
+
+        //-------------------------------------------------------------------------------
         #region OnPaint 描画
         //-------------------------------------------------------------------------------
         //
@@ -67,16 +94,16 @@ namespace StarlitTwit
             if (this.TabPages.Count == 0) { return; }
 
             //TabPageの枠を描画する
-            TabPage page = this.TabPages[this.SelectedIndex];
+            TabPageEx page = this.TabPages[this.SelectedIndex];
             Rectangle pageRect = new Rectangle(page.Bounds.X - 2, page.Bounds.Y - 2,
                                                page.Bounds.Width + 5, page.Bounds.Height + 5);
             TabRenderer.DrawTabPage(e.Graphics, pageRect);
 
-            var tabpages = new System.Collections.Generic.List<TabPage>();
-            foreach (TabPage p in TabPages) {
+            var tabpages = new System.Collections.Generic.List<TabPageEx>();
+            foreach (TabPageEx p in TabPages) {
                 tabpages.Add(p);
             }
-            
+
 
             //タブを描画する
             for (int i = 0; i < this.TabPages.Count; i++) {
@@ -165,14 +192,14 @@ namespace StarlitTwit
             Point pt = PointToClient(new Point(e.X, e.Y));
 
             //■ptからhovering overタブを得る．
-            TabPage hoverTab = GetTabPageByPoint(pt);
+            TabPageEx hoverTab = GetTabPageByPoint(pt);
 
             //■タブがキチンと取れているかどうかで条件分岐
-            if (hoverTab != null && e.Data.GetDataPresent(typeof(TabPage))) {
+            if (hoverTab != null && e.Data.GetDataPresent(typeof(TabPageEx))) {
                 //タブが取得できた場合の処理
 
                 e.Effect = DragDropEffects.Move;
-                TabPage draggedTab = (TabPage)e.Data.GetData(typeof(TabPage));
+                TabPageEx draggedTab = (TabPageEx)e.Data.GetData(typeof(TabPageEx));
 
                 int srcTabIndex = FindIndex(draggedTab);
                 int dstTabIndex = FindIndex(hoverTab);
@@ -187,10 +214,10 @@ namespace StarlitTwit
                 if (srcTabIndex != dstTabIndex) {
                     //SuspendPaint();
                     this.SuspendLayout();//★これ大事
-                    //TabPage tmp = TabPages[srcTabIndex];
+                    //TabPageEx tmp = TabPages[srcTabIndex];
                     //TabPages[srcTabIndex] = TabPages[dstTabIndex];
                     //TabPages[dstTabIndex] = tmp;
-                    TabPage mvtab = TabPages[srcTabIndex];
+                    TabPageEx mvtab = TabPages[srcTabIndex];
                     this.Visible = false;
                     TabPages.Remove(mvtab);
                     TabPages.Insert(dstTabIndex, mvtab);
@@ -222,16 +249,16 @@ namespace StarlitTwit
                 if (this.TabCount <= 1) { return; }
 
                 Point pt = new Point(mouseDownPointX, mouseDownPointY);
-                TabPage tp = GetTabPageByPoint(pt);
+                TabPageEx tp = GetTabPageByPoint(pt);
 
                 if (tp != null) {
                     DoDragDrop(tp, DragDropEffects.All);
                 }
             }
 
-            TabPage page = this.GetTabPageByPoint(this.PointToClient(Cursor.Position));
+            TabPageEx page = this.GetTabPageByPoint(this.PointToClient(Cursor.Position));
             int newHot;
-            if (page == null) { newHot = -1;}
+            if (page == null) { newHot = -1; }
             else {
                 newHot = TabPages.IndexOf(page);
             }
@@ -311,7 +338,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         //
         //■GetTabPageByTab : Point --> TabPage + {null}
-        private TabPage GetTabPageByPoint(Point pt)
+        private TabPageEx GetTabPageByPoint(Point pt)
         {
             for (int i = 0; i < TabPages.Count; i++) {
                 if (GetTabRect(i).Contains(pt)) { return TabPages[i]; }
@@ -364,7 +391,119 @@ namespace StarlitTwit
         }
         #endregion (#[override]WndProc)
         //-------------------------------------------------------------------------------
+
+        TabPageExCollection _tabpageCollection;
+        /// <summary>タブコントロールのタブページのコレクションを取得します。</summary>
+        public new TabPageExCollection TabPages
+        {
+            get { return _tabpageCollection; }
+        }
+
+        public new TabPageEx SelectedTab
+        {
+            get { return _tabpageCollection[base.TabPages.IndexOf(base.SelectedTab)]; }
+            set
+            {
+                if (!_tabpageCollection.Contains(value)) { return; }
+                base.SelectedTab = base.TabPages[_tabpageCollection.IndexOf(value)];
+            }
+        }
+
+        //-------------------------------------------------------------------------------
+        #region (class)TabPageExCollection
+        //-------------------------------------------------------------------------------
+        public class TabPageExCollection : IList<TabPageEx>, ICollection<TabPageEx>, IEnumerable<TabPageEx>
+        {
+            private List<TabPageEx> _tabPageList = new List<TabPageEx>();
+            private TabPageCollection _baseCollection;
+
+            internal TabPageExCollection(TabPageCollection baseCollection) { _baseCollection = baseCollection; }
+
+            public int IndexOf(TabPageEx item)
+            {
+                return _tabPageList.IndexOf(item);
+            }
+
+            public void Insert(int index, TabPageEx item)
+            {
+                _baseCollection.Insert(index, item);
+            }
+
+            public void RemoveAt(int index)
+            {
+                _baseCollection.RemoveAt(index);
+            }
+
+            public TabPageEx this[int i]
+            {
+                get { return _tabPageList[i]; }
+                set { _tabPageList[i] = value; }
+            }
+
+            internal void AddListOnly(TabPageEx item)
+            {
+                _tabPageList.Add(item);
+            }
+
+            public void Add(TabPageEx item)
+            {
+                _baseCollection.Add(item);
+            }
+
+            public void Clear()
+            {
+                _baseCollection.Clear();
+            }
+
+            public bool Contains(TabPageEx item)
+            {
+                return _tabPageList.Contains(item);
+            }
+
+            public void CopyTo(TabPageEx[] array, int arrayIndex)
+            {
+                _tabPageList.CopyTo(array, arrayIndex);
+            }
+
+            public int Count
+            {
+                get { return _tabPageList.Count; }
+            }
+
+            public bool IsReadOnly
+            {
+                get { return false; }
+            }
+
+            internal bool RemoveListOnly(TabPageEx item)
+            {
+                return _tabPageList.Remove(item);
+            }
+
+            public bool Remove(TabPageEx item)
+            {
+                if (_tabPageList.Contains(item)) {
+                    _baseCollection.Remove(item);
+                    return true;
+                }
+                return false;
+            }            
+
+            public IEnumerator<TabPageEx> GetEnumerator()
+            {
+                return _tabPageList.GetEnumerator();
+            }
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return _tabPageList.GetEnumerator();
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)TabPageExCollection)
     }
+
+
 
     //-------------------------------------------------------------------------------
     #region (class)TabMoveEventArgs
