@@ -54,6 +54,7 @@ namespace StarlitTwit
         private const string CONSUMER_SECRET = "Z7qNcllzRb9Iah3qfFmqUruZ0OAj5s0gdBd1zvHUs";
         private const string GET = "GET";
         private const string POST = "POST";
+        private const string DELETE = "DELETE";
         public static readonly string URLapi;
         public static readonly string URLtwi;
         public static readonly string URLsearch;
@@ -673,38 +674,54 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region list/ (リスト関連)
         //-------------------------------------------------------------------------------
-        #region lists_Create リスト作成（未実装）
+        #region lists_Create リスト作成
         //-------------------------------------------------------------------------------
         /// <summary>
         /// lists リスト作成メソッド
         /// </summary>
+        /// <param name="name">リストの名前</param>
+        /// <param name="isPrivate">[option]privateにする時にtrue</param>
+        /// <param name="description">[option]リストの説明</param>
         /// <returns></returns>
-        private object lists_Create()
+        public object lists_Create(string name, bool isPrivate = false, string description = null)
         {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
-            //string url = GetUrlWithOAuthParameters(URL + @"lists.xml", POST, paramdic);
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("name", Utilization.UrlEncode(name));
+                if (isPrivate) { paramdic.Add("mode", "private"); }
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+            }
 
-            //XElement el = PostToAPI(url);
-            //return ConvertToTwitDataDM(el);
-
-            throw new NotImplementedException();
+            string url = GetUrlWithOAuthParameters(URLapi + ScreenName + @"/lists.xml", POST, paramdic);
+            return ConvertToListData(PostToAPI(url));
         }
         #endregion (lists_Create)
         //-------------------------------------------------------------------------------
-        #region lists_Update リスト更新（未実装）
+        #region lists_Update リスト更新
         //-------------------------------------------------------------------------------
         /// <summary>
         /// lists リスト更新
         /// </summary>
-        /// <returns></returns>
-        private object lists_Update()
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="name">[option]リストの新しい名前</param>
+        /// <param name="isPrivate">[option]privateにする時にtrue</param>
+        /// <param name="description">[option]リストの説明</param>
+        /// <returns>変更前が返る？</returns>
+        public object lists_Update(string list_id, string name = null, bool isPrivate = false, string description = null)
         {
-            //string url = GetUrlWithOAuthParameters(URL + @"lists.xml", POST, paramdic);
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
-            //XElement el = PostToAPI(url);
-            //return ConvertToTwitDataDM(el);
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
+                paramdic.Add("mode", (isPrivate) ? "private" : "public");
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+            }
 
-            throw new NotImplementedException();
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), POST, paramdic);
+            return ConvertToListData(PostToAPI(url));
         }
         #endregion (lists_Update)
         //-------------------------------------------------------------------------------
@@ -718,6 +735,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public Tuple<IEnumerable<ListData>, long, long> lists_Get(string screen_name = "", long cursor = -1)
         {
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 paramdic.Add("cursor", cursor.ToString());
@@ -733,37 +752,38 @@ namespace StarlitTwit
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
-        #region list_Show リスト情報取得（未実装）
+        #region list_Show リスト情報取得
         //-------------------------------------------------------------------------------
         /// <summary>
         /// list リスト情報取得
         /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <returns></returns>
-        private object list_Show()
+        public object list_Show(string list_id, string screen_name = null)
         {
-            //string url = GetUrlWithOAuthParameters(URL + @"lists.xml", GET, paramdic);
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
 
-            //XElement el = GetByAPI(url);
-            //return ConvertToTwitDataDM(el);
-
-            throw new NotImplementedException();
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), GET);
+            return ConvertToListData(GetByAPI(url));
         }
         #endregion (list_Show)
         //-------------------------------------------------------------------------------
-        #region lists_Delete リスト削除（未実装）
+        #region lists_Delete リスト削除
         //-------------------------------------------------------------------------------
         /// <summary>
         /// lists リスト削除
         /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <returns></returns>
-        private object lists_Delete()
+        public ListData lists_Delete(string list_id)
         {
-            //string url = GetUrlWithOAuthParameters(URL + @"lists.xml", "DELETE", paramdic);
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
-            //XElement el = PostToAPI(url,"DELETE");
-            //return ConvertToTwitDataDM(el);
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), DELETE);
 
-            throw new NotImplementedException();
+            return ConvertToListData(DeleteToAPI(url));
         }
         #endregion (lists_Delete)
         //-------------------------------------------------------------------------------
@@ -772,7 +792,7 @@ namespace StarlitTwit
         /// <summary>
         /// lists/statuses リストの発言取得
         /// </summary>
-        /// <param name="list_id">リストのID</param>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="since_id">[option]</param>
         /// <param name="max_id">[option]</param>
@@ -781,6 +801,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public IEnumerable<TwitData> lists_statuses(string list_id, string screen_name = "", long since_id = -1, long max_id = -1, int per_page = -1, int page = -1)
         {
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
@@ -791,36 +813,58 @@ namespace StarlitTwit
 
             string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
 
-            string url = GetUrlWithOAuthParameters(URLapi + scrname + @"/lists/" + list_id + @"/statuses.xml", GET, paramdic);
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}/statuses.xml", URLapi, scrname, list_id), GET, paramdic);
 
             XElement el = GetByAPI(url);
             return ConvertToTwitDataArray(el);
         }
         #endregion (lists_statuses)
         //-------------------------------------------------------------------------------
-        #region lists_memberships（未実装）
+        #region lists_memberships
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// lists_membershipsメソッド（未実装）
+        /// lists_membershipsメソッド
         /// </summary>
-        private void lists_memberships()
+        /// <param name="screen_name">追加されているリストを調べるユーザー名</param>
+        public Tuple<IEnumerable<ListData>,long,long> lists_memberships(string screen_name)
         {
-
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, screen_name),GET);
+            XElement el = GetByAPI(url);
+            return new Tuple<IEnumerable<ListData>,long,long>(ConvertToListDataArray(el.Element("lists")),
+                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_memberships)
         //-------------------------------------------------------------------------------
-        #region lists_subscriptions（未実装）
+        #region lists_subscriptions
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// lists_subscriptionsメソッド（未実装）
+        /// lists_subscriptionsメソッド
         /// </summary>
-        private void lists_subscriptions()
+        /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
+        public Tuple<IEnumerable<ListData>, long, long> lists_subscriptions(string screen_name)
         {
-
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, screen_name), GET);
+            XElement el = GetByAPI(url);
+            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListDataArray(el.Element("lists")),
+                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_subscriptions)
         //-------------------------------------------------------------------------------
         #endregion (list)
+
+        //-------------------------------------------------------------------------------
+        #region list members/ (リスト所属ユーザー関連)
+        //-------------------------------------------------------------------------------
+
+        //-------------------------------------------------------------------------------
+        #endregion (list members/ (リスト所属ユーザー関連))
+
+        //-------------------------------------------------------------------------------
+        #region list subscribers/ (リスト購読ユーザー関連)
+        //-------------------------------------------------------------------------------
+
+        //-------------------------------------------------------------------------------
+        #endregion (list subscribers/ (リスト購読ユーザー関連))
 
         //-------------------------------------------------------------------------------
         #region direct_messages/ (ダイレクトメッセージ関連)
@@ -937,10 +981,10 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="user_id">[select]</param>
         /// <param name="screen_name">[select]</param>
-        /// <param name="follow">[option]</param>
+        /// <param name="follow">通知するか[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = true, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1190,6 +1234,108 @@ namespace StarlitTwit
         #endregion (favorites_destroy)
         //-------------------------------------------------------------------------------
         #endregion (favorites/)
+
+        //-------------------------------------------------------------------------------
+        #region blocks/ (ブロック関連）
+        //-------------------------------------------------------------------------------
+        #region blocks_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// blocks/create メソッド
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile blocks_create(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/create.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (blocks_create)
+        //-------------------------------------------------------------------------------
+        #region blocks_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// blocks/destroy メソッド
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile blocks_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/destroy.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (blocks_destroy)
+        //-------------------------------------------------------------------------------
+        #region blocks_exists (未実装)
+        //-------------------------------------------------------------------------------
+        //
+        private void blocks_exists()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion (blocks_exists)
+        //-------------------------------------------------------------------------------
+        #region blocks_blocking
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// blocks/blocking メソッド
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="include_entities"></param>
+        /// <returns></returns>
+        public IEnumerable<UserProfile> blocks_blocking(int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking.xml", GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPI(url, true));
+        }
+        #endregion (blocks_blocking)
+        //-------------------------------------------------------------------------------
+        #region blocks_blocking_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// blocks/blocking/ids メソッド
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<long> blocks_blocking_ids()
+        {
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking/ids.xml", GET);
+            XElement el = GetByAPI(url, true);
+
+            var ids = from id in el.Elements("id")
+                      select long.Parse(id.Value);
+            return ids;
+        }
+        #endregion (blocks_blocking_ids)
+        //-------------------------------------------------------------------------------
+        #endregion (blocks/ (ブロック関連）)
 
         //-------------------------------------------------------------------------------
         #region search/ (検索関連)
@@ -1482,7 +1628,7 @@ namespace StarlitTwit
                 }
                 catch (WebException) {
                     // TODO:既に接続が切れていた時
-                    
+
                 }
                 catch (Exception ex) {
                     Log.DebugLog(ex);
@@ -1595,6 +1741,28 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (PostToAPI)
+        //-------------------------------------------------------------------------------
+        #region -DeleteToAPI APIにDeleteで投稿
+        //-------------------------------------------------------------------------------
+        //
+        private XElement DeleteToAPI(string uri)
+        {
+            WebResponse res = RequestWeb(uri, DELETE, false);
+
+            using (Stream resStream = res.GetResponseStream()) {
+                using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
+                    //string s = reader.ReadToEnd();
+                    try {
+                        return XElement.Load(reader);
+                    }
+                    catch (XmlException ex) {
+                        //Log.DebugLog(ex);
+                        throw new TwitterAPIException(1000, ex.Message);
+                    }
+                }
+            }
+        }
+        #endregion (DeleteToAPI)
         //-------------------------------------------------------------------------------
         #region -RequestWeb 要求
         //-------------------------------------------------------------------------------
