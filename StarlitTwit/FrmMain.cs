@@ -36,7 +36,7 @@ namespace StarlitTwit
             System.Net.WebRequest.DefaultWebProxy = null;
             //System.Net.WebRequest.DefaultWebProxy = new System.Net.WebProxy("localhost",8888); // HttpDebug用
 
-            DEFAULT_TABPAGES = new TabPage[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
+            DEFAULT_TABPAGES = new TabPageEx[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
             Twitter = new Twitter();
         }
         //-------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace StarlitTwit
         public static SettingsData SettingsData { get; private set; }
 
         /// <summary>タブと表示コントロールの辞書</summary>
-        private Dictionary<TabPage, UctlDispTwit> _dispTwitDic = new Dictionary<TabPage, UctlDispTwit>();
+        private Dictionary<TabPageEx, UctlDispTwit> _dispTwitDic = new Dictionary<TabPageEx, UctlDispTwit>();
 
         /// <summary>自動取得用データ</summary>
         private Dictionary<UctlDispTwit, AutoRenewData> _autoRenewDic = new Dictionary<UctlDispTwit, AutoRenewData>();
@@ -114,7 +114,7 @@ namespace StarlitTwit
         /// <summary>発言可能な長さ</summary>
         private const int MAX_LENGTH = 140;
         /// <summary>デフォルトである(消せない)タブページ</summary>
-        private readonly TabPage[] DEFAULT_TABPAGES;
+        private readonly TabPageEx[] DEFAULT_TABPAGES;
         /// <summary>残りAPI表示フォーマット</summary>
         private const string REST_API_FORMAT = "API残: {0}/{1}";
         /// <summary>取得中表示フォーマット</summary>
@@ -820,7 +820,7 @@ namespace StarlitTwit
                         SettingsData.Save();
 
                         // 設定の適用
-                        foreach (TabPage tabpage in DEFAULT_TABPAGES) {
+                        foreach (var tabpage in DEFAULT_TABPAGES) {
                             tabpage.ToolTipText = DefaultTabToString(tabpage);
                             UctlDispTwit dispTwit = _dispTwitDic[tabpage];
                             lock (_autoRenewDic) {
@@ -1384,7 +1384,7 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="tabpage"></param>
         /// <param name="uctlDisp"></param>
-        private void ConfigTabAndUserDispControl(TabPage tabpage, UctlDispTwit uctlDisp)
+        private void ConfigTabAndUserDispControl(TabPageEx tabpage, UctlDispTwit uctlDisp)
         {
             uctlDisp.ImageListWrapper = imageListWrapper;
             _dispTwitDic.Add(tabpage, uctlDisp);
@@ -2384,7 +2384,7 @@ namespace StarlitTwit
         /// <param name="action">行う処理</param>
         private void ForAllUctlDispTwit(Action<UctlDispTwit> action)
         {
-            foreach (TabPage tabpage in tabTwitDisp.TabPages) {
+            foreach (var tabpage in tabTwitDisp.TabPages) {
                 UctlDispTwit dispTwit = _dispTwitDic[tabpage];
                 action(dispTwit);
             }
@@ -2581,7 +2581,7 @@ namespace StarlitTwit
                         }
                     }
 
-                    foreach (TabPage tabpage in _dispTwitDic.Keys) {
+                    foreach (var tabpage in _dispTwitDic.Keys) {
                         if (!_mreThreadTabRun.IsSet) { break; } // タブ変更機能使用時にforeachから抜ける
                         // UserStream中はHome,Reply,History,Directは更新しない
                         if (_usingUserStream && DEFAULT_TABPAGES.Contains(tabpage)) { continue; }
