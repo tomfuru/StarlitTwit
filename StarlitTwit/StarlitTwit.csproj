@@ -129,6 +129,7 @@
     </Compile>
     <Compile Include="BaseTools.cs" />
     <Compile Include="Function\PictureGetter.cs" />
+    <Compile Include="Function\StatusFilter.cs" />
     <Compile Include="Function\URLShortener.cs" />
     <Compile Include="ImageAnimation.cs" />
     <Compile Include="Program.cs" />
