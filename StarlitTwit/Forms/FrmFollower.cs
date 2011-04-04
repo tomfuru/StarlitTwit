@@ -190,7 +190,8 @@ namespace StarlitTwit
         //
         private void tsmiFollow_Click(object sender, EventArgs e)
         {
-            if (Message.ShowQuestionMessage("フォローします。よろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
+            if (!FrmMain.SettingsData.ConfirmDialogFollow
+             || Message.ShowQuestionMessage("フォローします。") == System.Windows.Forms.DialogResult.Yes) {
                 UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
                 bool? ret = Utilization.Follow(prof.ScreenName);
                 if (!ret.HasValue) {
@@ -211,7 +212,8 @@ namespace StarlitTwit
         //
         private void tsmiRemove_Click(object sender, EventArgs e)
         {
-            if (Message.ShowQuestionMessage("フォローを解除します。よろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
+            if (!FrmMain.SettingsData.ConfirmDialogFollow
+             || Message.ShowQuestionMessage("フォローを解除します。") == System.Windows.Forms.DialogResult.Yes) {
                 UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
                 if (Utilization.RemoveFollow(prof.ScreenName)) {
                     switch (FormType) {

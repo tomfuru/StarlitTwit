@@ -1237,7 +1237,7 @@ namespace StarlitTwit
 
             rtxtTwit.Text =
             tsslRestAPI.Text =
-            lblTweetStatus.Text = 
+            lblTweetStatus.Text =
             lblUserStreamInfo.Text = "";
 
             //tabpgPublic.ToolTipText = "全体";
@@ -2206,15 +2206,19 @@ namespace StarlitTwit
         /// <returns>成功したかどうか</returns>
         private bool CreateFavorite(long id)
         {
-            try {
-                Twitter.favorites_create(id);
+            if (!SettingsData.ConfirmDialogFavorite
+             || Message.ShowQuestionMessage("お気に入りに追加します。") == DialogResult.Yes) {
+                try {
+                    Twitter.favorites_create(id);
+                }
+                catch (TwitterAPIException ex) {
+                    tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                    SYSTEMSOUND.Play();
+                    return false;
+                }
+                return true;
             }
-            catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
-                SYSTEMSOUND.Play();
-                return false;
-            }
-            return true;
+            return false;
         }
         #endregion (CreateFavorite)
         //-------------------------------------------------------------------------------
@@ -2227,15 +2231,19 @@ namespace StarlitTwit
         /// <returns>成功したかどうか</returns>
         private bool DestroyFavorite(long id)
         {
-            try {
-                Twitter.favorites_destroy(id);
+            if (!SettingsData.ConfirmDialogFavorite
+             || Message.ShowQuestionMessage("お気に入りから削除します。") == DialogResult.Yes) {
+                try {
+                    Twitter.favorites_destroy(id);
+                }
+                catch (TwitterAPIException ex) {
+                    tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                    SYSTEMSOUND.Play();
+                    return false;
+                }
+                return true;
             }
-            catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
-                SYSTEMSOUND.Play();
-                return false;
-            }
-            return true;
+            return false;
         }
         #endregion (CreateFavorite)
 

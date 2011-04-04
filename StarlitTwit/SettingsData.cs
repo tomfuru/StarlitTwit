@@ -231,6 +231,10 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region その他
         //-------------------------------------------------------------------------------
+        /// <summary>フォロー・フォロー解除時に確認ダイアログを表示する</summary>
+        public bool ConfirmDialogFollow = true;
+        /// <summary>お気に入り追加・削除時に確認ダイアログを表示する</summary>
+        public bool ConfirmDialogFavorite = true;
         /// <summary>タブデータ</summary>
         public SerializableDictionary<string, TabData> TabDataDic;
         /// <summary>キー</summary>
