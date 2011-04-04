@@ -427,7 +427,9 @@ namespace StarlitTwit
             _disp.Paint += Disp_Paint;
 
             if (ConfigDispForm(p)) {
+                Size size = _disp.Size; // 大きくなることがあるので再設定用
                 _disp.Show();
+                _disp.Size = size;
             }
         }
         //-------------------------------------------------------------------------------

@@ -1324,7 +1324,7 @@ namespace StarlitTwit
                     return string.Join("\n", Utilization.InterpretFormat(tdata), tdata.Text);
                 }
             }
-            return "";
+            return "...";
         }
         #endregion (GetReplyText)
         //-------------------------------------------------------------------------------
