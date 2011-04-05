@@ -216,9 +216,9 @@ namespace StarlitTwit
 
                     long next_cursor = -1;
                     do {
-                        Tuple<IEnumerable<ListData>, long, long> lsttpl = FrmMain.Twitter.lists_Get(_listOwner, next_cursor);
-                        _listData = lsttpl.Item1;
-                        next_cursor = lsttpl.Item2;
+                        var lsttpl = FrmMain.Twitter.lists_Get(_listOwner, next_cursor);
+                        _listData = lsttpl.Data;
+                        next_cursor = lsttpl.NextCursor;
                         if (_listData.Count() > 0) {
                             cmbList.Items.AddRange(_listData.Select((data) => (object)data.Name).ToArray());
                             cmbList.SelectedIndex = 0;

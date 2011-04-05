@@ -622,7 +622,7 @@ namespace StarlitTwit
         /// <param name="cursor">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public Tuple<IEnumerable<UserProfile>, long, long> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public SequentData<UserProfile> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -635,7 +635,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_friends)
         //-------------------------------------------------------------------------------
@@ -649,7 +649,7 @@ namespace StarlitTwit
         /// <param name="cursor">[option]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public Tuple<IEnumerable<UserProfile>, long, long> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public SequentData<UserProfile> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -662,7 +662,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/followers.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<UserProfile>, long, long>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (statuses_followers)
         //-------------------------------------------------------------------------------
@@ -733,7 +733,7 @@ namespace StarlitTwit
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="cursor">[option]データベース上のカーソル</param>
         /// <returns></returns>
-        public Tuple<IEnumerable<ListData>, long, long> lists_Get(string screen_name = "", long cursor = -1)
+        public SequentData<ListData> lists_Get(string screen_name = "", long cursor = -1)
         {
             if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
@@ -748,7 +748,7 @@ namespace StarlitTwit
 
             XElement el = GetByAPI(url);
 
-            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListDataArray(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
@@ -826,11 +826,11 @@ namespace StarlitTwit
         /// lists_membershipsメソッド
         /// </summary>
         /// <param name="screen_name">追加されているリストを調べるユーザー名</param>
-        public Tuple<IEnumerable<ListData>, long, long> lists_memberships(string screen_name)
+        public SequentData<ListData> lists_memberships(string screen_name)
         {
             string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, screen_name), GET);
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListDataArray(el.Element("lists")),
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
                 long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_memberships)
@@ -841,11 +841,11 @@ namespace StarlitTwit
         /// lists_subscriptionsメソッド
         /// </summary>
         /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
-        public Tuple<IEnumerable<ListData>, long, long> lists_subscriptions(string screen_name)
+        public SequentData<ListData> lists_subscriptions(string screen_name)
         {
             string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, screen_name), GET);
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListDataArray(el.Element("lists")),
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
                 long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_subscriptions)
@@ -1116,7 +1116,7 @@ namespace StarlitTwit
             var ids = from id in el.Element("ids").Elements("id")
                       select long.Parse(id.Value);
 
-            return new Tuple<IEnumerable<long>, long, long>(ids,
+            return new SequentData<long>(ids,
                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (friends_ids)
@@ -1147,7 +1147,7 @@ namespace StarlitTwit
             var ids = from id in el.Element("ids").Elements("id")
                       select long.Parse(id.Value);
 
-            return new Tuple<IEnumerable<long>, long, long>(ids,
+            return new SequentData<long>(ids,
                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (followers_ids)
@@ -2769,6 +2769,28 @@ namespace StarlitTwit
         #endregion (Private Util Methods)
     }
 
+    //-------------------------------------------------------------------------------
+    #region (class)SequentData
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// Cursorにより位置づけられる連続データを表します。
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class SequentData<T>
+    {
+        public IEnumerable<T> Data { get; private set; }
+        public long NextCursor { get; private set; }
+        public long PreviousCursor { get; private set; }
+
+        public SequentData(IEnumerable<T> data, long next_cursor, long previous_cursor)
+        {
+            Data = data;
+            NextCursor = next_cursor;
+            PreviousCursor = previous_cursor;
+        }
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (SequentData)
     //-----------------------------------------------------------------------------------
     #region TwitData 構造体：1発言に関する情報
     //-------------------------------------------------------------------------------

@@ -414,27 +414,27 @@ namespace StarlitTwit
                     this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
                 }
                 else {
-                    Tuple<IEnumerable<UserProfile>, long, long> proftpl;
+                    SequentData<UserProfile> proftpl;
                     switch (FormType) {
                         case EFormType.MyFollower:
                             proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
-                            profiles = proftpl.Item1;
-                            _next_cursor = proftpl.Item2;
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.MyFollowing:
                             proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
-                            profiles = proftpl.Item1;
-                            _next_cursor = proftpl.Item2;
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.UserFollower:
                             proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
-                            profiles = proftpl.Item1;
-                            _next_cursor = proftpl.Item2;
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.UserFollowing:
                             proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
-                            profiles = proftpl.Item1;
-                            _next_cursor = proftpl.Item2;
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
                             break;
                     }
                     this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
