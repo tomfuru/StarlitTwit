@@ -826,11 +826,11 @@ namespace StarlitTwit
         /// lists_membershipsメソッド
         /// </summary>
         /// <param name="screen_name">追加されているリストを調べるユーザー名</param>
-        public Tuple<IEnumerable<ListData>,long,long> lists_memberships(string screen_name)
+        public Tuple<IEnumerable<ListData>, long, long> lists_memberships(string screen_name)
         {
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, screen_name),GET);
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, screen_name), GET);
             XElement el = GetByAPI(url);
-            return new Tuple<IEnumerable<ListData>,long,long>(ConvertToListDataArray(el.Element("lists")),
+            return new Tuple<IEnumerable<ListData>, long, long>(ConvertToListDataArray(el.Element("lists")),
                 long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_memberships)
@@ -1086,6 +1086,73 @@ namespace StarlitTwit
         #endregion (friendships_show)
         //-------------------------------------------------------------------------------
         #endregion (friendships/ (フレンド関連))
+
+        //-------------------------------------------------------------------------------
+        #region friends and followers/ (フォロー・フォロワー関係)
+        //-------------------------------------------------------------------------------
+        #region friends_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friends/ids メソッド</para>
+        /// <para>指定ユーザーがフォローしているユーザー</para>
+        /// </summary>
+        /// <returns></returns>
+        public object friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string urlbase = URLapi + @"friends/ids.xml";
+            string url = (withAuthParam) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
+                                         : urlbase + '?' + JoinParameters(paramdic);
+
+            XElement el = GetByAPI(url, withAuthParam);
+
+            var ids = from id in el.Element("ids").Elements("id")
+                      select long.Parse(id.Value);
+
+            return new Tuple<IEnumerable<long>, long, long>(ids,
+               long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (friends_ids)
+        //-------------------------------------------------------------------------------
+        #region followers_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>followers/ids メソッド</para>
+        /// <para>指定ユーザーをフォローしているユーザー</para>
+        /// </summary>
+        /// <returns></returns>
+        public object followers_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string urlbase = URLapi + @"followers/ids.xml";
+            string url = (withAuthParam) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
+                                         : urlbase + '?' + JoinParameters(paramdic);
+
+            XElement el = GetByAPI(url, withAuthParam);
+
+            var ids = from id in el.Element("ids").Elements("id")
+                      select long.Parse(id.Value);
+
+            return new Tuple<IEnumerable<long>, long, long>(ids,
+               long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (followers_ids)
+        //-------------------------------------------------------------------------------
+        #endregion (friends and followers/ (フォロー・フォロワー関係))
 
         //-------------------------------------------------------------------------------
         #region account/ (アカウント関連)
@@ -1608,8 +1675,10 @@ namespace StarlitTwit
                         }
                         catch (WebException ex) {
                             if (ex.Status == WebExceptionStatus.RequestCanceled) { return; } // キャンセルした時
-                            // TODO:切断された時
-
+                            canceled = true;// TODO:切断された時
+                        }
+                        catch (IOException) {
+                            canceled = true;// TODO:切断された時
                         }
                     };
 
@@ -1627,6 +1696,10 @@ namespace StarlitTwit
                     }
                 }
                 catch (WebException) {
+                    // TODO:既に接続が切れていた時
+
+                }
+                catch (IOException) {
                     // TODO:既に接続が切れていた時
 
                 }
