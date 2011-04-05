@@ -391,23 +391,47 @@ namespace StarlitTwit
         #endregion (#[override]WndProc)
         //-------------------------------------------------------------------------------
 
+        /// <summary>TabPageのコレクション</summary>
         TabPageExCollection _tabpageCollection;
+        //-------------------------------------------------------------------------------
+        #region +[new]TabPages プロパティ
+        //-------------------------------------------------------------------------------
         /// <summary>タブコントロールのタブページのコレクションを取得します。</summary>
         public new TabPageExCollection TabPages
         {
             get { return _tabpageCollection; }
         }
+        //-------------------------------------------------------------------------------
+        #endregion (+[new]TabPages プロパティ)
 
+        //-------------------------------------------------------------------------------
+        #region +[new]SelectedTab プロパティ
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 現在選択されているTabPageExを取得します。
+        /// </summary>
         public new TabPageEx SelectedTab
         {
-            get { return _tabpageCollection[base.TabPages.IndexOf(base.SelectedTab)]; }
+            get
+            {
+                if (base.SelectedTab == null) { return null; }
+                return _tabpageCollection[base.TabPages.IndexOf(base.SelectedTab)];
+            }
             set
             {
                 if (!_tabpageCollection.Contains(value)) { return; }
                 base.SelectedTab = base.TabPages[_tabpageCollection.IndexOf(value)];
             }
         }
+        //-------------------------------------------------------------------------------
+        #endregion (+[new]SelectedTab プロパティ)
 
+        //-------------------------------------------------------------------------------
+        #region +[new]Alignment プロパティ
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// コントロール内のタブの配置場所を取得または設定します。
+        /// </summary>
         public new TabAlignment Alignment
         {
             get { return base.Alignment; }
@@ -417,6 +441,8 @@ namespace StarlitTwit
                 OnAlignmentChanged(EventArgs.Empty);
             }
         }
+        //-------------------------------------------------------------------------------
+        #endregion (+[new]Alignment プロパティ)
 
         //-------------------------------------------------------------------------------
         #region OnAlignmentChanged
