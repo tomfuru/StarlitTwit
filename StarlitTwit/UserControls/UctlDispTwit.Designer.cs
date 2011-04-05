@@ -420,10 +420,10 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTweets.BackColor = System.Drawing.SystemColors.Control;
             this.pnlTweets.ContextMenuStrip = this.menuRow;
-            this.pnlTweets.Location = new System.Drawing.Point(0, 0);
+            this.pnlTweets.Location = new System.Drawing.Point(1, 1);
             this.pnlTweets.Margin = new System.Windows.Forms.Padding(0);
             this.pnlTweets.Name = "pnlTweets";
-            this.pnlTweets.Size = new System.Drawing.Size(348, 281);
+            this.pnlTweets.Size = new System.Drawing.Size(347, 279);
             this.pnlTweets.TabIndex = 0;
             this.pnlTweets.TabStop = true;
             this.pnlTweets.SizeChanged += new System.EventHandler(this.UctlDispTwit_ClientSizeChanged);

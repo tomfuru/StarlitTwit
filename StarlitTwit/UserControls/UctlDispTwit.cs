@@ -753,7 +753,7 @@ namespace StarlitTwit
                     }
                     else if (moveval < 0) {
                         if (vscrbar.Value + vscrbar.LargeChange - 1 == vscrbar.Maximum) { return; }
-                        vscrbar.Value = Math.Min(vscrbar.Maximum, vscrbar.Value - moveval);
+                        vscrbar.Value = Math.Min(vscrbar.Maximum - vscrbar.LargeChange + 1, vscrbar.Value - moveval);
                     }
                 }
             }
@@ -1010,12 +1010,13 @@ namespace StarlitTwit
             SelectedRow = null;
 
             // 全カラムの位置・幅・高さ調整
+            int maxHeight = pnlTweets.ClientSize.Height;
             bool needScrollbar = true;
             bool isForward = flowDirForward;
             bool existNotAllVisibleRow = false;
             int rowindex = 0;
             int rowdataindex = startIndex;
-            int height = (flowDirForward) ? 0 : pnlTweets.Height;
+            int height = (flowDirForward) ? 0 : maxHeight;
 
             // 1個ずらしの場合
             if (shiftvalue != 0 && Math.Abs(shiftvalue) < _iVisibleRowNum) {
@@ -1029,7 +1030,7 @@ namespace StarlitTwit
                             row.Location = new Point(0, height);
                             ChangeSelectRow(row, selectedStatusID);
                             height += row.Height;
-                            existNotAllVisibleRow = (height > pnlTweets.Height);
+                            existNotAllVisibleRow = (height > maxHeight);
                         }
                         for (int i = 0; i < shiftnum; i++) { // ずらす
                             UctlDispTwitRow exRow = _rowList[0];
@@ -1082,7 +1083,7 @@ namespace StarlitTwit
                             shiftnum -= (_existNotAllRow_Top) ? 1 : 0;
                             bool needMove = _existNotAllRow_Top;
                             for (int i = 0; i < shiftnum; i++) { // 新しい部分
-                                if (height >= pnlTweets.Height) { break; }
+                                if (height >= maxHeight) { break; }
                                 exRow = _rowList[_iVisibleRowNum - 1];
                                 RowData rowdata = _rowDataList.Values[rowdataindex];
                                 exRow.TwitData = rowdata.TwitData;
@@ -1090,7 +1091,7 @@ namespace StarlitTwit
                                 ConfigRow(exRow, rowdata.StrReplyTooltip, rowdata.IsBoundary, selectedStatusID); // 行設定
                                 exRow.Location = new Point(0, height);
                                 height += exRow.Height;
-                                existNotAllVisibleRow = (height > pnlTweets.Height);
+                                existNotAllVisibleRow = (height > maxHeight);
 
                                 _rowList.RemoveAt(_iVisibleRowNum - 1);
                                 _rowList.Insert(i, exRow);
@@ -1098,13 +1099,13 @@ namespace StarlitTwit
                                 rowdataindex++;
                             }
                             for (int i = shiftnum; i < _iVisibleRowNum; i++) { // シフト
-                                if (height >= pnlTweets.Height) { break; }
+                                if (height >= maxHeight) { break; }
                                 UctlDispTwitRow row = _rowList[i];
                                 row.Invalidate();
                                 row.Location = new Point(0, height);
                                 ChangeSelectRow(row, selectedStatusID);
                                 height += row.Height;
-                                existNotAllVisibleRow = (height > pnlTweets.Height);
+                                existNotAllVisibleRow = (height > maxHeight);
                                 rowindex++;
                             }
                             rowdataindex = startIndex + rowindex;
@@ -1116,13 +1117,13 @@ namespace StarlitTwit
                 }
             }
 
-            while ((isForward && height < pnlTweets.Height) || (!isForward && height > 0)) {
+            while ((isForward && height < maxHeight) || (!isForward && height > 0)) {
                 if (_rowDataList.Count <= rowdataindex) {// isForward=trueのみ．一番下までいった
                     if (startIndex == 0) { needScrollbar = false; break; } // 数が少なくてスクロールバーもいらないような時
                     isForward = false;
                     rowdataindex = startIndex - 1;
                     // 下詰めに
-                    int dif = pnlTweets.Height - height;
+                    int dif = maxHeight - height;
                     for (int i = 0; i < rowindex; i++) {
                         _rowList[i].Location = new Point(0, _rowList[i].Location.Y + dif);
                     }
@@ -1150,7 +1151,7 @@ namespace StarlitTwit
                 if (isForward) {
                     row.Location = new Point(0, height);
                     height += row.Height;
-                    existNotAllVisibleRow = (height > pnlTweets.Height);
+                    existNotAllVisibleRow = (height > maxHeight);
 
                     rowdataindex++;
                 }
@@ -1188,7 +1189,7 @@ namespace StarlitTwit
             // スクロールバー設定
             _suspend_vscrbar_ValueChangeEvent = true;
             if (vscrbar.Enabled = needScrollbar) {
-                vscrbar.LargeChange = Math.Max(0, _iVisibleRowNum - 1);
+                vscrbar.LargeChange = Math.Max(0, _iAllVisibleRowNum);
                 vscrbar.Maximum = _rowDataList.Count - 1;
 
                 if (isForward) { vscrbar.Value = startIndex; }
@@ -1253,7 +1254,7 @@ namespace StarlitTwit
             row.ResetPicturePopup();
 
             row.SuspendAdjust = true;
-            row.SetWidth(pnlTweets.Width);
+            row.SetWidth(pnlTweets.ClientSize.Width);
             row.SetIconConfig();
             row.SetFontConfig();
             row.SetNameLabel();
