@@ -45,22 +45,44 @@ namespace StarlitTwit
         #endregion (#OnTextChanged)
 
         //-------------------------------------------------------------------------------
-        #region -AdjustWidth 幅を調節
+        #region %AdjustWidth 幅を調節
         //-------------------------------------------------------------------------------
         /// <remarks>
         /// width(i^n) = 5+3n
-        /// width(Tab) = width(Text) + 7
         /// min(width(Tab)) = 60
+        /// ●縦
+        /// width(Tab) = width(Text) + 7
         /// ---------------------------
         /// ～54 : ""
         /// 55,56,57 : i*17 = 63
         /// ・・・
+        /// ●横
+        /// width(Tab) = width(Text) + n
+        /// ---------------------------
+        /// ～55 : ""
+        /// 56,57,58,59 : i*13 = 64
+        /// ・・・
         /// </remarks>
-        private void AdjustWidth()
+        internal void AdjustWidth()
         {
+            TabControlEx tab = this.Parent as TabControlEx;
+            if (tab == null) { return; }
+
             int width = TextRenderer.MeasureText(Text, this.Font).Width;
-            int iNum = Math.Max((width - 4) / 3, 0);
-            base.Text = new string('i', iNum);
+            switch (tab.Alignment) {
+                case TabAlignment.Top:
+                case TabAlignment.Bottom: {
+                        int iNum = Math.Max((width - 4) / 3, 0);
+                        base.Text = new string('i', iNum);
+                    }
+                    break;
+                case TabAlignment.Left:
+                case TabAlignment.Right: {
+                        int iNum = Math.Max((width - 4) / 4, 0);
+                        base.Text = new string('i', iNum);
+                    }
+                    break;
+            }
         }
         #endregion (AdjustWidth)
     }

@@ -94,21 +94,20 @@ namespace StarlitTwit
             if (this.TabPages.Count == 0) { return; }
 
             //TabPageの枠を描画する
-            TabPageEx page = this.TabPages[this.SelectedIndex];
-            Rectangle pageRect = new Rectangle(page.Bounds.X - 2, page.Bounds.Y - 2,
-                                               page.Bounds.Width + 5, page.Bounds.Height + 5);
-            TabRenderer.DrawTabPage(e.Graphics, pageRect);
-
-            var tabpages = new System.Collections.Generic.List<TabPageEx>();
-            foreach (TabPageEx p in TabPages) {
-                tabpages.Add(p);
+            TabPageEx page;
+            if (this.SelectedIndex >= 0) {
+                page = this.TabPages[this.SelectedIndex];
+                Rectangle pageRect = new Rectangle(page.Bounds.X - 2, page.Bounds.Y - 2,
+                                                   page.Bounds.Width + 5, page.Bounds.Height + 5);
+                TabRenderer.DrawTabPage(e.Graphics, pageRect);
             }
 
-
             //タブを描画する
-            for (int i = 0; i < this.TabPages.Count; i++) {
+            for (int i = 0; i < base.TabPages.Count; i++) {
                 page = this.TabPages[i];
                 Rectangle tabRect = this.GetTabRect(i);
+
+                //Console.WriteLine(string.Format("Text:{0} Size:{1} TextSize:{2}", page.Text, tabRect.Size,TextRenderer.MeasureText(page.Text,this.Font)));
 
                 //表示するタブの状態を決定する
                 TabItemState state;
@@ -409,6 +408,26 @@ namespace StarlitTwit
             }
         }
 
+        public new TabAlignment Alignment
+        {
+            get { return base.Alignment; }
+            set
+            {
+                base.Alignment = value;
+                OnAlignmentChanged(EventArgs.Empty);
+            }
+        }
+
+        //-------------------------------------------------------------------------------
+        #region OnAlignmentChanged
+        //-------------------------------------------------------------------------------
+        //
+        protected void OnAlignmentChanged(EventArgs e)
+        {
+            foreach (var page in this.TabPages) { page.AdjustWidth(); }
+        }
+        #endregion (OnAlignmentChanged)
+
         //-------------------------------------------------------------------------------
         #region (class)TabPageExCollection
         //-------------------------------------------------------------------------------
@@ -487,7 +506,7 @@ namespace StarlitTwit
                     return true;
                 }
                 return false;
-            }            
+            }
 
             public IEnumerator<TabPageEx> GetEnumerator()
             {
