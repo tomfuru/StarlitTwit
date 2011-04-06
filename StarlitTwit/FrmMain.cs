@@ -1787,6 +1787,14 @@ namespace StarlitTwit
                             sb.Append(string.Format("{0} List {1} is destroyed", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
                                                                              , d.TargetList.Name));
                             break;
+                        case UserStreamEventType.list_member_added:
+                            sb.Append(string.Format("{0} {1} is added in List {2}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                  , d.TargetUser.ScreenName, d.TargetList.Name));
+                            break;
+                        case UserStreamEventType.list_member_removed:
+                            sb.Append(string.Format("{0} {1} is remove from List {2}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                  , d.TargetUser.ScreenName, d.TargetList.Name));
+                            break;
                         case UserStreamEventType.list_user_subscribed:
                             sb.Append(string.Format("{0} {1} subscribe List {1}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
                                                                                 , d.SourceUser.ScreenName, d.TargetList.Name));
