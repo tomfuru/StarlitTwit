@@ -742,13 +742,13 @@ namespace StarlitTwit
                 paramdic.Add("cursor", cursor.ToString());
             }
 
-            string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
 
-            string url = GetUrlWithOAuthParameters(URLapi + scrname + @"/lists.xml", GET, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapi + user + @"/lists.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
 
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")), int.Parse(el.Element("next_cursor").Value), int.Parse(el.Element("previous_cursor").Value));
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
@@ -862,13 +862,24 @@ namespace StarlitTwit
         /// <para>リストメンバー取得</para>
         /// </summary>
         /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="cursor">データベース上のカーソル</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        private object list_members_Get(string list_id, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public SequentData<UserProfile> list_members_Get(string list_id, string screen_name = "", long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
 
-            throw new NotImplementedException();
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, user, list_id), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
+                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (list_members_Get)
         //-------------------------------------------------------------------------------
@@ -881,24 +892,36 @@ namespace StarlitTwit
         /// <param name="id">追加するユーザーのID(の文字列)かScreenName</param>
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <returns></returns>
-        private object list_members_Add(string id, string list_id)
+        public ListData list_members_Add(string id, string list_id)
         {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
-            throw new NotImplementedException();
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("id", id);
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, ScreenName, list_id), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
         }
         #endregion (list_members_Add)
         //-------------------------------------------------------------------------------
-        #region list_create_all
+        #region list_create_all (使用不可能)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// <para>list/create_all メソッド</para>
         /// <para>リストメンバー一斉追加</para>
         /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="user_ids">[select]</param>
         /// <param name="screen_names">[select]</param>
         /// <returns></returns>
-        private object list_create_all(long[] user_ids = null, string[] screen_names = null)
+        private object list_create_all(string list_id, long[] user_ids = null, string[] screen_names = null)
         {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
             if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
                 throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
             }
@@ -908,7 +931,9 @@ namespace StarlitTwit
                 if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
             }
 
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/create_all.xml", URLapi, ScreenName, list_id), POST, paramdic);
 
+            XElement el = PostToAPI(url);
             throw new NotImplementedException();
         }
         #endregion (list_create_all)
@@ -922,10 +947,19 @@ namespace StarlitTwit
         /// <param name="id">削除するユーザーのID(の文字列)かScreenName</param>
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <returns></returns>
-        private object list_members_Delete(string id, string list_id)
+        public ListData list_members_Delete(string id, string list_id)
         {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
-            throw new NotImplementedException();
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("id", id);
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, ScreenName, list_id), DELETE, paramdic);
+
+            XElement el = DeleteToAPI(url);
+            return ConvertToListData(el);
         }
         #endregion (list_members_Delete)
         //-------------------------------------------------------------------------------
@@ -934,15 +968,25 @@ namespace StarlitTwit
         /// <summary>
         /// <para>list/member メソッド</para>
         /// <para>リストメンバー所属確認</para>
+        /// <para>見つからなければ404エラーを返す</para>
         /// </summary>
-        /// <param name="id">確認するユーザーのID(の文字列)かScreenName</param>
+        /// <param name="user_id">確認するユーザーのID(の文字列)かScreenName</param>
         /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        private object list_members_Check(string id, string list_id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public object list_members_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+            
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
 
-            throw new NotImplementedException();
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfile(el);
         }
         #endregion (list_members_Check)
         //-------------------------------------------------------------------------------
@@ -962,10 +1006,20 @@ namespace StarlitTwit
         /// <param name="cursor">[option]データベース上のカーソル</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        private object list_subscribers_Get(string list_id, string screen_name = "",  long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public SequentData<UserProfile> list_subscribers_Get(string list_id, string screen_name = "", long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
 
-            throw new NotImplementedException();
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
+                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
         #endregion (list_subscribers_Get)
         //-------------------------------------------------------------------------------
@@ -978,14 +1032,17 @@ namespace StarlitTwit
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <returns></returns>
-        private object list_subscribers_Follow(string list_id, string screen_name = "")
+        public ListData list_subscribers_Follow(string list_id, string screen_name = "")
         {
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml",URLapi,user,list_id), POST);
 
-            throw new NotImplementedException();
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
         }
         #endregion (list_subscribers_Follow)
         //-------------------------------------------------------------------------------
-        #region list_subscribers_UnFollow
+        #region list_subscribers_Unfollow
         //-------------------------------------------------------------------------------
         /// <summary>
         /// <para>list/subscribers メソッド</para>
@@ -994,27 +1051,40 @@ namespace StarlitTwit
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <returns></returns>
-        private object list_subscribers_UnFollow(string list_id, string screen_name = "")
+        public ListData list_subscribers_Unfollow(string list_id, string screen_name = "")
         {
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), DELETE);
 
-            throw new NotImplementedException();
+            XElement el = DeleteToAPI(url);
+            return ConvertToListData(el);
         }
-        #endregion (list_subscribers_UnFollow)
+        #endregion (list_subscribers_Unfollow)
         //-------------------------------------------------------------------------------
         #region list_subscribers_Check
         //-------------------------------------------------------------------------------
         /// <summary>
         /// <para>list/subscribers メソッド</para>
         /// <para>リストフォロー確認</para>
+        /// <para>見つからなければ404エラーを返す</para>
         /// </summary>
         /// <param name="id">確認するユーザーのID(の文字列)かScreenName</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        private object list_subscribers_Check(string id, string list_id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public UserProfile list_subscribers_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
 
-            throw new NotImplementedException();
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfile(el);
         }
         #endregion (list_subscribers_Check)
         //-------------------------------------------------------------------------------
