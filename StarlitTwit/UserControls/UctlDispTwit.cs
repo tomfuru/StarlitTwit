@@ -156,7 +156,7 @@ namespace StarlitTwit
         [Browsable(false)]
         public TwitData SelectedTwitData
         {
-            get { return (_rowDataList.Values[SelectedIndex]).TwitData; }
+            get { lock (_lockObj) { return (_rowDataList.Values[SelectedIndex]).TwitData; } }
         }
         #endregion (SelectedTwitData)
         //-------------------------------------------------------------------------------
