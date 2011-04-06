@@ -752,15 +752,15 @@ namespace StarlitTwit
         }
         #endregion (lists_Get)
         //-------------------------------------------------------------------------------
-        #region list_Show リスト情報取得
+        #region lists_Show リスト情報取得
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// list リスト情報取得
+        /// lists リスト情報取得
         /// </summary>
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <returns></returns>
-        public object list_Show(string list_id, string screen_name = null)
+        public object lists_Show(string list_id, string screen_name = null)
         {
             if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
             string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
@@ -768,7 +768,7 @@ namespace StarlitTwit
             string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), GET);
             return ConvertToListData(GetByAPI(url));
         }
-        #endregion (list_Show)
+        #endregion (lists_Show)
         //-------------------------------------------------------------------------------
         #region lists_Delete リスト削除
         //-------------------------------------------------------------------------------
@@ -855,16 +855,170 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region list members/ (リスト所属ユーザー関連)
         //-------------------------------------------------------------------------------
+        #region list_members_Get
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members メソッド</para> 
+        /// <para>リストメンバー取得</para>
+        /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="cursor">データベース上のカーソル</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        private object list_members_Get(string list_id, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
 
+            throw new NotImplementedException();
+        }
+        #endregion (list_members_Get)
+        //-------------------------------------------------------------------------------
+        #region list_members_Add
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/member メソッド</para>
+        /// <para>リストメンバー追加</para>
+        /// </summary>
+        /// <param name="id">追加するユーザーのID(の文字列)かScreenName</param>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <returns></returns>
+        private object list_members_Add(string id, string list_id)
+        {
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_members_Add)
+        //-------------------------------------------------------------------------------
+        #region list_create_all
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/create_all メソッド</para>
+        /// <para>リストメンバー一斉追加</para>
+        /// </summary>
+        /// <param name="user_ids">[select]</param>
+        /// <param name="screen_names">[select]</param>
+        /// <returns></returns>
+        private object list_create_all(long[] user_ids = null, string[] screen_names = null)
+        {
+            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
+                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
+            }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids)); }
+                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
+            }
+
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_create_all)
+        //-------------------------------------------------------------------------------
+        #region list_members_Delete
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/member メソッド</para>
+        /// <para>リストメンバー削除</para>
+        /// </summary>
+        /// <param name="id">削除するユーザーのID(の文字列)かScreenName</param>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <returns></returns>
+        private object list_members_Delete(string id, string list_id)
+        {
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_members_Delete)
+        //-------------------------------------------------------------------------------
+        #region list_members_Check
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/member メソッド</para>
+        /// <para>リストメンバー所属確認</para>
+        /// </summary>
+        /// <param name="id">確認するユーザーのID(の文字列)かScreenName</param>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        private object list_members_Check(string id, string list_id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_members_Check)
         //-------------------------------------------------------------------------------
         #endregion (list members/ (リスト所属ユーザー関連))
 
         //-------------------------------------------------------------------------------
-        #region list subscribers/ (リスト購読ユーザー関連)
+        #region list subscribers/ (リストフォローユーザー関連)
         //-------------------------------------------------------------------------------
+        #region list_subscribers_Get
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers メソッド</para> 
+        /// <para>リストフォローメンバー取得</para>
+        /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        private object list_subscribers_Get(string list_id, string screen_name = "",  long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
 
+            throw new NotImplementedException();
+        }
+        #endregion (list_subscribers_Get)
         //-------------------------------------------------------------------------------
-        #endregion (list subscribers/ (リスト購読ユーザー関連))
+        #region list_subscribers_Follow
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers メソッド</para>
+        /// <para>リストをフォロー</para>
+        /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
+        /// <returns></returns>
+        private object list_subscribers_Follow(string list_id, string screen_name = "")
+        {
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_subscribers_Follow)
+        //-------------------------------------------------------------------------------
+        #region list_subscribers_UnFollow
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers メソッド</para>
+        /// <para>リストをフォロー解除</para>
+        /// </summary>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
+        /// <returns></returns>
+        private object list_subscribers_UnFollow(string list_id, string screen_name = "")
+        {
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_subscribers_UnFollow)
+        //-------------------------------------------------------------------------------
+        #region list_subscribers_Check
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers メソッド</para>
+        /// <para>リストフォロー確認</para>
+        /// </summary>
+        /// <param name="id">確認するユーザーのID(の文字列)かScreenName</param>
+        /// <param name="list_id">リストのID(の文字列)かslug</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        private object list_subscribers_Check(string id, string list_id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+
+            throw new NotImplementedException();
+        }
+        #endregion (list_subscribers_Check)
+        //-------------------------------------------------------------------------------
+        #endregion (list subscribers/ (リストフォローユーザー関連))
 
         //-------------------------------------------------------------------------------
         #region direct_messages/ (ダイレクトメッセージ関連)
