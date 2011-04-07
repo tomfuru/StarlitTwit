@@ -2503,7 +2503,8 @@ namespace StarlitTwit
             try {
                 return new ListData() {
                     ID = long.Parse(el.Element("id").Value),
-                    Name = el.Element("slug").Value,
+                    Name = el.Element("name").Value,
+                    Slug = el.Element("slug").Value,
                     Description = el.Element("description").Value,
                     SubscriberCount = int.Parse(el.Element("subscriber_count").Value),
                     MemberCount = int.Parse(el.Element("member_count").Value),
@@ -3142,6 +3143,8 @@ namespace StarlitTwit
         public long ID;
         /// <summary>リストの名前</summary>
         public string Name;
+        /// <summary>リストの通名</summary>
+        public string Slug;
         /// <summary>リストの説明</summary>
         public string Description;
         /// <summary>リストフォロワー数</summary>

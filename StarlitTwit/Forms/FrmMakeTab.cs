@@ -220,7 +220,7 @@ namespace StarlitTwit
                         _listData = lsttpl.Data;
                         next_cursor = lsttpl.NextCursor;
                         if (_listData.Count() > 0) {
-                            cmbList.Items.AddRange(_listData.Select((data) => (object)data.Name).ToArray());
+                            cmbList.Items.AddRange(_listData.Select((data) => (object)data.Slug).ToArray());
                             cmbList.SelectedIndex = 0;
                         }
                     }
