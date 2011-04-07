@@ -1624,7 +1624,7 @@ namespace StarlitTwit
                         break;
                     case UserStreamItemType.directmessage: {
                             TwitData twitdata = (TwitData)data;
-                            this.Invoke(new Action(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
+                            this.Invoke(new Action(() => uctlDispDirect.AddData(twitdata.AsEnumerable(), true)));
                             if (SettingsData.DisplayDMBaloon) {
                                 PopupTasktray(tasktray.Text + "：DirectMessage 新着有り", Utilization.MakePopupText(twitdata));
                             }
