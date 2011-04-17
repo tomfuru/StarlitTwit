@@ -51,6 +51,9 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tsmiBlock = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUnblock = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,29 +68,32 @@
             this.toolStripMenuItem2,
             this.tsmiDisplayUserProfile,
             this.tsmiDisplayUserTweet,
-            this.tsmiOpenBrowserUserHome});
+            this.tsmiOpenBrowserUserHome,
+            this.toolStripMenuItem3,
+            this.tsmiBlock,
+            this.tsmiUnblock});
             this.menuRow.Name = "contextMenuStrip1";
-            this.menuRow.Size = new System.Drawing.Size(208, 192);
+            this.menuRow.Size = new System.Drawing.Size(208, 242);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // tsmiFollow
             // 
             this.tsmiFollow.Name = "tsmiFollow";
-            this.tsmiFollow.Size = new System.Drawing.Size(260, 22);
+            this.tsmiFollow.Size = new System.Drawing.Size(207, 22);
             this.tsmiFollow.Text = "フォローする(&F)";
             this.tsmiFollow.Click += new System.EventHandler(this.tsmiFollow_Click);
             // 
             // tsmiRemove
             // 
             this.tsmiRemove.Name = "tsmiRemove";
-            this.tsmiRemove.Size = new System.Drawing.Size(260, 22);
+            this.tsmiRemove.Size = new System.Drawing.Size(207, 22);
             this.tsmiRemove.Text = "フォローを解除する(&R)";
             this.tsmiRemove.Click += new System.EventHandler(this.tsmiRemove_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(257, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(204, 6);
             // 
             // tsmiDispFollowing
             // 
@@ -106,7 +112,7 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(257, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(204, 6);
             // 
             // tsmiDisplayUserProfile
             // 
@@ -224,6 +230,25 @@
             this.columnHeader3.Text = "名称";
             this.columnHeader3.Width = 100;
             // 
+            // tsmiBlock
+            // 
+            this.tsmiBlock.Name = "tsmiBlock";
+            this.tsmiBlock.Size = new System.Drawing.Size(207, 22);
+            this.tsmiBlock.Text = "ブロックする(&B)";
+            this.tsmiBlock.Click += new System.EventHandler(this.tsmiBlock_Click);
+            // 
+            // tsmiUnblock
+            // 
+            this.tsmiUnblock.Name = "tsmiUnblock";
+            this.tsmiUnblock.Size = new System.Drawing.Size(207, 22);
+            this.tsmiUnblock.Text = "ブロックを解除する(&B)";
+            this.tsmiUnblock.Click += new System.EventHandler(this.tsmiUnblock_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(204, 6);
+            // 
             // FrmFollower
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -270,5 +295,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiDispFollower;
         private System.Windows.Forms.ToolStripMenuItem tsmiDispFollowing;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiBlock;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUnblock;
     }
 }

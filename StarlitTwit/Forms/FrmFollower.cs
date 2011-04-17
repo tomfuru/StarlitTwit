@@ -181,6 +181,9 @@ namespace StarlitTwit
             tsmiFollow.Visible = !prof.FolllowRequestSent && !prof.Following;
             tsmiRemove.Visible = !prof.FolllowRequestSent && prof.Following;
 
+            tsmiBlock.Visible = (FormType == EFormType.MyFollower);
+            tsmiUnblock.Visible = false;
+
             toolStripMenuItem1.Visible = !prof.FolllowRequestSent;
         }
         #endregion (menuRow_Opening)
@@ -222,7 +225,7 @@ namespace StarlitTwit
                             ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
                             break;
                         case EFormType.MyFollowing:
-                            lstvList.Items.Remove(lstvList.SelectedItems[0]);
+                            RemoveSelectedItem();
                             break;
                     }
                 }
@@ -285,6 +288,28 @@ namespace StarlitTwit
         }
         #endregion (tsmiOpenBrowserUserHome_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiBlock_Click ブロッククリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiBlock_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            if (Block(prof.ScreenName)) {
+                RemoveSelectedItem();
+            }
+        }
+        #endregion (tsmiBlock_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiUnblock_Click ブロック解除クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUnblock_Click(object sender, EventArgs e)
+        {
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            Unblock(prof.ScreenName);
+        }
+        #endregion (tsmiUnblock_Click)
+        //-------------------------------------------------------------------------------
         #region btnAppend_Click 追加取得ボタンクリック時
         //-------------------------------------------------------------------------------
         //
@@ -338,6 +363,42 @@ namespace StarlitTwit
 
         //-------------------------------------------------------------------------------
         #region メソッド
+        //-------------------------------------------------------------------------------
+        #region -Block ブロック
+        //-------------------------------------------------------------------------------
+        //
+        private bool Block(string screen_name)
+        {
+            try {
+                FrmMain.Twitter.blocks_create(screen_name: screen_name);
+                return true;
+            }
+            catch (TwitterAPIException) { return false; }
+        }
+        #endregion (Block)
+        //-------------------------------------------------------------------------------
+        #region -Unblock ブロック解除
+        //-------------------------------------------------------------------------------
+        //
+        private bool Unblock(string screen_name)
+        {
+            try {
+                FrmMain.Twitter.blocks_destroy(screen_name: screen_name);
+                return true;
+            }
+            catch (TwitterAPIException) { return false; }
+        }
+        #endregion (Unblock)
+        //-------------------------------------------------------------------------------
+        #region -RemoveSelectedItem 選択中項目を消去します
+        //-------------------------------------------------------------------------------
+        //
+        private void RemoveSelectedItem()
+        {
+            _profileList.RemoveAt(lstvList.SelectedIndices[0]);
+            lstvList.Items.Remove(lstvList.SelectedItems[0]);
+        }
+        #endregion (RemoveSelectedItem)
         //-------------------------------------------------------------------------------
         #region -GetToolTipText ツールチップのテキストを取得します。
         //-------------------------------------------------------------------------------
