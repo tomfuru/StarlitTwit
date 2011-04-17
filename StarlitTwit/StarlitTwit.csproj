@@ -67,11 +67,11 @@
     <Compile Include="Forms\FrmConfig.Designer.cs">
       <DependentUpon>FrmConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmFollower.cs">
+    <Compile Include="Forms\FrmDispUsers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FrmFollower.Designer.cs">
-      <DependentUpon>FrmFollower.cs</DependentUpon>
+    <Compile Include="Forms\FrmDispUsers.Designer.cs">
+      <DependentUpon>FrmDispUsers.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FrmMakeTab.cs">
       <SubType>Form</SubType>
@@ -79,11 +79,11 @@
     <Compile Include="Forms\FrmMakeTab.Designer.cs">
       <DependentUpon>FrmMakeTab.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmDispTweet.cs">
+    <Compile Include="Forms\FrmDispStatuses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FrmDispTweet.Designer.cs">
-      <DependentUpon>FrmDispTweet.cs</DependentUpon>
+    <Compile Include="Forms\FrmDispStatuses.Designer.cs">
+      <DependentUpon>FrmDispStatuses.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FrmProfile.cs">
       <SubType>Form</SubType>
@@ -114,6 +114,12 @@
     </Compile>
     <Compile Include="Forms\FrmGetTweet.Designer.cs">
       <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDispLists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmDispLists.Designer.cs">
+      <DependentUpon>FrmDispLists.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
@@ -218,14 +224,14 @@
     <EmbeddedResource Include="Forms\FrmConfig.resx">
       <DependentUpon>FrmConfig.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FrmFollower.resx">
-      <DependentUpon>FrmFollower.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmDispUsers.resx">
+      <DependentUpon>FrmDispUsers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmMakeTab.resx">
       <DependentUpon>FrmMakeTab.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FrmDispTweet.resx">
-      <DependentUpon>FrmDispTweet.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmDispStatuses.resx">
+      <DependentUpon>FrmDispStatuses.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmProfile.resx">
       <DependentUpon>FrmProfile.cs</DependentUpon>
@@ -241,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmGetTweet.resx">
       <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmDispLists.resx">
+      <DependentUpon>FrmDispLists.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
