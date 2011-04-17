@@ -439,7 +439,7 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUserListForm(this, imageListWrapper, FrmFollower.EFormType.MyFollowing);
+            Utilization.ShowUserListForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollowing);
         }
         #endregion (llblFollowing_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -448,7 +448,7 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUserListForm(this, imageListWrapper, FrmFollower.EFormType.MyFollower);
+            Utilization.ShowUserListForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollower);
         }
         #endregion (llblFollower_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -633,8 +633,8 @@ namespace StarlitTwit
         {
             UctlDispTwit dispTwit = (UctlDispTwit)sender;
 
-            FrmDispTweet frm = new FrmDispTweet(this, imageListWrapper);
-            frm.FormType = FrmDispTweet.EFormType.Conversation;
+            FrmDispStatuses frm = new FrmDispStatuses(this, imageListWrapper);
+            frm.FormType = FrmDispStatuses.EFormType.Conversation;
             frm.ReplyStartTwitdata = dispTwit.TraceReply(e.TwitData.StatusID);
             frm.Show(this);
         }
@@ -682,7 +682,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_Retweeter_Click(object sender, TwitRowMenuEventArgs e)
         {
-            Utilization.ShowUserListForm(this, imageListWrapper, FrmFollower.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID);
+            Utilization.ShowUserListForm(this, imageListWrapper, FrmDispUsers.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID);
         }
         #endregion (TwitMenu_Retweeter_Click)
         //-------------------------------------------------------------------------------

@@ -429,10 +429,10 @@ namespace StarlitTwit
         #region +[static]ShowUserListForm ユーザー一覧フォームを表示します。
         //-------------------------------------------------------------------------------
         //
-        public static void ShowUserListForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmFollower.EFormType type, string screen_name = null, long retweet_id = -1)
+        public static void ShowUserListForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
         {
             if (!Utilization.ExistFrmFollower(type, screen_name, retweet_id)) {
-                FrmFollower frm = new FrmFollower(parent, imageListWrapper, type) {
+                FrmDispUsers frm = new FrmDispUsers(parent, imageListWrapper, type) {
                     UserScreenName = screen_name,
                     RetweetStatusID = retweet_id
                 };
@@ -483,8 +483,8 @@ namespace StarlitTwit
         /// <param name="screen_name">ユーザー名</param>
         public static void ShowUserTweet(FrmMain parent, string screen_name)
         {
-            FrmDispTweet frm = new FrmDispTweet(parent, parent.ImageListWrapper);
-            frm.FormType = FrmDispTweet.EFormType.User;
+            FrmDispStatuses frm = new FrmDispStatuses(parent, parent.ImageListWrapper);
+            frm.FormType = FrmDispStatuses.EFormType.UserStatus;
             frm.UserScreenName = screen_name;
             frm.Show(parent);
         }
@@ -518,12 +518,12 @@ namespace StarlitTwit
         /// <param name="screen_name">UserFollower,UserFollowingタイプのみ必要</param>
         /// <param name="retweet_id">Retweeterタイプのみ必要</param>
         /// <returns>あればtrue,なければfalse</returns>
-        public static bool ExistFrmFollower(FrmFollower.EFormType type, string screen_name = null, long retweet_id = -1)
+        public static bool ExistFrmFollower(FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
         {
-            Func<FrmFollower, bool> judgeFunc = f =>
+            Func<FrmDispUsers, bool> judgeFunc = f =>
                 f.FormType == type
-                && !((type == FrmFollower.EFormType.UserFollower || type == FrmFollower.EFormType.UserFollowing) && f.UserScreenName != screen_name)
-                && !(type == FrmFollower.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
+                && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFollowing) && f.UserScreenName != screen_name)
+                && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
 
             return ExistForm<FrmFollower>(judgeFunc);
         }
