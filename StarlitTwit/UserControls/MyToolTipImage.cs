@@ -245,12 +245,11 @@ namespace StarlitTwit.UserControls
             lock (_lockimg) {
                 Graphics g = e.Graphics;
                 g.Clear(c.BackColor);
-                Rectangle drawrect = e.ClipRectangle;
-                g.DrawRectangle(PEN, 0, 0, drawrect.Width - 1, drawrect.Height - 1);
+                g.DrawRectangle(PEN, 0, 0, Size.Width - 1, Size.Height - 1);
                 Image img = (_dispLoading && _gettingImage) ? _imageAnimation.Image :
                             (_img != null) ? _img[_imgIndex] :
                                              StarlitTwit.Properties.Resources.failed;
-                g.DrawImage(img, PADDING, PADDING, drawrect.Width - PADDING * 2, drawrect.Height - PADDING * 2);
+                g.DrawImage(img, PADDING, PADDING, Size.Width - PADDING * 2, Size.Height - PADDING * 2);
             }
         }
         #endregion (Disp_Paint)
