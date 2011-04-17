@@ -10,6 +10,7 @@
  - Mention判定は両方小文字にあわせる
  - 自分へのReplyのRetweetがMentionと判定される
 ・ToolTipへの画像描画を(0,0)からサイズ分にするように
+/////
 
 ■要修正・確認
 ・UserStream
