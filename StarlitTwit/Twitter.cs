@@ -3108,7 +3108,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public bool TextIncludeUserMention(string screen_name)
         {
-            return Text.Contains('@' + screen_name);
+            return Text.ToLower().Contains('@' + screen_name.ToLower());
         }
         #endregion (TextIncludeUserMention)
         //-------------------------------------------------------------------------------
