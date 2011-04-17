@@ -525,7 +525,7 @@ namespace StarlitTwit
                 && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFollowing) && f.UserScreenName != screen_name)
                 && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
 
-            return ExistForm<FrmFollower>(judgeFunc);
+            return ExistForm<FrmDispUsers>(judgeFunc);
         }
         #endregion (ExistFrmFollower)
         //-------------------------------------------------------------------------------
