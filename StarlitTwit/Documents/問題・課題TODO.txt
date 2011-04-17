@@ -43,13 +43,9 @@
 ・画像の読み込み時に行がずれた時どうする？
 
 ・URLが改行してる時に2行目のところでリンクが反応しない
-・サブウィンドウは設定変更がすぐ適用されない(仕様にする？)
-・検索でjp限定等条件？
 ・SearchでReplyがおかしい
 ・タブは上のみOwnerDrawしないversionを用意する？
-・オブジェクト使用中エラー(ImageAnimation)
- -3/28 22:00前(Release)のエラー
- -4/1 1:07:22.8906 (Release)
+・サブウィンドウは設定変更がすぐ適用されない(仕様にする？)
 
 ■既存機能追加
 ・Blockリスト
@@ -60,6 +56,7 @@
 ・タスクバーアイコンの機能追加
 ・短縮URL自動expand
 ・取得サムネイル画像の保持
+・検索でjp限定等条件
 ↓短縮URL対応増加
  -tinyurl
  -t.co
@@ -80,6 +77,9 @@
 ＋ユーザー変更
 
 ■要検証・調査・様子見
+・オブジェクト使用中エラー(ImageAnimation)
+ -3/28 22:00前(Release)のエラー
+ -4/1 1:07:22.8906 (Release)
 ・HomeとReplyの取得の同期→発言する度に両方取るのは・・・
 ・ImageAnimation.NextFrameのフレーム選択でInvalidOperationException
 ・同一キータブ作成時エラーメッセージ(フォームで確認はしている筈・・・)
@@ -140,6 +140,9 @@
 
 
 ★DONE
+11/04/18
+・UserStreamのMentionの判定を修正
+・各種表示フォームの整理
 11/04/07
 ・UserStreamのDirectMessageがhistoryに入っていたのを修正
 11/04/05
