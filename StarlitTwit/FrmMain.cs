@@ -633,8 +633,7 @@ namespace StarlitTwit
         {
             UctlDispTwit dispTwit = (UctlDispTwit)sender;
 
-            FrmDispStatuses frm = new FrmDispStatuses(this, imageListWrapper);
-            frm.FormType = FrmDispStatuses.EFormType.Conversation;
+            FrmDispStatuses frm = new FrmDispStatuses(this, imageListWrapper,FrmDispStatuses.EFormType.Conversation);
             frm.ReplyStartTwitdata = dispTwit.TraceReply(e.TwitData.StatusID);
             frm.Show(this);
         }

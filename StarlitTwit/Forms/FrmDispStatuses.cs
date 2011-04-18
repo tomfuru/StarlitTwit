@@ -17,11 +17,13 @@ namespace StarlitTwit
         #region メンバー
         //-------------------------------------------------------------------------------
         /// <summary>フォームのタイプ</summary>
-        public EFormType FormType { get; set; }
-        /// <summary>FormType=Userの時必須，ユーザー名</summary>
+        public EFormType FormType { get; private set; }
+        /// <summary>FormType=User,UserFavorite,ListStatusesの時必須，ユーザー名</summary>
         public string UserScreenName { get; set; }
         /// <summary>FormType=Conversationの時必須，最初の発言データ</summary>
         public IEnumerable<TwitData> ReplyStartTwitdata { get; set; }
+        /// <summary>FormType=ListStatusesの時必須，リストID</summary>
+        public string ListID { get; set; }
 
         const int GET_NUM = 50;
         //-------------------------------------------------------------------------------
@@ -31,11 +33,11 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmDispStatuses(FrmMain parent, ImageListWrapper imageListWrapper)
+        public FrmDispStatuses(FrmMain parent, ImageListWrapper imageListWrapper,EFormType formtype)
         {
             InitializeComponent();
             ReplyStartTwitdata = null;
-            FormType = EFormType.UserStatus;
+            FormType = formtype;
             uctlDispTwit.ImageListWrapper = imageListWrapper;
             parent.RegisterUctlDispTwitEvent(uctlDispTwit);
         }

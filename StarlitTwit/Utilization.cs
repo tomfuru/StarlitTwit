@@ -483,8 +483,7 @@ namespace StarlitTwit
         /// <param name="screen_name">ユーザー名</param>
         public static void ShowUserTweet(FrmMain parent, string screen_name)
         {
-            FrmDispStatuses frm = new FrmDispStatuses(parent, parent.ImageListWrapper);
-            frm.FormType = FrmDispStatuses.EFormType.UserStatus;
+            FrmDispStatuses frm = new FrmDispStatuses(parent, parent.ImageListWrapper,FrmDispStatuses.EFormType.UserStatus);
             frm.UserScreenName = screen_name;
             frm.Show(parent);
         }
