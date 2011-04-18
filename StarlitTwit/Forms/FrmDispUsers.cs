@@ -492,38 +492,30 @@ namespace StarlitTwit
                     this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
                 }
                 else {
-                    SequentData<UserProfile> proftpl;
+                    SequentData<UserProfile> proftpl= null;
                     switch (FormType) {
                         case EFormType.MyFollower:
                             proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.MyFollowing:
                             proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.UserFollower:
                             proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.UserFollowing:
                             proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.ListMember:
                             proftpl = FrmMain.Twitter.list_members_Get(ListID, UserScreenName, _next_cursor);
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
                             break;
                         case EFormType.ListSubscriber:
                             proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);              
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
                             break;
+                    }
+                    if (proftpl != null) {
+                        profiles = proftpl.Data;
+                        _next_cursor = proftpl.NextCursor;
                     }
                     this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
                 }
