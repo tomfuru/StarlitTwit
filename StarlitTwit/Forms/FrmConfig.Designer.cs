@@ -108,7 +108,6 @@
             this.btnBCReplyToOtherUnSelected = new System.Windows.Forms.Button();
             this.txtBCReplyToOtherUnSelected = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
-            this.btnBCNormalSelected = new System.Windows.Forms.Button();
             this.txtBCNormalSelected = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.btnBCNormalUnSelected = new System.Windows.Forms.Button();
@@ -161,6 +160,8 @@
             this.chbUStEnableAllReplies = new System.Windows.Forms.CheckBox();
             this.chbUStStartUp = new System.Windows.Forms.CheckBox();
             this.tabpgElse = new System.Windows.Forms.TabPage();
+            this.chbConfirmDialogFollow = new System.Windows.Forms.CheckBox();
+            this.chbConfirmDialogFav = new System.Windows.Forms.CheckBox();
             this.cmbURLShortenType = new System.Windows.Forms.ComboBox();
             this.label40 = new System.Windows.Forms.Label();
             this.btnSelectWebBrowser = new System.Windows.Forms.Button();
@@ -178,8 +179,7 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.chbConfirmDialogFav = new System.Windows.Forms.CheckBox();
-            this.chbConfirmDialogFollow = new System.Windows.Forms.CheckBox();
+            this.btnBCNormalSelected = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
@@ -1008,6 +1008,7 @@
             // 
             // tabpgFontAndColor
             // 
+            this.tabpgFontAndColor.Controls.Add(this.btnBCNormalSelected);
             this.tabpgFontAndColor.Controls.Add(this.btnAllFontColorDefault);
             this.tabpgFontAndColor.Controls.Add(this.btnBCReplyToMeSelected);
             this.tabpgFontAndColor.Controls.Add(this.txtBCReplyToMeSelected);
@@ -1034,7 +1035,6 @@
             this.tabpgFontAndColor.Controls.Add(this.btnBCReplyToOtherUnSelected);
             this.tabpgFontAndColor.Controls.Add(this.txtBCReplyToOtherUnSelected);
             this.tabpgFontAndColor.Controls.Add(this.label25);
-            this.tabpgFontAndColor.Controls.Add(this.btnBCNormalSelected);
             this.tabpgFontAndColor.Controls.Add(this.txtBCNormalSelected);
             this.tabpgFontAndColor.Controls.Add(this.label23);
             this.tabpgFontAndColor.Controls.Add(this.btnBCNormalUnSelected);
@@ -1326,17 +1326,6 @@
             this.label25.Size = new System.Drawing.Size(89, 12);
             this.label25.TabIndex = 35;
             this.label25.Text = "非選択時背景色";
-            // 
-            // btnBCNormalSelected
-            // 
-            this.btnBCNormalSelected.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnBCNormalSelected.Location = new System.Drawing.Point(305, 50);
-            this.btnBCNormalSelected.Name = "btnBCNormalSelected";
-            this.btnBCNormalSelected.Size = new System.Drawing.Size(43, 23);
-            this.btnBCNormalSelected.TabIndex = 3;
-            this.btnBCNormalSelected.Text = "設定";
-            this.btnBCNormalSelected.UseVisualStyleBackColor = true;
-            this.btnBCNormalSelected.Click += new System.EventHandler(this.btnBackColorConfig_Click);
             // 
             // txtBCNormalSelected
             // 
@@ -1902,6 +1891,26 @@
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
             // 
+            // chbConfirmDialogFollow
+            // 
+            this.chbConfirmDialogFollow.AutoSize = true;
+            this.chbConfirmDialogFollow.Location = new System.Drawing.Point(20, 89);
+            this.chbConfirmDialogFollow.Name = "chbConfirmDialogFollow";
+            this.chbConfirmDialogFollow.Size = new System.Drawing.Size(266, 16);
+            this.chbConfirmDialogFollow.TabIndex = 16;
+            this.chbConfirmDialogFollow.Text = "フォロー・フォロー解除時に確認ダイアログを表示する";
+            this.chbConfirmDialogFollow.UseVisualStyleBackColor = true;
+            // 
+            // chbConfirmDialogFav
+            // 
+            this.chbConfirmDialogFav.AutoSize = true;
+            this.chbConfirmDialogFav.Location = new System.Drawing.Point(20, 112);
+            this.chbConfirmDialogFav.Name = "chbConfirmDialogFav";
+            this.chbConfirmDialogFav.Size = new System.Drawing.Size(271, 16);
+            this.chbConfirmDialogFav.TabIndex = 15;
+            this.chbConfirmDialogFav.Text = "お気に入り追加・削除時に確認ダイアログを表示する";
+            this.chbConfirmDialogFav.UseVisualStyleBackColor = true;
+            // 
             // cmbURLShortenType
             // 
             this.cmbURLShortenType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -2064,25 +2073,15 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // chbConfirmDialogFav
+            // btnBCNormalSelected
             // 
-            this.chbConfirmDialogFav.AutoSize = true;
-            this.chbConfirmDialogFav.Location = new System.Drawing.Point(20, 112);
-            this.chbConfirmDialogFav.Name = "chbConfirmDialogFav";
-            this.chbConfirmDialogFav.Size = new System.Drawing.Size(271, 16);
-            this.chbConfirmDialogFav.TabIndex = 15;
-            this.chbConfirmDialogFav.Text = "お気に入り追加・削除時に確認ダイアログを表示する";
-            this.chbConfirmDialogFav.UseVisualStyleBackColor = true;
-            // 
-            // chbConfirmDialogFollow
-            // 
-            this.chbConfirmDialogFollow.AutoSize = true;
-            this.chbConfirmDialogFollow.Location = new System.Drawing.Point(20, 89);
-            this.chbConfirmDialogFollow.Name = "chbConfirmDialogFollow";
-            this.chbConfirmDialogFollow.Size = new System.Drawing.Size(266, 16);
-            this.chbConfirmDialogFollow.TabIndex = 16;
-            this.chbConfirmDialogFollow.Text = "フォロー・フォロー解除時に確認ダイアログを表示する";
-            this.chbConfirmDialogFollow.UseVisualStyleBackColor = true;
+            this.btnBCNormalSelected.Location = new System.Drawing.Point(305, 50);
+            this.btnBCNormalSelected.Name = "btnBCNormalSelected";
+            this.btnBCNormalSelected.Size = new System.Drawing.Size(43, 23);
+            this.btnBCNormalSelected.TabIndex = 60;
+            this.btnBCNormalSelected.Text = "設定";
+            this.btnBCNormalSelected.UseVisualStyleBackColor = true;
+            this.btnBCNormalSelected.Click += new System.EventHandler(this.btnBackColorConfig_Click);
             // 
             // FrmConfig
             // 
@@ -2209,7 +2208,6 @@
         private System.Windows.Forms.TextBox txtExNormalText;
         private System.Windows.Forms.Button btnFontNormalText;
         private System.Windows.Forms.Button btnBCNormalUnSelected;
-        private System.Windows.Forms.Button btnBCNormalSelected;
         private System.Windows.Forms.TextBox txtBCNormalSelected;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Button btnBCRTSelected;
@@ -2295,5 +2293,6 @@
         private System.Windows.Forms.CheckBox chbUStStartUp;
         private System.Windows.Forms.CheckBox chbConfirmDialogFollow;
         private System.Windows.Forms.CheckBox chbConfirmDialogFav;
+        private System.Windows.Forms.Button btnBCNormalSelected;
     }
 }
