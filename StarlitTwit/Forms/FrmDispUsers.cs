@@ -22,6 +22,8 @@ namespace StarlitTwit
         public EFormType FormType { get; private set; }
         /// <summary>FormType=UserFollowing,UserFollowerの時に設定しなければならない</summary>
         public string UserScreenName { get; set; }
+        /// <summary>FormType=ListMember,ListSubscriberの時に設定しなければならない</summary>
+        public string ListID { get;set;}
         /// <summary>FormType=Retweeterの時に設定しなければならない</summary>
         public long RetweetStatusID { get; set; }
 
@@ -49,7 +51,7 @@ namespace StarlitTwit
             lstvList.SmallImageList = imgListWrapper.ImageList;
             FormType = formtype;
 
-            UserScreenName = null;
+            UserScreenName = ListID = null;
             RetweetStatusID = -1;
 
             _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingS.Clone();
@@ -114,6 +116,16 @@ namespace StarlitTwit
                 case EFormType.Retweeter:
                     Debug.Assert(RetweetStatusID > 0, "UserScreenNameが設定されていない");
                     Text = string.Format("発言ID{0}のリツイーター", RetweetStatusID);
+                    break;
+                case EFormType.ListMember:
+                    Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
+                    Debug.Assert(ListID != null, "ListIDが設定されていない");
+                    Text = string.Format("リスト{0}のメンバー", UserScreenName);
+                    break;
+                case EFormType.ListSubscriber:
+                    Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
+                    Debug.Assert(ListID != null, "ListIDが設定されていない");
+                    Text = string.Format("リスト{0}のフォロワー", UserScreenName);
                     break;
             }
 
@@ -499,6 +511,16 @@ namespace StarlitTwit
                             break;
                         case EFormType.UserFollowing:
                             proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
+                            break;
+                        case EFormType.ListMember:
+                            proftpl = FrmMain.Twitter.list_members_Get(ListID, UserScreenName, _next_cursor);
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
+                            break;
+                        case EFormType.ListSubscriber:
+                            proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);              
                             profiles = proftpl.Data;
                             _next_cursor = proftpl.NextCursor;
                             break;
