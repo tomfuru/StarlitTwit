@@ -1613,8 +1613,9 @@ namespace StarlitTwit
                                 this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
                             }
                             // Reply
-                            if (twitdata.MainTwitData.Mention_UserID == Twitter.ID
-                             || twitdata.MainTwitData.TextIncludeUserMention(Twitter.ScreenName)) {
+                            if (!twitdata.IsRT()
+                             && (twitdata.MainTwitData.Mention_UserID == Twitter.ID
+                              || twitdata.MainTwitData.TextIncludeUserMention(Twitter.ScreenName))) {
                                 this.Invoke(new Action(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true, true)));
                                 if (SettingsData.DisplayReplyBaloon) {
                                     PopupTasktray(tasktray.Text + "：Reply 新着有り", Utilization.MakePopupText(twitdata));
