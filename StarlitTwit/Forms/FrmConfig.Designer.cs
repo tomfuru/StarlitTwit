@@ -82,6 +82,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tabpgFontAndColor = new System.Windows.Forms.TabPage();
+            this.btnBCNormalSelected = new System.Windows.Forms.Button();
             this.btnAllFontColorDefault = new System.Windows.Forms.Button();
             this.btnBCReplyToMeSelected = new System.Windows.Forms.Button();
             this.txtBCReplyToMeSelected = new System.Windows.Forms.TextBox();
@@ -159,6 +160,25 @@
             this.chbUStAutoOpenLog = new System.Windows.Forms.CheckBox();
             this.chbUStEnableAllReplies = new System.Windows.Forms.CheckBox();
             this.chbUStStartUp = new System.Windows.Forms.CheckBox();
+            this.tabpgFilter = new System.Windows.Forms.TabPage();
+            this.btnFilterRemove = new System.Windows.Forms.Button();
+            this.btnFilterAdd = new System.Windows.Forms.Button();
+            this.grpObjStatusPattern = new System.Windows.Forms.GroupBox();
+            this.txtObjStatusClientPatterns = new System.Windows.Forms.TextBox();
+            this.txtObjStatusTextPatterns = new System.Windows.Forms.TextBox();
+            this.chbObjStatus_ClientPattern = new System.Windows.Forms.CheckBox();
+            this.chbObjStatus_TextPattern = new System.Windows.Forms.CheckBox();
+            this.chbObjStatus_Normal = new System.Windows.Forms.CheckBox();
+            this.chbObjStatus_Reply = new System.Windows.Forms.CheckBox();
+            this.chbObjStatus_Retweet = new System.Windows.Forms.CheckBox();
+            this.chbObjStatus_All = new System.Windows.Forms.CheckBox();
+            this.grpObjUser = new System.Windows.Forms.GroupBox();
+            this.txtObjUserPatterns = new System.Windows.Forms.TextBox();
+            this.rdbObjUser_Pattern = new System.Windows.Forms.RadioButton();
+            this.rdbObjUser_Followed = new System.Windows.Forms.RadioButton();
+            this.rdbObjUser_Following = new System.Windows.Forms.RadioButton();
+            this.rdbObjUser_All = new System.Windows.Forms.RadioButton();
+            this.lstFilters = new System.Windows.Forms.ListBox();
             this.tabpgElse = new System.Windows.Forms.TabPage();
             this.chbConfirmDialogFollow = new System.Windows.Forms.CheckBox();
             this.chbConfirmDialogFav = new System.Windows.Forms.CheckBox();
@@ -179,7 +199,6 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.btnBCNormalSelected = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
@@ -204,6 +223,9 @@
             this.tabpgThumbnail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).BeginInit();
             this.tabpgUserStream.SuspendLayout();
+            this.tabpgFilter.SuspendLayout();
+            this.grpObjStatusPattern.SuspendLayout();
+            this.grpObjUser.SuspendLayout();
             this.tabpgElse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).BeginInit();
             this.SuspendLayout();
@@ -218,6 +240,7 @@
             this.tabControl1.Controls.Add(this.tabpgFontAndColor);
             this.tabControl1.Controls.Add(this.tabpgThumbnail);
             this.tabControl1.Controls.Add(this.tabpgUserStream);
+            this.tabControl1.Controls.Add(this.tabpgFilter);
             this.tabControl1.Controls.Add(this.tabpgElse);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -231,10 +254,10 @@
             this.tabpgGet.Controls.Add(this.label39);
             this.tabpgGet.Controls.Add(this.label10);
             this.tabpgGet.Controls.Add(this.tableLayoutPanel1);
-            this.tabpgGet.Location = new System.Drawing.Point(4, 21);
+            this.tabpgGet.Location = new System.Drawing.Point(4, 22);
             this.tabpgGet.Name = "tabpgGet";
             this.tabpgGet.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgGet.Size = new System.Drawing.Size(386, 325);
+            this.tabpgGet.Size = new System.Drawing.Size(386, 324);
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
@@ -715,10 +738,10 @@
             this.tabpgDisp.Controls.Add(this.txtNameFormat);
             this.tabpgDisp.Controls.Add(this.label9);
             this.tabpgDisp.Controls.Add(this.label8);
-            this.tabpgDisp.Location = new System.Drawing.Point(4, 21);
+            this.tabpgDisp.Location = new System.Drawing.Point(4, 22);
             this.tabpgDisp.Name = "tabpgDisp";
             this.tabpgDisp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgDisp.Size = new System.Drawing.Size(386, 325);
+            this.tabpgDisp.Size = new System.Drawing.Size(386, 324);
             this.tabpgDisp.TabIndex = 1;
             this.tabpgDisp.Text = "表示";
             this.tabpgDisp.UseVisualStyleBackColor = true;
@@ -1061,13 +1084,23 @@
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalText);
             this.tabpgFontAndColor.Controls.Add(this.txtExNormalTitle);
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalTitle);
-            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 21);
+            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 22);
             this.tabpgFontAndColor.Name = "tabpgFontAndColor";
             this.tabpgFontAndColor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 325);
+            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 324);
             this.tabpgFontAndColor.TabIndex = 2;
             this.tabpgFontAndColor.Text = "フォント・色";
             this.tabpgFontAndColor.UseVisualStyleBackColor = true;
+            // 
+            // btnBCNormalSelected
+            // 
+            this.btnBCNormalSelected.Location = new System.Drawing.Point(305, 50);
+            this.btnBCNormalSelected.Name = "btnBCNormalSelected";
+            this.btnBCNormalSelected.Size = new System.Drawing.Size(43, 23);
+            this.btnBCNormalSelected.TabIndex = 60;
+            this.btnBCNormalSelected.Text = "設定";
+            this.btnBCNormalSelected.UseVisualStyleBackColor = true;
+            this.btnBCNormalSelected.Click += new System.EventHandler(this.btnBackColorConfig_Click);
             // 
             // btnAllFontColorDefault
             // 
@@ -1612,10 +1645,10 @@
             this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
             this.tabpgThumbnail.Controls.Add(this.label45);
-            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
+            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 22);
             this.tabpgThumbnail.Name = "tabpgThumbnail";
             this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
+            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 324);
             this.tabpgThumbnail.TabIndex = 4;
             this.tabpgThumbnail.Text = "サムネイル";
             this.tabpgThumbnail.UseVisualStyleBackColor = true;
@@ -1816,10 +1849,10 @@
             this.tabpgUserStream.Controls.Add(this.chbUStAutoOpenLog);
             this.tabpgUserStream.Controls.Add(this.chbUStEnableAllReplies);
             this.tabpgUserStream.Controls.Add(this.chbUStStartUp);
-            this.tabpgUserStream.Location = new System.Drawing.Point(4, 21);
+            this.tabpgUserStream.Location = new System.Drawing.Point(4, 22);
             this.tabpgUserStream.Name = "tabpgUserStream";
             this.tabpgUserStream.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgUserStream.Size = new System.Drawing.Size(386, 325);
+            this.tabpgUserStream.Size = new System.Drawing.Size(386, 324);
             this.tabpgUserStream.TabIndex = 5;
             this.tabpgUserStream.Text = "UserStream";
             this.tabpgUserStream.UseVisualStyleBackColor = true;
@@ -1864,6 +1897,221 @@
             this.chbUStStartUp.Text = "起動と同時にUserStreamを開始する";
             this.chbUStStartUp.UseVisualStyleBackColor = true;
             // 
+            // tabpgFilter
+            // 
+            this.tabpgFilter.Controls.Add(this.btnFilterRemove);
+            this.tabpgFilter.Controls.Add(this.btnFilterAdd);
+            this.tabpgFilter.Controls.Add(this.grpObjStatusPattern);
+            this.tabpgFilter.Controls.Add(this.grpObjUser);
+            this.tabpgFilter.Controls.Add(this.lstFilters);
+            this.tabpgFilter.Location = new System.Drawing.Point(4, 22);
+            this.tabpgFilter.Name = "tabpgFilter";
+            this.tabpgFilter.Padding = new System.Windows.Forms.Padding(3);
+            this.tabpgFilter.Size = new System.Drawing.Size(386, 324);
+            this.tabpgFilter.TabIndex = 6;
+            this.tabpgFilter.Text = "フィルタ";
+            this.tabpgFilter.UseVisualStyleBackColor = true;
+            // 
+            // btnFilterRemove
+            // 
+            this.btnFilterRemove.Enabled = false;
+            this.btnFilterRemove.Location = new System.Drawing.Point(66, 293);
+            this.btnFilterRemove.Name = "btnFilterRemove";
+            this.btnFilterRemove.Size = new System.Drawing.Size(52, 23);
+            this.btnFilterRemove.TabIndex = 4;
+            this.btnFilterRemove.Text = "削除";
+            this.btnFilterRemove.UseVisualStyleBackColor = true;
+            this.btnFilterRemove.Click += new System.EventHandler(this.btnFilterRemove_Click);
+            // 
+            // btnFilterAdd
+            // 
+            this.btnFilterAdd.Location = new System.Drawing.Point(8, 293);
+            this.btnFilterAdd.Name = "btnFilterAdd";
+            this.btnFilterAdd.Size = new System.Drawing.Size(52, 23);
+            this.btnFilterAdd.TabIndex = 3;
+            this.btnFilterAdd.Text = "追加";
+            this.btnFilterAdd.UseVisualStyleBackColor = true;
+            this.btnFilterAdd.Click += new System.EventHandler(this.btnFilterAdd_Click);
+            // 
+            // grpObjStatusPattern
+            // 
+            this.grpObjStatusPattern.Controls.Add(this.txtObjStatusClientPatterns);
+            this.grpObjStatusPattern.Controls.Add(this.txtObjStatusTextPatterns);
+            this.grpObjStatusPattern.Controls.Add(this.chbObjStatus_ClientPattern);
+            this.grpObjStatusPattern.Controls.Add(this.chbObjStatus_TextPattern);
+            this.grpObjStatusPattern.Controls.Add(this.chbObjStatus_Normal);
+            this.grpObjStatusPattern.Controls.Add(this.chbObjStatus_Reply);
+            this.grpObjStatusPattern.Controls.Add(this.chbObjStatus_Retweet);
+            this.grpObjStatusPattern.Controls.Add(this.chbObjStatus_All);
+            this.grpObjStatusPattern.Location = new System.Drawing.Point(127, 134);
+            this.grpObjStatusPattern.Name = "grpObjStatusPattern";
+            this.grpObjStatusPattern.Size = new System.Drawing.Size(253, 189);
+            this.grpObjStatusPattern.TabIndex = 2;
+            this.grpObjStatusPattern.TabStop = false;
+            this.grpObjStatusPattern.Text = "対象発言パターン";
+            // 
+            // txtObjStatusClientPatterns
+            // 
+            this.txtObjStatusClientPatterns.Enabled = false;
+            this.txtObjStatusClientPatterns.Location = new System.Drawing.Point(6, 144);
+            this.txtObjStatusClientPatterns.Multiline = true;
+            this.txtObjStatusClientPatterns.Name = "txtObjStatusClientPatterns";
+            this.txtObjStatusClientPatterns.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtObjStatusClientPatterns.Size = new System.Drawing.Size(241, 37);
+            this.txtObjStatusClientPatterns.TabIndex = 11;
+            // 
+            // txtObjStatusTextPatterns
+            // 
+            this.txtObjStatusTextPatterns.Enabled = false;
+            this.txtObjStatusTextPatterns.Location = new System.Drawing.Point(6, 78);
+            this.txtObjStatusTextPatterns.Multiline = true;
+            this.txtObjStatusTextPatterns.Name = "txtObjStatusTextPatterns";
+            this.txtObjStatusTextPatterns.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtObjStatusTextPatterns.Size = new System.Drawing.Size(241, 37);
+            this.txtObjStatusTextPatterns.TabIndex = 8;
+            // 
+            // chbObjStatus_ClientPattern
+            // 
+            this.chbObjStatus_ClientPattern.AutoSize = true;
+            this.chbObjStatus_ClientPattern.Location = new System.Drawing.Point(6, 122);
+            this.chbObjStatus_ClientPattern.Name = "chbObjStatus_ClientPattern";
+            this.chbObjStatus_ClientPattern.Size = new System.Drawing.Size(249, 16);
+            this.chbObjStatus_ClientPattern.TabIndex = 5;
+            this.chbObjStatus_ClientPattern.Text = "以下の各行の正規表現に当てはまるクライアント";
+            this.chbObjStatus_ClientPattern.UseVisualStyleBackColor = true;
+            this.chbObjStatus_ClientPattern.CheckedChanged += new System.EventHandler(this.chbObjStatus_Pattern_CheckedChanged);
+            // 
+            // chbObjStatus_TextPattern
+            // 
+            this.chbObjStatus_TextPattern.AutoSize = true;
+            this.chbObjStatus_TextPattern.Location = new System.Drawing.Point(7, 57);
+            this.chbObjStatus_TextPattern.Name = "chbObjStatus_TextPattern";
+            this.chbObjStatus_TextPattern.Size = new System.Drawing.Size(222, 16);
+            this.chbObjStatus_TextPattern.TabIndex = 4;
+            this.chbObjStatus_TextPattern.Text = "以下の各行の正規表現に当てはまる本文";
+            this.chbObjStatus_TextPattern.UseVisualStyleBackColor = true;
+            this.chbObjStatus_TextPattern.CheckedChanged += new System.EventHandler(this.chbObjStatus_Pattern_CheckedChanged);
+            // 
+            // chbObjStatus_Normal
+            // 
+            this.chbObjStatus_Normal.AutoSize = true;
+            this.chbObjStatus_Normal.Location = new System.Drawing.Point(157, 35);
+            this.chbObjStatus_Normal.Name = "chbObjStatus_Normal";
+            this.chbObjStatus_Normal.Size = new System.Drawing.Size(84, 16);
+            this.chbObjStatus_Normal.TabIndex = 3;
+            this.chbObjStatus_Normal.Text = "通常ツイート";
+            this.chbObjStatus_Normal.UseVisualStyleBackColor = true;
+            // 
+            // chbObjStatus_Reply
+            // 
+            this.chbObjStatus_Reply.AutoSize = true;
+            this.chbObjStatus_Reply.Location = new System.Drawing.Point(83, 35);
+            this.chbObjStatus_Reply.Name = "chbObjStatus_Reply";
+            this.chbObjStatus_Reply.Size = new System.Drawing.Size(57, 16);
+            this.chbObjStatus_Reply.TabIndex = 2;
+            this.chbObjStatus_Reply.Text = "リプライ";
+            this.chbObjStatus_Reply.UseVisualStyleBackColor = true;
+            // 
+            // chbObjStatus_Retweet
+            // 
+            this.chbObjStatus_Retweet.AutoSize = true;
+            this.chbObjStatus_Retweet.Location = new System.Drawing.Point(7, 35);
+            this.chbObjStatus_Retweet.Name = "chbObjStatus_Retweet";
+            this.chbObjStatus_Retweet.Size = new System.Drawing.Size(67, 16);
+            this.chbObjStatus_Retweet.TabIndex = 1;
+            this.chbObjStatus_Retweet.Text = "リツイート";
+            this.chbObjStatus_Retweet.UseVisualStyleBackColor = true;
+            // 
+            // chbObjStatus_All
+            // 
+            this.chbObjStatus_All.AutoSize = true;
+            this.chbObjStatus_All.Location = new System.Drawing.Point(7, 14);
+            this.chbObjStatus_All.Name = "chbObjStatus_All";
+            this.chbObjStatus_All.Size = new System.Drawing.Size(60, 16);
+            this.chbObjStatus_All.TabIndex = 0;
+            this.chbObjStatus_All.Text = "全発言";
+            this.chbObjStatus_All.UseVisualStyleBackColor = true;
+            this.chbObjStatus_All.CheckedChanged += new System.EventHandler(this.chbObjStatus_All_CheckedChanged);
+            // 
+            // grpObjUser
+            // 
+            this.grpObjUser.Controls.Add(this.txtObjUserPatterns);
+            this.grpObjUser.Controls.Add(this.rdbObjUser_Pattern);
+            this.grpObjUser.Controls.Add(this.rdbObjUser_Followed);
+            this.grpObjUser.Controls.Add(this.rdbObjUser_Following);
+            this.grpObjUser.Controls.Add(this.rdbObjUser_All);
+            this.grpObjUser.Location = new System.Drawing.Point(127, 7);
+            this.grpObjUser.Name = "grpObjUser";
+            this.grpObjUser.Size = new System.Drawing.Size(253, 125);
+            this.grpObjUser.TabIndex = 1;
+            this.grpObjUser.TabStop = false;
+            this.grpObjUser.Text = "対象ユーザー";
+            // 
+            // txtObjUserPatterns
+            // 
+            this.txtObjUserPatterns.Enabled = false;
+            this.txtObjUserPatterns.Location = new System.Drawing.Point(6, 82);
+            this.txtObjUserPatterns.Multiline = true;
+            this.txtObjUserPatterns.Name = "txtObjUserPatterns";
+            this.txtObjUserPatterns.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtObjUserPatterns.Size = new System.Drawing.Size(241, 37);
+            this.txtObjUserPatterns.TabIndex = 7;
+            // 
+            // rdbObjUser_Pattern
+            // 
+            this.rdbObjUser_Pattern.AutoSize = true;
+            this.rdbObjUser_Pattern.Location = new System.Drawing.Point(6, 62);
+            this.rdbObjUser_Pattern.Name = "rdbObjUser_Pattern";
+            this.rdbObjUser_Pattern.Size = new System.Drawing.Size(237, 16);
+            this.rdbObjUser_Pattern.TabIndex = 3;
+            this.rdbObjUser_Pattern.TabStop = true;
+            this.rdbObjUser_Pattern.Text = "以下の各行の正規表現に当てはまるユーザー";
+            this.rdbObjUser_Pattern.UseVisualStyleBackColor = true;
+            this.rdbObjUser_Pattern.CheckedChanged += new System.EventHandler(this.rdbObjUser_Pattern_CheckedChanged);
+            // 
+            // rdbObjUser_Followed
+            // 
+            this.rdbObjUser_Followed.AutoSize = true;
+            this.rdbObjUser_Followed.Location = new System.Drawing.Point(119, 40);
+            this.rdbObjUser_Followed.Name = "rdbObjUser_Followed";
+            this.rdbObjUser_Followed.Size = new System.Drawing.Size(117, 16);
+            this.rdbObjUser_Followed.TabIndex = 2;
+            this.rdbObjUser_Followed.TabStop = true;
+            this.rdbObjUser_Followed.Text = "フォローされている人";
+            this.rdbObjUser_Followed.UseVisualStyleBackColor = true;
+            // 
+            // rdbObjUser_Following
+            // 
+            this.rdbObjUser_Following.AutoSize = true;
+            this.rdbObjUser_Following.Location = new System.Drawing.Point(6, 40);
+            this.rdbObjUser_Following.Name = "rdbObjUser_Following";
+            this.rdbObjUser_Following.Size = new System.Drawing.Size(107, 16);
+            this.rdbObjUser_Following.TabIndex = 1;
+            this.rdbObjUser_Following.TabStop = true;
+            this.rdbObjUser_Following.Text = "フォローしている人";
+            this.rdbObjUser_Following.UseVisualStyleBackColor = true;
+            // 
+            // rdbObjUser_All
+            // 
+            this.rdbObjUser_All.AutoSize = true;
+            this.rdbObjUser_All.Location = new System.Drawing.Point(6, 18);
+            this.rdbObjUser_All.Name = "rdbObjUser_All";
+            this.rdbObjUser_All.Size = new System.Drawing.Size(47, 16);
+            this.rdbObjUser_All.TabIndex = 0;
+            this.rdbObjUser_All.TabStop = true;
+            this.rdbObjUser_All.Text = "全員";
+            this.rdbObjUser_All.UseVisualStyleBackColor = true;
+            // 
+            // lstFilters
+            // 
+            this.lstFilters.FormattingEnabled = true;
+            this.lstFilters.ItemHeight = 12;
+            this.lstFilters.Location = new System.Drawing.Point(7, 7);
+            this.lstFilters.Name = "lstFilters";
+            this.lstFilters.Size = new System.Drawing.Size(114, 280);
+            this.lstFilters.TabIndex = 0;
+            this.lstFilters.SelectedIndexChanged += new System.EventHandler(this.lstFilters_SelectedIndexChanged);
+            // 
             // tabpgElse
             // 
             this.tabpgElse.Controls.Add(this.chbConfirmDialogFollow);
@@ -1883,10 +2131,10 @@
             this.tabpgElse.Controls.Add(this.chbDispDMBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyTooltip);
-            this.tabpgElse.Location = new System.Drawing.Point(4, 21);
+            this.tabpgElse.Location = new System.Drawing.Point(4, 22);
             this.tabpgElse.Name = "tabpgElse";
             this.tabpgElse.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgElse.Size = new System.Drawing.Size(386, 325);
+            this.tabpgElse.Size = new System.Drawing.Size(386, 324);
             this.tabpgElse.TabIndex = 3;
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
@@ -2073,16 +2321,6 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // btnBCNormalSelected
-            // 
-            this.btnBCNormalSelected.Location = new System.Drawing.Point(305, 50);
-            this.btnBCNormalSelected.Name = "btnBCNormalSelected";
-            this.btnBCNormalSelected.Size = new System.Drawing.Size(43, 23);
-            this.btnBCNormalSelected.TabIndex = 60;
-            this.btnBCNormalSelected.Text = "設定";
-            this.btnBCNormalSelected.UseVisualStyleBackColor = true;
-            this.btnBCNormalSelected.Click += new System.EventHandler(this.btnBackColorConfig_Click);
-            // 
             // FrmConfig
             // 
             this.AcceptButton = this.btnOK;
@@ -2132,6 +2370,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).EndInit();
             this.tabpgUserStream.ResumeLayout(false);
             this.tabpgUserStream.PerformLayout();
+            this.tabpgFilter.ResumeLayout(false);
+            this.grpObjStatusPattern.ResumeLayout(false);
+            this.grpObjStatusPattern.PerformLayout();
+            this.grpObjUser.ResumeLayout(false);
+            this.grpObjUser.PerformLayout();
             this.tabpgElse.ResumeLayout(false);
             this.tabpgElse.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).EndInit();
@@ -2294,5 +2537,24 @@
         private System.Windows.Forms.CheckBox chbConfirmDialogFollow;
         private System.Windows.Forms.CheckBox chbConfirmDialogFav;
         private System.Windows.Forms.Button btnBCNormalSelected;
+        private System.Windows.Forms.TabPage tabpgFilter;
+        private System.Windows.Forms.ListBox lstFilters;
+        private System.Windows.Forms.GroupBox grpObjStatusPattern;
+        private System.Windows.Forms.GroupBox grpObjUser;
+        private System.Windows.Forms.RadioButton rdbObjUser_Pattern;
+        private System.Windows.Forms.RadioButton rdbObjUser_Followed;
+        private System.Windows.Forms.RadioButton rdbObjUser_Following;
+        private System.Windows.Forms.RadioButton rdbObjUser_All;
+        private System.Windows.Forms.Button btnFilterRemove;
+        private System.Windows.Forms.Button btnFilterAdd;
+        private System.Windows.Forms.CheckBox chbObjStatus_ClientPattern;
+        private System.Windows.Forms.CheckBox chbObjStatus_TextPattern;
+        private System.Windows.Forms.CheckBox chbObjStatus_Normal;
+        private System.Windows.Forms.CheckBox chbObjStatus_Reply;
+        private System.Windows.Forms.CheckBox chbObjStatus_Retweet;
+        private System.Windows.Forms.CheckBox chbObjStatus_All;
+        private System.Windows.Forms.TextBox txtObjStatusClientPatterns;
+        private System.Windows.Forms.TextBox txtObjStatusTextPatterns;
+        private System.Windows.Forms.TextBox txtObjUserPatterns;
     }
 }
