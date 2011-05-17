@@ -131,6 +131,35 @@ namespace StarlitTwit
         #endregion (btnNameFormatSearchInit_Click)
 
         //===============================================================================
+        private void lstFilters_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnFilterRemove.Enabled = (lstFilters.SelectedIndex >= 0);
+        }
+        private void btnFilterAdd_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btnFilterRemove_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void chbObjStatus_All_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void rdbObjUser_Pattern_CheckedChanged(object sender, EventArgs e)
+        {
+            txtObjUserPatterns.Enabled = rdbObjUser_Pattern.Checked;
+        }
+        private void chbObjStatus_Pattern_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox chb = sender as CheckBox;
+            var txtbox = chb.Tag as TextBox;
+
+            txtbox.Enabled = chb.Checked;
+        }
+
+        //===============================================================================
         #region btnFontConfig_Click フォント設定ボタンクリック時
         //-------------------------------------------------------------------------------
         //
@@ -328,6 +357,10 @@ namespace StarlitTwit
             chbDispIcon.Tag = numIconSize;
             chbDispThumbnail.Tag = numThumbnailInterval;
             chbDispReplyTooltip.Tag = numReplyTooltipDepth;
+
+            //-------------------------------------------------------------------------------
+            chbObjStatus_ClientPattern.Tag = txtObjStatusClientPatterns;
+            chbObjStatus_TextPattern.Tag = txtObjUserPatterns;
         }
         #endregion (SetAssociateData)
         //===============================================================================

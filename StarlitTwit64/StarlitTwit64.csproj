@@ -1,0 +1,419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FC4D9C38-8347-49A6-832F-8768784C3AAE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StarlitTwit</RootNamespace>
+    <AssemblyName>StarlitTwit64</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\StarlitTwit\BaseTools.cs">
+      <Link>BaseTools.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmAuthWebBrowser.cs">
+      <Link>Forms\FrmAuthWebBrowser.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmAuthWebBrowser.designer.cs">
+      <Link>Forms\FrmAuthWebBrowser.designer.cs</Link>
+      <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmConfig.cs">
+      <Link>Forms\FrmConfig.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmConfig.designer.cs">
+      <Link>Forms\FrmConfig.designer.cs</Link>
+      <DependentUpon>FrmConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispLists.cs">
+      <Link>Forms\FrmDispLists.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispLists.designer.cs">
+      <Link>Forms\FrmDispLists.designer.cs</Link>
+      <DependentUpon>FrmDispLists.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispStatuses.cs">
+      <Link>Forms\FrmDispStatuses.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispStatuses.designer.cs">
+      <Link>Forms\FrmDispStatuses.designer.cs</Link>
+      <DependentUpon>FrmDispStatuses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispUsers.cs">
+      <Link>Forms\FrmDispUsers.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispUsers.designer.cs">
+      <Link>Forms\FrmDispUsers.designer.cs</Link>
+      <DependentUpon>FrmDispUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmGetTweet.cs">
+      <Link>Forms\FrmGetTweet.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmGetTweet.designer.cs">
+      <Link>Forms\FrmGetTweet.designer.cs</Link>
+      <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmMakeTab.cs">
+      <Link>Forms\FrmMakeTab.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmMakeTab.designer.cs">
+      <Link>Forms\FrmMakeTab.designer.cs</Link>
+      <DependentUpon>FrmMakeTab.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmProfile.cs">
+      <Link>Forms\FrmProfile.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmProfile.designer.cs">
+      <Link>Forms\FrmProfile.designer.cs</Link>
+      <DependentUpon>FrmProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmRenewProfileImage.cs">
+      <Link>Forms\FrmRenewProfileImage.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmRenewProfileImage.designer.cs">
+      <Link>Forms\FrmRenewProfileImage.designer.cs</Link>
+      <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmUserStreamWatch.cs">
+      <Link>Forms\FrmUserStreamWatch.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmUserStreamWatch.designer.cs">
+      <Link>Forms\FrmUserStreamWatch.designer.cs</Link>
+      <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmWebBrowser.cs">
+      <Link>Forms\FrmWebBrowser.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmWebBrowser.designer.cs">
+      <Link>Forms\FrmWebBrowser.designer.cs</Link>
+      <DependentUpon>FrmWebBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\FrmMain.cs">
+      <Link>FrmMain.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\FrmMain.designer.cs">
+      <Link>FrmMain.designer.cs</Link>
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Function\PictureGetter.cs">
+      <Link>Function\PictureGetter.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Function\StatusFilter.cs">
+      <Link>Function\StatusFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Function\URLShortener.cs">
+      <Link>Function\URLShortener.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\ImageAnimation.cs">
+      <Link>ImageAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\SerializableClass\SerializableColor.cs">
+      <Link>SerializableClass\SerializableColor.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\SerializableClass\SerializableDictionary.cs">
+      <Link>SerializableClass\SerializableDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\SerializableClass\SerializableFont.cs">
+      <Link>SerializableClass\SerializableFont.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\SettingsData.cs">
+      <Link>SettingsData.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Twitter.cs">
+      <Link>Twitter.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\ImageListWrapper.cs">
+      <Link>UserControls\ImageListWrapper.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\ListViewEx.cs">
+      <Link>UserControls\ListViewEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\MyToolTip.cs">
+      <Link>UserControls\MyToolTip.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\MyToolTipBase.cs">
+      <Link>UserControls\MyToolTipBase.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\MyToolTipImage.cs">
+      <Link>UserControls\MyToolTipImage.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\NumericUpDownExtended.cs">
+      <Link>UserControls\NumericUpDownExtended.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\PanelEx.cs">
+      <Link>UserControls\PanelEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\PanelEx.designer.cs">
+      <Link>UserControls\PanelEx.designer.cs</Link>
+      <DependentUpon>PanelEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\PictureBoxEx.cs">
+      <Link>UserControls\PictureBoxEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\RichTextBoxEx.cs">
+      <Link>UserControls\RichTextBoxEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\RichTextBoxEx.designer.cs">
+      <Link>UserControls\RichTextBoxEx.designer.cs</Link>
+      <DependentUpon>RichTextBoxEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\RichTextBoxExBase.cs">
+      <Link>UserControls\RichTextBoxExBase.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\RichTextBoxHash.cs">
+      <Link>UserControls\RichTextBoxHash.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\RichTextBoxHash.designer.cs">
+      <Link>UserControls\RichTextBoxHash.designer.cs</Link>
+      <DependentUpon>RichTextBoxHash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\SplitButton.cs">
+      <Link>UserControls\SplitButton.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\SplitButton.designer.cs">
+      <Link>UserControls\SplitButton.designer.cs</Link>
+      <DependentUpon>SplitButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\TabControlEx.cs">
+      <Link>UserControls\TabControlEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\TabPageEx.cs">
+      <Link>UserControls\TabPageEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\ToolStripStatusLabelEx.cs">
+      <Link>UserControls\ToolStripStatusLabelEx.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UctlDispTwit.cs">
+      <Link>UserControls\UctlDispTwit.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UctlDispTwit.designer.cs">
+      <Link>UserControls\UctlDispTwit.designer.cs</Link>
+      <DependentUpon>UctlDispTwit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UctlDispTwitRow.cs">
+      <Link>UserControls\UctlDispTwitRow.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UctlDispTwitRow.designer.cs">
+      <Link>UserControls\UctlDispTwitRow.designer.cs</Link>
+      <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UctlLine.cs">
+      <Link>UserControls\UctlLine.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UctlLine.designer.cs">
+      <Link>UserControls\UctlLine.designer.cs</Link>
+      <DependentUpon>UctlLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Utilization.cs">
+      <Link>Utilization.cs</Link>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmAuthWebBrowser.resx">
+      <Link>Forms\FrmAuthWebBrowser.resx</Link>
+      <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmConfig.resx">
+      <Link>Forms\FrmConfig.resx</Link>
+      <DependentUpon>FrmConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispLists.resx">
+      <Link>Forms\FrmDispLists.resx</Link>
+      <DependentUpon>FrmDispLists.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispStatuses.resx">
+      <Link>Forms\FrmDispStatuses.resx</Link>
+      <DependentUpon>FrmDispStatuses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispUsers.resx">
+      <Link>Forms\FrmDispUsers.resx</Link>
+      <DependentUpon>FrmDispUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmGetTweet.resx">
+      <Link>Forms\FrmGetTweet.resx</Link>
+      <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmMakeTab.resx">
+      <Link>Forms\FrmMakeTab.resx</Link>
+      <DependentUpon>FrmMakeTab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmProfile.resx">
+      <Link>Forms\FrmProfile.resx</Link>
+      <DependentUpon>FrmProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmRenewProfileImage.resx">
+      <Link>Forms\FrmRenewProfileImage.resx</Link>
+      <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmUserStreamWatch.resx">
+      <Link>Forms\FrmUserStreamWatch.resx</Link>
+      <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmWebBrowser.resx">
+      <Link>Forms\FrmWebBrowser.resx</Link>
+      <DependentUpon>FrmWebBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\FrmMain.resx">
+      <Link>FrmMain.resx</Link>
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\NumericUpDownExtended.resx">
+      <Link>UserControls\NumericUpDownExtended.resx</Link>
+      <DependentUpon>NumericUpDownExtended.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\RichTextBoxEx.resx">
+      <Link>UserControls\RichTextBoxEx.resx</Link>
+      <DependentUpon>RichTextBoxEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\RichTextBoxHash.resx">
+      <Link>UserControls\RichTextBoxHash.resx</Link>
+      <DependentUpon>RichTextBoxHash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\TabControlEx.resx">
+      <Link>UserControls\TabControlEx.resx</Link>
+      <DependentUpon>TabControlEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlDispTwit.resx">
+      <Link>UserControls\UctlDispTwit.resx</Link>
+      <DependentUpon>UctlDispTwit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlDispTwitRow.resx">
+      <Link>UserControls\UctlDispTwitRow.resx</Link>
+      <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlLine.resx">
+      <Link>UserControls\UctlLine.resx</Link>
+      <DependentUpon>UctlLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="StarlitTwit64.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\failed.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NowLoadingL.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NowLoadingS.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.bmp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
