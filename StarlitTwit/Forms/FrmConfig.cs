@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -18,6 +19,10 @@ namespace StarlitTwit
         public SettingsData SettingsData { get; set; }
         /// <summary>デフォルト設定データ</summary>
         public readonly SettingsData DefaultSettings = new SettingsData();
+        /// <summary>フィルター情報変更中</summary>
+        private bool _filterChanging = false;
+        /// <summary>フィルター情報保存中</summary>
+        private bool _filterSaving = false;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -131,33 +136,146 @@ namespace StarlitTwit
         #endregion (btnNameFormatSearchInit_Click)
 
         //===============================================================================
+        #region lstFilters_SelectedIndexChanged フィルターリスト選択時
+        //-------------------------------------------------------------------------------
+        //
         private void lstFilters_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnFilterRemove.Enabled = (lstFilters.SelectedIndex >= 0);
+            if (_filterSaving) { return; }
+
+            pnlFilterInfo.Enabled = btnFilterRemove.Enabled = (lstFilters.SelectedIndex >= 0);
+
+            var info = lstFilters.SelectedItem as StatusFilterInfo;
+            if (info != null) {
+                _filterChanging = true;
+
+                txtFilterName.Text = info.Name;
+                switch (info.User_FilterType) {
+                    case StatusFilterUserType.All:
+                        rdbObjUser_All.Checked = true;
+                        txtObjUserPatterns.Text = "";
+                        break;
+                    case StatusFilterUserType.Following:
+                        rdbObjUser_Following.Checked = true;
+                        txtObjUserPatterns.Text = "";
+                        break;
+                    case StatusFilterUserType.Unfollowing:
+                        rdbObjUser_UnFollowing.Checked = true;
+                        txtObjUserPatterns.Text = "";
+                        break;
+                    case StatusFilterUserType.UserList:
+                        rdbObjUser_Pattern.Checked = true;
+                        txtObjUserPatterns.Text = string.Join("\r\n", info.User_Patterns);
+                        break;
+                }
+
+                chbObjStatus_All.Checked = (info.Status_FilterType == StatusFilterStatusType.All);
+                chbObjStatus_Normal.Checked = (info.Status_FilterType & StatusFilterStatusType.NormalTweet) == StatusFilterStatusType.NormalTweet;
+                chbObjStatus_Reply.Checked = (info.Status_FilterType & StatusFilterStatusType.ReplyTweet) == StatusFilterStatusType.ReplyTweet;
+                chbObjStatus_Retweet.Checked = (info.Status_FilterType & StatusFilterStatusType.Retweet) == StatusFilterStatusType.Retweet;
+                if (chbObjStatus_TextPattern.Checked = (info.Status_Text_Patterns != null)) {
+                    txtObjStatusTextPatterns.Text = string.Join("\r\n", info.Status_Text_Patterns);
+                }
+                else { txtObjStatusTextPatterns.Text = ""; }
+                if (chbObjStatus_ClientPattern.Checked = (info.Status_Client_Patterns != null)) {
+                    txtObjStatusClientPatterns.Text = string.Join("\r\n", info.Status_Client_Patterns);
+                }
+                else { txtObjStatusClientPatterns.Text = ""; }
+
+                _filterChanging = false;
+            }
         }
+        #endregion (lstFilters_SelectedIndexChanged)
+        //-------------------------------------------------------------------------------
+        #region btnFilterAdd_Click フィルター追加ボタン
+        //-------------------------------------------------------------------------------
+        //
         private void btnFilterAdd_Click(object sender, EventArgs e)
         {
-
+            int count = lstFilters.Items.Count;
+            lstFilters.Items.Add(new StatusFilterInfo() { Name = string.Format("Filter{0}", count) });
+            lstFilters.SelectedIndex = count;
         }
+        #endregion (btnFilterAdd_Click)
+        //-------------------------------------------------------------------------------
+        #region btnFilterRemove_Click フィルター削除ボタン
+        //-------------------------------------------------------------------------------
+        //
         private void btnFilterRemove_Click(object sender, EventArgs e)
         {
-
+            Debug.Assert(lstFilters.SelectedIndex >= 0);
+            if (Message.ShowQuestionMessage("選択中のフィルターを削除してよろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
+                lstFilters.Items.RemoveAt(lstFilters.SelectedIndex);
+            }
         }
+        #endregion (btnFilterRemove_Click)
+        //-------------------------------------------------------------------------------
+        #region chbObjStatus_All_CheckedChanged 全発言チェックボックス変化時
+        //-------------------------------------------------------------------------------
+        //
         private void chbObjStatus_All_CheckedChanged(object sender, EventArgs e)
         {
+            chbObjStatus_Normal.Enabled = chbObjStatus_Reply.Enabled = chbObjStatus_Retweet.Enabled = !chbObjStatus_All.Checked;
 
+            chbFilter_CheckedChanged(sender, e);
         }
+        #endregion (chbObjStatus_All_CheckedChanged)
+        //-------------------------------------------------------------------------------
+        #region rdbObjUser_Pattern_CheckedChanged ラジオボタン状態変更時
+        //-------------------------------------------------------------------------------
+        //
         private void rdbObjUser_Pattern_CheckedChanged(object sender, EventArgs e)
         {
             txtObjUserPatterns.Enabled = rdbObjUser_Pattern.Checked;
+
+            rdbFilter_CheckedChanged(sender, e);
         }
+        #endregion (rdbObjUser_Pattern_CheckedChanged)
+        //-------------------------------------------------------------------------------
+        #region chbObjStatus_Pattern_CheckedChanged パターンチェックボックス状態変更時
+        //-------------------------------------------------------------------------------
+        /// <remarks>CheckboxにはTextBoxがTagにある</remarks>
         private void chbObjStatus_Pattern_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox chb = sender as CheckBox;
             var txtbox = chb.Tag as TextBox;
 
             txtbox.Enabled = chb.Checked;
+
+            chbFilter_CheckedChanged(sender, e);
         }
+        #endregion (chbObjStatus_Pattern_CheckedChanged)
+        //-------------------------------------------------------------------------------
+        #region txtFilter_Leave フィルター系テキストボックスフォーカスアウト
+        //-------------------------------------------------------------------------------
+        //
+        private void txtFilter_Leave(object sender, EventArgs e)
+        {
+            SaveFilterInfo();
+        }
+        #endregion (txtFilter_Leave)
+        //-------------------------------------------------------------------------------
+        #region rdbFilter_CheckedChanged フィルター系ラジオボタン変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void rdbFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_filterChanging) {
+                SaveFilterInfo();
+            }
+        }
+        #endregion (rdbFilter_CheckedChanged)
+        //-------------------------------------------------------------------------------
+        #region chbFilter_CheckedChanged フィルター系チェックボックス変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void chbFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_filterChanging) {
+                SaveFilterInfo();
+            }
+        }
+        #endregion (chbFilter_CheckedChanged)
 
         //===============================================================================
         #region btnFontConfig_Click フォント設定ボタンクリック時
@@ -359,8 +477,8 @@ namespace StarlitTwit
             chbDispReplyTooltip.Tag = numReplyTooltipDepth;
 
             //-------------------------------------------------------------------------------
+            chbObjStatus_TextPattern.Tag = txtObjStatusTextPatterns;
             chbObjStatus_ClientPattern.Tag = txtObjStatusClientPatterns;
-            chbObjStatus_TextPattern.Tag = txtObjUserPatterns;
         }
         #endregion (SetAssociateData)
         //===============================================================================
@@ -471,6 +589,14 @@ namespace StarlitTwit
             chbUStAutoOpenLog.Checked = SettingsData.UserStreamAutoOpenLog;
             //-------------------------------------------------------------------------------
             #endregion (■■UserStream設定■■)
+
+            #region ■■Filter設定■■
+            //-------------------------------------------------------------------------------
+            if (SettingsData.Filters != null) {
+                lstFilters.Items.AddRange(SettingsData.Filters);
+            }
+            //-------------------------------------------------------------------------------
+            #endregion (■■Filter設定■■)
 
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------
@@ -592,6 +718,17 @@ namespace StarlitTwit
             //-------------------------------------------------------------------------------
             #endregion (■■UserStream設定■■)
 
+            #region ■■Filter設定■■
+            //-------------------------------------------------------------------------------
+            List<StatusFilterInfo> filterList = new List<StatusFilterInfo>();
+            foreach (var data in lstFilters.Items) {
+                var filter = data as StatusFilterInfo;
+                if (filter != null) { filterList.Add(filter); }
+            }
+            SettingsData.Filters = filterList.ToArray();
+            //-------------------------------------------------------------------------------
+            #endregion (■■Filter設定■■)
+
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------
             SettingsData.Header = txtHeader.Text;
@@ -625,6 +762,43 @@ namespace StarlitTwit
             foreach (var item in array) { combobox.Items.Add(item); }
         }
         #endregion (SetComboBoxEnumValue)
+        //-------------------------------------------------------------------------------
+        #region -SaveFilterInfo フィルター情報保存
+        //-------------------------------------------------------------------------------
+        //
+        private void SaveFilterInfo()
+        {
+            var info = lstFilters.SelectedItem as StatusFilterInfo;
+            if (info != null) {
+                _filterSaving = true;
+
+                info.Name = txtFilterName.Text;
+                // User情報
+                info.User_FilterType = (rdbObjUser_All.Checked) ? StatusFilterUserType.All :
+                                       (rdbObjUser_Following.Checked) ? StatusFilterUserType.Following :
+                                       (rdbObjUser_UnFollowing.Checked) ? StatusFilterUserType.Unfollowing :
+                                       (rdbObjUser_Pattern.Checked) ? StatusFilterUserType.UserList :
+                                       StatusFilterUserType.All;
+                if (rdbObjUser_Pattern.Checked) { info.User_Patterns = txtObjUserPatterns.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries); }
+                // Status情報
+                info.Status_FilterType = StatusFilterStatusType.None;
+                if (chbObjStatus_All.Checked) { info.Status_FilterType |= StatusFilterStatusType.All; }
+                if (chbObjStatus_Reply.Checked) { info.Status_FilterType |= StatusFilterStatusType.ReplyTweet; }
+                if (chbObjStatus_Retweet.Checked) { info.Status_FilterType |= StatusFilterStatusType.Retweet; }
+                if (chbObjStatus_Normal.Checked) { info.Status_FilterType |= StatusFilterStatusType.NormalTweet; }
+
+                if (chbObjStatus_TextPattern.Checked && txtObjStatusTextPatterns.Text.Length > 0) {
+                    info.Status_Text_Patterns = txtObjStatusTextPatterns.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                }
+                if (chbObjStatus_ClientPattern.Checked && txtObjStatusClientPatterns.Text.Length > 0) {
+                    info.Status_Client_Patterns = txtObjStatusClientPatterns.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                }
+                lstFilters.Items[lstFilters.SelectedIndex] = lstFilters.SelectedItem;
+
+                _filterSaving = false;
+            }
+        }
+        #endregion (SaveFilterInfo)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
     }

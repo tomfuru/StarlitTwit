@@ -19,7 +19,7 @@ namespace StarlitTwit
         /// <param name="filters">フィルター配列</param>
         /// <param name="friends_ids">フォローしている人のID</param>
         /// <returns></returns>
-        public static bool ThroughFilters(TwitData twitdata, StatusFilterInfo[] filters, long[] friends_ids)
+        public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, long[] friends_ids)
         {
             Debug.Assert(twitdata != null && filters != null && friends_ids != null);
             return filters.All(sfi => ThroughFilter(twitdata, sfi, friends_ids));
@@ -92,6 +92,8 @@ namespace StarlitTwit
     {
         #region Variables
         //-------------------------------------------------------------------------------
+        // フィルタ名
+        public string Name = "";
         // 対象ユーザー情報
         /// <summary>フィルター対象ユーザー</summary>
         public StatusFilterUserType User_FilterType = StatusFilterUserType.All;
@@ -111,15 +113,16 @@ namespace StarlitTwit
         #endregion (Variables)
 
         //-------------------------------------------------------------------------------
-        #region +[override]ToString 文字列へ
+        #region +DescriptionMessage フィルタリング情報の文字列を取得します。
         //-------------------------------------------------------------------------------
-        /// <summary>
-        /// このインスタンスを文字列に変換します。
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
+        //
+        public string DescriptionMessage()
         {
             StringBuilder sb = new StringBuilder();
+
+            // Name
+            sb.Append("Name:");
+            sb.AppendLine(Name);
 
             // User
             sb.Append("User:");
@@ -171,6 +174,19 @@ namespace StarlitTwit
 
             return sb.ToString();
         }
+        #endregion (DescriptionMessage)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// このインスタンスを文字列に変換します。
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Name;
+        }
         #endregion (ToString)
     }
     //-------------------------------------------------------------------------------
@@ -201,6 +217,8 @@ namespace StarlitTwit
     [Flags]
     public enum StatusFilterStatusType
     {
+        /// <summary>なし</summary>
+        None = 0,
         /// <summary>通常ツイート</summary>
         NormalTweet = 1,
         /// <summary>リプライツイート</summary>
