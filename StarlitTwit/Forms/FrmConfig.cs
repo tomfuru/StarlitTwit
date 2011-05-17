@@ -780,19 +780,23 @@ namespace StarlitTwit
                                        (rdbObjUser_Pattern.Checked) ? StatusFilterUserType.UserList :
                                        StatusFilterUserType.All;
                 if (rdbObjUser_Pattern.Checked) { info.User_Patterns = txtObjUserPatterns.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries); }
+                else { info.User_Patterns = null; }
                 // Status情報
                 info.Status_FilterType = StatusFilterStatusType.None;
                 if (chbObjStatus_All.Checked) { info.Status_FilterType |= StatusFilterStatusType.All; }
-                if (chbObjStatus_Reply.Checked) { info.Status_FilterType |= StatusFilterStatusType.ReplyTweet; }
-                if (chbObjStatus_Retweet.Checked) { info.Status_FilterType |= StatusFilterStatusType.Retweet; }
-                if (chbObjStatus_Normal.Checked) { info.Status_FilterType |= StatusFilterStatusType.NormalTweet; }
-
+                else {
+                    if (chbObjStatus_Reply.Checked) { info.Status_FilterType |= StatusFilterStatusType.ReplyTweet; }
+                    if (chbObjStatus_Retweet.Checked) { info.Status_FilterType |= StatusFilterStatusType.Retweet; }
+                    if (chbObjStatus_Normal.Checked) { info.Status_FilterType |= StatusFilterStatusType.NormalTweet; }
+                }
                 if (chbObjStatus_TextPattern.Checked && txtObjStatusTextPatterns.Text.Length > 0) {
                     info.Status_Text_Patterns = txtObjStatusTextPatterns.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 }
+                else { info.Status_Text_Patterns = null; }
                 if (chbObjStatus_ClientPattern.Checked && txtObjStatusClientPatterns.Text.Length > 0) {
                     info.Status_Client_Patterns = txtObjStatusClientPatterns.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 }
+                else { info.Status_Client_Patterns = null; }
                 lstFilters.Items[lstFilters.SelectedIndex] = lstFilters.SelectedItem;
 
                 _filterSaving = false;

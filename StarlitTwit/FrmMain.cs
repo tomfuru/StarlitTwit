@@ -71,12 +71,16 @@ namespace StarlitTwit
         private bool _bIsProcessing = false;
         /// <summary>排他処理同時開始抑制用</summary>
         private object _objKeyProcessStart = new object();
-        /// <summary>UserStream中かどうか</summary>
-        private volatile bool _usingUserStream = false;
         /// <summary>UserStreamをキャンセルするクラス</summary>
         private CancellationTokenSource _userStreamCancellationTS;
         /// <summary>UserStreamログ監視フォーム</summary>
         private FrmUserStreamWatch _frmUserStreamWatch;
+        /// <summary>UserStream中かどうか</summary>
+        private volatile bool _usingUserStream = false;
+        /// <summary>FriendのID配列</summary>
+        private long[] _friendArray;
+        /// <summary>FollowerのID配列</summary>
+        private long[] _followArray;
         #region 発言状態関連
         //-------------------------------------------------------------------------------
         /// <summary>発言状態かどうか</summary>
@@ -633,7 +637,7 @@ namespace StarlitTwit
         {
             UctlDispTwit dispTwit = (UctlDispTwit)sender;
 
-            FrmDispStatuses frm = new FrmDispStatuses(this, imageListWrapper,FrmDispStatuses.EFormType.Conversation);
+            FrmDispStatuses frm = new FrmDispStatuses(this, imageListWrapper, FrmDispStatuses.EFormType.Conversation);
             frm.ReplyStartTwitdata = dispTwit.TraceReply(e.TwitData.StatusID);
             frm.Show(this);
         }
@@ -815,7 +819,7 @@ namespace StarlitTwit
                 using (FrmConfig frmconf = new FrmConfig()) {
                     frmconf.SettingsData = SettingsData;
                     if (frmconf.ShowDialog() == DialogResult.OK) {
-                        SettingsData = frmconf.SettingsData;
+                        //SettingsData = frmconf.SettingsData; // classなので不要
                         SettingsData.Save();
 
                         // 設定の適用
@@ -1593,20 +1597,21 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region -UserStreamTransaction UserStreamのメイン処理
         //-------------------------------------------------------------------------------
-        /// <summary>UserStreamで送られてくるFriendのID配列</summary>
-        private long[] _friendList;
         //
         private void UserStreamTransaction(UserStreamItemType type, object data)
         {
             try {
                 switch (type) {
                     case UserStreamItemType.friendlist:
-                        _friendList = ((IEnumerable<long>)data).ToArray();
+                        _friendArray = ((IEnumerable<long>)data).ToArray();
                         break;
                     case UserStreamItemType.status: {
                             TwitData twitdata = (TwitData)data;
+                            while (_friendArray == null) { Thread.Sleep(10); } // 待機
                             // Home
-                            this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
+                            if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendArray)) {
+                                this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
+                            }
                             // Reply
                             if (twitdata.MainTwitData.Mention_UserID == Twitter.ID
                              || twitdata.MainTwitData.TextIncludeUserMention(Twitter.ScreenName)) {

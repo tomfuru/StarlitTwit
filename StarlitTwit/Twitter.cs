@@ -1899,9 +1899,11 @@ namespace StarlitTwit
                         }
                         catch (WebException ex) {
                             if (ex.Status == WebExceptionStatus.RequestCanceled) { return; } // キャンセルした時
+                            //Message.ShowInfoMessage("WebException");
                             canceled = true;// TODO:切断された時
                         }
                         catch (IOException) {
+                            //Message.ShowInfoMessage("IOException");
                             canceled = true;// TODO:切断された時
                         }
                     };
@@ -1921,14 +1923,16 @@ namespace StarlitTwit
                 }
                 catch (WebException) {
                     // TODO:既に接続が切れていた時
+                    //Message.ShowInfoMessage("WebException");
 
                 }
                 catch (IOException) {
                     // TODO:既に接続が切れていた時
-
+                    //Message.ShowInfoMessage("IOException");
                 }
                 catch (Exception ex) {
                     Log.DebugLog(ex);
+                    //Message.ShowInfoMessage("Exception");
                 }
                 finally { endact(); }
             };
