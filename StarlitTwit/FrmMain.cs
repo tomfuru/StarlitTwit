@@ -2605,12 +2605,13 @@ namespace StarlitTwit
 
                     foreach (var tabpage in _dispTwitDic.Keys) {
                         if (!_mreThreadTabRun.IsSet) { break; } // タブ変更機能使用時にforeachから抜ける
-                        // UserStream中はHome,Reply,History,Directは更新しない
-                        if (_usingUserStream && DEFAULT_TABPAGES.Contains(tabpage)) { continue; }
                         // タブ未使用イベントSTOP
                         _mreThreadConfirm.Set();
                         _mreThreadRun.Wait();
                         _mreThreadConfirm.Reset();
+
+                        // UserStream中はHome,Reply,History,Directは更新しない
+                        if (_usingUserStream && DEFAULT_TABPAGES.Contains(tabpage)) { continue; }
 
                         now = DateTime.Now;
                         UctlDispTwit uctlDisp = _dispTwitDic[tabpage];
