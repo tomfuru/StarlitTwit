@@ -255,7 +255,7 @@ namespace StarlitTwit
         //
         private void tsmiDispFollowing_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserListForm(_mainForm, _imageListWrapper, EFormType.UserFollowing,
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFollowing,
                                          ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
         }
         #endregion (tsmiDispFollowing_Click)
@@ -265,7 +265,7 @@ namespace StarlitTwit
         //
         private void tsmiDispFollower_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserListForm(_mainForm, _imageListWrapper, EFormType.UserFollower, 
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFollower, 
                                          ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
         }
         #endregion (tsmiDispFollower_Click)

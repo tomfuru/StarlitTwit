@@ -443,7 +443,7 @@ namespace StarlitTwit
         //
         private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUserListForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollowing);
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollowing);
         }
         #endregion (llblFollowing_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -452,7 +452,7 @@ namespace StarlitTwit
         //
         private void llblFollower_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUserListForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollower);
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollower);
         }
         #endregion (llblFollower_LinkClicked)
         //-------------------------------------------------------------------------------
@@ -685,7 +685,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_Retweeter_Click(object sender, TwitRowMenuEventArgs e)
         {
-            Utilization.ShowUserListForm(this, imageListWrapper, FrmDispUsers.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID);
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID);
         }
         #endregion (TwitMenu_Retweeter_Click)
         //-------------------------------------------------------------------------------

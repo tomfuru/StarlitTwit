@@ -454,12 +454,33 @@ namespace StarlitTwit
         #endregion (Callback)
 
         //-------------------------------------------------------------------------------
-        #region +[static]ShowUserListForm ユーザー一覧フォームを表示します。
+        #region +[static]ShowListsForm リスト一覧フォームを表示します。
         //-------------------------------------------------------------------------------
-        //
-        public static void ShowUserListForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
+        /// <summary>
+        /// リスト一覧フォームを表示します。
+        /// </summary>
+        /// <param name="parent">最上位フォーム</param>
+        /// <param name="screen_name">ユーザー名</param>
+        public static void ShowListsForm(FrmMain parent, string screen_name = null)
         {
-            if (!Utilization.ExistFrmFollower(type, screen_name, retweet_id)) {
+            // TODO:Implement ShowListsForm
+            throw new NotImplementedException();
+        }
+        #endregion (ShowListsForm)
+        //-------------------------------------------------------------------------------
+        #region +[static]ShowUsersForm ユーザー一覧フォームを表示します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// ユーザー一覧フォームを表示します。
+        /// </summary>
+        /// <param name="parent">最上位フォーム</param>
+        /// <param name="imageListWrapper"></param>
+        /// <param name="type">フォームタイプ</param>
+        /// <param name="screen_name"></param>
+        /// <param name="retweet_id"></param>
+        public static void ShowUsersForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
+        {
+            if (!Utilization.ExistFrmUsers(type, screen_name, retweet_id)) {
                 FrmDispUsers frm = new FrmDispUsers(parent, imageListWrapper, type) {
                     UserScreenName = screen_name,
                     RetweetStatusID = retweet_id
@@ -492,7 +513,7 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="parent">最上位フォーム</param>
         /// <param name="canEdit">自分かどうか</param>
-        /// <param name="screen_name">ユーザー名</param>
+        /// <param name="profile">プロフィールデータ</param>
         public static void ShowUserProfile(FrmMain parent, bool canEdit, UserProfile profile)
         {
             if (!Utilization.ExistFrmProfile(canEdit, profile.ScreenName)) {
@@ -517,6 +538,8 @@ namespace StarlitTwit
         }
         #endregion (ShowUserTweet)
 
+        // FrmProfile
+        // ListsForm
         //-------------------------------------------------------------------------------
         #region +[static]ExistFrmProfile すでにあるFrmProfileを探す
         //-------------------------------------------------------------------------------
@@ -536,16 +559,16 @@ namespace StarlitTwit
         }
         #endregion (ExistFrmProfile)
         //-------------------------------------------------------------------------------
-        #region +[static]ExistFrmFollower 既にあるFrmFollowerを探す
+        #region +[static]ExistFrmUsers 既にあるFrmUsersを探す
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// 既にあるFrmFollowerと同じものがあるかどうか探し，あれば最前面にします。
+        /// 既にあるFrmUsersと同じものがあるかどうか探し，あれば最前面にします。
         /// </summary>
         /// <param name="type">タイプ</param>
         /// <param name="screen_name">UserFollower,UserFollowingタイプのみ必要</param>
         /// <param name="retweet_id">Retweeterタイプのみ必要</param>
         /// <returns>あればtrue,なければfalse</returns>
-        public static bool ExistFrmFollower(FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
+        public static bool ExistFrmUsers(FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
         {
             Func<FrmDispUsers, bool> judgeFunc = f =>
                 f.FormType == type

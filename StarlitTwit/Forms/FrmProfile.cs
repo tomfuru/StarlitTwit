@@ -218,7 +218,7 @@ namespace StarlitTwit
                 username = _profile.ScreenName;
             }
 
-            Utilization.ShowUserListForm(_mainForm, picbIcon.ImageListWrapper, formType, username);
+            Utilization.ShowUsersForm(_mainForm, picbIcon.ImageListWrapper, formType, username);
         }
         #endregion (tsmiDisplay_Friends_Click)
         //-------------------------------------------------------------------------------
@@ -237,7 +237,7 @@ namespace StarlitTwit
                 username = _profile.ScreenName;
             }
 
-            Utilization.ShowUserListForm(_mainForm, picbIcon.ImageListWrapper, formType, username);
+            Utilization.ShowUsersForm(_mainForm, picbIcon.ImageListWrapper, formType, username);
         }
         #endregion (tsmiDisplay_Follower_Click)
         //-------------------------------------------------------------------------------
