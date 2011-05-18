@@ -71,7 +71,7 @@ namespace StarlitTwit
                 if (newProfile.Protected && !newProfile.Following) { return null; }
             }
             catch (TwitterAPIException) {
-                newProfile = null; 
+                newProfile = null;
                 return false;
             }
             return true;
@@ -101,7 +101,7 @@ namespace StarlitTwit
             try { newProfile = FrmMain.Twitter.friendships_destroy(screen_name: screen_name); }
             catch (TwitterAPIException) {
                 newProfile = null;
-                return false; 
+                return false;
             }
             return true;
         }
@@ -517,7 +517,7 @@ namespace StarlitTwit
         public static void ShowUserProfile(FrmMain parent, bool canEdit, UserProfile profile)
         {
             if (!Utilization.ExistFrmProfile(canEdit, profile.ScreenName)) {
-                FrmProfile frm = new FrmProfile(parent,canEdit, profile, parent.ImageListWrapper);
+                FrmProfile frm = new FrmProfile(parent, canEdit, profile, parent.ImageListWrapper);
                 frm.Show(parent);
             }
         }
@@ -530,15 +530,17 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="parent">最上位フォーム</param>
         /// <param name="screen_name">ユーザー名</param>
-        public static void ShowUserTweet(FrmMain parent, string screen_name)
+        public static void ShowUserTweet(FrmMain parent, FrmDispStatuses.EFormType formType, string screen_name = null, IEnumerable<TwitData> conversations = null)
         {
-            FrmDispStatuses frm = new FrmDispStatuses(parent, parent.ImageListWrapper,FrmDispStatuses.EFormType.UserStatus);
-            frm.UserScreenName = screen_name;
-            frm.Show(parent);
+            if (!ExistFrmTweets(formType, screen_name, conversations)) {
+                FrmDispStatuses frm = new FrmDispStatuses(parent, parent.ImageListWrapper, formType);
+                frm.ReplyStartTwitdata = conversations;
+                frm.UserScreenName = screen_name;
+                frm.Show(parent);
+            }
         }
         #endregion (ShowUserTweet)
 
-        // ExistFrmProfile
         // ExistListsForm
         //-------------------------------------------------------------------------------
         #region +[static]ExistFrmProfile すでにあるFrmProfileを探す
@@ -574,10 +576,24 @@ namespace StarlitTwit
                 f.FormType == type
                 && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFollowing) && f.UserScreenName != screen_name)
                 && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
-
+            // TODO:staticフォーム存在確認メソッド更新
+            
             return ExistForm<FrmDispUsers>(judgeFunc);
         }
         #endregion (ExistFrmFollower)
+        //-------------------------------------------------------------------------------
+        #region +[static]ExistFrmTweets 既にあるFrmDispStatusesを探す
+        //-------------------------------------------------------------------------------
+        //
+        public static bool ExistFrmTweets(FrmDispStatuses.EFormType formType, string screen_name = null, IEnumerable<TwitData> conversations = null)
+        {
+            Func<FrmDispStatuses, bool> judgeFunc = f =>
+               f.FormType == formType;
+            // TODO:staticフォーム存在確認メソッド更新
+
+            return ExistForm<FrmDispStatuses>(judgeFunc);
+        }
+        #endregion (ExistFrmTweets)
         //-------------------------------------------------------------------------------
         #region -[static]ExistForm 既にあるフォームを探す
         //-------------------------------------------------------------------------------

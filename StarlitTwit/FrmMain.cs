@@ -636,10 +636,7 @@ namespace StarlitTwit
         private void TwitMenu_DisplayConversation_Click(object sender, TwitRowMenuEventArgs e)
         {
             UctlDispTwit dispTwit = (UctlDispTwit)sender;
-
-            FrmDispStatuses frm = new FrmDispStatuses(this, imageListWrapper, FrmDispStatuses.EFormType.Conversation);
-            frm.ReplyStartTwitdata = dispTwit.TraceReply(e.TwitData.StatusID);
-            frm.Show(this);
+            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.Conversation, null, dispTwit.TraceReply(e.TwitData.StatusID));
         }
         #endregion (TwitMenu_DisplayConversation_Click)
         //-------------------------------------------------------------------------------
@@ -772,7 +769,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_EntityEvent_DisplayUserTweet(object sender, EntityEventArgs e)
         {
-            Utilization.ShowUserTweet(this, e.Data);
+            Utilization.ShowUserTweet(this,FrmDispStatuses.EFormType.UserStatus, e.Data);
         }
         #endregion (TwitMenu_EntityEvent_DisplayUserTweet)
         //-------------------------------------------------------------------------------
