@@ -22,7 +22,8 @@ namespace StarlitTwit
         public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, long[] friends_ids)
         {
             Debug.Assert(twitdata != null && filters != null && friends_ids != null);
-            return filters.All(sfi => ThroughFilter(twitdata, sfi, friends_ids));
+            return filters.Where(sfi => sfi.Enabled)
+                          .All(sfi => ThroughFilter(twitdata, sfi, friends_ids));
         }
         #endregion (ThroughFilters)
 
@@ -94,6 +95,8 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         // フィルタ名
         public string Name = "";
+        /// <summary>フィルタが有効かどうか</summary>
+        public bool Enabled = true;
         // 対象ユーザー情報
         /// <summary>フィルター対象ユーザー</summary>
         public StatusFilterUserType User_FilterType = StatusFilterUserType.All;
@@ -185,7 +188,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public override string ToString()
         {
-            return Name;
+            return ((Enabled) ? "" : "(無効)") + Name;
         }
         #endregion (ToString)
     }

@@ -29,6 +29,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabpgGet = new System.Windows.Forms.TabPage();
+            this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
             this.label39 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -37,8 +38,20 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_Interval = new StarlitTwit.NumericUpDownExtended();
+            this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_Add = new StarlitTwit.NumericUpDownExtended();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
+            this.numReply_First = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
+            this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
+            this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
             this.tabpgDisp = new System.Windows.Forms.TabPage();
             this.lblNameFormatSearchSample = new System.Windows.Forms.Label();
             this.lblNameFormatDMSample = new System.Windows.Forms.Label();
@@ -189,22 +202,23 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_Interval = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numTimeline_First = new StarlitTwit.NumericUpDownExtended();
-            this.numReply_First = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_Add = new StarlitTwit.NumericUpDownExtended();
-            this.numHistory_First = new StarlitTwit.NumericUpDownExtended();
-            this.numDirect_First = new StarlitTwit.NumericUpDownExtended();
+            this.chbFilterEnabled = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Interval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Add)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_Add)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Add)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_First)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_First)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).BeginInit();
             this.tabpgDisp.SuspendLayout();
             this.grpIcon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numIconSize)).BeginInit();
@@ -219,19 +233,6 @@
             this.grpObjStatusPattern.SuspendLayout();
             this.tabpgElse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Add)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_Add)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Add)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_First)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_First)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -258,13 +259,31 @@
             this.tabpgGet.Controls.Add(this.label39);
             this.tabpgGet.Controls.Add(this.label10);
             this.tabpgGet.Controls.Add(this.tableLayoutPanel1);
-            this.tabpgGet.Location = new System.Drawing.Point(4, 21);
+            this.tabpgGet.Location = new System.Drawing.Point(4, 22);
             this.tabpgGet.Name = "tabpgGet";
             this.tabpgGet.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgGet.Size = new System.Drawing.Size(386, 325);
+            this.tabpgGet.Size = new System.Drawing.Size(386, 324);
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
+            // 
+            // numProfile_Interval
+            // 
+            this.numProfile_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numProfile_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numProfile_Interval.Location = new System.Drawing.Point(164, 167);
+            this.numProfile_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numProfile_Interval.Name = "numProfile_Interval";
+            this.numProfile_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numProfile_Interval.TabIndex = 1;
             // 
             // label39
             // 
@@ -372,6 +391,169 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "発言履歴";
             // 
+            // numTimeline_Interval
+            // 
+            this.numTimeline_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_Interval.Location = new System.Drawing.Point(293, 34);
+            this.numTimeline_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numTimeline_Interval.Name = "numTimeline_Interval";
+            this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_Interval.TabIndex = 2;
+            this.numTimeline_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_Interval
+            // 
+            this.numReply_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_Interval.Location = new System.Drawing.Point(293, 63);
+            this.numReply_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numReply_Interval.Name = "numReply_Interval";
+            this.numReply_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numReply_Interval.TabIndex = 5;
+            this.numReply_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_Interval
+            // 
+            this.numHistory_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_Interval.Location = new System.Drawing.Point(293, 92);
+            this.numHistory_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numHistory_Interval.Name = "numHistory_Interval";
+            this.numHistory_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_Interval.TabIndex = 8;
+            this.numHistory_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_Interval
+            // 
+            this.numDirect_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_Interval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_Interval.Location = new System.Drawing.Point(293, 122);
+            this.numDirect_Interval.Maximum = new decimal(new int[] {
+            3600,
+            0,
+            0,
+            0});
+            this.numDirect_Interval.Name = "numDirect_Interval";
+            this.numDirect_Interval.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_Interval.TabIndex = 11;
+            this.numDirect_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numTimeline_Add
+            // 
+            this.numTimeline_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Location = new System.Drawing.Point(197, 34);
+            this.numTimeline_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.Name = "numTimeline_Add";
+            this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_Add.TabIndex = 1;
+            this.numTimeline_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_Add
+            // 
+            this.numReply_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_Add.Location = new System.Drawing.Point(197, 63);
+            this.numReply_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numReply_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_Add.Name = "numReply_Add";
+            this.numReply_Add.Size = new System.Drawing.Size(56, 19);
+            this.numReply_Add.TabIndex = 4;
+            this.numReply_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_Add
+            // 
+            this.numHistory_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Location = new System.Drawing.Point(197, 92);
+            this.numHistory_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_Add.Name = "numHistory_Add";
+            this.numHistory_Add.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_Add.TabIndex = 7;
+            this.numHistory_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
             // label4
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -391,6 +573,151 @@
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 12;
             this.label5.Text = "初期取得数";
+            // 
+            // numTimeline_First
+            // 
+            this.numTimeline_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numTimeline_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Location = new System.Drawing.Point(101, 34);
+            this.numTimeline_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_First.Name = "numTimeline_First";
+            this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
+            this.numTimeline_First.TabIndex = 0;
+            this.numTimeline_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numTimeline_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numReply_First
+            // 
+            this.numReply_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numReply_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numReply_First.Location = new System.Drawing.Point(101, 63);
+            this.numReply_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numReply_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_First.Name = "numReply_First";
+            this.numReply_First.Size = new System.Drawing.Size(56, 19);
+            this.numReply_First.TabIndex = 3;
+            this.numReply_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numReply_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_Add
+            // 
+            this.numDirect_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_Add.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Location = new System.Drawing.Point(197, 122);
+            this.numDirect_Add.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_Add.Name = "numDirect_Add";
+            this.numDirect_Add.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_Add.TabIndex = 10;
+            this.numDirect_Add.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numHistory_First
+            // 
+            this.numHistory_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numHistory_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numHistory_First.Location = new System.Drawing.Point(101, 92);
+            this.numHistory_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numHistory_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_First.Name = "numHistory_First";
+            this.numHistory_First.Size = new System.Drawing.Size(56, 19);
+            this.numHistory_First.TabIndex = 6;
+            this.numHistory_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numHistory_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            // 
+            // numDirect_First
+            // 
+            this.numDirect_First.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.numDirect_First.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numDirect_First.Location = new System.Drawing.Point(101, 122);
+            this.numDirect_First.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numDirect_First.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_First.Name = "numDirect_First";
+            this.numDirect_First.Size = new System.Drawing.Size(56, 19);
+            this.numDirect_First.TabIndex = 9;
+            this.numDirect_First.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
             // 
             // tabpgDisp
             // 
@@ -416,10 +743,10 @@
             this.tabpgDisp.Controls.Add(this.txtNameFormat);
             this.tabpgDisp.Controls.Add(this.label9);
             this.tabpgDisp.Controls.Add(this.label8);
-            this.tabpgDisp.Location = new System.Drawing.Point(4, 21);
+            this.tabpgDisp.Location = new System.Drawing.Point(4, 22);
             this.tabpgDisp.Name = "tabpgDisp";
             this.tabpgDisp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgDisp.Size = new System.Drawing.Size(386, 325);
+            this.tabpgDisp.Size = new System.Drawing.Size(386, 324);
             this.tabpgDisp.TabIndex = 1;
             this.tabpgDisp.Text = "表示";
             this.tabpgDisp.UseVisualStyleBackColor = true;
@@ -762,10 +1089,10 @@
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalText);
             this.tabpgFontAndColor.Controls.Add(this.txtExNormalTitle);
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalTitle);
-            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 21);
+            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 22);
             this.tabpgFontAndColor.Name = "tabpgFontAndColor";
             this.tabpgFontAndColor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 325);
+            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 324);
             this.tabpgFontAndColor.TabIndex = 2;
             this.tabpgFontAndColor.Text = "フォント・色";
             this.tabpgFontAndColor.UseVisualStyleBackColor = true;
@@ -1323,10 +1650,10 @@
             this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
             this.tabpgThumbnail.Controls.Add(this.label45);
-            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
+            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 22);
             this.tabpgThumbnail.Name = "tabpgThumbnail";
             this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
+            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 324);
             this.tabpgThumbnail.TabIndex = 4;
             this.tabpgThumbnail.Text = "サムネイル";
             this.tabpgThumbnail.UseVisualStyleBackColor = true;
@@ -1527,10 +1854,10 @@
             this.tabpgUserStream.Controls.Add(this.chbUStAutoOpenLog);
             this.tabpgUserStream.Controls.Add(this.chbUStEnableAllReplies);
             this.tabpgUserStream.Controls.Add(this.chbUStStartUp);
-            this.tabpgUserStream.Location = new System.Drawing.Point(4, 21);
+            this.tabpgUserStream.Location = new System.Drawing.Point(4, 22);
             this.tabpgUserStream.Name = "tabpgUserStream";
             this.tabpgUserStream.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgUserStream.Size = new System.Drawing.Size(386, 325);
+            this.tabpgUserStream.Size = new System.Drawing.Size(386, 324);
             this.tabpgUserStream.TabIndex = 5;
             this.tabpgUserStream.Text = "UserStream";
             this.tabpgUserStream.UseVisualStyleBackColor = true;
@@ -1581,16 +1908,17 @@
             this.tabpgFilter.Controls.Add(this.btnFilterRemove);
             this.tabpgFilter.Controls.Add(this.btnFilterAdd);
             this.tabpgFilter.Controls.Add(this.lstFilters);
-            this.tabpgFilter.Location = new System.Drawing.Point(4, 21);
+            this.tabpgFilter.Location = new System.Drawing.Point(4, 22);
             this.tabpgFilter.Name = "tabpgFilter";
             this.tabpgFilter.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFilter.Size = new System.Drawing.Size(386, 325);
+            this.tabpgFilter.Size = new System.Drawing.Size(386, 324);
             this.tabpgFilter.TabIndex = 6;
             this.tabpgFilter.Text = "フィルタ";
             this.tabpgFilter.UseVisualStyleBackColor = true;
             // 
             // pnlFilterInfo
             // 
+            this.pnlFilterInfo.Controls.Add(this.chbFilterEnabled);
             this.pnlFilterInfo.Controls.Add(this.label53);
             this.pnlFilterInfo.Controls.Add(this.txtFilterName);
             this.pnlFilterInfo.Controls.Add(this.grpObjUser);
@@ -1604,7 +1932,7 @@
             // label53
             // 
             this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(3, 8);
+            this.label53.Location = new System.Drawing.Point(87, 9);
             this.label53.Name = "label53";
             this.label53.Size = new System.Drawing.Size(50, 12);
             this.label53.TabIndex = 6;
@@ -1612,9 +1940,9 @@
             // 
             // txtFilterName
             // 
-            this.txtFilterName.Location = new System.Drawing.Point(61, 5);
+            this.txtFilterName.Location = new System.Drawing.Point(143, 6);
             this.txtFilterName.Name = "txtFilterName";
-            this.txtFilterName.Size = new System.Drawing.Size(128, 19);
+            this.txtFilterName.Size = new System.Drawing.Size(111, 19);
             this.txtFilterName.TabIndex = 5;
             this.txtFilterName.Leave += new System.EventHandler(this.txtFilter_Leave);
             // 
@@ -1849,10 +2177,10 @@
             this.tabpgElse.Controls.Add(this.chbDispDMBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyTooltip);
-            this.tabpgElse.Location = new System.Drawing.Point(4, 21);
+            this.tabpgElse.Location = new System.Drawing.Point(4, 22);
             this.tabpgElse.Name = "tabpgElse";
             this.tabpgElse.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgElse.Size = new System.Drawing.Size(386, 325);
+            this.tabpgElse.Size = new System.Drawing.Size(386, 324);
             this.tabpgElse.TabIndex = 3;
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
@@ -2039,331 +2367,16 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // numProfile_Interval
+            // chbFilterEnabled
             // 
-            this.numProfile_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numProfile_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numProfile_Interval.Location = new System.Drawing.Point(164, 167);
-            this.numProfile_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numProfile_Interval.Name = "numProfile_Interval";
-            this.numProfile_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numProfile_Interval.TabIndex = 1;
-            // 
-            // numTimeline_Interval
-            // 
-            this.numTimeline_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_Interval.Location = new System.Drawing.Point(293, 34);
-            this.numTimeline_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numTimeline_Interval.Name = "numTimeline_Interval";
-            this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Interval.TabIndex = 2;
-            this.numTimeline_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_Interval
-            // 
-            this.numReply_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_Interval.Location = new System.Drawing.Point(293, 63);
-            this.numReply_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numReply_Interval.Name = "numReply_Interval";
-            this.numReply_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numReply_Interval.TabIndex = 5;
-            this.numReply_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_Interval
-            // 
-            this.numHistory_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_Interval.Location = new System.Drawing.Point(293, 92);
-            this.numHistory_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numHistory_Interval.Name = "numHistory_Interval";
-            this.numHistory_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_Interval.TabIndex = 8;
-            this.numHistory_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_Interval
-            // 
-            this.numDirect_Interval.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_Interval.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_Interval.Location = new System.Drawing.Point(293, 122);
-            this.numDirect_Interval.Maximum = new decimal(new int[] {
-            3600,
-            0,
-            0,
-            0});
-            this.numDirect_Interval.Name = "numDirect_Interval";
-            this.numDirect_Interval.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_Interval.TabIndex = 11;
-            this.numDirect_Interval.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numTimeline_Add
-            // 
-            this.numTimeline_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Location = new System.Drawing.Point(197, 34);
-            this.numTimeline_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.Name = "numTimeline_Add";
-            this.numTimeline_Add.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_Add.TabIndex = 1;
-            this.numTimeline_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_Add
-            // 
-            this.numReply_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_Add.Location = new System.Drawing.Point(197, 63);
-            this.numReply_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numReply_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_Add.Name = "numReply_Add";
-            this.numReply_Add.Size = new System.Drawing.Size(56, 19);
-            this.numReply_Add.TabIndex = 4;
-            this.numReply_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_Add
-            // 
-            this.numHistory_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Location = new System.Drawing.Point(197, 92);
-            this.numHistory_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_Add.Name = "numHistory_Add";
-            this.numHistory_Add.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_Add.TabIndex = 7;
-            this.numHistory_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numTimeline_First
-            // 
-            this.numTimeline_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numTimeline_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Location = new System.Drawing.Point(101, 34);
-            this.numTimeline_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_First.Name = "numTimeline_First";
-            this.numTimeline_First.Size = new System.Drawing.Size(56, 19);
-            this.numTimeline_First.TabIndex = 0;
-            this.numTimeline_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numTimeline_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numReply_First
-            // 
-            this.numReply_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numReply_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numReply_First.Location = new System.Drawing.Point(101, 63);
-            this.numReply_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numReply_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_First.Name = "numReply_First";
-            this.numReply_First.Size = new System.Drawing.Size(56, 19);
-            this.numReply_First.TabIndex = 3;
-            this.numReply_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numReply_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_Add
-            // 
-            this.numDirect_Add.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_Add.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Location = new System.Drawing.Point(197, 122);
-            this.numDirect_Add.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_Add.Name = "numDirect_Add";
-            this.numDirect_Add.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_Add.TabIndex = 10;
-            this.numDirect_Add.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_Add.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numHistory_First
-            // 
-            this.numHistory_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numHistory_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numHistory_First.Location = new System.Drawing.Point(101, 92);
-            this.numHistory_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numHistory_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_First.Name = "numHistory_First";
-            this.numHistory_First.Size = new System.Drawing.Size(56, 19);
-            this.numHistory_First.TabIndex = 6;
-            this.numHistory_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numHistory_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
-            // 
-            // numDirect_First
-            // 
-            this.numDirect_First.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numDirect_First.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numDirect_First.Location = new System.Drawing.Point(101, 122);
-            this.numDirect_First.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numDirect_First.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_First.Name = "numDirect_First";
-            this.numDirect_First.Size = new System.Drawing.Size(56, 19);
-            this.numDirect_First.TabIndex = 9;
-            this.numDirect_First.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numDirect_First.ValueChanged += new System.EventHandler(this.NumericUpDown_First_ValueChanged);
+            this.chbFilterEnabled.AutoSize = true;
+            this.chbFilterEnabled.Location = new System.Drawing.Point(12, 8);
+            this.chbFilterEnabled.Name = "chbFilterEnabled";
+            this.chbFilterEnabled.Size = new System.Drawing.Size(48, 16);
+            this.chbFilterEnabled.TabIndex = 12;
+            this.chbFilterEnabled.Text = "有効";
+            this.chbFilterEnabled.UseVisualStyleBackColor = true;
+            this.chbFilterEnabled.CheckedChanged += new System.EventHandler(this.chbFilter_CheckedChanged);
             // 
             // FrmConfig
             // 
@@ -2385,8 +2398,21 @@
             this.tabControl1.ResumeLayout(false);
             this.tabpgGet.ResumeLayout(false);
             this.tabpgGet.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_First)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numReply_First)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).EndInit();
             this.tabpgDisp.ResumeLayout(false);
             this.tabpgDisp.PerformLayout();
             this.grpIcon.ResumeLayout(false);
@@ -2411,19 +2437,6 @@
             this.tabpgElse.ResumeLayout(false);
             this.tabpgElse.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numReplyTooltipDepth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numTimeline_First)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numReply_First)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_Add)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numHistory_First)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numDirect_First)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2605,5 +2618,6 @@
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.TextBox txtFilterName;
         private System.Windows.Forms.Panel pnlFilterInfo;
+        private System.Windows.Forms.CheckBox chbFilterEnabled;
     }
 }

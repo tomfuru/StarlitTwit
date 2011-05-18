@@ -150,6 +150,7 @@ namespace StarlitTwit
                 _filterChanging = true;
 
                 txtFilterName.Text = info.Name;
+                chbFilterEnabled.Checked = info.Enabled;
                 switch (info.User_FilterType) {
                     case StatusFilterUserType.All:
                         rdbObjUser_All.Checked = true;
@@ -773,6 +774,7 @@ namespace StarlitTwit
                 _filterSaving = true;
 
                 info.Name = txtFilterName.Text;
+                info.Enabled = chbFilterEnabled.Checked;
                 // User情報
                 info.User_FilterType = (rdbObjUser_All.Checked) ? StatusFilterUserType.All :
                                        (rdbObjUser_Following.Checked) ? StatusFilterUserType.Following :
