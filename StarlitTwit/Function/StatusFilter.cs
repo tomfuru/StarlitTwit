@@ -52,9 +52,9 @@ namespace StarlitTwit
                 case StatusFilterUserType.Unfollowing:
                     if (friends_ids.Contains(twitdata.UserID)) { return true; }
                     break;
-                case StatusFilterUserType.UserList: // 通る：パターンがあるが，そのどれにも当てはまっていない
+                case StatusFilterUserType.UserList: // 通る：パターンが存在，そのいずれかに当てはまっていない
                     if (filter.User_Patterns != null
-                     && filter.User_Patterns.All(pattern => !Regex.IsMatch(twitdata.UserScreenName, pattern))) { return true; }
+                     && filter.User_Patterns.Any(pattern => !Regex.IsMatch(twitdata.UserScreenName, pattern))) { return true; }
                     break;
                 default:
                     Debug.Assert(false, "不正なフィルタ");
@@ -64,20 +64,20 @@ namespace StarlitTwit
             if (filter.Status_FilterType != StatusFilterStatusType.All) {
                 // 発言パターン抽出
                 if ((filter.Status_FilterType & StatusFilterStatusType.NormalTweet) != StatusFilterStatusType.NormalTweet
-                 && twitdata.TwitType == TwitType.Normal) { return true; }
+                 && twitdata.TwitType == TwitType.Normal && twitdata.Mention_UserID < 0) { return true; }
                 else if ((filter.Status_FilterType & StatusFilterStatusType.ReplyTweet) != StatusFilterStatusType.ReplyTweet
-                 && twitdata.Mention_UserID >= 0) { return true; }
+                 && twitdata.TwitType == TwitType.Normal && twitdata.Mention_UserID >= 0) { return true; }
                 else if ((filter.Status_FilterType & StatusFilterStatusType.Retweet) != StatusFilterStatusType.Retweet
                  && twitdata.IsRT()) { return true; }
             }
 
             // Text抽出
             if (filter.Status_Text_Patterns != null
-             && filter.Status_Text_Patterns.All(pattern => !Regex.IsMatch(twitdata.MainTwitData.Text, pattern))) { return true; }
+             && filter.Status_Text_Patterns.Any(pattern => !Regex.IsMatch(twitdata.MainTwitData.Text, pattern))) { return true; }
 
             // Client抽出
             if (filter.Status_Client_Patterns != null
-             && filter.Status_Client_Patterns.All(pattern => !Regex.IsMatch(twitdata.MainTwitData.Source, pattern))) { return true; }
+             && filter.Status_Client_Patterns.Any(pattern => !Regex.IsMatch(twitdata.MainTwitData.Source, pattern))) { return true; }
 
             return false;
         }
