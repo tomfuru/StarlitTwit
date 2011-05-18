@@ -538,8 +538,8 @@ namespace StarlitTwit
         }
         #endregion (ShowUserTweet)
 
-        // FrmProfile
-        // ListsForm
+        // ExistFrmProfile
+        // ExistListsForm
         //-------------------------------------------------------------------------------
         #region +[static]ExistFrmProfile すでにあるFrmProfileを探す
         //-------------------------------------------------------------------------------
