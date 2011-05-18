@@ -55,11 +55,25 @@ namespace StarlitTwit
         /// <returns>成功:true,失敗:false,成功したが認証待ち:null</returns>
         public static bool? Follow(string screen_name)
         {
+            UserProfile profile;
+            return Follow(screen_name, out profile);
+        }
+        /// <summary>
+        /// フォローを行います。返り値は成功:true,失敗:false,成功したが承認待ち:null
+        /// </summary>
+        /// <param name="screen_name">フォローするユーザーのScreenName</param>
+        /// <param name="newProfile">新しいUserProfile(失敗時はnull)</param>
+        /// <returns>成功:true,失敗:false,成功したが認証待ち:null</returns>
+        public static bool? Follow(string screen_name, out UserProfile newProfile)
+        {
             try {
-                UserProfile ret = FrmMain.Twitter.friendships_create(screen_name: screen_name);
-                if (ret.Protected && !ret.Following) { return null; }
+                newProfile = FrmMain.Twitter.friendships_create(screen_name: screen_name);
+                if (newProfile.Protected && !newProfile.Following) { return null; }
             }
-            catch (TwitterAPIException) { return false; }
+            catch (TwitterAPIException) {
+                newProfile = null; 
+                return false;
+            }
             return true;
         }
         #endregion (Follow)
@@ -73,8 +87,22 @@ namespace StarlitTwit
         /// <returns></returns>
         public static bool RemoveFollow(string screen_name)
         {
-            try { FrmMain.Twitter.friendships_destroy(screen_name: screen_name); }
-            catch (TwitterAPIException) { return false; }
+            UserProfile profile;
+            return RemoveFollow(screen_name, out profile);
+        }
+        /// <summary>
+        /// フォロー解除を行います。できたかどうかが返ります。
+        /// </summary>
+        /// <param name="screen_name">フォロー解除するユーザーのScreenName</param>
+        /// <param name="newProfile">新しいUserProfile(失敗時はnull)</param>
+        /// <returns></returns>
+        public static bool RemoveFollow(string screen_name, out UserProfile newProfile)
+        {
+            try { newProfile = FrmMain.Twitter.friendships_destroy(screen_name: screen_name); }
+            catch (TwitterAPIException) {
+                newProfile = null;
+                return false; 
+            }
             return true;
         }
         #endregion (RemoveFollow)
@@ -468,7 +496,7 @@ namespace StarlitTwit
         public static void ShowUserProfile(FrmMain parent, bool canEdit, UserProfile profile)
         {
             if (!Utilization.ExistFrmProfile(canEdit, profile.ScreenName)) {
-                FrmProfile frm = new FrmProfile(canEdit, profile, parent.ImageListWrapper);
+                FrmProfile frm = new FrmProfile(parent,canEdit, profile, parent.ImageListWrapper);
                 frm.Show(parent);
             }
         }

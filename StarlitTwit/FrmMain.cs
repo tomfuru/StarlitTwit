@@ -1846,6 +1846,7 @@ namespace StarlitTwit
                 if (uctldisp == uctlDispHome) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Home : SettingsData.RenewGetNum_Home;
                     d = Twitter.statuses_home_timeline(count: iCount);
+                    //d = d.Where(twitdata => StatusFilter.ThroughFilters( SettingsData
                 }
                 else if (uctldisp == uctlDispReply) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Reply : SettingsData.RenewGetNum_Reply;

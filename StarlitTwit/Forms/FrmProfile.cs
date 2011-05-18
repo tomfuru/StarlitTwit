@@ -11,22 +11,30 @@ namespace StarlitTwit
 {
     public partial class FrmProfile : Form
     {
+        //-------------------------------------------------------------------------------
+        #region Variables
+        //-------------------------------------------------------------------------------
+        /// <summary>メインフォーム</summary>
+        public FrmMain _mainForm;
+        /// <summary>表示プロフィール</summary>
         private UserProfile _profile;
-
         /// <summary>編集可能かどうか</summary>
         public bool CanEdit { get; private set; }
         /// <summary>プロフィールのユーザー名</summary>
         public string ScreenName { get { return (_profile != null) ? _profile.ScreenName : null; } }
         // 変更確認用
         string _bakName, _bakLoc, _bakUrl, _bakDesc;
+        //-------------------------------------------------------------------------------
+        #endregion (Variables)
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmProfile(bool canEdit, UserProfile profile, ImageListWrapper imagelistwrapper)
+        public FrmProfile(FrmMain mainForm, bool canEdit, UserProfile profile, ImageListWrapper imagelistwrapper)
         {
             InitializeComponent();
+            _mainForm = mainForm;
             CanEdit = canEdit;
             if (!canEdit) {
                 rtxtDescription.ReadOnly = txtLocation.ReadOnly = txtName.ReadOnly = txtUrl.ReadOnly = true;
@@ -135,6 +143,132 @@ namespace StarlitTwit
         #endregion (rtxtDescription_TextChanged)
 
         //-------------------------------------------------------------------------------
+        #region メニュー
+        //-------------------------------------------------------------------------------
+        #region tsmiOperation_Follow_Click フォロー
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOperation_Follow_Click(object sender, EventArgs e)
+        {
+            UserProfile profile;
+            bool? ret = Utilization.Follow(_profile.ScreenName, out profile);
+            if (!ret.HasValue) {
+                _profile = profile;
+                SetProfile(_profile);
+            }
+            else if (ret.Value) {
+                _profile = profile;
+                SetProfile(_profile);
+            }
+        }
+        #endregion (tsmiOperation_Follow_Clic)
+        //-------------------------------------------------------------------------------
+        #region tsmiOperation_UnFollow_Click フォロー解除
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOperation_UnFollow_Click(object sender, EventArgs e)
+        {
+            UserProfile profile;
+            if (Utilization.RemoveFollow(_profile.ScreenName, out profile)) {
+                _profile = profile;
+                SetProfile(_profile);
+            }
+        }
+        #endregion (tsmiOperation_UnFollow_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiOperation_MakeUserTab_Click ユーザータブ作成
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOperation_MakeUserTab_Click(object sender, EventArgs e)
+        {
+            // TODO:タブ作成
+        }
+        #endregion (tsmiOperation_MakeUserTab_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiOperation_Block_Click ブロック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOperation_Block_Click(object sender, EventArgs e)
+        {
+            // TODO:ブロック
+        }
+        #endregion (tsmiOperation_Block_Click)
+        //-------------------------------------------------------------------------------
+		#region smiOperation_UnBlock_Click ブロック解除
+		//-------------------------------------------------------------------------------
+		//
+        private void tsmiOperation_UnBlock_Click(object sender, EventArgs e)
+        {
+            // TODO:ブロック解除
+        }
+		#endregion (smiOperation_UnBlock_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplay_Friends_Click フレンド一覧表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_Friends_Click(object sender, EventArgs e)
+        {
+            FrmDispUsers.EFormType formType;
+            string username = null;
+            if (CanEdit) {
+                formType = FrmDispUsers.EFormType.MyFollowing;
+            }
+            else {
+                formType = FrmDispUsers.EFormType.UserFollowing;
+                username = _profile.ScreenName;
+            }
+
+            Utilization.ShowUserListForm(_mainForm, picbIcon.ImageListWrapper, formType, username);
+        }
+        #endregion (tsmiDisplay_Friends_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplay_Follower_Click フォロワー一覧表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_Follower_Click(object sender, EventArgs e)
+        {
+            FrmDispUsers.EFormType formType;
+            string username = null;
+            if (CanEdit) {
+                formType = FrmDispUsers.EFormType.MyFollower;
+            }
+            else {
+                formType = FrmDispUsers.EFormType.UserFollower;
+                username = _profile.ScreenName;
+            }
+
+            Utilization.ShowUserListForm(_mainForm, picbIcon.ImageListWrapper, formType, username);
+        }
+        #endregion (tsmiDisplay_Follower_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplay_OwnList_Click 所有リスト表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_OwnList_Click(object sender, EventArgs e)
+        {
+            FrmDispLists.EFormType formType;
+
+            if (CanEdit) {
+
+            }
+            else {
+
+            }
+
+            // TODO:リスト一覧表示
+        }
+        #endregion (tsmiDisplay_OwnList_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplay_BelongList_Click 所属リスト表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_BelongList_Click(object sender, EventArgs e)
+        {
+            // TODO:リスト一覧表示
+        }
+        #endregion (tsmiDisplay_BelongList_Click)
+
+        //-------------------------------------------------------------------------------
         #region tsmiRenew_Click 更新メニュークリック
         //-------------------------------------------------------------------------------
         //
@@ -151,6 +285,8 @@ namespace StarlitTwit
             }
         }
         #endregion (tsmiRenew_Click)
+        //-------------------------------------------------------------------------------
+        #endregion (メニュー)
 
         //-------------------------------------------------------------------------------
         #region -SetProfile プロフィールセット
@@ -192,6 +328,14 @@ namespace StarlitTwit
                 lblLastStatusTime.Visible = false;
                 lblLastStatus.Text = "(無し)";
             }
+
+            // メニュー設定
+            tsmiOperation.Visible = !CanEdit;
+            tsmiOperation_Follow.Visible = !(tsmiOperation_UnFollow.Visible = profile.Following);
+            
+            tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible = toolStripMenuItem3.Visible = false;   // TODO:ブロックメニュー有効化
+            tsmiOperation_MakeUserTab.Visible = toolStripMenuItem2.Visible = false;                             // TODO:タブ作成メニュー有効化
+            tsmiDisplay_OwnList.Visible = tsmiDisplay_BelongList.Visible = toolStripMenuItem1.Visible = false;  // TODO:リスト表示メニュー有効化
         }
         #endregion (SetProfile)
 
