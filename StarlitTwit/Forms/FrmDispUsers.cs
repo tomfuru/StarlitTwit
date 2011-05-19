@@ -286,7 +286,7 @@ namespace StarlitTwit
         private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            Utilization.ShowUserTweet((FrmMain)this.Owner, prof.ScreenName);
+            Utilization.ShowUserTweet((FrmMain)this.Owner,FrmDispStatuses.EFormType.UserStatus,  prof.ScreenName);
         }
         #endregion (tsmiDisplayUserTweet_Click)
         //-------------------------------------------------------------------------------
