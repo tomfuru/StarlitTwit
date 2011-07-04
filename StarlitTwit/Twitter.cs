@@ -743,7 +743,6 @@ namespace StarlitTwit
             }
 
             string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-
             string url = GetUrlWithOAuthParameters(URLapi + user + @"/lists.xml", GET, paramdic);
 
             XElement el = GetByAPI(url);
@@ -826,9 +825,17 @@ namespace StarlitTwit
         /// lists_membershipsメソッド
         /// </summary>
         /// <param name="screen_name">追加されているリストを調べるユーザー名</param>
-        public SequentData<ListData> lists_memberships(string screen_name)
+        public SequentData<ListData> lists_memberships(string screen_name = "", long cursor = -1)
         {
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, screen_name), GET);
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, user), GET, paramdic);
             XElement el = GetByAPI(url);
             return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
                 long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
@@ -841,9 +848,17 @@ namespace StarlitTwit
         /// lists_subscriptionsメソッド
         /// </summary>
         /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
-        public SequentData<ListData> lists_subscriptions(string screen_name)
+        public SequentData<ListData> lists_subscriptions(string screen_name = "", long cursor = -1)
         {
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, screen_name), GET);
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, user), GET, paramdic);
             XElement el = GetByAPI(url);
             return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
                 long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));

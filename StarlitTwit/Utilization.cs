@@ -464,10 +464,14 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="parent">最上位フォーム</param>
         /// <param name="screen_name">ユーザー名</param>
-        public static void ShowListsForm(FrmMain parent, string screen_name = null)
+        public static void ShowListsForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispLists.EFormType type, string screen_name = null)
         {
-            // TODO:Implement ShowListsForm
-            throw new NotImplementedException();
+            if (!Utilization.ExistFrmLists()) {
+                FrmDispLists frm = new FrmDispLists(parent, imageListWrapper, type) {
+                    UserScreenName = screen_name
+                };
+                frm.Show(parent);
+            }
         }
         #endregion (ShowListsForm)
         //-------------------------------------------------------------------------------
@@ -544,7 +548,16 @@ namespace StarlitTwit
         }
         #endregion (ShowUserTweet)
 
-        // ExistListsForm
+        //-------------------------------------------------------------------------------
+        #region +[static]ExistFrmLists 既にあるFrmListsを探す
+        //-------------------------------------------------------------------------------
+        //
+        public static bool ExistFrmLists()
+        {
+            // TODO:Implement
+            return false;
+        }
+        #endregion (ExistFrmLists)
         //-------------------------------------------------------------------------------
         #region +[static]ExistFrmProfile すでにあるFrmProfileを探す
         //-------------------------------------------------------------------------------

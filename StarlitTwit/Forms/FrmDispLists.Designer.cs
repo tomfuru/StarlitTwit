@@ -33,9 +33,9 @@
             this.lstvList = new StarlitTwit.ListViewEx();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnClose = new System.Windows.Forms.Button();
             this.btnAppend = new System.Windows.Forms.Button();
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,16 +43,16 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 252);
+            this.statusStrip.Location = new System.Drawing.Point(0, 251);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(392, 22);
+            this.statusStrip.Size = new System.Drawing.Size(392, 23);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip";
             // 
             // tsslLabel
             // 
             this.tsslLabel.Name = "tsslLabel";
-            this.tsslLabel.Size = new System.Drawing.Size(377, 17);
+            this.tsslLabel.Size = new System.Drawing.Size(377, 18);
             this.tsslLabel.Spring = true;
             this.tsslLabel.Text = "...";
             this.tsslLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -82,7 +82,6 @@
             this.lstvList.Location = new System.Drawing.Point(12, 16);
             this.lstvList.MultiSelect = false;
             this.lstvList.Name = "lstvList";
-            this.lstvList.OwnerDraw = true;
             this.lstvList.Size = new System.Drawing.Size(368, 204);
             this.lstvList.TabIndex = 5;
             this.lstvList.UseCompatibleStateImageBehavior = false;
@@ -97,6 +96,11 @@
             // 
             this.columnHeader3.Text = "人数";
             this.columnHeader3.Width = 40;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "フォロワー数";
+            this.columnHeader4.Width = 71;
             // 
             // btnClose
             // 
@@ -120,11 +124,6 @@
             this.btnAppend.Text = "追加取得";
             this.btnAppend.UseVisualStyleBackColor = true;
             this.btnAppend.Click += new System.EventHandler(this.btnAppend_Click);
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "フォロワー数";
-            this.columnHeader4.Width = 71;
             // 
             // FrmDispLists
             // 
@@ -155,7 +154,7 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel tsslLabel;
         private System.Windows.Forms.Label lblCount;
-        private ListViewEx lstvList;
+        private StarlitTwit.ListViewEx lstvList;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.Button btnClose;

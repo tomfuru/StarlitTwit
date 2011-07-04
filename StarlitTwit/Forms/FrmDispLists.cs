@@ -106,9 +106,9 @@ namespace StarlitTwit
             }
 
             if (FormType == EFormType.MyList) {
-                lstvList.Columns.Add(new ColumnHeader() { Name = "公開", Width = 50 });
+                lstvList.Columns.Add(new ColumnHeader() { Text = "公開", Width = 50 });
             }
-            { lstvList.Columns.Insert(0, new ColumnHeader() { Name = "所有者", Width = 100 }); }
+            else { lstvList.Columns.Insert(0, new ColumnHeader() { Text = "所有者", Width = 100 }); }
             tsslLabel.Text = "取得中...";
             lblCount.Text = "";
             Utilization.InvokeTransaction(() => GetUsers());
@@ -130,7 +130,7 @@ namespace StarlitTwit
         //
         private void btnAppend_Click(object sender, EventArgs e)
         {
-
+            Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)
         //-------------------------------------------------------------------------------
@@ -152,13 +152,15 @@ namespace StarlitTwit
                     case EFormType.MyList:
                         listseq = FrmMain.Twitter.lists_Get(cursor: _next_cursor);
                         break;
-                    case EFormType.UserList:
-                        break;
                     case EFormType.MyBelongedList:
-                        break;
-                    case EFormType.UserBelongedList:
+                        listseq = FrmMain.Twitter.lists_memberships(cursor: _next_cursor);
                         break;
                     case EFormType.MySubscribingList:
+                        listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
+                        break;
+                    case EFormType.UserList:
+                        break;
+                    case EFormType.UserBelongedList:
                         break;
                     case EFormType.UserSubscribingList:
                         break;
@@ -170,7 +172,7 @@ namespace StarlitTwit
                     this.Invoke(new Action(() =>
                     {
                         AddList(listdata);
-                        lblCount.Text = string.Format("{0}人見つかりました", _listList.Count);
+                        lblCount.Text = string.Format("{0}個見つかりました", _listList.Count);
                         tsslLabel.Text = "取得完了しました。";
                     }));
                 }
@@ -194,7 +196,24 @@ namespace StarlitTwit
         //
         private void AddList(IEnumerable<ListData> listdata)
         {
+            List<ListViewItem> items = new List<ListViewItem>();
+            foreach (var list in listdata) {
+                if (_listList.Exists(l => l.ID == list.ID)) { continue; } // 重複防止
+                ListViewItem item = new ListViewItem();
+                item.Tag = list;
+                if (FormType != EFormType.MyList) { 
+                    item.Text = list.OwnerScreenName;
+                    item.SubItems.Add(list.Name); 
+                }
+                else { item.Text = list.Name; }
+                item.SubItems.Add(list.MemberCount.ToString());
+                item.SubItems.Add(list.SubscriberCount.ToString());
+                if (FormType == EFormType.MyList) { item.SubItems.Add((list.Public) ? "公開" : "非公開"); }
 
+                items.Add(item);
+                _listList.Add(list);
+            }
+            lstvList.Items.AddRange(items.ToArray());
         }
         //-------------------------------------------------------------------------------
         #endregion (AddList)

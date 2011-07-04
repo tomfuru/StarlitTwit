@@ -456,6 +456,15 @@ namespace StarlitTwit
         }
         #endregion (llblFollower_LinkClicked)
         //-------------------------------------------------------------------------------
+        #region llblList_LinkClicked 所属リスト数ラベルクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void llblList_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Utilization.ShowListsForm(this, imageListWrapper, FrmDispLists.EFormType.MyBelongedList);
+        }
+        #endregion (llblList_LinkClicked)
+        //-------------------------------------------------------------------------------
         #region DispTwit_OpenURLRequest URLオープン要請時
         //-------------------------------------------------------------------------------
         //
@@ -991,6 +1000,24 @@ namespace StarlitTwit
             ShowProfileForm(true, Twitter.ScreenName);
         }
         #endregion (tsmi自分のプロフィール_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmi自分のリスト_Click 自分のリスト
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi自分のリスト_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowListsForm(this, imageListWrapper, FrmDispLists.EFormType.MyList);
+        }
+        #endregion (tsmi自分のリスト_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiフォロー中のリスト_Click フォロー中のリスト
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiフォロー中のリスト_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowListsForm(this, imageListWrapper, FrmDispLists.EFormType.MySubscribingList);
+        }
+        #endregion (tsmiフォロー中のリスト_Click)
         //===============================================================================
         #region tsmi_子画面_DropDownOpening 子画面メニューオープン時
         //-------------------------------------------------------------------------------
@@ -1437,7 +1464,9 @@ namespace StarlitTwit
             _profileRenew_IsForce = true;
 
             tsmi_プロフィール.Enabled = true;
-            foreach (ToolStripMenuItem item in tsmi_プロフィール.DropDownItems) { item.Enabled = true; }
+            foreach (var item in tsmi_プロフィール.DropDownItems.OfType<ToolStripMenuItem>()) {
+                item.Enabled = true; 
+            }
             tsmiUserStream.Enabled = true;
             tsmiUserStreamEnd.Enabled = tsmiUserStreamStart.Enabled = true;
             tsmiAPIRestriction.Enabled = tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
@@ -1489,7 +1518,7 @@ namespace StarlitTwit
         {
             if (!lblUserName.Font.Bold) {
                 lblUserName.Font = new Font(lblUserName.Font, FontStyle.Bold);
-                llblFollower.Enabled = llblFollowing.Enabled = true;
+                llblFollower.Enabled = llblFollowing.Enabled = llblList.Enabled = true;
             }
             StringBuilder namesb = new StringBuilder();
             if (profile.Protected) { namesb.Append(Utilization.CHR_LOCKED); }
@@ -1499,6 +1528,7 @@ namespace StarlitTwit
             lblUserName.Text = namesb.ToString();
             llblFollower.Text = profile.FollowerNum.ToString();
             llblFollowing.Text = profile.FollowingNum.ToString();
+            llblList.Text = profile.ListedNum.ToString();
             lblStatuses.Text = profile.StatusNum.ToString();
         }
         //-------------------------------------------------------------------------------
