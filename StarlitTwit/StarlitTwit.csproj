@@ -73,6 +73,12 @@
     <Compile Include="Forms\FrmDispUsers.Designer.cs">
       <DependentUpon>FrmDispUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmInputRegex.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmInputRegex.Designer.cs">
+      <DependentUpon>FrmInputRegex.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmMakeTab.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,6 +189,12 @@
     <Compile Include="UserControls\TabPageEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\TextBoxRegex.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\TextBoxRegex.Designer.cs">
+      <DependentUpon>TextBoxRegex.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ToolStripStatusLabelEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -226,6 +238,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmDispUsers.resx">
       <DependentUpon>FrmDispUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmInputRegex.resx">
+      <DependentUpon>FrmInputRegex.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmMakeTab.resx">
       <DependentUpon>FrmMakeTab.cs</DependentUpon>
@@ -278,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\TabControlEx.resx">
       <DependentUpon>TabControlEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TextBoxRegex.resx">
+      <DependentUpon>TextBoxRegex.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UctlDispTwit.resx">
       <DependentUpon>UctlDispTwit.cs</DependentUpon>

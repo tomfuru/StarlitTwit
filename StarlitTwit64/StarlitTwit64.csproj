@@ -115,6 +115,13 @@
       <Link>Forms\FrmGetTweet.designer.cs</Link>
       <DependentUpon>FrmGetTweet.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmInputRegex.cs">
+      <Link>Forms\FrmInputRegex.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmInputRegex.designer.cs">
+      <Link>Forms\FrmInputRegex.designer.cs</Link>
+      <DependentUpon>FrmInputRegex.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmMakeTab.cs">
       <Link>Forms\FrmMakeTab.cs</Link>
       <SubType>Form</SubType>
@@ -262,6 +269,13 @@
       <Link>UserControls\TabPageEx.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\TextBoxRegex.cs">
+      <Link>UserControls\TextBoxRegex.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\TextBoxRegex.designer.cs">
+      <Link>UserControls\TextBoxRegex.designer.cs</Link>
+      <DependentUpon>TextBoxRegex.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\UserControls\ToolStripStatusLabelEx.cs">
       <Link>UserControls\ToolStripStatusLabelEx.cs</Link>
       <SubType>Component</SubType>
@@ -319,6 +333,10 @@
       <Link>Forms\FrmGetTweet.resx</Link>
       <DependentUpon>FrmGetTweet.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmInputRegex.resx">
+      <Link>Forms\FrmInputRegex.resx</Link>
+      <DependentUpon>FrmInputRegex.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmMakeTab.resx">
       <Link>Forms\FrmMakeTab.resx</Link>
       <DependentUpon>FrmMakeTab.cs</DependentUpon>
@@ -358,6 +376,10 @@
     <EmbeddedResource Include="..\StarlitTwit\UserControls\TabControlEx.resx">
       <Link>UserControls\TabControlEx.resx</Link>
       <DependentUpon>TabControlEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\TextBoxRegex.resx">
+      <Link>UserControls\TextBoxRegex.resx</Link>
+      <DependentUpon>TextBoxRegex.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlDispTwit.resx">
       <Link>UserControls\UctlDispTwit.resx</Link>

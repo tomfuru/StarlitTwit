@@ -1,4 +1,4 @@
-﻿namespace StarlitTwit.Forms
+﻿namespace StarlitTwit
 {
     partial class FrmInputRegex
     {
@@ -54,6 +54,7 @@
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnCansel
             // 
@@ -64,12 +65,13 @@
             this.btnCansel.TabIndex = 2;
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
+            this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
             // txtCheck
             // 
             this.txtCheck.Location = new System.Drawing.Point(12, 88);
             this.txtCheck.Name = "txtCheck";
-            this.txtCheck.Size = new System.Drawing.Size(179, 19);
+            this.txtCheck.Size = new System.Drawing.Size(168, 19);
             this.txtCheck.TabIndex = 3;
             this.txtCheck.TextChanged += new System.EventHandler(this.txtCheck_TextChanged);
             // 
@@ -85,7 +87,7 @@
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(201, 91);
+            this.lblInfo.Location = new System.Drawing.Point(186, 91);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Size = new System.Drawing.Size(11, 12);
             this.lblInfo.TabIndex = 5;
@@ -116,6 +118,7 @@
             this.Controls.Add(this.txtRegex);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmInputRegex";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "正規表現入力";
             this.ResumeLayout(false);
             this.PerformLayout();

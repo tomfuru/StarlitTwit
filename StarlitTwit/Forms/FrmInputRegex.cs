@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
-namespace StarlitTwit.Forms
+namespace StarlitTwit
 {
     public partial class FrmInputRegex : Form
     {
@@ -92,5 +92,24 @@ namespace StarlitTwit.Forms
             }
         }
         #endregion (CheckRegex)
+
+        //-------------------------------------------------------------------------------
+        #region btnOK_Click OKボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+        }
+        #endregion (btnOK_Click)
+        //-------------------------------------------------------------------------------
+        #region btnCansel_Click キャンセルボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnCansel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+        }
+        #endregion (btnCansel_Click)
     }
 }
