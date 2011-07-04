@@ -269,7 +269,7 @@ namespace StarlitTwit
         {
             FrmDispLists.EFormType formType = (CanEdit) ? FrmDispLists.EFormType.MyList : FrmDispLists.EFormType.UserList;
 
-            // TODO:リスト一覧表示
+            Utilization.ShowListsForm(_mainForm, picbIcon.ImageListWrapper, formType, _profile.ScreenName);
         }
         #endregion (tsmiDisplay_OwnList_Click)
         //-------------------------------------------------------------------------------
@@ -280,7 +280,7 @@ namespace StarlitTwit
         {
             FrmDispLists.EFormType formType = (CanEdit) ? FrmDispLists.EFormType.MyBelongedList : FrmDispLists.EFormType.UserBelongedList;
 
-            // TODO:リスト一覧表示
+            Utilization.ShowListsForm(_mainForm, picbIcon.ImageListWrapper, formType, _profile.ScreenName);
         }
         #endregion (tsmiDisplay_BelongList_Click)
         //-------------------------------------------------------------------------------
@@ -291,7 +291,7 @@ namespace StarlitTwit
         {
             FrmDispLists.EFormType formType = (CanEdit) ? FrmDispLists.EFormType.MySubscribingList : FrmDispLists.EFormType.UserSubscribingList;
 
-            // TODO:リスト一覧表示
+            Utilization.ShowListsForm(_mainForm, picbIcon.ImageListWrapper, formType, _profile.ScreenName);
         }
         #endregion (tsmiDisplay_SubscriptList_Click)
 
@@ -359,9 +359,6 @@ namespace StarlitTwit
             // メニュー設定
             tsmiOperation.Visible = !CanEdit;
             tsmiOperation_Follow.Visible = !(tsmiOperation_UnFollow.Visible = profile.Following);
-            
-            tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible = toolStripMenuItem3.Visible = false;   // TODO:ブロックメニュー有効化
-            tsmiDisplay_OwnList.Visible = tsmiDisplay_BelongList.Visible = tsmiDisplay_SubscriptList.Visible = toolStripMenuItem1.Visible = false;  // TODO:リスト表示メニュー有効化
         }
         #endregion (SetProfile)
 

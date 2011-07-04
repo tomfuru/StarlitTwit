@@ -190,7 +190,7 @@ namespace StarlitTwit
         #region menuRow_Opening メニューオープン時
         //-------------------------------------------------------------------------------
         //
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        private void menuRow_Opening(object sender, CancelEventArgs e)
         {
             if (lstvList.SelectedItems.Count == 0) { e.Cancel = true; return; }
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;

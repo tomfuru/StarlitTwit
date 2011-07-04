@@ -2529,7 +2529,8 @@ namespace StarlitTwit
                     MemberCount = int.Parse(el.Element("member_count").Value),
                     Public = el.Element("mode").Value.Equals("public"),
                     OwnerID = long.Parse(el.Element("user").Element("id").Value),
-                    OwnerScreenName = el.Element("user").Element("screen_name").Value
+                    OwnerScreenName = el.Element("user").Element("screen_name").Value,
+                    OwnerIconURL = el.Element("user").Element("profile_image_url").Value
                 };
             }
             catch (NullReferenceException ex) {
@@ -3157,6 +3158,8 @@ namespace StarlitTwit
         public long OwnerID;
         /// <summary>リスト作成者ScreenName</summary>
         public string OwnerScreenName;
+        /// <summary>リスト作成者のアイコンURL</summary>
+        public string OwnerIconURL;
 
         /// <summary>リストのID</summary>
         public long ID;

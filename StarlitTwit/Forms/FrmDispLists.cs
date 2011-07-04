@@ -13,7 +13,7 @@ namespace StarlitTwit
     public partial class FrmDispLists : Form
     {
         //-------------------------------------------------------------------------------
-        #region Member
+        #region Variables
         //-------------------------------------------------------------------------------
         /// <summary>フォームの用途</summary>
         public EFormType FormType { get; private set; }
@@ -24,8 +24,13 @@ namespace StarlitTwit
         private long _next_cursor = -1;
 
         private List<ListData> _listList = new List<ListData>();
+
+        /// <summary>ロード中画像</summary>
+        private Bitmap _loadingimg;
+        /// <summary>アニメーション管理クラス</summary>
+        private ImageAnimation _imageAnimation;
         //-------------------------------------------------------------------------------
-        #endregion (Member)
+        #endregion (Variables)
 
         //-------------------------------------------------------------------------------
         #region EFormType 列挙体：フォームの種類
@@ -60,9 +65,14 @@ namespace StarlitTwit
 
             _mainForm = mainForm;
             _imageListWrapper = imgListWrapper;
+            lstvList.SmallImageList = imgListWrapper.ImageList;
             FormType = formtype;
 
             UserScreenName = null;
+            
+            _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingS.Clone();
+            _imageAnimation = new ImageAnimation(_loadingimg);
+            _imageAnimation.FrameUpdated += Image_Animate;
         }
         //-------------------------------------------------------------------------------
         #endregion (Constructor)
@@ -108,13 +118,48 @@ namespace StarlitTwit
             if (FormType == EFormType.MyList) {
                 lstvList.Columns.Add(new ColumnHeader() { Text = "公開", Width = 50 });
             }
-            else { lstvList.Columns.Insert(0, new ColumnHeader() { Text = "所有者", Width = 100 }); }
+            else { lstvList.Columns.Insert(1, new ColumnHeader() { Text = "所有者", Width = 90 }); }
             tsslLabel.Text = "取得中...";
             lblCount.Text = "";
             Utilization.InvokeTransaction(() => GetUsers());
         }
         //-------------------------------------------------------------------------------
         #endregion (OnLoad)
+        //-------------------------------------------------------------------------------
+        #region Image_Animate 画像フレームが進んだとき
+        //-------------------------------------------------------------------------------
+        //
+        private void Image_Animate(object sender, EventArgs e)
+        {
+            try {
+                this.Invoke(new Action(() => lstvList.Invalidate()));
+            }
+            catch (InvalidOperationException) { }
+        }
+        #endregion (Image_Animate)
+        //-------------------------------------------------------------------------------
+        #region menuRow_Opening メニューオープン時
+        //-------------------------------------------------------------------------------
+        //
+        private void menuRow_Opening(object sender, CancelEventArgs e)
+        {
+            if (lstvList.SelectedItems.Count == 0) { e.Cancel = true; return; }
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            
+            //
+        }
+        #endregion (menuRow_Opening)
+        //-------------------------------------------------------------------------------
+        #region tsmiMakeListTab_Click リストタブ追加
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiMakeListTab_Click(object sender, EventArgs e)
+        {
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+
+            _mainForm.MakeNewTab(TabSearchType.List, listdata.Slug, listdata.OwnerScreenName);
+        }
+        #endregion (tsmiMakeListTab_Click)
         //-------------------------------------------------------------------------------
         #region btnClose_Click 閉じるボタン
         //-------------------------------------------------------------------------------
@@ -133,6 +178,32 @@ namespace StarlitTwit
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)
+        //===============================================================================
+        #region lstvList_DrawColumnHeader ヘッダ描画
+        //-------------------------------------------------------------------------------
+        //
+        private void lstvList_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+        #endregion (lstvList_DrawColumnHeader)
+        //-------------------------------------------------------------------------------
+        #region lstvList_DrawSubItem アイテム描画
+        //-------------------------------------------------------------------------------
+        //
+        private void lstvList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            if (e.ColumnIndex > 0) { e.DrawDefault = true; return; }
+            e.DrawBackground();
+            Image img = _imageListWrapper.GetImage(_listList[e.ItemIndex].OwnerIconURL);
+            if (img != null) {
+                e.Graphics.DrawImage(img, e.Bounds.Location);
+            }
+            else if (_imageAnimation != null) {
+                e.Graphics.DrawImage(_imageAnimation.Image, e.Bounds.Location);
+            }
+        }
+        #endregion (lstvList_DrawSubItem)
         //-------------------------------------------------------------------------------
         #endregion (イベント)
 
@@ -199,16 +270,17 @@ namespace StarlitTwit
         //
         private void AddList(IEnumerable<ListData> listdata)
         {
+            List<Tuple<ListViewItem, string>> urllist = new List<Tuple<ListViewItem, string>>();
             List<ListViewItem> items = new List<ListViewItem>();
             foreach (var list in listdata) {
                 if (_listList.Exists(l => l.ID == list.ID)) { continue; } // 重複防止
                 ListViewItem item = new ListViewItem();
                 item.Tag = list;
+                if (!_imageListWrapper.ImageContainsKey(list.OwnerIconURL)) { urllist.Add(new Tuple<ListViewItem, string>(item, list.OwnerIconURL)); }
                 if (FormType != EFormType.MyList) { 
-                    item.Text = list.OwnerScreenName;
-                    item.SubItems.Add(list.Name); 
+                    item.SubItems.Add(list.OwnerScreenName);
                 }
-                else { item.Text = list.Name; }
+                item.SubItems.Add(list.Name); 
                 item.SubItems.Add(list.MemberCount.ToString());
                 item.SubItems.Add(list.SubscriberCount.ToString());
                 if (FormType == EFormType.MyList) { item.SubItems.Add((list.Public) ? "公開" : "非公開"); }
@@ -217,9 +289,36 @@ namespace StarlitTwit
                 _listList.Add(list);
             }
             lstvList.Items.AddRange(items.ToArray());
+
+            if (urllist.Count > 0) {
+                Utilization.InvokeTransaction(() => GetImages(urllist));
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion (AddList)
+        //-------------------------------------------------------------------------------
+        #region -GetImages 画像取得と追加 (別スレッド処理)
+        //-------------------------------------------------------------------------------
+        //
+        private void GetImages(IEnumerable<Tuple<ListViewItem, string>> data)
+        {
+            try {
+                _imageAnimation.StartAnimation();
+                foreach (var d in data) {
+                    Image img = Utilization.GetImageFromURL(d.Item2);
+                    if (img != null) {
+                        _imageListWrapper.ImageAdd(d.Item2, img);
+                        this.Invoke(new Action(() => Refresh()));
+                    }
+                    else {
+                        d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;
+                    }
+                }
+                _imageAnimation.StopAnimation();
+            }
+            catch (InvalidOperationException) { }
+        }
+        #endregion (GetImages)
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
     }

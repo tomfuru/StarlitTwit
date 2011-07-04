@@ -74,7 +74,7 @@
             this.tsmiUnblock});
             this.menuRow.Name = "contextMenuStrip1";
             this.menuRow.Size = new System.Drawing.Size(208, 242);
-            this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiFollow
             // 

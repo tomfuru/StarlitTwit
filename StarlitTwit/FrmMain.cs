@@ -30,6 +30,10 @@ namespace StarlitTwit
         public FrmMain()
         {
             InitializeComponent();
+            this.tabpgHome.Text = "Home";
+            this.tabpgReply.Text = "Reply";
+            this.tabpgHistory.Text = "History";
+            this.tabpgDirect.Text = "Direct";
 
             // 初期設定
             System.Net.ServicePointManager.Expect100Continue = false;

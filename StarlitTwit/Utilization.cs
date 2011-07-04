@@ -466,7 +466,7 @@ namespace StarlitTwit
         /// <param name="screen_name">ユーザー名</param>
         public static void ShowListsForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispLists.EFormType type, string screen_name = null)
         {
-            if (!Utilization.ExistFrmLists()) {
+            if (!Utilization.ExistFrmLists(type, screen_name)) {
                 FrmDispLists frm = new FrmDispLists(parent, imageListWrapper, type) {
                     UserScreenName = screen_name
                 };
@@ -552,10 +552,16 @@ namespace StarlitTwit
         #region +[static]ExistFrmLists 既にあるFrmListsを探す
         //-------------------------------------------------------------------------------
         //
-        public static bool ExistFrmLists()
+        public static bool ExistFrmLists(FrmDispLists.EFormType type, string screen_name = null)
         {
-            // TODO:Implement
-            return false;
+            Func<FrmDispLists, bool> judgeFunc = f =>
+                f.FormType == type
+                && !((type == FrmDispLists.EFormType.UserList 
+                   || type == FrmDispLists.EFormType.UserBelongedList
+                   || type == FrmDispLists.EFormType.UserSubscribingList)
+                  && f.UserScreenName != screen_name);
+
+            return ExistForm<FrmDispLists>(judgeFunc);
         }
         #endregion (ExistFrmLists)
         //-------------------------------------------------------------------------------
