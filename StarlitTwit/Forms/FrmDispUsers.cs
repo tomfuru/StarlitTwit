@@ -311,7 +311,12 @@ namespace StarlitTwit
         private void tsmiBlock_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            if (Block(prof.ScreenName)) {
+            if (!FrmMain.SettingsData.ConfirmDialogBlock
+             || Message.ShowQuestionMessage("ブロックします。") == System.Windows.Forms.DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.blocks_create(screen_name: prof.ScreenName);
+                }
+                catch (TwitterAPIException) { tsslabel.Text = "ブロックに失敗しました。"; return; }
                 RemoveSelectedItem();
             }
         }
@@ -323,7 +328,13 @@ namespace StarlitTwit
         private void tsmiUnblock_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            Unblock(prof.ScreenName);
+            if (!FrmMain.SettingsData.ConfirmDialogBlock
+             || Message.ShowQuestionMessage("ブロック解除します。") == System.Windows.Forms.DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.blocks_destroy(screen_name: prof.ScreenName);
+                }
+                catch (TwitterAPIException) { tsslabel.Text = "ブロック解除に失敗しました。"; return; }
+            }
         }
         #endregion (tsmiUnblock_Click)
         //-------------------------------------------------------------------------------
@@ -380,32 +391,6 @@ namespace StarlitTwit
 
         //-------------------------------------------------------------------------------
         #region メソッド
-        //-------------------------------------------------------------------------------
-        #region -Block ブロック
-        //-------------------------------------------------------------------------------
-        //
-        private bool Block(string screen_name)
-        {
-            try {
-                FrmMain.Twitter.blocks_create(screen_name: screen_name);
-                return true;
-            }
-            catch (TwitterAPIException) { return false; }
-        }
-        #endregion (Block)
-        //-------------------------------------------------------------------------------
-        #region -Unblock ブロック解除
-        //-------------------------------------------------------------------------------
-        //
-        private bool Unblock(string screen_name)
-        {
-            try {
-                FrmMain.Twitter.blocks_destroy(screen_name: screen_name);
-                return true;
-            }
-            catch (TwitterAPIException) { return false; }
-        }
-        #endregion (Unblock)
         //-------------------------------------------------------------------------------
         #region -RemoveSelectedItem 選択中項目を消去します
         //-------------------------------------------------------------------------------

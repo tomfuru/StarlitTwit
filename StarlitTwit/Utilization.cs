@@ -331,6 +331,9 @@ namespace StarlitTwit
                 case 0:
                     // Connection Failure
                     return "ネットワークに接続されていない可能性があります。";
+                case 1:
+                    // Disconnected
+                    return "接続が切断されました。";
                 case 400:
                     // Bad Request
                     return "APIの実行制限の可能性があります。";

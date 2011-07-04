@@ -162,6 +162,7 @@
             this.chbUStStartUp = new System.Windows.Forms.CheckBox();
             this.tabpgFilter = new System.Windows.Forms.TabPage();
             this.pnlFilterInfo = new System.Windows.Forms.Panel();
+            this.chbFilterEnabled = new System.Windows.Forms.CheckBox();
             this.label53 = new System.Windows.Forms.Label();
             this.txtFilterName = new System.Windows.Forms.TextBox();
             this.grpObjUser = new System.Windows.Forms.GroupBox();
@@ -202,7 +203,7 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.chbFilterEnabled = new System.Windows.Forms.CheckBox();
+            this.chbConfirmDialogBlock = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
@@ -1929,6 +1930,17 @@
             this.pnlFilterInfo.Size = new System.Drawing.Size(259, 323);
             this.pnlFilterInfo.TabIndex = 7;
             // 
+            // chbFilterEnabled
+            // 
+            this.chbFilterEnabled.AutoSize = true;
+            this.chbFilterEnabled.Location = new System.Drawing.Point(12, 8);
+            this.chbFilterEnabled.Name = "chbFilterEnabled";
+            this.chbFilterEnabled.Size = new System.Drawing.Size(48, 16);
+            this.chbFilterEnabled.TabIndex = 12;
+            this.chbFilterEnabled.Text = "有効";
+            this.chbFilterEnabled.UseVisualStyleBackColor = true;
+            this.chbFilterEnabled.CheckedChanged += new System.EventHandler(this.chbFilter_CheckedChanged);
+            // 
             // label53
             // 
             this.label53.AutoSize = true;
@@ -1967,6 +1979,7 @@
             this.txtObjUserPatterns.Location = new System.Drawing.Point(6, 84);
             this.txtObjUserPatterns.Multiline = true;
             this.txtObjUserPatterns.Name = "txtObjUserPatterns";
+            this.txtObjUserPatterns.ReadOnly = true;
             this.txtObjUserPatterns.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtObjUserPatterns.Size = new System.Drawing.Size(241, 30);
             this.txtObjUserPatterns.TabIndex = 7;
@@ -2044,6 +2057,7 @@
             this.txtObjStatusClientPatterns.Location = new System.Drawing.Point(6, 137);
             this.txtObjStatusClientPatterns.Multiline = true;
             this.txtObjStatusClientPatterns.Name = "txtObjStatusClientPatterns";
+            this.txtObjStatusClientPatterns.ReadOnly = true;
             this.txtObjStatusClientPatterns.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtObjStatusClientPatterns.Size = new System.Drawing.Size(241, 30);
             this.txtObjStatusClientPatterns.TabIndex = 11;
@@ -2056,6 +2070,7 @@
             this.txtObjStatusTextPatterns.Location = new System.Drawing.Point(7, 79);
             this.txtObjStatusTextPatterns.Multiline = true;
             this.txtObjStatusTextPatterns.Name = "txtObjStatusTextPatterns";
+            this.txtObjStatusTextPatterns.ReadOnly = true;
             this.txtObjStatusTextPatterns.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtObjStatusTextPatterns.Size = new System.Drawing.Size(241, 30);
             this.txtObjStatusTextPatterns.TabIndex = 8;
@@ -2160,6 +2175,7 @@
             // 
             // tabpgElse
             // 
+            this.tabpgElse.Controls.Add(this.chbConfirmDialogBlock);
             this.tabpgElse.Controls.Add(this.chbConfirmDialogFollow);
             this.tabpgElse.Controls.Add(this.chbConfirmDialogFav);
             this.tabpgElse.Controls.Add(this.cmbURLShortenType);
@@ -2188,7 +2204,7 @@
             // chbConfirmDialogFollow
             // 
             this.chbConfirmDialogFollow.AutoSize = true;
-            this.chbConfirmDialogFollow.Location = new System.Drawing.Point(20, 89);
+            this.chbConfirmDialogFollow.Location = new System.Drawing.Point(20, 84);
             this.chbConfirmDialogFollow.Name = "chbConfirmDialogFollow";
             this.chbConfirmDialogFollow.Size = new System.Drawing.Size(266, 16);
             this.chbConfirmDialogFollow.TabIndex = 16;
@@ -2198,7 +2214,7 @@
             // chbConfirmDialogFav
             // 
             this.chbConfirmDialogFav.AutoSize = true;
-            this.chbConfirmDialogFav.Location = new System.Drawing.Point(20, 112);
+            this.chbConfirmDialogFav.Location = new System.Drawing.Point(20, 105);
             this.chbConfirmDialogFav.Name = "chbConfirmDialogFav";
             this.chbConfirmDialogFav.Size = new System.Drawing.Size(271, 16);
             this.chbConfirmDialogFav.TabIndex = 15;
@@ -2209,7 +2225,7 @@
             // 
             this.cmbURLShortenType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbURLShortenType.FormattingEnabled = true;
-            this.cmbURLShortenType.Location = new System.Drawing.Point(210, 192);
+            this.cmbURLShortenType.Location = new System.Drawing.Point(130, 224);
             this.cmbURLShortenType.Name = "cmbURLShortenType";
             this.cmbURLShortenType.Size = new System.Drawing.Size(89, 20);
             this.cmbURLShortenType.TabIndex = 8;
@@ -2217,7 +2233,7 @@
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(32, 223);
+            this.label40.Location = new System.Drawing.Point(32, 227);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(88, 12);
             this.label40.TabIndex = 14;
@@ -2236,7 +2252,7 @@
             // chbUseInternalWebBrowser
             // 
             this.chbUseInternalWebBrowser.AutoSize = true;
-            this.chbUseInternalWebBrowser.Location = new System.Drawing.Point(20, 242);
+            this.chbUseInternalWebBrowser.Location = new System.Drawing.Point(20, 244);
             this.chbUseInternalWebBrowser.Name = "chbUseInternalWebBrowser";
             this.chbUseInternalWebBrowser.Size = new System.Drawing.Size(161, 16);
             this.chbUseInternalWebBrowser.TabIndex = 9;
@@ -2262,7 +2278,7 @@
             // 
             // txtFooter
             // 
-            this.txtFooter.Location = new System.Drawing.Point(20, 64);
+            this.txtFooter.Location = new System.Drawing.Point(22, 59);
             this.txtFooter.Name = "txtFooter";
             this.txtFooter.Size = new System.Drawing.Size(314, 19);
             this.txtFooter.TabIndex = 1;
@@ -2270,7 +2286,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(18, 49);
+            this.label32.Location = new System.Drawing.Point(20, 44);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(38, 12);
             this.label32.TabIndex = 10;
@@ -2278,7 +2294,7 @@
             // 
             // txtHeader
             // 
-            this.txtHeader.Location = new System.Drawing.Point(20, 25);
+            this.txtHeader.Location = new System.Drawing.Point(22, 20);
             this.txtHeader.Name = "txtHeader";
             this.txtHeader.Size = new System.Drawing.Size(314, 19);
             this.txtHeader.TabIndex = 0;
@@ -2286,7 +2302,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(18, 10);
+            this.label31.Location = new System.Drawing.Point(20, 5);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(41, 12);
             this.label31.TabIndex = 8;
@@ -2294,7 +2310,7 @@
             // 
             // numReplyTooltipDepth
             // 
-            this.numReplyTooltipDepth.Location = new System.Drawing.Point(210, 150);
+            this.numReplyTooltipDepth.Location = new System.Drawing.Point(158, 166);
             this.numReplyTooltipDepth.Maximum = new decimal(new int[] {
             10,
             0,
@@ -2307,7 +2323,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(32, 158);
+            this.label30.Location = new System.Drawing.Point(32, 168);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(120, 12);
             this.label30.TabIndex = 5;
@@ -2316,7 +2332,7 @@
             // chbDispDMBaloon
             // 
             this.chbDispDMBaloon.AutoSize = true;
-            this.chbDispDMBaloon.Location = new System.Drawing.Point(20, 200);
+            this.chbDispDMBaloon.Location = new System.Drawing.Point(20, 206);
             this.chbDispDMBaloon.Name = "chbDispDMBaloon";
             this.chbDispDMBaloon.Size = new System.Drawing.Size(182, 16);
             this.chbDispDMBaloon.TabIndex = 7;
@@ -2326,7 +2342,7 @@
             // chbDispReplyBaloon
             // 
             this.chbDispReplyBaloon.AutoSize = true;
-            this.chbDispReplyBaloon.Location = new System.Drawing.Point(20, 177);
+            this.chbDispReplyBaloon.Location = new System.Drawing.Point(20, 185);
             this.chbDispReplyBaloon.Name = "chbDispReplyBaloon";
             this.chbDispReplyBaloon.Size = new System.Drawing.Size(198, 16);
             this.chbDispReplyBaloon.TabIndex = 6;
@@ -2336,7 +2352,7 @@
             // chbDispReplyTooltip
             // 
             this.chbDispReplyTooltip.AutoSize = true;
-            this.chbDispReplyTooltip.Location = new System.Drawing.Point(20, 135);
+            this.chbDispReplyTooltip.Location = new System.Drawing.Point(20, 147);
             this.chbDispReplyTooltip.Name = "chbDispReplyTooltip";
             this.chbDispReplyTooltip.Size = new System.Drawing.Size(173, 16);
             this.chbDispReplyTooltip.TabIndex = 4;
@@ -2367,16 +2383,15 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // chbFilterEnabled
+            // chbConfirmDialogBlock
             // 
-            this.chbFilterEnabled.AutoSize = true;
-            this.chbFilterEnabled.Location = new System.Drawing.Point(12, 8);
-            this.chbFilterEnabled.Name = "chbFilterEnabled";
-            this.chbFilterEnabled.Size = new System.Drawing.Size(48, 16);
-            this.chbFilterEnabled.TabIndex = 12;
-            this.chbFilterEnabled.Text = "有効";
-            this.chbFilterEnabled.UseVisualStyleBackColor = true;
-            this.chbFilterEnabled.CheckedChanged += new System.EventHandler(this.chbFilter_CheckedChanged);
+            this.chbConfirmDialogBlock.AutoSize = true;
+            this.chbConfirmDialogBlock.Location = new System.Drawing.Point(20, 126);
+            this.chbConfirmDialogBlock.Name = "chbConfirmDialogBlock";
+            this.chbConfirmDialogBlock.Size = new System.Drawing.Size(262, 16);
+            this.chbConfirmDialogBlock.TabIndex = 17;
+            this.chbConfirmDialogBlock.Text = "ブロック・ブロック解除時に確認ダイアログを表示する";
+            this.chbConfirmDialogBlock.UseVisualStyleBackColor = true;
             // 
             // FrmConfig
             // 
@@ -2619,5 +2634,6 @@
         private System.Windows.Forms.TextBox txtFilterName;
         private System.Windows.Forms.Panel pnlFilterInfo;
         private System.Windows.Forms.CheckBox chbFilterEnabled;
+        private System.Windows.Forms.CheckBox chbConfirmDialogBlock;
     }
 }

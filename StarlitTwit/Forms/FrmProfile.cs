@@ -181,7 +181,7 @@ namespace StarlitTwit
         //
         private void tsmiOperation_MakeUserTab_Click(object sender, EventArgs e)
         {
-            // TODO:タブ作成
+            _mainForm.MakeNewTab(TabSearchType.User, _profile.ScreenName);
         }
         #endregion (tsmiOperation_MakeUserTab_Click)
         //-------------------------------------------------------------------------------
@@ -190,7 +190,13 @@ namespace StarlitTwit
         //
         private void tsmiOperation_Block_Click(object sender, EventArgs e)
         {
-            // TODO:ブロック
+            if (!FrmMain.SettingsData.ConfirmDialogBlock
+             || Message.ShowQuestionMessage("ブロックします。") == System.Windows.Forms.DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.blocks_create(screen_name: _profile.ScreenName);
+                }
+                catch (TwitterAPIException) { return; }
+            }
         }
         #endregion (tsmiOperation_Block_Click)
         //-------------------------------------------------------------------------------
@@ -199,7 +205,13 @@ namespace StarlitTwit
 		//
         private void tsmiOperation_UnBlock_Click(object sender, EventArgs e)
         {
-            // TODO:ブロック解除
+            if (!FrmMain.SettingsData.ConfirmDialogBlock
+             || Message.ShowQuestionMessage("ブロック解除します。") == System.Windows.Forms.DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.blocks_destroy(screen_name: _profile.ScreenName);
+                }
+                catch (TwitterAPIException) { return; }
+            }
         }
 		#endregion (smiOperation_UnBlock_Click)
         //-------------------------------------------------------------------------------
@@ -343,7 +355,6 @@ namespace StarlitTwit
             tsmiOperation_Follow.Visible = !(tsmiOperation_UnFollow.Visible = profile.Following);
             
             tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible = toolStripMenuItem3.Visible = false;   // TODO:ブロックメニュー有効化
-            tsmiOperation_MakeUserTab.Visible = toolStripMenuItem2.Visible = false;                             // TODO:タブ作成メニュー有効化
             tsmiDisplay_OwnList.Visible = tsmiDisplay_BelongList.Visible = toolStripMenuItem1.Visible = false;  // TODO:リスト表示メニュー有効化
         }
         #endregion (SetProfile)

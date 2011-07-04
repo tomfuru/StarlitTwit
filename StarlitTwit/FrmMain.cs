@@ -1274,9 +1274,9 @@ namespace StarlitTwit
         }
         #endregion (RegisterUctlDispTwitEvent)
         //-------------------------------------------------------------------------------
-        #region -MakeNewTab 新規タブ作成
+        #region ++-MakeNewTab 新規タブ作成
         //-------------------------------------------------------------------------------
-        #region (TabSearchType,string,[opt]string) Main
+        #region +(TabSearchType,string,[opt]string) Main
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 新規タブを作成します。
@@ -1284,7 +1284,7 @@ namespace StarlitTwit
         /// <param name="type">作成タブタイプ</param>
         /// <param name="data">タブデータ</param>
         /// <param name="listowner">[opt]リストのオーナー</param>
-        private void MakeNewTab(TabSearchType type, string data, string listowner = null)
+        public void MakeNewTab(TabSearchType type, string data, string listowner = null)
         {
             tssLabel.SetText(STR_WAITING_MAKETAB);
             LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
@@ -1314,18 +1314,18 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion ((TabSearchType,string,(opt)string) Main)
-        #region (void)
+        #region +(void)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 新規タブを作成します。
         /// </summary>
-        private void MakeNewTab()
+        public void MakeNewTab()
         {
             MakeNewTab(TabSearchType.Keyword, "");
         }
         //-------------------------------------------------------------------------------
         #endregion ((void))
-        #region (ItemType,string)
+        #region -(ItemType,string)
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 新規タブを作成します。

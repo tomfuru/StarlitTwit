@@ -237,6 +237,8 @@ namespace StarlitTwit
         public bool ConfirmDialogFollow = true;
         /// <summary>お気に入り追加・削除時に確認ダイアログを表示する</summary>
         public bool ConfirmDialogFavorite = true;
+        /// <summary>ブロック・ブロック解除時に確認ダイアログを表示する</summary>
+        public bool ConfirmDialogBlock = true;
         /// <summary>タブデータ</summary>
         public SerializableDictionary<string, TabData> TabDataDic;
         /// <summary>キー</summary>

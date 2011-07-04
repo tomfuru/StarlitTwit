@@ -606,6 +606,7 @@ namespace StarlitTwit
 
             chbConfirmDialogFollow.Checked = SettingsData.ConfirmDialogFollow;
             chbConfirmDialogFav.Checked = SettingsData.ConfirmDialogFavorite;
+            chbConfirmDialogBlock.Checked = SettingsData.ConfirmDialogBlock;
             chbDispReplyTooltip.Checked = SettingsData.DisplayReplyToolTip;
             numReplyTooltipDepth.Value = SettingsData.DisplayReplyToolTipDepth;
             chbDispReplyBaloon.Checked = SettingsData.DisplayReplyBaloon;
@@ -737,6 +738,7 @@ namespace StarlitTwit
 
             SettingsData.ConfirmDialogFollow = chbConfirmDialogFollow.Checked;
             SettingsData.ConfirmDialogFavorite = chbConfirmDialogFav.Checked;
+            SettingsData.ConfirmDialogBlock = chbConfirmDialogBlock.Checked;
             SettingsData.DisplayReplyToolTip = chbDispReplyTooltip.Checked;
             SettingsData.DisplayReplyToolTipDepth = (int)numReplyTooltipDepth.Value;
             SettingsData.DisplayReplyBaloon = chbDispReplyBaloon.Checked;

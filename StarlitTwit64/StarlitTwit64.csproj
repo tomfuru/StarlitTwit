@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmInputRegex.cs">
       <Link>Forms\FrmInputRegex.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmInputRegex.designer.cs">
       <Link>Forms\FrmInputRegex.designer.cs</Link>
@@ -271,6 +272,7 @@
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\TextBoxRegex.cs">
       <Link>UserControls\TextBoxRegex.cs</Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\TextBoxRegex.designer.cs">
       <Link>UserControls\TextBoxRegex.designer.cs</Link>

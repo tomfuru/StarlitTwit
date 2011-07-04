@@ -3600,6 +3600,7 @@ namespace StarlitTwit
     /// <para>・ステータスコード</para>
     /// <para>-1 Unknown Error           不明なエラー(ただし以下以外のものも不明なエラーとして扱われる)</para>
     /// <para>0 Connection Failure:      接続に失敗しました。</para>
+    /// <para>1 Disconnected             接続は切断されました。</para>
     /// <para></para>
     /// <para>(200 OK:                   成功(この場合は例外が投げられないはず)</para>
     /// <para>304 Not Modified:          新しい情報はない</para>
