@@ -159,10 +159,13 @@ namespace StarlitTwit
                         listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
                         break;
                     case EFormType.UserList:
+                        listseq = FrmMain.Twitter.lists_Get(UserScreenName, _next_cursor);
                         break;
                     case EFormType.UserBelongedList:
+                        listseq = FrmMain.Twitter.lists_memberships(UserScreenName, _next_cursor);
                         break;
                     case EFormType.UserSubscribingList:
+                        listseq = FrmMain.Twitter.lists_subscriptions(UserScreenName, _next_cursor);
                         break;
                 }
                 if (listseq != null) {

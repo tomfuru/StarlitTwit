@@ -267,14 +267,7 @@ namespace StarlitTwit
         //
         private void tsmiDisplay_OwnList_Click(object sender, EventArgs e)
         {
-            FrmDispLists.EFormType formType;
-
-            if (CanEdit) {
-
-            }
-            else {
-
-            }
+            FrmDispLists.EFormType formType = (CanEdit) ? FrmDispLists.EFormType.MyList : FrmDispLists.EFormType.UserList;
 
             // TODO:リスト一覧表示
         }
@@ -285,9 +278,22 @@ namespace StarlitTwit
         //
         private void tsmiDisplay_BelongList_Click(object sender, EventArgs e)
         {
+            FrmDispLists.EFormType formType = (CanEdit) ? FrmDispLists.EFormType.MyBelongedList : FrmDispLists.EFormType.UserBelongedList;
+
             // TODO:リスト一覧表示
         }
         #endregion (tsmiDisplay_BelongList_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplay_SubscriptList_Click フォローリスト表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_SubscriptList_Click(object sender, EventArgs e)
+        {
+            FrmDispLists.EFormType formType = (CanEdit) ? FrmDispLists.EFormType.MySubscribingList : FrmDispLists.EFormType.UserSubscribingList;
+
+            // TODO:リスト一覧表示
+        }
+        #endregion (tsmiDisplay_SubscriptList_Click)
 
         //-------------------------------------------------------------------------------
         #region tsmiRenew_Click 更新メニュークリック
@@ -355,7 +361,7 @@ namespace StarlitTwit
             tsmiOperation_Follow.Visible = !(tsmiOperation_UnFollow.Visible = profile.Following);
             
             tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible = toolStripMenuItem3.Visible = false;   // TODO:ブロックメニュー有効化
-            tsmiDisplay_OwnList.Visible = tsmiDisplay_BelongList.Visible = toolStripMenuItem1.Visible = false;  // TODO:リスト表示メニュー有効化
+            tsmiDisplay_OwnList.Visible = tsmiDisplay_BelongList.Visible = tsmiDisplay_SubscriptList.Visible = toolStripMenuItem1.Visible = false;  // TODO:リスト表示メニュー有効化
         }
         #endregion (SetProfile)
 

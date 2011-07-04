@@ -74,14 +74,15 @@
             this.tsmiDisplay = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplay_Friends = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplay_Follower = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDisplay_Statuses = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplay_OwnList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplay_BelongList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRenew = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiDisplay_Statuses = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
+            this.tsmiDisplay_SubscriptList = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
@@ -551,7 +552,8 @@
             this.tsmiDisplay_Statuses,
             this.toolStripMenuItem1,
             this.tsmiDisplay_OwnList,
-            this.tsmiDisplay_BelongList});
+            this.tsmiDisplay_BelongList,
+            this.tsmiDisplay_SubscriptList});
             this.tsmiDisplay.Name = "tsmiDisplay";
             this.tsmiDisplay.Size = new System.Drawing.Size(63, 22);
             this.tsmiDisplay.Text = "表示(&D)";
@@ -559,33 +561,45 @@
             // tsmiDisplay_Friends
             // 
             this.tsmiDisplay_Friends.Name = "tsmiDisplay_Friends";
-            this.tsmiDisplay_Friends.Size = new System.Drawing.Size(179, 22);
+            this.tsmiDisplay_Friends.Size = new System.Drawing.Size(202, 22);
             this.tsmiDisplay_Friends.Text = "フレンド表示(&F)";
             this.tsmiDisplay_Friends.Click += new System.EventHandler(this.tsmiDisplay_Friends_Click);
             // 
             // tsmiDisplay_Follower
             // 
             this.tsmiDisplay_Follower.Name = "tsmiDisplay_Follower";
-            this.tsmiDisplay_Follower.Size = new System.Drawing.Size(179, 22);
+            this.tsmiDisplay_Follower.Size = new System.Drawing.Size(202, 22);
             this.tsmiDisplay_Follower.Text = "フォロワー表示(&O)";
             this.tsmiDisplay_Follower.Click += new System.EventHandler(this.tsmiDisplay_Follower_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            // 
+            // tsmiDisplay_Statuses
+            // 
+            this.tsmiDisplay_Statuses.Name = "tsmiDisplay_Statuses";
+            this.tsmiDisplay_Statuses.Size = new System.Drawing.Size(202, 22);
+            this.tsmiDisplay_Statuses.Text = "最近の発言表示(&S)";
+            this.tsmiDisplay_Statuses.Click += new System.EventHandler(this.tsmiDisplay_Statuses_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(176, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
             // 
             // tsmiDisplay_OwnList
             // 
             this.tsmiDisplay_OwnList.Name = "tsmiDisplay_OwnList";
-            this.tsmiDisplay_OwnList.Size = new System.Drawing.Size(179, 22);
+            this.tsmiDisplay_OwnList.Size = new System.Drawing.Size(202, 22);
             this.tsmiDisplay_OwnList.Text = "所有リスト表示(&O)";
             this.tsmiDisplay_OwnList.Click += new System.EventHandler(this.tsmiDisplay_OwnList_Click);
             // 
             // tsmiDisplay_BelongList
             // 
             this.tsmiDisplay_BelongList.Name = "tsmiDisplay_BelongList";
-            this.tsmiDisplay_BelongList.Size = new System.Drawing.Size(179, 22);
+            this.tsmiDisplay_BelongList.Size = new System.Drawing.Size(202, 22);
             this.tsmiDisplay_BelongList.Text = "所属リスト表示(&B)";
             this.tsmiDisplay_BelongList.Click += new System.EventHandler(this.tsmiDisplay_BelongList_Click);
             // 
@@ -596,18 +610,6 @@
             this.tsmiRenew.Size = new System.Drawing.Size(68, 22);
             this.tsmiRenew.Text = "更新(F5)";
             this.tsmiRenew.Click += new System.EventHandler(this.tsmiRenew_Click);
-            // 
-            // tsmiDisplay_Statuses
-            // 
-            this.tsmiDisplay_Statuses.Name = "tsmiDisplay_Statuses";
-            this.tsmiDisplay_Statuses.Size = new System.Drawing.Size(179, 22);
-            this.tsmiDisplay_Statuses.Text = "最近の発言表示(&S)";
-            this.tsmiDisplay_Statuses.Click += new System.EventHandler(this.tsmiDisplay_Statuses_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
             // 
             // rtxtDescription
             // 
@@ -631,6 +633,13 @@
             this.picbIcon.Size = new System.Drawing.Size(48, 48);
             this.picbIcon.TabIndex = 12;
             this.picbIcon.TabStop = false;
+            // 
+            // tsmiDisplay_SubscriptList
+            // 
+            this.tsmiDisplay_SubscriptList.Name = "tsmiDisplay_SubscriptList";
+            this.tsmiDisplay_SubscriptList.Size = new System.Drawing.Size(202, 22);
+            this.tsmiDisplay_SubscriptList.Text = "フォローリスト表示(&S)";
+            this.tsmiDisplay_SubscriptList.Click += new System.EventHandler(this.tsmiDisplay_SubscriptList_Click);
             // 
             // FrmProfile
             // 
@@ -750,5 +759,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiOperation_UnBlock;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplay_Statuses;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDisplay_SubscriptList;
     }
 }
