@@ -241,6 +241,15 @@ namespace StarlitTwit
         }
         #endregion (tsmiDisplay_Follower_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiDisplay_Statuses_Click 最近の発言表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_Statuses_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowUserTweet(_mainForm, FrmDispStatuses.EFormType.UserStatus, _profile.ScreenName);
+        }
+        #endregion (tsmiDisplay_Statuses_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiDisplay_OwnList_Click 所有リスト表示
         //-------------------------------------------------------------------------------
         //

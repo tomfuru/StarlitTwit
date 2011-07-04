@@ -892,6 +892,10 @@ namespace StarlitTwit
                     //Console.WriteLine("Access_Token: " + access_token);
                     //Console.WriteLine("Access_Token_Secret: " + access_token_secret);
 
+                    // 存在すれば消す(structなので更新不可)
+                    int index = SettingsData.UserInfoList.FindIndex(info => info.ID == userdata.ID);
+                    if (index >= 0) { SettingsData.UserInfoList.RemoveAt(index); }
+                    
                     SettingsData.UserInfoList.Insert(0, userdata);
                     SettingsData.Save();
 
