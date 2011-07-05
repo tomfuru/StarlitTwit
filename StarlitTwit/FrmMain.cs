@@ -232,6 +232,7 @@ namespace StarlitTwit
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            //tabTwitDisp.SelectedIndex = 0;
 
             SettingsData = SettingsData.Restore();
 
@@ -266,10 +267,6 @@ namespace StarlitTwit
             }
 
             InitializeControls();
-
-            if (SettingsData.UserStreamStartUp) {
-                StartUserStream(SettingsData.UserStreamAllReplies);
-            }
 
             // スレッド作成
             _bgThread = new Thread(AutoGetTweet);
@@ -1586,8 +1583,11 @@ namespace StarlitTwit
         //
         private void StartUserStream(bool all_replies)
         {
-            lblUserStreamInfo.Text = STR_USERSTREAM_STARTING;
-            tsmiUserStreamEnd.Enabled = false;
+            this.Invoke(new Action(() =>
+            {
+                lblUserStreamInfo.Text = STR_USERSTREAM_STARTING;
+                tsmiUserStreamEnd.Enabled = false;
+            }));
             _usingUserStream = true;
             try {
                 // RESTによるデータ取り込み
@@ -1604,13 +1604,16 @@ namespace StarlitTwit
 
                 _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
 
-                lblUserStreamInfo.Text = STR_USERSTREAM;
-
                 _frmUserStreamWatch = new FrmUserStreamWatch();
                 if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
             }
             catch (InvalidOperationException) { }
-            tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
+
+            this.Invoke(new Action(() =>
+            {
+                lblUserStreamInfo.Text = STR_USERSTREAM;
+                tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
+            }));
         }
         #endregion (StartUserStream)
         //-------------------------------------------------------------------------------
@@ -1686,35 +1689,68 @@ namespace StarlitTwit
                         }
                         break;
                     case UserStreamItemType.eventdata: {
+                            #region EventData表示処理
+                            //-----------------------------------------------------------
                             UserStreamEventData d = (UserStreamEventData)data;
+                            string title = null;
+                            string text = null;
                             switch (d.Type) {
                                 case UserStreamEventType.favorite:
+                                    title = tasktray.Text + ":お気に入り追加";
+                                    text = string.Format("{0} が {1} の発言をお気に入りに追加", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.unfavorite:
+                                    title = tasktray.Text + ":お気に入り削除";
+                                    text = string.Format("{0} が {1} の発言をお気に入りから削除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.follow:
+                                    title = tasktray.Text + ":フォロー";
+                                    text = string.Format("{0} が {1} をフォロー", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.block:
+                                    title = tasktray.Text + ":ブロック";
+                                    text = string.Format("{0} が {1} をブロック", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.unblock:
+                                    title = tasktray.Text + ":ブロック解除";
+                                    text = string.Format("{0} が {1} をブロック解除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.list_member_added:
+                                    title = tasktray.Text + ":リストメンバー追加";
+                                    text = string.Format("リスト {0} に {1} を追加", d.TargetList.Name, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.list_member_removed:
+                                    title = tasktray.Text + ":リストメンバー削除";
+                                    text = string.Format("リスト {0} から {1} を削除", d.TargetList.Name, d.TargetUser.ScreenName);
                                     break;
                                 case UserStreamEventType.list_created:
+                                    title = tasktray.Text + ":リスト追加";
+                                    text = string.Format("リスト {0} を追加", d.TargetList.Name);
                                     break;
                                 case UserStreamEventType.list_updated:
+                                    title = tasktray.Text + ":リスト更新";
+                                    text = string.Format("リスト {0} を更新", d.TargetList.Name);
                                     break;
                                 case UserStreamEventType.list_destroyed:
+                                    title = tasktray.Text + ":リスト削除";
+                                    text = string.Format("リスト {0} を削除", d.TargetList.Name);
                                     break;
                                 case UserStreamEventType.list_user_subscribed:
+                                    title = tasktray.Text + ":リストフォロー";
+                                    text = string.Format("{0} がリスト {1} をフォロー", d.TargetList.Name, d.SourceUser.ScreenName);
                                     break;
                                 case UserStreamEventType.list_user_unsubscribed:
+                                    title = tasktray.Text + ":リストフォロー解除";
+                                    text = string.Format("{0} がリスト {1} をフォロー解除", d.TargetList.Name, d.SourceUser.ScreenName);
                                     break;
                                 case UserStreamEventType.user_update:
+                                    title = tasktray.Text + ":プロフィール更新";
+                                    text = string.Format("プロフィールが更新されました");
                                     break;
                             }
+                            if (title != null) { this.PopupTasktray(title, text); }
+                            //-----------------------------------------------------------
+                            #endregion
                         }
                         break;
                     case UserStreamItemType.tracklimit:
@@ -2608,8 +2644,6 @@ namespace StarlitTwit
         //
         private void AutoGetTweet()
         {
-            while (!_isAuthenticated) { Thread.Sleep(1000); } // 未認証時はストップ
-
             Action<DateTime> GetProfile = (dt) =>
             {
                 string labelText = STR_GETTING_PROFILE;
@@ -2625,6 +2659,13 @@ namespace StarlitTwit
                 _profileRenew_Standard = dt;
                 tssLabel.RemoveText(labelText);
             };
+
+            if (_isAuthenticated && SettingsData.UserStreamStartUp) {
+                GetProfile(DateTime.Now);
+                StartUserStream(SettingsData.UserStreamAllReplies);
+            }
+
+            while (!_isAuthenticated) { Thread.Sleep(1000); } // 未認証時はストップ
 
             try {
                 while (true) {

@@ -40,6 +40,7 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuRow = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiMakeListTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip.SuspendLayout();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
@@ -124,6 +125,7 @@
             // 
             this.columnHeader1.Text = "";
             this.columnHeader1.Width = 48;
+            this.lstvList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lstvList_MouseMove);
             // 
             // columnHeader2
             // 
@@ -156,6 +158,12 @@
             this.tsmiMakeListTab.Size = new System.Drawing.Size(169, 22);
             this.tsmiMakeListTab.Text = "リストのタブを追加(&T)";
             this.tsmiMakeListTab.Click += new System.EventHandler(this.tsmiMakeListTab_Click);
+            // 
+            // ttInfo
+            // 
+            this.ttInfo.AutoPopDelay = 10000;
+            this.ttInfo.InitialDelay = 500;
+            this.ttInfo.ReshowDelay = 100;
             // 
             // FrmDispLists
             // 
@@ -196,5 +204,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ContextMenuStrip menuRow;
         private System.Windows.Forms.ToolStripMenuItem tsmiMakeListTab;
+        private System.Windows.Forms.ToolTip ttInfo;
     }
 }

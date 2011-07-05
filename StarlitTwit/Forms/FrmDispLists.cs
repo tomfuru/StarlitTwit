@@ -161,6 +161,38 @@ namespace StarlitTwit
         }
         #endregion (tsmiMakeListTab_Click)
         //-------------------------------------------------------------------------------
+        #region lstvList_MouseMove マウスオーバー時
+        //-------------------------------------------------------------------------------
+        private ListViewItem _lastListViewItem = null;
+        //
+        private void lstvList_MouseMove(object sender, MouseEventArgs e)
+        {
+            ListView lv = (ListView)sender;
+            //マウスポインタのあるアイテムを取得
+            ListViewHitTestInfo hi = lstvList.HitTest(e.X, e.Y);
+            ListViewItem lvi = hi.Item;
+            //ポイントされているアイテムが変わった時
+            if (lvi != _lastListViewItem) {
+                //アクティブを解除
+                if (ttInfo.Active)
+                    ttInfo.Active = false;
+
+                if (lvi != null) {
+                    //ToolTipのテキストを設定しなおす
+                    int index = lstvList.Items.IndexOf(lvi);
+                    if (index < 0) { return; }
+                    ListData l = _listList[index];
+
+                    ttInfo.SetToolTip(lv, l.Description);
+                    //ToolTipを再びアクティブにする
+                    ttInfo.Active = true;
+                }
+                //ポイントされているアイテムを記憶する
+                _lastListViewItem = lvi;
+            }
+        }
+        #endregion (lstvList_MouseMove)
+        //-------------------------------------------------------------------------------
         #region btnClose_Click 閉じるボタン
         //-------------------------------------------------------------------------------
         //

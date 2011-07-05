@@ -45,7 +45,7 @@
             this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFrom.Location = new System.Drawing.Point(32, 6);
             this.dtpFrom.Name = "dtpFrom";
-            this.dtpFrom.Size = new System.Drawing.Size(159, 19);
+            this.dtpFrom.Size = new System.Drawing.Size(183, 19);
             this.dtpFrom.TabIndex = 0;
             // 
             // dtpTo
@@ -54,12 +54,12 @@
             this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpTo.Location = new System.Drawing.Point(32, 67);
             this.dtpTo.Name = "dtpTo";
-            this.dtpTo.Size = new System.Drawing.Size(159, 19);
+            this.dtpTo.Size = new System.Drawing.Size(183, 19);
             this.dtpTo.TabIndex = 1;
             // 
             // btnReverse
             // 
-            this.btnReverse.Location = new System.Drawing.Point(139, 35);
+            this.btnReverse.Location = new System.Drawing.Point(163, 35);
             this.btnReverse.Name = "btnReverse";
             this.btnReverse.Size = new System.Drawing.Size(52, 23);
             this.btnReverse.TabIndex = 4;
@@ -112,7 +112,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(197, 21);
+            this.label3.Location = new System.Drawing.Point(221, 24);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(235, 84);
             this.label3.TabIndex = 9;
@@ -122,7 +122,7 @@
             // 
             // btnGet
             // 
-            this.btnGet.Location = new System.Drawing.Point(30, 95);
+            this.btnGet.Location = new System.Drawing.Point(47, 95);
             this.btnGet.Name = "btnGet";
             this.btnGet.Size = new System.Drawing.Size(69, 23);
             this.btnGet.TabIndex = 10;
@@ -133,7 +133,7 @@
             // btnCansel
             // 
             this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCansel.Location = new System.Drawing.Point(122, 95);
+            this.btnCansel.Location = new System.Drawing.Point(146, 95);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(69, 23);
             this.btnCansel.TabIndex = 11;
@@ -147,7 +147,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCansel;
-            this.ClientSize = new System.Drawing.Size(433, 130);
+            this.ClientSize = new System.Drawing.Size(461, 130);
             this.ControlBox = false;
             this.Controls.Add(this.btnCansel);
             this.Controls.Add(this.btnGet);
