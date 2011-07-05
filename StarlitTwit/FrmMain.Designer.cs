@@ -746,7 +746,7 @@
             this.tabTwitDisp.Name = "tabTwitDisp";
             this.tabTwitDisp.Padding = new System.Drawing.Point(0, 0);
             this.tabTwitDisp.SelectedIndex = 0;
-            this.tabTwitDisp.SelectedTab = this.tabpgDirect;
+            this.tabTwitDisp.SelectedTab = this.tabpgHome;
             this.tabTwitDisp.ShowToolTips = true;
             this.tabTwitDisp.Size = new System.Drawing.Size(488, 513);
             this.tabTwitDisp.TabIndex = 0;

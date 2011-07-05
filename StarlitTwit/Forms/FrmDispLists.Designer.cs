@@ -27,6 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tsslLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblCount = new System.Windows.Forms.Label();
@@ -36,6 +37,7 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnClose = new System.Windows.Forms.Button();
             this.btnAppend = new System.Windows.Forms.Button();
+            this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,6 +88,7 @@
             this.lstvList.TabIndex = 5;
             this.lstvList.UseCompatibleStateImageBehavior = false;
             this.lstvList.View = System.Windows.Forms.View.Details;
+            this.lstvList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lstvList_MouseMove);
             // 
             // columnHeader2
             // 
@@ -125,6 +128,12 @@
             this.btnAppend.UseVisualStyleBackColor = true;
             this.btnAppend.Click += new System.EventHandler(this.btnAppend_Click);
             // 
+            // ttInfo
+            // 
+            this.ttInfo.AutoPopDelay = 10000;
+            this.ttInfo.InitialDelay = 500;
+            this.ttInfo.ReshowDelay = 100;
+            // 
             // FrmDispLists
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -160,5 +169,6 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnAppend;
         private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ToolTip ttInfo;
     }
 }
