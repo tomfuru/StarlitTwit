@@ -103,6 +103,7 @@
             this.tabpgDirect = new StarlitTwit.TabPageEx();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
+            this.tsmiブロックユーザーリスト = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -258,7 +259,8 @@
             this.tsmi自分のプロフィール,
             this.toolStripMenuItem5,
             this.tsmi自分のリスト,
-            this.tsmiフォロー中のリスト});
+            this.tsmiフォロー中のリスト,
+            this.tsmiブロックユーザーリスト});
             this.tsmi_プロフィール.Enabled = false;
             this.tsmi_プロフィール.Name = "tsmi_プロフィール";
             this.tsmi_プロフィール.Size = new System.Drawing.Size(85, 20);
@@ -759,8 +761,7 @@
             this.tabpgHome.Location = new System.Drawing.Point(4, 19);
             this.tabpgHome.Name = "tabpgHome";
             this.tabpgHome.Size = new System.Drawing.Size(480, 492);
-            this.tabpgHome.TabIndex = 3; 
-            this.tabpgHome.Text = "Home";
+            this.tabpgHome.TabIndex = 3;
             this.tabpgHome.UseVisualStyleBackColor = true;
             // 
             // uctlDispHome
@@ -780,9 +781,8 @@
             this.tabpgReply.Controls.Add(this.uctlDispReply);
             this.tabpgReply.Location = new System.Drawing.Point(4, 19);
             this.tabpgReply.Name = "tabpgReply";
-            this.tabpgReply.Size = new System.Drawing.Size(480, 490);
+            this.tabpgReply.Size = new System.Drawing.Size(480, 492);
             this.tabpgReply.TabIndex = 1;
-            this.tabpgReply.Text = "Reply";
             this.tabpgReply.UseVisualStyleBackColor = true;
             // 
             // uctlDispReply
@@ -802,9 +802,8 @@
             this.tabpgHistory.Controls.Add(this.uctlDispHistory);
             this.tabpgHistory.Location = new System.Drawing.Point(4, 19);
             this.tabpgHistory.Name = "tabpgHistory";
-            this.tabpgHistory.Size = new System.Drawing.Size(480, 490);
+            this.tabpgHistory.Size = new System.Drawing.Size(480, 492);
             this.tabpgHistory.TabIndex = 0;
-            this.tabpgHistory.Text = "History";
             this.tabpgHistory.UseVisualStyleBackColor = true;
             // 
             // uctlDispHistory
@@ -826,7 +825,6 @@
             this.tabpgDirect.Name = "tabpgDirect";
             this.tabpgDirect.Size = new System.Drawing.Size(480, 492);
             this.tabpgDirect.TabIndex = 4;
-            this.tabpgDirect.Text = "Direct";
             this.tabpgDirect.UseVisualStyleBackColor = true;
             // 
             // uctlDispDirect
@@ -849,6 +847,14 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // tsmiブロックユーザーリスト
+            // 
+            this.tsmiブロックユーザーリスト.Enabled = false;
+            this.tsmiブロックユーザーリスト.Name = "tsmiブロックユーザーリスト";
+            this.tsmiブロックユーザーリスト.Size = new System.Drawing.Size(226, 22);
+            this.tsmiブロックユーザーリスト.Text = "ブロックユーザーリスト(&B)";
+            this.tsmiブロックユーザーリスト.Click += new System.EventHandler(this.tsmiブロックユーザーリスト_Click);
             // 
             // FrmMain
             // 
@@ -962,6 +968,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiフォロー中のリスト;
         private System.Windows.Forms.LinkLabel llblList;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiブロックユーザーリスト;
 
     }
 }

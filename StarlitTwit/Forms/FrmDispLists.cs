@@ -73,6 +73,8 @@ namespace StarlitTwit
             _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingS.Clone();
             _imageAnimation = new ImageAnimation(_loadingimg);
             _imageAnimation.FrameUpdated += Image_Animate;
+
+            btnAddNewList.Visible = (formtype == EFormType.MyList);
         }
         //-------------------------------------------------------------------------------
         #endregion (Constructor)
@@ -193,6 +195,15 @@ namespace StarlitTwit
         }
         #endregion (lstvList_MouseMove)
         //-------------------------------------------------------------------------------
+        #region btnAddNewList_Click 新規リストボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnAddNewList_Click(object sender, EventArgs e)
+        {
+            // TODO:新規リスト作成
+        }
+        #endregion (btnAddNewList_Click)
+        //-------------------------------------------------------------------------------
         #region btnClose_Click 閉じるボタン
         //-------------------------------------------------------------------------------
         //
@@ -308,7 +319,8 @@ namespace StarlitTwit
                 if (_listList.Exists(l => l.ID == list.ID)) { continue; } // 重複防止
                 ListViewItem item = new ListViewItem();
                 item.Tag = list;
-                if (!_imageListWrapper.ImageContainsKey(list.OwnerIconURL)) { urllist.Add(new Tuple<ListViewItem, string>(item, list.OwnerIconURL)); }
+                if (!_imageListWrapper.ImageContainsKey(list.OwnerIconURL)
+                 && !urllist.Any(t => t.Item2.Equals(list.OwnerIconURL))) { urllist.Add(new Tuple<ListViewItem, string>(item, list.OwnerIconURL)); }
                 if (FormType != EFormType.MyList) { 
                     item.SubItems.Add(list.OwnerScreenName);
                 }

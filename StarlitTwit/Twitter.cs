@@ -1611,11 +1611,12 @@ namespace StarlitTwit
         /// <param name="page"></param>
         /// <param name="include_entities"></param>
         /// <returns></returns>
-        public IEnumerable<UserProfile> blocks_blocking(int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public IEnumerable<UserProfile> blocks_blocking(int page = -1,int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 

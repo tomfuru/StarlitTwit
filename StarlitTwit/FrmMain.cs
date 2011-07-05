@@ -1019,6 +1019,15 @@ namespace StarlitTwit
             Utilization.ShowListsForm(this, imageListWrapper, FrmDispLists.EFormType.MySubscribingList);
         }
         #endregion (tsmiフォロー中のリスト_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiブロックユーザーリスト_Click ブロックユーザーリスト
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiブロックユーザーリスト_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyBlocking);
+        }
+        #endregion (tsmiブロックユーザーリスト_Click)
         //===============================================================================
         #region tsmi_子画面_DropDownOpening 子画面メニューオープン時
         //-------------------------------------------------------------------------------

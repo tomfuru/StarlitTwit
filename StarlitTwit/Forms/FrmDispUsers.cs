@@ -129,6 +129,9 @@ namespace StarlitTwit
                     Debug.Assert(ListID != null, "ListIDが設定されていない");
                     Text = string.Format("リスト{0}のフォロワー", UserScreenName);
                     break;
+                case EFormType.MyBlocking:
+                    Text = "ブロック中のユーザー";
+                    break;
             }
 
             if (FormType != EFormType.MyFollowing) {
@@ -197,13 +200,16 @@ namespace StarlitTwit
             if (lstvList.SelectedItems.Count == 0) { e.Cancel = true; return; }
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
 
-            tsmiFollow.Visible = !prof.FolllowRequestSent && !prof.Following;
-            tsmiRemove.Visible = !prof.FolllowRequestSent && prof.Following;
+            bool isBlocking = (FormType == EFormType.MyBlocking);
+
+            tsmiFollow.Visible = !isBlocking && !prof.FolllowRequestSent && !prof.Following;
+            tsmiRemove.Visible = !isBlocking && !prof.FolllowRequestSent && prof.Following;
+            
 
             tsmiBlock.Visible = (FormType == EFormType.MyFollower);
-            tsmiUnblock.Visible = false;
+            tsmiUnblock.Visible = isBlocking;
 
-            toolStripMenuItem1.Visible = !prof.FolllowRequestSent;
+            toolStripMenuItem1.Visible = !isBlocking && !prof.FolllowRequestSent;
         }
         #endregion (menuRow_Opening)
         //-------------------------------------------------------------------------------
@@ -336,6 +342,7 @@ namespace StarlitTwit
                     FrmMain.Twitter.blocks_destroy(screen_name: prof.ScreenName);
                 }
                 catch (TwitterAPIException) { tsslabel.Text = "ブロック解除に失敗しました。"; return; }
+                RemoveSelectedItem();
             }
         }
         #endregion (tsmiUnblock_Click)
@@ -479,9 +486,9 @@ namespace StarlitTwit
                     this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
                 }
                 else if (FormType == EFormType.MyBlocking) {
-                    profiles = FrmMain.Twitter.blocks_blocking(_page);
+                    profiles = FrmMain.Twitter.blocks_blocking(_page, 100);
                     _page++;
-                    this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
+                    this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                 }
                 else {
                     SequentData<UserProfile> proftpl = null;

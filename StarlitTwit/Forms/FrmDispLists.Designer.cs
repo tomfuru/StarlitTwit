@@ -33,14 +33,15 @@
             this.lblCount = new System.Windows.Forms.Label();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnAppend = new System.Windows.Forms.Button();
+            this.menuRow = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiMakeListTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.btnAddNewList = new System.Windows.Forms.Button();
             this.lstvList = new StarlitTwit.ListViewEx();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.menuRow = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmiMakeListTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip.SuspendLayout();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
@@ -96,6 +97,32 @@
             this.btnAppend.UseVisualStyleBackColor = true;
             this.btnAppend.Click += new System.EventHandler(this.btnAppend_Click);
             // 
+            // menuRow
+            // 
+            this.menuRow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiMakeListTab});
+            this.menuRow.Name = "menuRow";
+            this.menuRow.Size = new System.Drawing.Size(170, 26);
+            this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
+            // 
+            // tsmiMakeListTab
+            // 
+            this.tsmiMakeListTab.Name = "tsmiMakeListTab";
+            this.tsmiMakeListTab.Size = new System.Drawing.Size(169, 22);
+            this.tsmiMakeListTab.Text = "リストのタブを追加(&T)";
+            this.tsmiMakeListTab.Click += new System.EventHandler(this.tsmiMakeListTab_Click);
+            // 
+            // btnAddNewList
+            // 
+            this.btnAddNewList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddNewList.Location = new System.Drawing.Point(93, 226);
+            this.btnAddNewList.Name = "btnAddNewList";
+            this.btnAddNewList.Size = new System.Drawing.Size(75, 23);
+            this.btnAddNewList.TabIndex = 9;
+            this.btnAddNewList.Text = "新規リスト";
+            this.btnAddNewList.UseVisualStyleBackColor = true;
+            this.btnAddNewList.Click += new System.EventHandler(this.btnAddNewList_Click);
+            // 
             // lstvList
             // 
             this.lstvList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -120,12 +147,12 @@
             this.lstvList.View = System.Windows.Forms.View.Details;
             this.lstvList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lstvList_DrawColumnHeader);
             this.lstvList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lstvList_DrawSubItem);
+            this.lstvList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lstvList_MouseMove);
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "";
             this.columnHeader1.Width = 48;
-            this.lstvList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lstvList_MouseMove);
             // 
             // columnHeader2
             // 
@@ -144,32 +171,12 @@
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeader4.Width = 64;
             // 
-            // menuRow
-            // 
-            this.menuRow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiMakeListTab});
-            this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(170, 48);
-            this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
-            // 
-            // tsmiMakeListTab
-            // 
-            this.tsmiMakeListTab.Name = "tsmiMakeListTab";
-            this.tsmiMakeListTab.Size = new System.Drawing.Size(169, 22);
-            this.tsmiMakeListTab.Text = "リストのタブを追加(&T)";
-            this.tsmiMakeListTab.Click += new System.EventHandler(this.tsmiMakeListTab_Click);
-            // 
-            // ttInfo
-            // 
-            this.ttInfo.AutoPopDelay = 10000;
-            this.ttInfo.InitialDelay = 500;
-            this.ttInfo.ReshowDelay = 100;
-            // 
             // FrmDispLists
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(392, 274);
+            this.Controls.Add(this.btnAddNewList);
             this.Controls.Add(this.lblCount);
             this.Controls.Add(this.lstvList);
             this.Controls.Add(this.btnClose);
@@ -205,5 +212,6 @@
         private System.Windows.Forms.ContextMenuStrip menuRow;
         private System.Windows.Forms.ToolStripMenuItem tsmiMakeListTab;
         private System.Windows.Forms.ToolTip ttInfo;
+        private System.Windows.Forms.Button btnAddNewList;
     }
 }
