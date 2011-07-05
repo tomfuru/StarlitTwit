@@ -23,7 +23,7 @@ namespace StarlitTwit
         /// <summary>FormType=UserFollowing,UserFollowerの時に設定しなければならない</summary>
         public string UserScreenName { get; set; }
         /// <summary>FormType=ListMember,ListSubscriberの時に設定しなければならない</summary>
-        public string ListID { get;set;}
+        public string ListID { get; set; }
         /// <summary>FormType=Retweeterの時に設定しなければならない</summary>
         public long RetweetStatusID { get; set; }
 
@@ -83,7 +83,9 @@ namespace StarlitTwit
             /// <summary>リストのメンバー</summary>
             ListMember,
             /// <summary>リストのフォロワー</summary>
-            ListSubscriber
+            ListSubscriber,
+            /// <summary>ブロック中のユーザー</summary>
+            MyBlocking
         }
         //-------------------------------------------------------------------------------
         #endregion (EFormType)
@@ -265,7 +267,7 @@ namespace StarlitTwit
         //
         private void tsmiDispFollower_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFollower, 
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFollower,
                                          ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
         }
         #endregion (tsmiDispFollower_Click)
@@ -286,7 +288,7 @@ namespace StarlitTwit
         private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            Utilization.ShowUserTweet((FrmMain)this.Owner,FrmDispStatuses.EFormType.UserStatus,  prof.ScreenName);
+            Utilization.ShowUserTweet((FrmMain)this.Owner, FrmDispStatuses.EFormType.UserStatus, prof.ScreenName);
         }
         #endregion (tsmiDisplayUserTweet_Click)
         //-------------------------------------------------------------------------------
@@ -476,8 +478,13 @@ namespace StarlitTwit
                     _page++;
                     this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
                 }
+                else if (FormType == EFormType.MyBlocking) {
+                    profiles = FrmMain.Twitter.blocks_blocking(_page);
+                    _page++;
+                    this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
+                }
                 else {
-                    SequentData<UserProfile> proftpl= null;
+                    SequentData<UserProfile> proftpl = null;
                     switch (FormType) {
                         case EFormType.MyFollower:
                             proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
@@ -495,7 +502,7 @@ namespace StarlitTwit
                             proftpl = FrmMain.Twitter.list_members_Get(ListID, UserScreenName, _next_cursor);
                             break;
                         case EFormType.ListSubscriber:
-                            proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);              
+                            proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);
                             break;
                     }
                     if (proftpl != null) {
@@ -515,7 +522,8 @@ namespace StarlitTwit
             }
             catch (InvalidOperationException) { }
             catch (TwitterAPIException) {
-                this.Invoke(new Action(() => {
+                this.Invoke(new Action(() =>
+                {
                     tsslabel.Text = "取得に失敗しました。";
                     btnAppend.Enabled = true;
                 }));
