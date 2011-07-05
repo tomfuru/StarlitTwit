@@ -135,7 +135,7 @@ namespace StarlitTwit
             }
 
             if (FormType != EFormType.MyFollowing) {
-                lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 100 });
+                lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 90 });
             }
             tsslabel.Text = "取得中...";
             lblCount.Text = "";

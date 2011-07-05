@@ -69,7 +69,7 @@ namespace StarlitTwit
             FormType = formtype;
 
             UserScreenName = null;
-            
+
             _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingS.Clone();
             _imageAnimation = new ImageAnimation(_loadingimg);
             _imageAnimation.FrameUpdated += Image_Animate;
@@ -147,10 +147,36 @@ namespace StarlitTwit
         {
             if (lstvList.SelectedItems.Count == 0) { e.Cancel = true; return; }
             ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
-            
-            //
+
+            tsmiEditList.Visible = tsmiDeleteList.Visible = tsSepListEdit.Visible = (FormType == EFormType.MyList);
+            // TODO: リストフォロー確認？
+            //tsmiListSubscribe.Visible = 
+            //tsmiListUnSubscribe.Visible = 
+
+            // TODO: 実装次第項目削除
+            tsmiEditList.Visible = tsmiDeleteList.Visible = tsSepListEdit.Visible =
+            toolStripMenuItem2.Visible = tsmiListSubscribe.Visible = tsmiListUnSubscribe.Visible =
+            tsmiDispListStatuses.Visible = false;
         }
         #endregion (menuRow_Opening)
+        //-------------------------------------------------------------------------------
+        #region tsmiEditList_Click リスト編集
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiEditList_Click(object sender, EventArgs e)
+        {
+            // TODO:リスト編集
+        }
+        #endregion (tsmiEditList_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDeleteList_Click リスト削除
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDeleteList_Click(object sender, EventArgs e)
+        {
+            // TODO:リスト削除
+        }
+        #endregion (tsmiDeleteList_Click)
         //-------------------------------------------------------------------------------
         #region tsmiMakeListTab_Click リストタブ追加
         //-------------------------------------------------------------------------------
@@ -162,6 +188,54 @@ namespace StarlitTwit
             _mainForm.MakeNewTab(TabSearchType.List, listdata.Slug, listdata.OwnerScreenName);
         }
         #endregion (tsmiMakeListTab_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDispListStatuses_Click リストの発言表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispListStatuses_Click(object sender, EventArgs e)
+        {
+            // TODO:Implement DispListStatuses
+            //Utilization.ShowUserTweet(_mainForm, FrmDispStatuses.EFormType.ListStatuses, 
+        }
+        #endregion (tsmiDispListStatuses_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDispListUsers_Click リスト内ユーザー表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispListUsers_Click(object sender, EventArgs e)
+        {
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, FrmDispUsers.EFormType.ListMember, listdata.OwnerScreenName, listdata.Slug);
+        }
+        #endregion (tsmiDispListUsers_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDispListSubscriber_Click リストのフォロワ表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispListSubscriber_Click(object sender, EventArgs e)
+        {
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, FrmDispUsers.EFormType.ListSubscriber, listdata.OwnerScreenName, listdata.Slug);
+        }
+        #endregion (tsmiDispListSubscriber_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiListSubscribe_Click リストフォロー
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiListSubscribe_Click(object sender, EventArgs e)
+        {
+            // TODO:Implement List To Subscribe
+        }
+        #endregion (tsmiListSubscribe_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiListUnSubscribe_Click リストフォロー解除
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiListUnSubscribe_Click(object sender, EventArgs e)
+        {
+            // TODO:Implement List To UnSubscribe
+        }
+        #endregion (tsmiListUnSubscribe_Click)
         //-------------------------------------------------------------------------------
         #region lstvList_MouseMove マウスオーバー時
         //-------------------------------------------------------------------------------
@@ -321,10 +395,10 @@ namespace StarlitTwit
                 item.Tag = list;
                 if (!_imageListWrapper.ImageContainsKey(list.OwnerIconURL)
                  && !urllist.Any(t => t.Item2.Equals(list.OwnerIconURL))) { urllist.Add(new Tuple<ListViewItem, string>(item, list.OwnerIconURL)); }
-                if (FormType != EFormType.MyList) { 
+                if (FormType != EFormType.MyList) {
                     item.SubItems.Add(list.OwnerScreenName);
                 }
-                item.SubItems.Add(list.Name); 
+                item.SubItems.Add(list.Name);
                 item.SubItems.Add(list.MemberCount.ToString());
                 item.SubItems.Add(list.SubscriberCount.ToString());
                 if (FormType == EFormType.MyList) { item.SubItems.Add((list.Public) ? "公開" : "非公開"); }

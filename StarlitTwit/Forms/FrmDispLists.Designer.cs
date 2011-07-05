@@ -35,6 +35,9 @@
             this.btnAppend = new System.Windows.Forms.Button();
             this.menuRow = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiMakeListTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispListStatuses = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispListUsers = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispListSubscriber = new System.Windows.Forms.ToolStripMenuItem();
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.btnAddNewList = new System.Windows.Forms.Button();
             this.lstvList = new StarlitTwit.ListViewEx();
@@ -42,6 +45,13 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiListSubscribe = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiListUnSubscribe = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEditList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDeleteList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsSepListEdit = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
@@ -100,17 +110,48 @@
             // menuRow
             // 
             this.menuRow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiMakeListTab});
+            this.tsmiEditList,
+            this.tsmiDeleteList,
+            this.tsSepListEdit,
+            this.tsmiMakeListTab,
+            this.tsmiDispListStatuses,
+            this.toolStripMenuItem1,
+            this.tsmiDispListUsers,
+            this.tsmiDispListSubscriber,
+            this.toolStripMenuItem2,
+            this.tsmiListSubscribe,
+            this.tsmiListUnSubscribe});
             this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(170, 26);
+            this.menuRow.Size = new System.Drawing.Size(206, 220);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiMakeListTab
             // 
             this.tsmiMakeListTab.Name = "tsmiMakeListTab";
-            this.tsmiMakeListTab.Size = new System.Drawing.Size(169, 22);
+            this.tsmiMakeListTab.Size = new System.Drawing.Size(205, 22);
             this.tsmiMakeListTab.Text = "リストのタブを追加(&T)";
             this.tsmiMakeListTab.Click += new System.EventHandler(this.tsmiMakeListTab_Click);
+            // 
+            // tsmiDispListStatuses
+            // 
+            this.tsmiDispListStatuses.Name = "tsmiDispListStatuses";
+            this.tsmiDispListStatuses.Size = new System.Drawing.Size(205, 22);
+            this.tsmiDispListStatuses.Text = "リストの発言を表示(&S)";
+            this.tsmiDispListStatuses.Click += new System.EventHandler(this.tsmiDispListStatuses_Click);
+            // 
+            // tsmiDispListUsers
+            // 
+            this.tsmiDispListUsers.Name = "tsmiDispListUsers";
+            this.tsmiDispListUsers.Size = new System.Drawing.Size(205, 22);
+            this.tsmiDispListUsers.Text = "リスト内のユーザーを表示(&U)";
+            this.tsmiDispListUsers.Click += new System.EventHandler(this.tsmiDispListUsers_Click);
+            // 
+            // tsmiDispListSubscriber
+            // 
+            this.tsmiDispListSubscriber.Name = "tsmiDispListSubscriber";
+            this.tsmiDispListSubscriber.Size = new System.Drawing.Size(205, 22);
+            this.tsmiDispListSubscriber.Text = "リストのフォロワーを表示(&F)";
+            this.tsmiDispListSubscriber.Click += new System.EventHandler(this.tsmiDispListSubscriber_Click);
             // 
             // btnAddNewList
             // 
@@ -171,6 +212,49 @@
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeader4.Width = 64;
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(202, 6);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(202, 6);
+            // 
+            // tsmiListSubscribe
+            // 
+            this.tsmiListSubscribe.Name = "tsmiListSubscribe";
+            this.tsmiListSubscribe.Size = new System.Drawing.Size(205, 22);
+            this.tsmiListSubscribe.Text = "リストをフォロー(&F)";
+            this.tsmiListSubscribe.Click += new System.EventHandler(this.tsmiListSubscribe_Click);
+            // 
+            // tsmiListUnSubscribe
+            // 
+            this.tsmiListUnSubscribe.Name = "tsmiListUnSubscribe";
+            this.tsmiListUnSubscribe.Size = new System.Drawing.Size(205, 22);
+            this.tsmiListUnSubscribe.Text = "リストをフォロー解除(&U)";
+            this.tsmiListUnSubscribe.Click += new System.EventHandler(this.tsmiListUnSubscribe_Click);
+            // 
+            // tsmiEditList
+            // 
+            this.tsmiEditList.Name = "tsmiEditList";
+            this.tsmiEditList.Size = new System.Drawing.Size(205, 22);
+            this.tsmiEditList.Text = "リストを編集(&E)";
+            this.tsmiEditList.Click += new System.EventHandler(this.tsmiEditList_Click);
+            // 
+            // tsmiDeleteList
+            // 
+            this.tsmiDeleteList.Name = "tsmiDeleteList";
+            this.tsmiDeleteList.Size = new System.Drawing.Size(205, 22);
+            this.tsmiDeleteList.Text = "リストを削除(&D)";
+            this.tsmiDeleteList.Click += new System.EventHandler(this.tsmiDeleteList_Click);
+            // 
+            // tsSepListEdit
+            // 
+            this.tsSepListEdit.Name = "tsSepListEdit";
+            this.tsSepListEdit.Size = new System.Drawing.Size(202, 6);
+            // 
             // FrmDispLists
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -213,5 +297,15 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiMakeListTab;
         private System.Windows.Forms.ToolTip ttInfo;
         private System.Windows.Forms.Button btnAddNewList;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispListStatuses;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispListUsers;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispListSubscriber;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiListSubscribe;
+        private System.Windows.Forms.ToolStripMenuItem tsmiListUnSubscribe;
+        private System.Windows.Forms.ToolStripMenuItem tsmiEditList;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDeleteList;
+        private System.Windows.Forms.ToolStripSeparator tsSepListEdit;
     }
 }

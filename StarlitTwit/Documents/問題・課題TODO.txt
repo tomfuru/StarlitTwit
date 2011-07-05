@@ -153,6 +153,7 @@
 
 ★DONE
 11/07/05
+・ブロックユーザー表示追加
 ・リスト表示画面にDescriptionのToolTipを追加
 ・UserStreamのイベントをPopup表示
 11/07/04

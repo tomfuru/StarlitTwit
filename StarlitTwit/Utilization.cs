@@ -485,11 +485,12 @@ namespace StarlitTwit
         /// <param name="type">フォームタイプ</param>
         /// <param name="screen_name"></param>
         /// <param name="retweet_id"></param>
-        public static void ShowUsersForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
+        public static void ShowUsersForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispUsers.EFormType type, string screen_name = null, string list_id = null, long retweet_id = -1)
         {
             if (!Utilization.ExistFrmUsers(type, screen_name, retweet_id)) {
                 FrmDispUsers frm = new FrmDispUsers(parent, imageListWrapper, type) {
                     UserScreenName = screen_name,
+                    ListID = list_id,
                     RetweetStatusID = retweet_id
                 };
                 frm.Show(parent);
