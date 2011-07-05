@@ -44,11 +44,21 @@ namespace StarlitTwit
         //
         private void txtRegex_TextChanged(object sender, EventArgs e)
         {
-            try {
-                _regex = new Regex(txtRegex.Text);
+            bool success;
+            if (!txtRegex.Text.EndsWith(@"\\") && txtRegex.Text.EndsWith(@"\")) {
+                success = false;
             }
-            catch (ArgumentException ex) {
-                ex.ToString();
+            else {
+                try {
+                    _regex = new Regex(txtRegex.Text);
+                    success = true;
+                }
+                catch (ArgumentException) {
+                    success = false;
+                }
+            }
+
+            if (!success) {
                 _regex = null;
                 btnOK.Enabled = false;
                 lblInfo.Text = "無効な正規表現";
