@@ -16,11 +16,12 @@
 ・ブロックの確認メッセージ
  - Eventの処理(Popup?)
  - StartUpの時に開始時点の調整
+・子画面一斉消去
 
 ■要修正・確認
 
+・UserStreamのRetweetのPopup
 ・タブの変更の別の方法準備（複数行時に不具合）
-・子画面一斉消去
 ・発言表示フォームの重複確認の確認
 
 ・profileフォーム：RelationshipDataの取得？
@@ -153,6 +154,10 @@
 
 
 ★DONE
+11/07/06
+・UserStreamPopup設定
+・子画面全消去追加
+・発言表示フォーム修正，メイン画面からRetweet,Favoriteを表示可に
 11/07/05
 ・ブロックユーザー表示追加
 ・リスト表示画面にDescriptionのToolTipを追加

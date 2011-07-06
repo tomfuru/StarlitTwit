@@ -157,6 +157,19 @@
             this.label45 = new System.Windows.Forms.Label();
             this.tabpgUserStream = new System.Windows.Forms.TabPage();
             this.grbUStPopup = new System.Windows.Forms.GroupBox();
+            this.chbUStPopup_UserUpdate = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListDestroyed = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListUnsubscribed = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListSubscribed = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListUpdated = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_Block = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListMemberAdd = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListMemberRemoved = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_Unblock = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_ListCreated = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_Follow = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_Unfavorite = new System.Windows.Forms.CheckBox();
+            this.chbUStPopup_Favorite = new System.Windows.Forms.CheckBox();
             this.chbUStAutoOpenLog = new System.Windows.Forms.CheckBox();
             this.chbUStEnableAllReplies = new System.Windows.Forms.CheckBox();
             this.chbUStStartUp = new System.Windows.Forms.CheckBox();
@@ -184,6 +197,7 @@
             this.btnFilterAdd = new System.Windows.Forms.Button();
             this.lstFilters = new System.Windows.Forms.ListBox();
             this.tabpgElse = new System.Windows.Forms.TabPage();
+            this.chbConfirmDialogBlock = new System.Windows.Forms.CheckBox();
             this.chbConfirmDialogFollow = new System.Windows.Forms.CheckBox();
             this.chbConfirmDialogFav = new System.Windows.Forms.CheckBox();
             this.cmbURLShortenType = new System.Windows.Forms.ComboBox();
@@ -203,7 +217,6 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.chbConfirmDialogBlock = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
@@ -228,6 +241,7 @@
             this.tabpgThumbnail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).BeginInit();
             this.tabpgUserStream.SuspendLayout();
+            this.grbUStPopup.SuspendLayout();
             this.tabpgFilter.SuspendLayout();
             this.pnlFilterInfo.SuspendLayout();
             this.grpObjUser.SuspendLayout();
@@ -260,10 +274,10 @@
             this.tabpgGet.Controls.Add(this.label39);
             this.tabpgGet.Controls.Add(this.label10);
             this.tabpgGet.Controls.Add(this.tableLayoutPanel1);
-            this.tabpgGet.Location = new System.Drawing.Point(4, 22);
+            this.tabpgGet.Location = new System.Drawing.Point(4, 21);
             this.tabpgGet.Name = "tabpgGet";
             this.tabpgGet.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgGet.Size = new System.Drawing.Size(386, 324);
+            this.tabpgGet.Size = new System.Drawing.Size(386, 325);
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
@@ -744,10 +758,10 @@
             this.tabpgDisp.Controls.Add(this.txtNameFormat);
             this.tabpgDisp.Controls.Add(this.label9);
             this.tabpgDisp.Controls.Add(this.label8);
-            this.tabpgDisp.Location = new System.Drawing.Point(4, 22);
+            this.tabpgDisp.Location = new System.Drawing.Point(4, 21);
             this.tabpgDisp.Name = "tabpgDisp";
             this.tabpgDisp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgDisp.Size = new System.Drawing.Size(386, 324);
+            this.tabpgDisp.Size = new System.Drawing.Size(386, 325);
             this.tabpgDisp.TabIndex = 1;
             this.tabpgDisp.Text = "表示";
             this.tabpgDisp.UseVisualStyleBackColor = true;
@@ -1090,10 +1104,10 @@
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalText);
             this.tabpgFontAndColor.Controls.Add(this.txtExNormalTitle);
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalTitle);
-            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 22);
+            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 21);
             this.tabpgFontAndColor.Name = "tabpgFontAndColor";
             this.tabpgFontAndColor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 324);
+            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 325);
             this.tabpgFontAndColor.TabIndex = 2;
             this.tabpgFontAndColor.Text = "フォント・色";
             this.tabpgFontAndColor.UseVisualStyleBackColor = true;
@@ -1651,10 +1665,10 @@
             this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
             this.tabpgThumbnail.Controls.Add(this.label45);
-            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 22);
+            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
             this.tabpgThumbnail.Name = "tabpgThumbnail";
             this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 324);
+            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
             this.tabpgThumbnail.TabIndex = 4;
             this.tabpgThumbnail.Text = "サムネイル";
             this.tabpgThumbnail.UseVisualStyleBackColor = true;
@@ -1855,28 +1869,170 @@
             this.tabpgUserStream.Controls.Add(this.chbUStAutoOpenLog);
             this.tabpgUserStream.Controls.Add(this.chbUStEnableAllReplies);
             this.tabpgUserStream.Controls.Add(this.chbUStStartUp);
-            this.tabpgUserStream.Location = new System.Drawing.Point(4, 22);
+            this.tabpgUserStream.Location = new System.Drawing.Point(4, 21);
             this.tabpgUserStream.Name = "tabpgUserStream";
             this.tabpgUserStream.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgUserStream.Size = new System.Drawing.Size(386, 324);
+            this.tabpgUserStream.Size = new System.Drawing.Size(386, 325);
             this.tabpgUserStream.TabIndex = 5;
             this.tabpgUserStream.Text = "UserStream";
             this.tabpgUserStream.UseVisualStyleBackColor = true;
             // 
             // grbUStPopup
             // 
-            this.grbUStPopup.Location = new System.Drawing.Point(20, 63);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_UserUpdate);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListDestroyed);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListUnsubscribed);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListSubscribed);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListUpdated);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_Block);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListMemberAdd);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListMemberRemoved);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_Unblock);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_ListCreated);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_Follow);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_Unfavorite);
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_Favorite);
+            this.grbUStPopup.Location = new System.Drawing.Point(20, 50);
             this.grbUStPopup.Name = "grbUStPopup";
-            this.grbUStPopup.Size = new System.Drawing.Size(255, 179);
+            this.grbUStPopup.Size = new System.Drawing.Size(269, 194);
             this.grbUStPopup.TabIndex = 3;
             this.grbUStPopup.TabStop = false;
-            this.grbUStPopup.Text = "タスクトレイバルーン表示";
-            this.grbUStPopup.Visible = false;
+            this.grbUStPopup.Text = "タスクトレイバルーンを表示するイベント";
+            // 
+            // chbUStPopup_UserUpdate
+            // 
+            this.chbUStPopup_UserUpdate.AutoSize = true;
+            this.chbUStPopup_UserUpdate.Location = new System.Drawing.Point(6, 172);
+            this.chbUStPopup_UserUpdate.Name = "chbUStPopup_UserUpdate";
+            this.chbUStPopup_UserUpdate.Size = new System.Drawing.Size(101, 16);
+            this.chbUStPopup_UserUpdate.TabIndex = 14;
+            this.chbUStPopup_UserUpdate.Text = "プロフィール更新";
+            this.chbUStPopup_UserUpdate.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListDestroyed
+            // 
+            this.chbUStPopup_ListDestroyed.AutoSize = true;
+            this.chbUStPopup_ListDestroyed.Location = new System.Drawing.Point(6, 128);
+            this.chbUStPopup_ListDestroyed.Name = "chbUStPopup_ListDestroyed";
+            this.chbUStPopup_ListDestroyed.Size = new System.Drawing.Size(72, 16);
+            this.chbUStPopup_ListDestroyed.TabIndex = 13;
+            this.chbUStPopup_ListDestroyed.Text = "リスト削除";
+            this.chbUStPopup_ListDestroyed.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListUnsubscribed
+            // 
+            this.chbUStPopup_ListUnsubscribed.AutoSize = true;
+            this.chbUStPopup_ListUnsubscribed.Location = new System.Drawing.Point(138, 150);
+            this.chbUStPopup_ListUnsubscribed.Name = "chbUStPopup_ListUnsubscribed";
+            this.chbUStPopup_ListUnsubscribed.Size = new System.Drawing.Size(107, 16);
+            this.chbUStPopup_ListUnsubscribed.TabIndex = 12;
+            this.chbUStPopup_ListUnsubscribed.Text = "リストフォロー解除";
+            this.chbUStPopup_ListUnsubscribed.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListSubscribed
+            // 
+            this.chbUStPopup_ListSubscribed.AutoSize = true;
+            this.chbUStPopup_ListSubscribed.Location = new System.Drawing.Point(6, 150);
+            this.chbUStPopup_ListSubscribed.Name = "chbUStPopup_ListSubscribed";
+            this.chbUStPopup_ListSubscribed.Size = new System.Drawing.Size(83, 16);
+            this.chbUStPopup_ListSubscribed.TabIndex = 11;
+            this.chbUStPopup_ListSubscribed.Text = "リストフォロー";
+            this.chbUStPopup_ListSubscribed.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListUpdated
+            // 
+            this.chbUStPopup_ListUpdated.AutoSize = true;
+            this.chbUStPopup_ListUpdated.Location = new System.Drawing.Point(138, 106);
+            this.chbUStPopup_ListUpdated.Name = "chbUStPopup_ListUpdated";
+            this.chbUStPopup_ListUpdated.Size = new System.Drawing.Size(72, 16);
+            this.chbUStPopup_ListUpdated.TabIndex = 10;
+            this.chbUStPopup_ListUpdated.Text = "リスト更新";
+            this.chbUStPopup_ListUpdated.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_Block
+            // 
+            this.chbUStPopup_Block.AutoSize = true;
+            this.chbUStPopup_Block.Location = new System.Drawing.Point(6, 62);
+            this.chbUStPopup_Block.Name = "chbUStPopup_Block";
+            this.chbUStPopup_Block.Size = new System.Drawing.Size(57, 16);
+            this.chbUStPopup_Block.TabIndex = 9;
+            this.chbUStPopup_Block.Text = "ブロック";
+            this.chbUStPopup_Block.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListMemberAdd
+            // 
+            this.chbUStPopup_ListMemberAdd.AutoSize = true;
+            this.chbUStPopup_ListMemberAdd.Location = new System.Drawing.Point(6, 84);
+            this.chbUStPopup_ListMemberAdd.Name = "chbUStPopup_ListMemberAdd";
+            this.chbUStPopup_ListMemberAdd.Size = new System.Drawing.Size(109, 16);
+            this.chbUStPopup_ListMemberAdd.TabIndex = 8;
+            this.chbUStPopup_ListMemberAdd.Text = "リストメンバー追加";
+            this.chbUStPopup_ListMemberAdd.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListMemberRemoved
+            // 
+            this.chbUStPopup_ListMemberRemoved.AutoSize = true;
+            this.chbUStPopup_ListMemberRemoved.Location = new System.Drawing.Point(138, 84);
+            this.chbUStPopup_ListMemberRemoved.Name = "chbUStPopup_ListMemberRemoved";
+            this.chbUStPopup_ListMemberRemoved.Size = new System.Drawing.Size(109, 16);
+            this.chbUStPopup_ListMemberRemoved.TabIndex = 7;
+            this.chbUStPopup_ListMemberRemoved.Text = "リストメンバー削除";
+            this.chbUStPopup_ListMemberRemoved.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_Unblock
+            // 
+            this.chbUStPopup_Unblock.AutoSize = true;
+            this.chbUStPopup_Unblock.Location = new System.Drawing.Point(138, 62);
+            this.chbUStPopup_Unblock.Name = "chbUStPopup_Unblock";
+            this.chbUStPopup_Unblock.Size = new System.Drawing.Size(81, 16);
+            this.chbUStPopup_Unblock.TabIndex = 6;
+            this.chbUStPopup_Unblock.Text = "ブロック解除";
+            this.chbUStPopup_Unblock.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_ListCreated
+            // 
+            this.chbUStPopup_ListCreated.AutoSize = true;
+            this.chbUStPopup_ListCreated.Location = new System.Drawing.Point(6, 106);
+            this.chbUStPopup_ListCreated.Name = "chbUStPopup_ListCreated";
+            this.chbUStPopup_ListCreated.Size = new System.Drawing.Size(72, 16);
+            this.chbUStPopup_ListCreated.TabIndex = 5;
+            this.chbUStPopup_ListCreated.Text = "リスト作成";
+            this.chbUStPopup_ListCreated.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_Follow
+            // 
+            this.chbUStPopup_Follow.AutoSize = true;
+            this.chbUStPopup_Follow.Location = new System.Drawing.Point(6, 40);
+            this.chbUStPopup_Follow.Name = "chbUStPopup_Follow";
+            this.chbUStPopup_Follow.Size = new System.Drawing.Size(59, 16);
+            this.chbUStPopup_Follow.TabIndex = 4;
+            this.chbUStPopup_Follow.Text = "フォロー";
+            this.chbUStPopup_Follow.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_Unfavorite
+            // 
+            this.chbUStPopup_Unfavorite.AutoSize = true;
+            this.chbUStPopup_Unfavorite.Location = new System.Drawing.Point(138, 18);
+            this.chbUStPopup_Unfavorite.Name = "chbUStPopup_Unfavorite";
+            this.chbUStPopup_Unfavorite.Size = new System.Drawing.Size(117, 16);
+            this.chbUStPopup_Unfavorite.TabIndex = 3;
+            this.chbUStPopup_Unfavorite.Text = "お気に入りから削除";
+            this.chbUStPopup_Unfavorite.UseVisualStyleBackColor = true;
+            // 
+            // chbUStPopup_Favorite
+            // 
+            this.chbUStPopup_Favorite.AutoSize = true;
+            this.chbUStPopup_Favorite.Location = new System.Drawing.Point(6, 18);
+            this.chbUStPopup_Favorite.Name = "chbUStPopup_Favorite";
+            this.chbUStPopup_Favorite.Size = new System.Drawing.Size(108, 16);
+            this.chbUStPopup_Favorite.TabIndex = 2;
+            this.chbUStPopup_Favorite.Text = "お気に入りに追加";
+            this.chbUStPopup_Favorite.UseVisualStyleBackColor = true;
             // 
             // chbUStAutoOpenLog
             // 
             this.chbUStAutoOpenLog.AutoSize = true;
-            this.chbUStAutoOpenLog.Location = new System.Drawing.Point(20, 303);
+            this.chbUStAutoOpenLog.Location = new System.Drawing.Point(20, 250);
             this.chbUStAutoOpenLog.Name = "chbUStAutoOpenLog";
             this.chbUStAutoOpenLog.Size = new System.Drawing.Size(223, 16);
             this.chbUStAutoOpenLog.TabIndex = 2;
@@ -1909,10 +2065,10 @@
             this.tabpgFilter.Controls.Add(this.btnFilterRemove);
             this.tabpgFilter.Controls.Add(this.btnFilterAdd);
             this.tabpgFilter.Controls.Add(this.lstFilters);
-            this.tabpgFilter.Location = new System.Drawing.Point(4, 22);
+            this.tabpgFilter.Location = new System.Drawing.Point(4, 21);
             this.tabpgFilter.Name = "tabpgFilter";
             this.tabpgFilter.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFilter.Size = new System.Drawing.Size(386, 324);
+            this.tabpgFilter.Size = new System.Drawing.Size(386, 325);
             this.tabpgFilter.TabIndex = 6;
             this.tabpgFilter.Text = "フィルタ";
             this.tabpgFilter.UseVisualStyleBackColor = true;
@@ -2193,13 +2349,23 @@
             this.tabpgElse.Controls.Add(this.chbDispDMBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyTooltip);
-            this.tabpgElse.Location = new System.Drawing.Point(4, 22);
+            this.tabpgElse.Location = new System.Drawing.Point(4, 21);
             this.tabpgElse.Name = "tabpgElse";
             this.tabpgElse.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgElse.Size = new System.Drawing.Size(386, 324);
+            this.tabpgElse.Size = new System.Drawing.Size(386, 325);
             this.tabpgElse.TabIndex = 3;
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
+            // 
+            // chbConfirmDialogBlock
+            // 
+            this.chbConfirmDialogBlock.AutoSize = true;
+            this.chbConfirmDialogBlock.Location = new System.Drawing.Point(20, 126);
+            this.chbConfirmDialogBlock.Name = "chbConfirmDialogBlock";
+            this.chbConfirmDialogBlock.Size = new System.Drawing.Size(262, 16);
+            this.chbConfirmDialogBlock.TabIndex = 17;
+            this.chbConfirmDialogBlock.Text = "ブロック・ブロック解除時に確認ダイアログを表示する";
+            this.chbConfirmDialogBlock.UseVisualStyleBackColor = true;
             // 
             // chbConfirmDialogFollow
             // 
@@ -2383,16 +2549,6 @@
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
             // 
-            // chbConfirmDialogBlock
-            // 
-            this.chbConfirmDialogBlock.AutoSize = true;
-            this.chbConfirmDialogBlock.Location = new System.Drawing.Point(20, 126);
-            this.chbConfirmDialogBlock.Name = "chbConfirmDialogBlock";
-            this.chbConfirmDialogBlock.Size = new System.Drawing.Size(262, 16);
-            this.chbConfirmDialogBlock.TabIndex = 17;
-            this.chbConfirmDialogBlock.Text = "ブロック・ブロック解除時に確認ダイアログを表示する";
-            this.chbConfirmDialogBlock.UseVisualStyleBackColor = true;
-            // 
             // FrmConfig
             // 
             this.AcceptButton = this.btnOK;
@@ -2442,6 +2598,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numThumbnailInterval)).EndInit();
             this.tabpgUserStream.ResumeLayout(false);
             this.tabpgUserStream.PerformLayout();
+            this.grbUStPopup.ResumeLayout(false);
+            this.grbUStPopup.PerformLayout();
             this.tabpgFilter.ResumeLayout(false);
             this.pnlFilterInfo.ResumeLayout(false);
             this.pnlFilterInfo.PerformLayout();
@@ -2635,5 +2793,18 @@
         private System.Windows.Forms.Panel pnlFilterInfo;
         private System.Windows.Forms.CheckBox chbFilterEnabled;
         private System.Windows.Forms.CheckBox chbConfirmDialogBlock;
+        private System.Windows.Forms.CheckBox chbUStPopup_Favorite;
+        private System.Windows.Forms.CheckBox chbUStPopup_Follow;
+        private System.Windows.Forms.CheckBox chbUStPopup_Unfavorite;
+        private System.Windows.Forms.CheckBox chbUStPopup_Block;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListMemberAdd;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListMemberRemoved;
+        private System.Windows.Forms.CheckBox chbUStPopup_Unblock;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListCreated;
+        private System.Windows.Forms.CheckBox chbUStPopup_UserUpdate;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListDestroyed;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListUnsubscribed;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListSubscribed;
+        private System.Windows.Forms.CheckBox chbUStPopup_ListUpdated;
     }
 }

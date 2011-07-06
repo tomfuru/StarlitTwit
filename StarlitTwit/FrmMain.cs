@@ -779,7 +779,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_EntityEvent_DisplayUserTweet(object sender, EntityEventArgs e)
         {
-            Utilization.ShowUserTweet(this,FrmDispStatuses.EFormType.UserStatus, e.Data);
+            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.UserStatus, e.Data);
         }
         #endregion (TwitMenu_EntityEvent_DisplayUserTweet)
         //-------------------------------------------------------------------------------
@@ -905,7 +905,7 @@ namespace StarlitTwit
                     // 存在すれば消す(structなので更新不可)
                     int index = SettingsData.UserInfoList.FindIndex(info => info.ID == userdata.ID);
                     if (index >= 0) { SettingsData.UserInfoList.RemoveAt(index); }
-                    
+
                     SettingsData.UserInfoList.Insert(0, userdata);
                     SettingsData.Save();
 
@@ -1527,7 +1527,7 @@ namespace StarlitTwit
 
             tsmi_プロフィール.Enabled = true;
             foreach (var item in tsmi_プロフィール.DropDownItems.OfType<ToolStripMenuItem>()) {
-                item.Enabled = true; 
+                item.Enabled = true;
             }
             tsmiUserStream.Enabled = true;
             tsmiUserStreamEnd.Enabled = tsmiUserStreamStart.Enabled = true;
@@ -1757,56 +1757,82 @@ namespace StarlitTwit
                             string text = null;
                             switch (d.Type) {
                                 case UserStreamEventType.favorite:
-                                    title = tasktray.Text + ":お気に入り追加";
-                                    text = string.Format("{0} が {1} の発言をお気に入りに追加", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_Favorite) {
+                                        title = tasktray.Text + ":お気に入り追加";
+                                        text = string.Format("{0} が {1} の発言をお気に入りに追加", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.unfavorite:
-                                    title = tasktray.Text + ":お気に入り削除";
-                                    text = string.Format("{0} が {1} の発言をお気に入りから削除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_Unfavorite) {
+                                        title = tasktray.Text + ":お気に入り削除";
+                                        text = string.Format("{0} が {1} の発言をお気に入りから削除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.follow:
-                                    title = tasktray.Text + ":フォロー";
-                                    text = string.Format("{0} が {1} をフォロー", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_Follow) {
+                                        title = tasktray.Text + ":フォロー";
+                                        text = string.Format("{0} が {1} をフォロー", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.block:
-                                    title = tasktray.Text + ":ブロック";
-                                    text = string.Format("{0} が {1} をブロック", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_Block) {
+                                        title = tasktray.Text + ":ブロック";
+                                        text = string.Format("{0} が {1} をブロック", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.unblock:
-                                    title = tasktray.Text + ":ブロック解除";
-                                    text = string.Format("{0} が {1} をブロック解除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_Unblock) {
+                                        title = tasktray.Text + ":ブロック解除";
+                                        text = string.Format("{0} が {1} をブロック解除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.list_member_added:
-                                    title = tasktray.Text + ":リストメンバー追加";
-                                    text = string.Format("リスト {0} に {1} を追加", d.TargetList.Name, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_ListMemberAdd) {
+                                        title = tasktray.Text + ":リストメンバー追加";
+                                        text = string.Format("リスト {0} に {1} を追加", d.TargetList.Name, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.list_member_removed:
-                                    title = tasktray.Text + ":リストメンバー削除";
-                                    text = string.Format("リスト {0} から {1} を削除", d.TargetList.Name, d.TargetUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_ListMemberRemoved) {
+                                        title = tasktray.Text + ":リストメンバー削除";
+                                        text = string.Format("リスト {0} から {1} を削除", d.TargetList.Name, d.TargetUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.list_created:
-                                    title = tasktray.Text + ":リスト追加";
-                                    text = string.Format("リスト {0} を追加", d.TargetList.Name);
+                                    if (SettingsData.UserStream_ShowPopup_ListCreated) {
+                                        title = tasktray.Text + ":リスト追加";
+                                        text = string.Format("リスト {0} を追加", d.TargetList.Name);
+                                    }
                                     break;
                                 case UserStreamEventType.list_updated:
-                                    title = tasktray.Text + ":リスト更新";
-                                    text = string.Format("リスト {0} を更新", d.TargetList.Name);
+                                    if (SettingsData.UserStream_ShowPopup_ListUpdated) {
+                                        title = tasktray.Text + ":リスト更新";
+                                        text = string.Format("リスト {0} を更新", d.TargetList.Name);
+                                    }
                                     break;
                                 case UserStreamEventType.list_destroyed:
-                                    title = tasktray.Text + ":リスト削除";
-                                    text = string.Format("リスト {0} を削除", d.TargetList.Name);
+                                    if (SettingsData.UserStream_ShowPopup_ListDestroyed) {
+                                        title = tasktray.Text + ":リスト削除";
+                                        text = string.Format("リスト {0} を削除", d.TargetList.Name);
+                                    }
                                     break;
                                 case UserStreamEventType.list_user_subscribed:
-                                    title = tasktray.Text + ":リストフォロー";
-                                    text = string.Format("{0} がリスト {1} をフォロー", d.TargetList.Name, d.SourceUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_ListSubscribed) {
+                                        title = tasktray.Text + ":リストフォロー";
+                                        text = string.Format("{0} がリスト {1} をフォロー", d.TargetList.Name, d.SourceUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.list_user_unsubscribed:
-                                    title = tasktray.Text + ":リストフォロー解除";
-                                    text = string.Format("{0} がリスト {1} をフォロー解除", d.TargetList.Name, d.SourceUser.ScreenName);
+                                    if (SettingsData.UserStream_ShowPopup_ListUnsubscribed) {
+                                        title = tasktray.Text + ":リストフォロー解除";
+                                        text = string.Format("{0} がリスト {1} をフォロー解除", d.TargetList.Name, d.SourceUser.ScreenName);
+                                    }
                                     break;
                                 case UserStreamEventType.user_update:
-                                    title = tasktray.Text + ":プロフィール更新";
-                                    text = string.Format("プロフィールが更新されました");
+                                    if (SettingsData.UserStream_ShowPopup_UserUpdate) {
+                                        title = tasktray.Text + ":プロフィール更新";
+                                        text = string.Format("プロフィールが更新されました");
+                                    }
                                     break;
                             }
                             if (title != null) { this.PopupTasktray(title, text); }

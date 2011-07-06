@@ -587,6 +587,21 @@ namespace StarlitTwit
             //-------------------------------------------------------------------------------
             chbUStStartUp.Checked = SettingsData.UserStreamStartUp;
             chbUStEnableAllReplies.Checked = SettingsData.UserStreamAllReplies;
+
+            chbUStPopup_Favorite.Checked = SettingsData.UserStream_ShowPopup_Favorite;
+            chbUStPopup_Unfavorite.Checked = SettingsData.UserStream_ShowPopup_Unfavorite;
+            chbUStPopup_Follow.Checked = SettingsData.UserStream_ShowPopup_Follow;
+            chbUStPopup_Block.Checked = SettingsData.UserStream_ShowPopup_Block;
+            chbUStPopup_Unblock.Checked = SettingsData.UserStream_ShowPopup_Unblock;
+            chbUStPopup_ListMemberAdd.Checked = SettingsData.UserStream_ShowPopup_ListMemberAdd;
+            chbUStPopup_ListMemberRemoved.Checked = SettingsData.UserStream_ShowPopup_ListMemberRemoved;
+            chbUStPopup_ListCreated.Checked = SettingsData.UserStream_ShowPopup_ListCreated;
+            chbUStPopup_ListUpdated.Checked = SettingsData.UserStream_ShowPopup_ListUpdated;
+            chbUStPopup_ListDestroyed.Checked = SettingsData.UserStream_ShowPopup_ListDestroyed;
+            chbUStPopup_ListSubscribed.Checked = SettingsData.UserStream_ShowPopup_ListSubscribed;
+            chbUStPopup_ListUnsubscribed.Checked = SettingsData.UserStream_ShowPopup_ListUnsubscribed;
+            chbUStPopup_UserUpdate.Checked = SettingsData.UserStream_ShowPopup_UserUpdate;
+
             chbUStAutoOpenLog.Checked = SettingsData.UserStreamAutoOpenLog;
             //-------------------------------------------------------------------------------
             #endregion (■■UserStream設定■■)
@@ -716,6 +731,21 @@ namespace StarlitTwit
             //-------------------------------------------------------------------------------
             SettingsData.UserStreamStartUp = chbUStStartUp.Checked;
             SettingsData.UserStreamAllReplies = chbUStEnableAllReplies.Checked;
+
+            SettingsData.UserStream_ShowPopup_Favorite = chbUStPopup_Favorite.Checked;
+            SettingsData.UserStream_ShowPopup_Unfavorite = chbUStPopup_Unfavorite.Checked;
+            SettingsData.UserStream_ShowPopup_Follow = chbUStPopup_Follow.Checked;
+            SettingsData.UserStream_ShowPopup_Block = chbUStPopup_Block.Checked;
+            SettingsData.UserStream_ShowPopup_Unblock = chbUStPopup_Unblock.Checked;
+            SettingsData.UserStream_ShowPopup_ListMemberAdd = chbUStPopup_ListMemberAdd.Checked;
+            SettingsData.UserStream_ShowPopup_ListMemberRemoved = chbUStPopup_ListMemberRemoved.Checked;
+            SettingsData.UserStream_ShowPopup_ListCreated = chbUStPopup_ListCreated.Checked;
+            SettingsData.UserStream_ShowPopup_ListUpdated = chbUStPopup_ListUpdated.Checked;
+            SettingsData.UserStream_ShowPopup_ListDestroyed = chbUStPopup_ListDestroyed.Checked;
+            SettingsData.UserStream_ShowPopup_ListSubscribed = chbUStPopup_ListSubscribed.Checked;
+            SettingsData.UserStream_ShowPopup_ListUnsubscribed = chbUStPopup_ListUnsubscribed.Checked;
+            SettingsData.UserStream_ShowPopup_UserUpdate = chbUStPopup_UserUpdate.Checked;
+
             SettingsData.UserStreamAutoOpenLog = chbUStAutoOpenLog.Checked;
             //-------------------------------------------------------------------------------
             #endregion (■■UserStream設定■■)

@@ -191,6 +191,32 @@ namespace StarlitTwit
         public bool UserStreamAllReplies = false;
         /// <summary>UserStream開始と同時にログ画面表示</summary>
         public bool UserStreamAutoOpenLog = false;
+        /// <summary>お気に入り追加時にPopup通知</summary>
+        public bool UserStream_ShowPopup_Favorite = true;
+        /// <summary>お気に入り削除時にPopup通知</summary>
+        public bool UserStream_ShowPopup_Unfavorite = true;
+        /// <summary>フォローイベント時にPopup通知</summary>
+        public bool UserStream_ShowPopup_Follow = true;
+        /// <summary>ブロック時にPopup通知</summary>
+        public bool UserStream_ShowPopup_Block = true;
+        /// <summary>ブロック解除時にPopup通知</summary>
+        public bool UserStream_ShowPopup_Unblock = true;
+        /// <summary>リストメンバー追加時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListMemberAdd = true;
+        /// <summary>リストメンバー削除時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListMemberRemoved = true;
+        /// <summary>リスト作成時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListCreated = true;
+        /// <summary>リスト更新時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListUpdated = true;
+        /// <summary>リスト削除時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListDestroyed = true;
+        /// <summary>リストフォロー時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListSubscribed = true;
+        /// <summary>リストフォロー解除時にPopup通知</summary>
+        public bool UserStream_ShowPopup_ListUnsubscribed = true;
+        /// <summary>プロフィールアップデート時にPopup通知</summary>
+        public bool UserStream_ShowPopup_UserUpdate = true;
         //-------------------------------------------------------------------------------
         #endregion (UserStream関係)
 
