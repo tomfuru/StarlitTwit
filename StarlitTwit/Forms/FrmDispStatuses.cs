@@ -26,6 +26,8 @@ namespace StarlitTwit
         public string ListID { get; set; }
         /// <summary>最後の発言のStatusID</summary>
         private long _last_status_id = -1;
+        /// <summary>ページ</summary>
+        private int _page = 1;
 
         private const int GET_NUM = 50;
         //-------------------------------------------------------------------------------
@@ -154,7 +156,7 @@ namespace StarlitTwit
         #endregion (FrmDispTweet_FormClosed)
 
         //-------------------------------------------------------------------------------
-        #region GetTweets 発言取得(別スレッド)
+        #region -GetTweets 発言取得(別スレッド)
         //-------------------------------------------------------------------------------
         //
         private void GetTweets()
@@ -171,7 +173,8 @@ namespace StarlitTwit
                 switch (FormType) {
                     case EFormType.UserStatus:
                         d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM);
-                        _last_status_id = d.Last().StatusID;
+                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                        else { disableAppend = true; }
                         break;
                     case EFormType.Conversation:
                         List<TwitData> list = new List<TwitData>();
@@ -188,18 +191,35 @@ namespace StarlitTwit
                         }
                         d = list;
                         break;
-                    ///////////////////////
                     case EFormType.MyRetweet:
+                        d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id, count: GET_NUM);
+                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                        else { disableAppend = true; }
                         break;
                     case EFormType.FollowersRetweet:
+                        d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id, count: GET_NUM);
+                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                        else { disableAppend = true; }
                         break;
                     case EFormType.FollowersRetweetToMe:
+                        d = FrmMain.Twitter.statuses_retweets_of_me(max_id: _last_status_id, count: GET_NUM);
+                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                        else { disableAppend = true; }
                         break;
                     case EFormType.ListStatuses:
+                        d = FrmMain.Twitter.lists_statuses(ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
+                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                        else { disableAppend = true; }
                         break;
                     case EFormType.MyFavorite:
+                        d = FrmMain.Twitter.favorites_get(page: _page);
+                        _page++;
+                        disableAppend = (d.Count() == 0);
                         break;
                     case EFormType.UserFavorite:
+                        d = FrmMain.Twitter.favorites_get(UserScreenName, page: _page);
+                        _page++;
+                        disableAppend = (d.Count() == 0);
                         break;
                     default:
                         Debug.Assert(false); // ここには来ない

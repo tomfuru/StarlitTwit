@@ -308,7 +308,7 @@
             this.tsmiブロックユーザーリスト.Enabled = false;
             this.tsmiブロックユーザーリスト.Name = "tsmiブロックユーザーリスト";
             this.tsmiブロックユーザーリスト.Size = new System.Drawing.Size(261, 22);
-            this.tsmiブロックユーザーリスト.Text = "ブロックユーザーリスト(&B)";
+            this.tsmiブロックユーザーリスト.Text = "ブロックユーザー(&B)";
             this.tsmiブロックユーザーリスト.Click += new System.EventHandler(this.tsmiブロックユーザーリスト_Click);
             // 
             // tsmiUserStream
@@ -770,7 +770,6 @@
             this.tabpgHome.Name = "tabpgHome";
             this.tabpgHome.Size = new System.Drawing.Size(480, 490);
             this.tabpgHome.TabIndex = 3;
-            this.tabpgHome.Text = "Home";
             this.tabpgHome.UseVisualStyleBackColor = true;
             // 
             // uctlDispHome
@@ -792,7 +791,6 @@
             this.tabpgReply.Name = "tabpgReply";
             this.tabpgReply.Size = new System.Drawing.Size(480, 490);
             this.tabpgReply.TabIndex = 1;
-            this.tabpgReply.Text = "Reply";
             this.tabpgReply.UseVisualStyleBackColor = true;
             // 
             // uctlDispReply
@@ -814,7 +812,6 @@
             this.tabpgHistory.Name = "tabpgHistory";
             this.tabpgHistory.Size = new System.Drawing.Size(480, 490);
             this.tabpgHistory.TabIndex = 0;
-            this.tabpgHistory.Text = "History";
             this.tabpgHistory.UseVisualStyleBackColor = true;
             // 
             // uctlDispHistory
@@ -836,7 +833,6 @@
             this.tabpgDirect.Name = "tabpgDirect";
             this.tabpgDirect.Size = new System.Drawing.Size(480, 490);
             this.tabpgDirect.TabIndex = 4;
-            this.tabpgDirect.Text = "Direct";
             this.tabpgDirect.UseVisualStyleBackColor = true;
             // 
             // uctlDispDirect

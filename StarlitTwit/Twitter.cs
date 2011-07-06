@@ -759,7 +759,7 @@ namespace StarlitTwit
         /// <param name="list_id">リストのID(の文字列)かslug</param>
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <returns></returns>
-        public object lists_Show(string list_id, string screen_name = null)
+        public ListData lists_Show(string list_id, string screen_name = null)
         {
             if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
             string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
@@ -1481,21 +1481,34 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region favorites/ (お気に入り関連)
         //-------------------------------------------------------------------------------
-        #region favorites_get お気に入り取得（未実装）
+        #region favorites_get お気に入り取得
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// favorites_get お気に入り取得（未実装）
+        /// favorites_get お気に入り取得
         /// </summary>
+        /// <param name="screen_name">user_idより優先</param>
+        /// <param name="user_id"></param>
+        /// <param name="page"></param>
+        /// <param name="since_id"></param>
+        /// <param name="include_entities"></param>
+        /// <param name="skip_status"></param>
         /// <returns></returns>
-        private object favorites_get()
+        public IEnumerable<TwitData> favorites_get(string screen_name = "", long user_id = -1, int page = -1, long since_id = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
         {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("id", screen_name); }
+                else if (user_id >= 0) { paramdic.Add("id", user_id.ToString()); }
+                if (page >= 0) { paramdic.Add("page", page.ToString()); }
+                if (since_id >= 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
 
-            //string url = GetUrlWithOAuthParameters(URL + @"lists.xml", POST, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapi + @"favorites.xml", GET, paramdic);
 
-            //XElement el = PostToAPI(url);
-            //return ConvertToTwitDataDM(el);
-
-            throw new NotImplementedException();
+            XElement el = GetByAPI(url);
+            return ConvertToTwitDataArray(el);
         }
         #endregion (favorites_get)
         //-------------------------------------------------------------------------------
