@@ -1020,6 +1020,42 @@ namespace StarlitTwit
         }
         #endregion (tsmiフォロー中のリスト_Click)
         //-------------------------------------------------------------------------------
+        #region tsmi自分のお気に入り_Click 自分のお気に入り
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi自分のお気に入り_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.MyFavorite);
+        }
+        #endregion (tsmi自分のお気に入り_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmi自分のリツイート_Click 自分のリツイート
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi自分のリツイート_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.MyRetweet);
+        }
+        #endregion (tsmi自分のリツイート_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiフォロワーのリツイート_Click フォロワーのリツイート
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiフォロワーのリツイート_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.FollowersRetweet);
+        }
+        #endregion (tsmiフォロワーのリツイート_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmi自分がされたリツイート_Click 自分がされたリツイート
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi自分がされたリツイート_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.FollowersRetweetToMe);
+        }
+        #endregion (tsmi自分がされたリツイート_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiブロックユーザーリスト_Click ブロックユーザーリスト
         //-------------------------------------------------------------------------------
         //
@@ -1066,6 +1102,10 @@ namespace StarlitTwit
             }
 
             if (count == 0) { tsmi_子画面.DropDownItems.Add(tsmi子画面_nothing); }
+            else {
+                tsmi_子画面.DropDownItems.Add(tsSep子画面);
+                tsmi_子画面.DropDownItems.Add(tsmi全小画面を消去);
+            }
         }
         #endregion (tsmi_子画面_DropDownOpening)
         //-------------------------------------------------------------------------------
@@ -1079,6 +1119,18 @@ namespace StarlitTwit
             form.BringToFront();
         }
         #endregion (tsmi小画面_Dialog_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmi全子画面を消去_Click 全子画面を消去
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmi全子画面を消去_Click(object sender, EventArgs e)
+        {
+            Application.OpenForms.OfType<Form>()
+                                 .Where(f => !(f == this || f is MyToolTipBase.FrmDisp || !f.Visible))
+                                 .ToArray()
+                                 .ForEach(f => f.Close());
+        }
+        #endregion (tsmi全子画面を消去_Click)
         //===============================================================================
         #region tsmiUserStream_DropDownOpening UserStreamメニューオープン時
         //-------------------------------------------------------------------------------

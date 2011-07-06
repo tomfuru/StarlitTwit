@@ -209,7 +209,7 @@ namespace StarlitTwit
             tsmiBlock.Visible = (FormType == EFormType.MyFollower);
             tsmiUnblock.Visible = isBlocking;
 
-            toolStripMenuItem1.Visible = !prof.FolllowRequestSent;
+            toolStripMenuItem1.Visible = !isBlocking && !prof.FolllowRequestSent;
             toolStripMenuItem3.Visible = isBlocking;
         }
         #endregion (menuRow_Opening)

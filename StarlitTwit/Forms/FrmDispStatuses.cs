@@ -85,6 +85,49 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
             Utilization.SetModelessDialogCenter(this);
+
+            switch (FormType) {
+                case EFormType.UserStatus:
+                    Debug.Assert(!string.IsNullOrEmpty(UserScreenName), "ReplyStartTwitdataが設定されていません。");
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = string.Format("{0}の発言", UserScreenName);
+                    break;
+                case EFormType.Conversation:
+                    Debug.Assert(ReplyStartTwitdata != null, "ReplyStartTwitdataが設定されていません。");
+                    this.Text = "会話";
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
+                    TwitData[] data = ReplyStartTwitdata.ToArray();
+                    uctlDispTwit.AddData(data, true);
+                    _last_status_id = data[data.Length - 1].Mention_StatusID;
+                    break;
+                case EFormType.MyRetweet:
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = "自分のリツイート";
+                    break;
+                case EFormType.FollowersRetweet:
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = "フォロワーのリツイート";
+                    break;
+                case EFormType.FollowersRetweetToMe:
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = "自分がされたリツイート";
+                    break;
+                case EFormType.MyFavorite:
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = "お気に入り";
+                    break;
+                case EFormType.UserFavorite:
+                    Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていません");
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = string.Format("{0}のお気に入り", UserScreenName);
+                    break;
+                case EFormType.ListStatuses:
+                    Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていません。");
+                    Debug.Assert(ListID != null, "ListIDが設定されていません。");
+                    uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
+                    this.Text = string.Format("リスト{0}の発言", UserScreenName);
+                    break;
+            }
         }
         #endregion (FrmDispTweet_Load)
 
@@ -92,34 +135,9 @@ namespace StarlitTwit
         #region #[override]OnShown フォーム表示時
         //-------------------------------------------------------------------------------
         //
-        protected override void  OnShown(EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            switch (FormType) {
-                case EFormType.UserStatus:
-                    if (!string.IsNullOrEmpty(UserScreenName)) {
-                        this.Text = string.Format("{0}の発言", UserScreenName);
-                        uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
-                    }
-                    else {
-                        Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
-                        this.Close();
-                    }
-                    break;
-                case EFormType.Conversation:
-                    if (ReplyStartTwitdata != null) {
-                        this.Text = "会話";
-                        uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
-                        TwitData[] data = ReplyStartTwitdata.ToArray();
-                        uctlDispTwit.AddData(data, true);
-                        _last_status_id = data[data.Length - 1].Mention_StatusID;
-                    }
-                    else {
-                        Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
-                        this.Close();
-                    }
-                    break;
-            }
             Utilization.InvokeTransaction(() => GetTweets());
         }
         //-------------------------------------------------------------------------------
