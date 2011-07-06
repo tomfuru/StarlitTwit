@@ -24,8 +24,10 @@ namespace StarlitTwit
         public IEnumerable<TwitData> ReplyStartTwitdata { get; set; }
         /// <summary>FormType=ListStatusesの時必須，リストID</summary>
         public string ListID { get; set; }
+        /// <summary>最後の発言のStatusID</summary>
+        private long _last_status_id = -1;
 
-        const int GET_NUM = 50;
+        private const int GET_NUM = 50;
         //-------------------------------------------------------------------------------
         #endregion (メンバー)
 
@@ -33,7 +35,7 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmDispStatuses(FrmMain parent, ImageListWrapper imageListWrapper,EFormType formtype)
+        public FrmDispStatuses(FrmMain parent, ImageListWrapper imageListWrapper, EFormType formtype)
         {
             InitializeComponent();
             ReplyStartTwitdata = null;
@@ -74,29 +76,28 @@ namespace StarlitTwit
         #endregion (EFormType)
 
         //-------------------------------------------------------------------------------
-        #region FrmDispTweet_Load フォームロード時
+        #region #[override]OnLoad フォームロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmDispTweet_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
             Utilization.SetModelessDialogCenter(this);
         }
         #endregion (FrmDispTweet_Load)
 
         //-------------------------------------------------------------------------------
-        #region FrmReply_Shown フォーム表示時
+        #region #[override]OnShown フォーム表示時
         //-------------------------------------------------------------------------------
         //
-        private void FrmReply_Shown(object sender, EventArgs e)
+        protected override void  OnShown(EventArgs e)
         {
+            base.OnShown(e);
             switch (FormType) {
                 case EFormType.UserStatus:
                     if (!string.IsNullOrEmpty(UserScreenName)) {
                         this.Text = string.Format("{0}の発言", UserScreenName);
                         uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
-                        uctlDispTwit.RowContextMenu_Click += new EventHandler<TwitRowMenuEventArgs>(TwitMenu_OlderDataRequest_Click);
-                        tsslabel.Text = "発言取得中...";
-                        Utilization.InvokeTransaction(() => GetUserTweets(UserScreenName, -1));
                     }
                     else {
                         Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
@@ -108,9 +109,8 @@ namespace StarlitTwit
                         this.Text = "会話";
                         uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.Conversation;
                         TwitData[] data = ReplyStartTwitdata.ToArray();
-                        uctlDispTwit.AddData(data , true);
-                        tsslabel.Text = "リプライ取得中...";
-                        Utilization.InvokeTransaction(() => GetReplies(data[data.Length -1].Mention_StatusID));
+                        uctlDispTwit.AddData(data, true);
+                        _last_status_id = data[data.Length - 1].Mention_StatusID;
                     }
                     else {
                         Debug.Assert(false, "ReplyStartTwitdataが設定されていません。");
@@ -118,75 +118,108 @@ namespace StarlitTwit
                     }
                     break;
             }
+            Utilization.InvokeTransaction(() => GetTweets());
         }
         //-------------------------------------------------------------------------------
         #endregion (FrmReply_Shown)
 
         //-------------------------------------------------------------------------------
-        #region FrmDispTweet_FormClosed フォームクローズ時
+        #region btnClose_Click 閉じるボタン
         //-------------------------------------------------------------------------------
         //
-        private void FrmDispTweet_FormClosed(object sender, FormClosedEventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
+            this.Close();
+        }
+        #endregion (btnClose_Click)
 
+        //-------------------------------------------------------------------------------
+        #region btnAppend_Click 追加取得ボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnAppend_Click(object sender, EventArgs e)
+        {
+            Utilization.InvokeTransaction(() => GetTweets());
+        }
+        #endregion (btnAppend_Click)
+
+        //-------------------------------------------------------------------------------
+        #region #[override]OnFormClosed フォームクローズ時
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
         }
         #endregion (FrmDispTweet_FormClosed)
 
         //-------------------------------------------------------------------------------
-        #region TwitMenu_OlderDataRequest_Click より古い発言要求
+        #region GetTweets 発言取得(別スレッド)
         //-------------------------------------------------------------------------------
         //
-        private void TwitMenu_OlderDataRequest_Click(object sender, TwitRowMenuEventArgs e)
+        private void GetTweets()
         {
-            if (e.EventType == RowEventType.OlderTweetRequest) {
+            this.Invoke(new Action(() =>
+            {
                 tsslabel.Text = "発言取得中...";
-                Utilization.InvokeTransaction(() => GetUserTweets(UserScreenName, e.TwitData.StatusID));
-            }
-        }
-        #endregion (TwitMenu_OlderDataRequest_Click)
-
-        //-------------------------------------------------------------------------------
-        #region -GetUserTweets （別スレッド：発言取得)
-        //-------------------------------------------------------------------------------
-        //
-        private void GetUserTweets(string screen_name, long max_id = -1)
-        {
+                btnAppend.Enabled = false;
+            }));
+            bool disableAppend = false;
             try {
-                try {
-                    IEnumerable<TwitData> d = FrmMain.Twitter.statuses_user_timeline(screen_name: screen_name, max_id: max_id, count: GET_NUM);
-                    this.Invoke(new Action(() => uctlDispTwit.AddData(d)));
-                }
-                catch (TwitterAPIException) {
-                    this.Invoke(new Action(() => tsslabel.Text = "発言が取得できませんでした。"));
-                    return;
-                }
-                this.Invoke(new Action(() => tsslabel.Text = "発言の取得が完了しました。"));
-            }
-            catch (InvalidOperationException) { }
-        }
-        #endregion (GetUserTweets)
-
-        //-------------------------------------------------------------------------------
-        #region -GetReplies (別スレッド：リプライ取得)
-        //-------------------------------------------------------------------------------
-        //
-        private void GetReplies(long status_id)
-        {
-            try {
-                while (status_id >= 0) {
-                    TwitData data ;
-                    if (!Utilization.GetTwitDataFromID(status_id, out data)) {
-                        this.Invoke(new Action(() => tsslabel.Text = "取得できなかった発言があります。"));
+                IEnumerable<TwitData> d = null;
+                string changedStatusText = null;
+                switch (FormType) {
+                    case EFormType.UserStatus:
+                        d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM);
+                        _last_status_id = d.Last().StatusID;
+                        break;
+                    case EFormType.Conversation:
+                        List<TwitData> list = new List<TwitData>();
+                        disableAppend = true;
+                        while (_last_status_id >= 0) {
+                            TwitData data;
+                            if (!Utilization.GetTwitDataFromID(_last_status_id, out data)) {
+                                changedStatusText = "取得できなかった発言があります。";
+                                disableAppend = false;
+                                break;
+                            }
+                            list.Add(data);
+                            _last_status_id = data.Mention_StatusID;
+                        }
+                        d = list;
+                        break;
+                    ///////////////////////
+                    case EFormType.MyRetweet:
+                        break;
+                    case EFormType.FollowersRetweet:
+                        break;
+                    case EFormType.FollowersRetweetToMe:
+                        break;
+                    case EFormType.ListStatuses:
+                        break;
+                    case EFormType.MyFavorite:
+                        break;
+                    case EFormType.UserFavorite:
+                        break;
+                    default:
+                        Debug.Assert(false); // ここには来ない
                         return;
-                    }
-                    this.Invoke(new Action(() => uctlDispTwit.AddData(new TwitData[] { data }, true)));
-                    status_id = data.Mention_StatusID;
                 }
-                this.Invoke(new Action(() => tsslabel.Text = "会話の取得が完了しました。"));
+
+                this.Invoke(new Action(() =>
+                {
+                    uctlDispTwit.AddData(d);
+                    tsslabel.Text = (changedStatusText == null) ? "取得完了しました。" : changedStatusText;
+                }));
             }
             catch (InvalidOperationException) { }
+            catch (TwitterAPIException) {
+                this.Invoke(new Action(() => tsslabel.Text = "取得に失敗しました。"));
+            }
+            finally {
+                this.Invoke(new Action(() => btnAppend.Enabled = !disableAppend));
+            }
         }
-        //-------------------------------------------------------------------------------
-        #endregion (GetReplies)
+        #endregion (GetTweets)
     }
 }

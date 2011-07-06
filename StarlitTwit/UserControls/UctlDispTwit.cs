@@ -231,8 +231,7 @@ namespace StarlitTwit
                 case MenuType.Default:
                     break;
                 case MenuType.RestrictedUser:
-                    /*tsmiDisplayUserTweet.Visible = */
-                    tsmiSpecifyTime.Visible = false;
+                    tsmiOlder.Visible = tsmiSpecifyTime.Visible = tsmiSepMoreTweet.Visible = false;
                     break;
                 case MenuType.Conversation:
                     tsmiDispConversation.Visible = tsmiSepConversation.Visible = false;
