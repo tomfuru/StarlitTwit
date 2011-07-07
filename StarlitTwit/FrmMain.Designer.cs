@@ -486,27 +486,27 @@
             this.tsmiTab_EditTab,
             this.tsmiTab_DeleteTab});
             this.menuTab.Name = "menuTab";
-            this.menuTab.Size = new System.Drawing.Size(139, 70);
+            this.menuTab.Size = new System.Drawing.Size(157, 70);
             this.menuTab.Opening += new System.ComponentModel.CancelEventHandler(this.menuTab_Opening);
             // 
             // tsmiTab_MakeTab
             // 
             this.tsmiTab_MakeTab.Name = "tsmiTab_MakeTab";
-            this.tsmiTab_MakeTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiTab_MakeTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiTab_MakeTab.Text = "タブの作成(&M)";
             this.tsmiTab_MakeTab.Click += new System.EventHandler(this.tsmiTab_MakeTab_Click);
             // 
             // tsmiTab_EditTab
             // 
             this.tsmiTab_EditTab.Name = "tsmiTab_EditTab";
-            this.tsmiTab_EditTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiTab_EditTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiTab_EditTab.Text = "タブの編集(&E)";
             this.tsmiTab_EditTab.Click += new System.EventHandler(this.tsmiTab_EditTab_Click);
             // 
             // tsmiTab_DeleteTab
             // 
             this.tsmiTab_DeleteTab.Name = "tsmiTab_DeleteTab";
-            this.tsmiTab_DeleteTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiTab_DeleteTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiTab_DeleteTab.Text = "タブの削除(&D)";
             this.tsmiTab_DeleteTab.Click += new System.EventHandler(this.tsmiTab_DeleteTab_Click);
             // 
@@ -524,24 +524,24 @@
             this.toolStripMenuItem1,
             this.tsmiTasktray_Exit});
             this.menuTasktray.Name = "menuTasktray";
-            this.menuTasktray.Size = new System.Drawing.Size(111, 54);
+            this.menuTasktray.Size = new System.Drawing.Size(120, 54);
             // 
             // tsmiTasktray_Display
             // 
             this.tsmiTasktray_Display.Name = "tsmiTasktray_Display";
-            this.tsmiTasktray_Display.Size = new System.Drawing.Size(110, 22);
+            this.tsmiTasktray_Display.Size = new System.Drawing.Size(119, 22);
             this.tsmiTasktray_Display.Text = "表示(&D)";
             this.tsmiTasktray_Display.Click += new System.EventHandler(this.tsmiTasktray_Display_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(116, 6);
             // 
             // tsmiTasktray_Exit
             // 
             this.tsmiTasktray_Exit.Name = "tsmiTasktray_Exit";
-            this.tsmiTasktray_Exit.Size = new System.Drawing.Size(110, 22);
+            this.tsmiTasktray_Exit.Size = new System.Drawing.Size(119, 22);
             this.tsmiTasktray_Exit.Text = "終了(&E)";
             this.tsmiTasktray_Exit.Click += new System.EventHandler(this.tsmiTasktray_Exit_Click);
             // 
@@ -550,12 +550,12 @@
             this.menuContainer2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiCon2_MakeTab});
             this.menuContainer2.Name = "menuContainer2";
-            this.menuContainer2.Size = new System.Drawing.Size(139, 26);
+            this.menuContainer2.Size = new System.Drawing.Size(157, 26);
             // 
             // tsmiCon2_MakeTab
             // 
             this.tsmiCon2_MakeTab.Name = "tsmiCon2_MakeTab";
-            this.tsmiCon2_MakeTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiCon2_MakeTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiCon2_MakeTab.Text = "タブの作成(&M)";
             this.tsmiCon2_MakeTab.Click += new System.EventHandler(this.tsmiTab_MakeTab_Click);
             // 
@@ -567,13 +567,13 @@
             this.menuShortenType.Name = "menuShortenType";
             this.menuShortenType.ShowCheckMargin = true;
             this.menuShortenType.ShowImageMargin = false;
-            this.menuShortenType.Size = new System.Drawing.Size(95, 48);
+            this.menuShortenType.Size = new System.Drawing.Size(106, 48);
             this.menuShortenType.Opening += new System.ComponentModel.CancelEventHandler(this.menuShortenType_Opening);
             // 
             // tsmibit_ly
             // 
             this.tsmibit_ly.Name = "tsmibit_ly";
-            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
+            this.tsmibit_ly.Size = new System.Drawing.Size(105, 22);
             this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
             this.tsmibit_ly.Text = "bit.ly";
             this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
@@ -581,7 +581,7 @@
             // tsmij_mp
             // 
             this.tsmij_mp.Name = "tsmij_mp";
-            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
+            this.tsmij_mp.Size = new System.Drawing.Size(105, 22);
             this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
             this.tsmij_mp.Text = "j.mp";
             this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
