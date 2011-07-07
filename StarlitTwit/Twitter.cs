@@ -683,7 +683,7 @@ namespace StarlitTwit
         /// <param name="isPrivate">[option]privateにする時にtrue</param>
         /// <param name="description">[option]リストの説明</param>
         /// <returns></returns>
-        public object lists_Create(string name, bool isPrivate = false, string description = null)
+        public ListData lists_Create(string name, bool isPrivate = false, string description = null)
         {
             if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
@@ -709,7 +709,7 @@ namespace StarlitTwit
         /// <param name="isPrivate">[option]privateにする時にtrue</param>
         /// <param name="description">[option]リストの説明</param>
         /// <returns>変更前が返る？</returns>
-        public object lists_Update(string list_id, string name = null, bool isPrivate = false, string description = null)
+        public ListData lists_Update(string list_id, string name = null, bool isPrivate = false, string description = null)
         {
             if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 

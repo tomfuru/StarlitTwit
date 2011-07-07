@@ -73,6 +73,12 @@
     <Compile Include="Forms\FrmDispUsers.Designer.cs">
       <DependentUpon>FrmDispUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmEditList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmEditList.Designer.cs">
+      <DependentUpon>FrmEditList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmInputRegex.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmDispUsers.resx">
       <DependentUpon>FrmDispUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmEditList.resx">
+      <DependentUpon>FrmEditList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmInputRegex.resx">
       <DependentUpon>FrmInputRegex.cs</DependentUpon>

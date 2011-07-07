@@ -274,7 +274,11 @@ namespace StarlitTwit
         //
         private void btnAddNewList_Click(object sender, EventArgs e)
         {
-            // TODO:新規リスト作成
+            using (FrmEditList frm = new FrmEditList(true, _listList.Select(list => list.Name))) {
+                if (frm.ShowDialog() == DialogResult.OK) {
+                    AddList(frm.ListData.AsEnumerable());
+                }
+            }
         }
         #endregion (btnAddNewList_Click)
         //-------------------------------------------------------------------------------

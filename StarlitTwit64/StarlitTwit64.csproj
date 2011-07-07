@@ -107,6 +107,13 @@
       <Link>Forms\FrmDispUsers.designer.cs</Link>
       <DependentUpon>FrmDispUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmEditList.cs">
+      <Link>Forms\FrmEditList.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmEditList.designer.cs">
+      <Link>Forms\FrmEditList.designer.cs</Link>
+      <DependentUpon>FrmEditList.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmGetTweet.cs">
       <Link>Forms\FrmGetTweet.cs</Link>
       <SubType>Form</SubType>
@@ -330,6 +337,10 @@
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispUsers.resx">
       <Link>Forms\FrmDispUsers.resx</Link>
       <DependentUpon>FrmDispUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmEditList.resx">
+      <Link>Forms\FrmEditList.resx</Link>
+      <DependentUpon>FrmEditList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmGetTweet.resx">
       <Link>Forms\FrmGetTweet.resx</Link>
