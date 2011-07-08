@@ -5,10 +5,12 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms.VisualStyles;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace StarlitTwit
 {
     // 交換について　利用： http://d.hatena.ne.jp/barycentric/20091022/1256225627
+    [Designer(typeof(TabControlExDesigner), typeof(System.Windows.Forms.Design.ParentControlDesigner))]
     public class TabControlEx : TabControl
     {
         //-------------------------------------------------------------------------------
@@ -37,8 +39,12 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         //
         public TabControlEx()
+            : base()
         {
             _tabpageCollection = new TabPageExCollection(base.TabPages);
+            //_tabpageCollection.Add(new TabPageEx());
+            SelectedIndex = -1;
+            this.Alignment = TabAlignment.Top;
             MinMovableIndex = 0;
             MaxMovableIndex = int.MaxValue;
 
@@ -397,9 +403,12 @@ namespace StarlitTwit
         #region +[new]TabPages プロパティ
         //-------------------------------------------------------------------------------
         /// <summary>タブコントロールのタブページのコレクションを取得します。</summary>
+        [MergableProperty(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new TabPageExCollection TabPages
         {
             get { return _tabpageCollection; }
+            set { _tabpageCollection = value; }
         }
         //-------------------------------------------------------------------------------
         #endregion (+[new]TabPages プロパティ)
@@ -414,6 +423,7 @@ namespace StarlitTwit
         {
             get
             {
+                if (_tabpageCollection.Count == 0) { return null; }
                 if (base.SelectedTab == null) { return null; }
                 return _tabpageCollection[base.TabPages.IndexOf(base.SelectedTab)];
             }
@@ -432,6 +442,7 @@ namespace StarlitTwit
         /// <summary>
         /// コントロール内のタブの配置場所を取得または設定します。
         /// </summary>
+        [DefaultValue(TabAlignment.Top)]
         public new TabAlignment Alignment
         {
             get { return base.Alignment; }
@@ -457,7 +468,8 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region (class)TabPageExCollection
         //-------------------------------------------------------------------------------
-        public class TabPageExCollection : IList<TabPageEx>, ICollection<TabPageEx>, IEnumerable<TabPageEx>
+        [Editor(typeof(TabPageExCollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public class TabPageExCollection : IList<TabPageEx>, ICollection<TabPageEx>, IEnumerable<TabPageEx>, IList
         {
             private List<TabPageEx> _tabPageList = new List<TabPageEx>();
             private TabPageCollection _baseCollection;
@@ -542,6 +554,59 @@ namespace StarlitTwit
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
             {
                 return _tabPageList.GetEnumerator();
+            }
+
+            public int Add(object value)
+            {
+                _baseCollection.Add(value as TabPageEx);
+                return _baseCollection.Count - 1;
+            }
+
+            public bool Contains(object value)
+            {
+                return _tabPageList.Contains(value as TabPageEx);
+            }
+
+            public int IndexOf(object value)
+            {
+                return _tabPageList.IndexOf(value as TabPageEx);
+            }
+
+            public void Insert(int index, object value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool IsFixedSize
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public void Remove(object value)
+            {
+                throw new NotImplementedException();
+            }
+
+            object IList.this[int index]
+            {
+                get { return this[index]; }
+                set { this[index] = value as TabPageEx; }
+            }
+
+            public void CopyTo(Array array, int index)
+            {
+                _tabPageList.CopyTo(array as TabPageEx[], index);
+            }
+
+            public bool IsSynchronized
+            {
+                get { return false; }
+            }
+
+            private object _syncObj = new object();
+            public object SyncRoot
+            {
+                get { return _syncObj; }
             }
         }
         //-------------------------------------------------------------------------------

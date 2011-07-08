@@ -6,9 +6,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace StarlitTwit
 {
+    [DefaultProperty("Text")]
     public partial class TabPageEx : TabPage
     {
         string _dispText = "";
@@ -18,6 +20,11 @@ namespace StarlitTwit
         /// <summary>
         /// 
         /// </summary>
+        [Browsable(true)]
+        [Localizable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Bindable(true)]
+        [DispId(-517)]
         public new string Text
         {
             get { return _dispText; }

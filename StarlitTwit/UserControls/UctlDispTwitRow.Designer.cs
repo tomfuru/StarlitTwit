@@ -34,7 +34,7 @@
             this.uctlline = new StarlitTwit.UctlLine();
             this.rtxtGet = new StarlitTwit.RichTextBoxHash();
             this.myToolTipReply = new StarlitTwit.MyToolTip(this.components);
-            this.myToolTipImage = new StarlitTwit.UserControls.MyToolTipImage(this.components);
+            this.myToolTipImage = new StarlitTwit.MyToolTipImage(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -151,6 +151,6 @@
         private StarlitTwit.RichTextBoxHash rtxtGet;
         private UctlLine uctlline;
         private MyToolTip myToolTipReply;
-        private UserControls.MyToolTipImage myToolTipImage;
+        private MyToolTipImage myToolTipImage;
     }
 }

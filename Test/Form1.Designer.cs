@@ -42,6 +42,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelEx1 = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.button2 = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.richTextBox3 = new StarlitTwit.RichTextBoxHash();
-            this.toolStripStatusLabelEx1 = new StarlitTwit.ToolStripStatusLabelEx();
             this.tabControlEx1 = new StarlitTwit.TabControlEx();
             this.tabPage5 = new StarlitTwit.TabPageEx();
             this.label7 = new System.Windows.Forms.Label();
@@ -71,6 +71,16 @@
             this.toolTip2 = new StarlitTwit.ToolTipPicture(this.components);
             this.toolTip3 = new StarlitTwit.PermanentToolTip(this.components);
             this.testPermanentToolTip1 = new Test.TestPermanentToolTip();
+            this.tabControlEx2 = new StarlitTwit.TabControlEx();
+            this.tabPageEx1 = new StarlitTwit.TabPageEx();
+            this.label9 = new System.Windows.Forms.Label();
+            this.tabPageEx2 = new StarlitTwit.TabPageEx();
+            this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
+            this.tabPageEx3 = new StarlitTwit.TabPageEx();
+            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
+            this.tabPageEx4 = new StarlitTwit.TabPageEx();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -81,6 +91,11 @@
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.anisTabControl1.SuspendLayout();
+            this.tabControlEx2.SuspendLayout();
+            this.tabPageEx1.SuspendLayout();
+            this.tabPageEx2.SuspendLayout();
+            this.tabPageEx3.SuspendLayout();
+            this.tabPageEx4.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -210,23 +225,28 @@
             this.toolStripStatusLabelEx1,
             this.toolStripStatusLabel2,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 559);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 558);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(997, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(997, 23);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelEx1
+            // 
+            this.toolStripStatusLabelEx1.Name = "toolStripStatusLabelEx1";
+            this.toolStripStatusLabelEx1.Size = new System.Drawing.Size(0, 18);
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(971, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(962, 18);
             this.toolStripStatusLabel2.Spring = true;
             this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(20, 18);
             this.toolStripStatusLabel1.Text = "...";
             // 
             // button2
@@ -306,11 +326,6 @@
             this.richTextBox3.Text = "";
             this.richTextBox3.TextChanged += new System.EventHandler(this.richTextBox3_TextChanged);
             // 
-            // toolStripStatusLabelEx1
-            // 
-            this.toolStripStatusLabelEx1.Name = "toolStripStatusLabelEx1";
-            this.toolStripStatusLabelEx1.Size = new System.Drawing.Size(0, 0);
-            // 
             // tabControlEx1
             // 
             this.tabControlEx1.Alignment = System.Windows.Forms.TabAlignment.Right;
@@ -337,7 +352,6 @@
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(156, 332);
             this.tabPage5.TabIndex = 0;
-            this.tabPage5.Text = "iiiiiiiiiiii";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -357,7 +371,6 @@
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(156, 332);
             this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "iiiiiiiiiiii";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // checkedListBox1
@@ -376,7 +389,6 @@
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage7.Size = new System.Drawing.Size(156, 332);
             this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "iiiiiiiiiiiii";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // maskedTextBox1
@@ -394,7 +406,6 @@
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage8.Size = new System.Drawing.Size(156, 332);
             this.tabPage8.TabIndex = 3;
-            this.tabPage8.Text = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // comboBox1
@@ -422,40 +433,40 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 21);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(238, 75);
+            this.tabPage1.Size = new System.Drawing.Size(238, 74);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tab";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 21);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(238, 75);
+            this.tabPage2.Size = new System.Drawing.Size(238, 74);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 21);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(238, 75);
+            this.tabPage3.Size = new System.Drawing.Size(238, 74);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage4
             // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 21);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(238, 75);
+            this.tabPage4.Size = new System.Drawing.Size(238, 74);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -483,6 +494,104 @@
             this.testPermanentToolTip1.ReshowDelay = 100;
             this.testPermanentToolTip1.ShowAlways = true;
             // 
+            // tabControlEx2
+            // 
+            this.tabControlEx2.AllowDrop = true;
+            this.tabControlEx2.Controls.Add(this.tabPageEx1);
+            this.tabControlEx2.Controls.Add(this.tabPageEx2);
+            this.tabControlEx2.Controls.Add(this.tabPageEx3);
+            this.tabControlEx2.Controls.Add(this.tabPageEx4);
+            this.tabControlEx2.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControlEx2.ItemSize = new System.Drawing.Size(0, 18);
+            this.tabControlEx2.Location = new System.Drawing.Point(16, 142);
+            this.tabControlEx2.Multiline = true;
+            this.tabControlEx2.Name = "tabControlEx2";
+            this.tabControlEx2.SelectedIndex = 0;
+            this.tabControlEx2.SelectedTab = this.tabPageEx1;
+            this.tabControlEx2.Size = new System.Drawing.Size(255, 161);
+            this.tabControlEx2.TabIndex = 21;
+            // 
+            // tabPageEx1
+            // 
+            this.tabPageEx1.Controls.Add(this.label9);
+            this.tabPageEx1.Location = new System.Drawing.Point(4, 22);
+            this.tabPageEx1.Name = "tabPageEx1";
+            this.tabPageEx1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageEx1.Size = new System.Drawing.Size(247, 135);
+            this.tabPageEx1.TabIndex = 0;
+            this.tabPageEx1.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 14);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 12);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "label9";
+            // 
+            // tabPageEx2
+            // 
+            this.tabPageEx2.Controls.Add(this.checkedListBox2);
+            this.tabPageEx2.Location = new System.Drawing.Point(4, 22);
+            this.tabPageEx2.Name = "tabPageEx2";
+            this.tabPageEx2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageEx2.Size = new System.Drawing.Size(247, 135);
+            this.tabPageEx2.TabIndex = 1;
+            this.tabPageEx2.UseVisualStyleBackColor = true;
+            // 
+            // checkedListBox2
+            // 
+            this.checkedListBox2.FormattingEnabled = true;
+            this.checkedListBox2.Location = new System.Drawing.Point(87, 6);
+            this.checkedListBox2.Name = "checkedListBox2";
+            this.checkedListBox2.Size = new System.Drawing.Size(120, 88);
+            this.checkedListBox2.TabIndex = 0;
+            // 
+            // tabPageEx3
+            // 
+            this.tabPageEx3.Controls.Add(this.maskedTextBox2);
+            this.tabPageEx3.Location = new System.Drawing.Point(4, 22);
+            this.tabPageEx3.Name = "tabPageEx3";
+            this.tabPageEx3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageEx3.Size = new System.Drawing.Size(247, 135);
+            this.tabPageEx3.TabIndex = 2;
+            this.tabPageEx3.UseVisualStyleBackColor = true;
+            // 
+            // maskedTextBox2
+            // 
+            this.maskedTextBox2.Location = new System.Drawing.Point(200, 35);
+            this.maskedTextBox2.Name = "maskedTextBox2";
+            this.maskedTextBox2.Size = new System.Drawing.Size(100, 19);
+            this.maskedTextBox2.TabIndex = 0;
+            // 
+            // tabPageEx4
+            // 
+            this.tabPageEx4.Controls.Add(this.comboBox2);
+            this.tabPageEx4.Location = new System.Drawing.Point(4, 22);
+            this.tabPageEx4.Name = "tabPageEx4";
+            this.tabPageEx4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageEx4.Size = new System.Drawing.Size(247, 135);
+            this.tabPageEx4.TabIndex = 3;
+            this.tabPageEx4.UseVisualStyleBackColor = true;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(286, 7);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(121, 20);
+            this.comboBox2.TabIndex = 0;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(653, 201);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 22;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -490,6 +599,8 @@
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.ClientSize = new System.Drawing.Size(997, 581);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.tabControlEx2);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.richTextBox3);
@@ -527,6 +638,13 @@
             this.tabPage7.PerformLayout();
             this.tabPage8.ResumeLayout(false);
             this.anisTabControl1.ResumeLayout(false);
+            this.tabControlEx2.ResumeLayout(false);
+            this.tabPageEx1.ResumeLayout(false);
+            this.tabPageEx1.PerformLayout();
+            this.tabPageEx2.ResumeLayout(false);
+            this.tabPageEx3.ResumeLayout(false);
+            this.tabPageEx3.PerformLayout();
+            this.tabPageEx4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -577,6 +695,16 @@
         private StarlitTwit.RichTextBoxHash richTextBox3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label8;
+        private StarlitTwit.TabControlEx tabControlEx2;
+        private StarlitTwit.TabPageEx tabPageEx1;
+        private System.Windows.Forms.Label label9;
+        private StarlitTwit.TabPageEx tabPageEx2;
+        private System.Windows.Forms.CheckedListBox checkedListBox2;
+        private StarlitTwit.TabPageEx tabPageEx3;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox2;
+        private StarlitTwit.TabPageEx tabPageEx4;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Button button3;
     }
 }
 

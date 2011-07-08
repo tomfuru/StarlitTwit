@@ -11,7 +11,8 @@
     <RootNamespace>StarlitTwit</RootNamespace>
     <AssemblyName>StarlitTwit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -49,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -192,9 +194,11 @@
     <Compile Include="UserControls\TabControlEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\TabControlExDesigner.cs" />
     <Compile Include="UserControls\TabPageEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\TabPageExCollectionEditor.cs" />
     <Compile Include="UserControls\TextBoxRegex.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -316,6 +320,7 @@
       <DependentUpon>UctlLine.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.ComponentModel;
 
-namespace StarlitTwit.UserControls
+namespace StarlitTwit
 {
     /// <summary>
     /// 画像を表示するToolTipです。

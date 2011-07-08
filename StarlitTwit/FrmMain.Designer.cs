@@ -847,6 +847,7 @@
             this.tabpgHome.Name = "tabpgHome";
             this.tabpgHome.Size = new System.Drawing.Size(480, 490);
             this.tabpgHome.TabIndex = 3;
+            this.tabpgHome.Text = "Home";
             this.tabpgHome.UseVisualStyleBackColor = true;
             // 
             // uctlDispHome
@@ -866,8 +867,9 @@
             this.tabpgReply.Controls.Add(this.uctlDispReply);
             this.tabpgReply.Location = new System.Drawing.Point(4, 19);
             this.tabpgReply.Name = "tabpgReply";
-            this.tabpgReply.Size = new System.Drawing.Size(480, 492);
+            this.tabpgReply.Size = new System.Drawing.Size(480, 490);
             this.tabpgReply.TabIndex = 1;
+            this.tabpgReply.Text = "Reply";
             this.tabpgReply.UseVisualStyleBackColor = true;
             // 
             // uctlDispReply
@@ -879,7 +881,7 @@
             this.uctlDispReply.Location = new System.Drawing.Point(0, 0);
             this.uctlDispReply.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispReply.Name = "uctlDispReply";
-            this.uctlDispReply.Size = new System.Drawing.Size(480, 492);
+            this.uctlDispReply.Size = new System.Drawing.Size(480, 490);
             this.uctlDispReply.TabIndex = 1;
             // 
             // tabpgHistory
@@ -887,8 +889,9 @@
             this.tabpgHistory.Controls.Add(this.uctlDispHistory);
             this.tabpgHistory.Location = new System.Drawing.Point(4, 19);
             this.tabpgHistory.Name = "tabpgHistory";
-            this.tabpgHistory.Size = new System.Drawing.Size(480, 492);
+            this.tabpgHistory.Size = new System.Drawing.Size(480, 490);
             this.tabpgHistory.TabIndex = 0;
+            this.tabpgHistory.Text = "History";
             this.tabpgHistory.UseVisualStyleBackColor = true;
             // 
             // uctlDispHistory
@@ -900,7 +903,7 @@
             this.uctlDispHistory.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHistory.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHistory.Name = "uctlDispHistory";
-            this.uctlDispHistory.Size = new System.Drawing.Size(480, 492);
+            this.uctlDispHistory.Size = new System.Drawing.Size(480, 490);
             this.uctlDispHistory.TabIndex = 0;
             // 
             // tabpgDirect
@@ -908,8 +911,9 @@
             this.tabpgDirect.Controls.Add(this.uctlDispDirect);
             this.tabpgDirect.Location = new System.Drawing.Point(4, 19);
             this.tabpgDirect.Name = "tabpgDirect";
-            this.tabpgDirect.Size = new System.Drawing.Size(480, 492);
+            this.tabpgDirect.Size = new System.Drawing.Size(480, 490);
             this.tabpgDirect.TabIndex = 4;
+            this.tabpgDirect.Text = "Direct";
             this.tabpgDirect.UseVisualStyleBackColor = true;
             // 
             // uctlDispDirect
@@ -921,7 +925,7 @@
             this.uctlDispDirect.Location = new System.Drawing.Point(0, 0);
             this.uctlDispDirect.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispDirect.Name = "uctlDispDirect";
-            this.uctlDispDirect.Size = new System.Drawing.Size(480, 492);
+            this.uctlDispDirect.Size = new System.Drawing.Size(480, 490);
             this.uctlDispDirect.TabIndex = 2;
             // 
             // imageListWrapper
