@@ -8,6 +8,6 @@ namespace StarlitTwit
 {
     public class TabControlExDesigner : ParentControlDesigner
     {
-        override on
+        //override on
     }
 }
