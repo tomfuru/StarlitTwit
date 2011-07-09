@@ -95,6 +95,10 @@ namespace StarlitTwit
         private string _RecipiantName = "";
         //-------------------------------------------------------------------------------
         #endregion (発言状態関連)
+        /// <summary>履歴発言リスト</summary>
+        private List<string> _statusHistoryList = new List<string>("".AsEnumerable());
+        /// <summary>現在の履歴発言の位置</summary>
+        private int _nowStatusHistoryIndex = 0;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -117,12 +121,19 @@ namespace StarlitTwit
         //===============================================================================
         #region 定数
         //-------------------------------------------------------------------------------
-        /// <summary>×画像</summary>
-        public const string STR_IMAGE_CROSS = "CROSS";
+        /// <summary>発言履歴保存最大数</summary>
+        private const int MAX_STATUS_HISTORY = 30;
         /// <summary>発言可能な長さ</summary>
         private const int MAX_LENGTH = 140;
+        private readonly SystemSound SYSTEMSOUND = SystemSounds.Question;
+        const int BALOON_DURATION = 10000;
+        private const int ERROR_STATUSBAR_DISP_TIMES = 1;
+
         /// <summary>デフォルトである(消せない)タブページ</summary>
         private readonly TabPageEx[] DEFAULT_TABPAGES;
+
+        /// <summary>×画像</summary>
+        public const string STR_IMAGE_CROSS = "CROSS";
         /// <summary>残りAPI表示フォーマット</summary>
         private const string REST_API_FORMAT = "API残: {0}/{1}";
         /// <summary>取得中表示フォーマット</summary>
@@ -135,11 +146,8 @@ namespace StarlitTwit
         private const string STR_NOT_AUTOGET = "自動取得無し";
         private const string STR_SECOND = "秒";
         private const string STR_NUM = "件";
-        private readonly SystemSound SYSTEMSOUND = SystemSounds.Question;
-        const int BALOON_DURATION = 10000;
 
         private const string STR_POSTING = "投稿中...";
-
         private const string STR_WAITING_CONFIGFORM = "設定画面待機中...";
         private const string STR_WAITING_RENEW = "更新待機中...";
         private const string STR_WAITING_MAKETAB = "タブ作成待機中...";
@@ -157,9 +165,6 @@ namespace StarlitTwit
         private const string STR_USERSTREAM_ENDING = "UserStream終了中...";
 
         private const string FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
-
-        private const int ERROR_STATUSBAR_DISP_TIMES = 1;
-
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -378,14 +383,19 @@ namespace StarlitTwit
         //
         private void rtxtTwit_KeyDown(object sender, KeyEventArgs e)
         {
-            // Ctrl+Tab によるタブ入力の抑制
-            if (e.Control && e.KeyCode == Keys.Tab) {
+            if (e.Control && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)) {
+                bool isUp = (e.KeyCode == Keys.Up);
+                MoveStatusHitory(isUp);
                 e.SuppressKeyPress = true;
                 return;
             }
-
+            // Ctrl+Tab によるタブ入力の抑制
+            else if (e.Control && e.KeyCode == Keys.Tab) {
+                e.SuppressKeyPress = true;
+                return;
+            }
             // Enter入力時の発言イベント発生
-            if (e.KeyData == Keys.Enter) {
+            else if (e.KeyData == Keys.Enter) {
                 if (!e.Shift || !e.Control) {
                     e.SuppressKeyPress = true;
                     btnTwit_Click(sender, e);
@@ -1561,6 +1571,37 @@ namespace StarlitTwit
         }
         #endregion (ReSetStatusState)
 
+        //===============================================================================
+        #region -MoveStatusHitory 履歴を辿る
+        //-------------------------------------------------------------------------------
+        //
+        private void MoveStatusHitory(bool isUp)
+        {
+            if (_nowStatusHistoryIndex == 0) { _statusHistoryList[0] = rtxtTwit.Text; }
+            
+            if (isUp && _nowStatusHistoryIndex + 1 < _statusHistoryList.Count) {
+                ++_nowStatusHistoryIndex;
+                rtxtTwit.Text = _statusHistoryList[_nowStatusHistoryIndex]; 
+            }
+            else if (!isUp && _nowStatusHistoryIndex > 0) {
+                --_nowStatusHistoryIndex;
+                rtxtTwit.Text = _statusHistoryList[_nowStatusHistoryIndex];
+            }
+        }
+        #endregion (MoveStatusHitory)
+        //-------------------------------------------------------------------------------
+        #region -AddAndResetStatusHistory 履歴追加，初期化
+        //-------------------------------------------------------------------------------
+        //
+        private void AddAndResetStatusHistory(string status)
+        {
+            if (_statusHistoryList.Count > MAX_STATUS_HISTORY) { _statusHistoryList.RemoveAt(MAX_STATUS_HISTORY); }
+            _statusHistoryList[0] = status;
+            _statusHistoryList.Insert(0, "");
+            _nowStatusHistoryIndex = 0;
+        }
+        #endregion (AddAndResetStatusHistory)
+
         //-------------------------------------------------------------------------------
         #region -ShowProfileForm プロフィール表示(失敗時の処理含)
         //-------------------------------------------------------------------------------
@@ -2346,6 +2387,7 @@ namespace StarlitTwit
 
             this.Invoke(new Action(() =>
             {
+                AddAndResetStatusHistory(rtxtTwit.Text);
                 ReSetStatusState();
                 rtxtTwit.Text = "";
             }));
