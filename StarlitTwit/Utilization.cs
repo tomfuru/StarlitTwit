@@ -487,7 +487,7 @@ namespace StarlitTwit
         /// <param name="retweet_id"></param>
         public static void ShowUsersForm(FrmMain parent, ImageListWrapper imageListWrapper, FrmDispUsers.EFormType type, string screen_name = null, string list_id = null, long retweet_id = -1)
         {
-            if (!Utilization.ExistFrmUsers(type, screen_name, retweet_id)) {
+            if (!Utilization.ExistFrmUsers(type, screen_name, list_id, retweet_id)) {
                 FrmDispUsers frm = new FrmDispUsers(parent, imageListWrapper, type) {
                     UserScreenName = screen_name,
                     ListID = list_id,
@@ -498,7 +498,7 @@ namespace StarlitTwit
         }
         #endregion (+[static]ShowUserListForm)
         //-------------------------------------------------------------------------------
-        #region +[static]ShowUserProfile ユーザープロフィールフォームを表示します。
+        #region +[static]ShowProfileForm ユーザープロフィールフォームを表示します。
         //-------------------------------------------------------------------------------
         /// <summary>
         /// ユーザープロフィールフォームを表示します。
@@ -507,11 +507,11 @@ namespace StarlitTwit
         /// <param name="canEdit">自分かどうか</param>
         /// <param name="screen_name">ユーザー名</param>
         /// <returns>プロフィール取得に成功したかどうか</returns>
-        public static bool ShowUserProfile(FrmMain parent, bool canEdit, string screen_name)
+        public static bool ShowProfileForm(FrmMain parent, bool canEdit, string screen_name)
         {
             UserProfile profile = GetProfile(screen_name);
             if (profile != null) {
-                ShowUserProfile(parent, canEdit, profile);
+                ShowProfileForm(parent, canEdit, profile);
                 return true;
             }
             return false;
@@ -522,7 +522,7 @@ namespace StarlitTwit
         /// <param name="parent">最上位フォーム</param>
         /// <param name="canEdit">自分かどうか</param>
         /// <param name="profile">プロフィールデータ</param>
-        public static void ShowUserProfile(FrmMain parent, bool canEdit, UserProfile profile)
+        public static void ShowProfileForm(FrmMain parent, bool canEdit, UserProfile profile)
         {
             if (!Utilization.ExistFrmProfile(canEdit, profile.ScreenName)) {
                 FrmProfile frm = new FrmProfile(parent, canEdit, profile, parent.ImageListWrapper);
@@ -531,19 +531,20 @@ namespace StarlitTwit
         }
         #endregion (ShowUserProfile)
         //-------------------------------------------------------------------------------
-        #region +[static]ShowUserTweet ユーザー発言フォームを表示します。
+        #region +[static]ShowStatusesForm ユーザー発言フォームを表示します。
         //-------------------------------------------------------------------------------
         /// <summary>
         /// ユーザー発言フォームを表示します。
         /// </summary>
         /// <param name="parent">最上位フォーム</param>
         /// <param name="screen_name">ユーザー名</param>
-        public static void ShowUserTweet(FrmMain parent, FrmDispStatuses.EFormType formType, string screen_name = null, IEnumerable<TwitData> conversations = null)
+        public static void ShowStatusesForm(FrmMain parent, FrmDispStatuses.EFormType formType, string screen_name = null, string listID = null, IEnumerable<TwitData> conversations = null)
         {
-            if (!ExistFrmTweets(formType, screen_name, conversations)) {
+            if (!ExistFrmStatuses(formType, screen_name, listID, conversations)) {
                 FrmDispStatuses frm = new FrmDispStatuses(parent, parent.ImageListWrapper, formType);
                 frm.ReplyStartTwitdata = conversations;
                 frm.UserScreenName = screen_name;
+                frm.ListID = listID;
                 frm.Show(parent);
             }
         }
@@ -593,26 +594,28 @@ namespace StarlitTwit
         /// <param name="screen_name">UserFollower,UserFollowingタイプのみ必要</param>
         /// <param name="retweet_id">Retweeterタイプのみ必要</param>
         /// <returns>あればtrue,なければfalse</returns>
-        public static bool ExistFrmUsers(FrmDispUsers.EFormType type, string screen_name = null, long retweet_id = -1)
+        public static bool ExistFrmUsers(FrmDispUsers.EFormType type, string screen_name = null, string listID = null, long retweet_id = -1)
         {
             Func<FrmDispUsers, bool> judgeFunc = f =>
                 f.FormType == type
                 && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFollowing) && f.UserScreenName != screen_name)
-                && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id);
-            // TODO:staticフォーム存在確認メソッド更新
+                && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id)
+                && !((type == FrmDispUsers.EFormType.ListMember || type == FrmDispUsers.EFormType.ListSubscriber) && f.UserScreenName != screen_name && f.ListID != listID);
             
             return ExistForm<FrmDispUsers>(judgeFunc);
         }
         #endregion (ExistFrmFollower)
         //-------------------------------------------------------------------------------
-        #region +[static]ExistFrmTweets 既にあるFrmDispStatusesを探す
+        #region +[static]ExistFrmStatuses 既にあるFrmDispStatusesを探す
         //-------------------------------------------------------------------------------
         //
-        public static bool ExistFrmTweets(FrmDispStatuses.EFormType formType, string screen_name = null, IEnumerable<TwitData> conversations = null)
+        public static bool ExistFrmStatuses(FrmDispStatuses.EFormType type, string screen_name = null, string listID = null, IEnumerable<TwitData> conversations = null)
         {
             Func<FrmDispStatuses, bool> judgeFunc = f =>
-               f.FormType == formType;
-            // TODO:staticフォーム存在確認メソッド更新
+               f.FormType == type
+               && !((type == FrmDispStatuses.EFormType.UserFavorite || type == FrmDispStatuses.EFormType.UserStatus) && f.UserScreenName != screen_name)
+               && !(type == FrmDispStatuses.EFormType.Conversation && f.ReplyStartTwitdata.First().StatusID == conversations.First().StatusID)
+               && !(type == FrmDispStatuses.EFormType.ListStatuses && f.UserScreenName != screen_name && f.ListID != listID);
 
             return ExistForm<FrmDispStatuses>(judgeFunc);
         }

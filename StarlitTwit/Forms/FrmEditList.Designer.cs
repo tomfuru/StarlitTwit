@@ -35,6 +35,7 @@
             this.rdbUnPublic = new System.Windows.Forms.RadioButton();
             this.btnCansel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.lblWarning = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -61,6 +62,7 @@
             this.txtListName.Name = "txtListName";
             this.txtListName.Size = new System.Drawing.Size(179, 19);
             this.txtListName.TabIndex = 3;
+            this.txtListName.TextChanged += new System.EventHandler(this.txtListName_TextChanged);
             // 
             // txtDescription
             // 
@@ -106,6 +108,7 @@
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnOK.Enabled = false;
             this.btnOK.Location = new System.Drawing.Point(169, 87);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
@@ -114,6 +117,16 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // lblWarning
+            // 
+            this.lblWarning.AutoSize = true;
+            this.lblWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblWarning.Location = new System.Drawing.Point(12, 92);
+            this.lblWarning.Name = "lblWarning";
+            this.lblWarning.Size = new System.Drawing.Size(11, 12);
+            this.lblWarning.TabIndex = 9;
+            this.lblWarning.Text = "...";
+            // 
             // FrmEditList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -121,6 +134,7 @@
             this.CancelButton = this.btnCansel;
             this.ClientSize = new System.Drawing.Size(330, 116);
             this.ControlBox = false;
+            this.Controls.Add(this.lblWarning);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCansel);
             this.Controls.Add(this.rdbUnPublic);
@@ -133,6 +147,7 @@
             this.Name = "FrmEditList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "リスト";
+            this.Load += new System.EventHandler(this.FrmEditList_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -148,5 +163,6 @@
         private System.Windows.Forms.RadioButton rdbUnPublic;
         private System.Windows.Forms.Button btnCansel;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.Label lblWarning;
     }
 }

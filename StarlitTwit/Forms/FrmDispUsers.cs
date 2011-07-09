@@ -285,7 +285,7 @@ namespace StarlitTwit
         private void tsmiDisplayUserProfile_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            Utilization.ShowUserProfile(_mainForm, false, prof);
+            Utilization.ShowProfileForm(_mainForm, false, prof);
         }
         #endregion (tsmiDisplayUserProfile_Click)
         //-------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ namespace StarlitTwit
         private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            Utilization.ShowUserTweet((FrmMain)this.Owner, FrmDispStatuses.EFormType.UserStatus, prof.ScreenName);
+            Utilization.ShowStatusesForm((FrmMain)this.Owner, FrmDispStatuses.EFormType.UserStatus, prof.ScreenName);
         }
         #endregion (tsmiDisplayUserTweet_Click)
         //-------------------------------------------------------------------------------

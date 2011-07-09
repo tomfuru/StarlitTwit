@@ -16,7 +16,7 @@ namespace StarlitTwit
         private bool _isNew;
         private string _list_id;
         /// <summary>作成/更新されたリストデータ</summary>
-        public ListData ListData { get; private set; }
+        public ListData ListData { get; set; }
 
         //-------------------------------------------------------------------------------
         #region Constructor コンストラクタ
@@ -29,6 +29,7 @@ namespace StarlitTwit
         public FrmEditList(bool isNew, IEnumerable<string> listNames, string list_id = null)
         {
             InitializeComponent();
+            lblWarning.Text = "";
             _listNames = listNames;
 
             this.Text = (_isNew = isNew) ? "リスト新規作成" : "リスト編集";
@@ -39,28 +40,40 @@ namespace StarlitTwit
         #endregion (Constructor)
 
         //-------------------------------------------------------------------------------
+        #region FrmEditList_Load ロード時
+        //-------------------------------------------------------------------------------
+        //
+        private void FrmEditList_Load(object sender, EventArgs e)
+        {
+            if (!_isNew) {
+                txtListName.Text = ListData.Name;
+                txtDescription.Text = ListData.Description;
+                rdbUnPublic.Checked = !ListData.Public;
+            }
+        }
+        #endregion (FrmEditList_Load)
+
+        //-------------------------------------------------------------------------------
         #region btnOK_Click OKボタン
         //-------------------------------------------------------------------------------
         //
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (CheckItems()) {
-                if (_isNew) {
-                    if (!MakeList()) {
-                        Message.ShowWarningMessage("作成に失敗しました。");
-                        return;
-                    }
-                    Message.ShowInfoMessage("リストを作成しました。");
+            if (_isNew) {
+                if (!MakeList()) {
+                    Message.ShowWarningMessage("作成に失敗しました。");
+                    return;
                 }
-                else {
-                    if (!UpdateList()) {
-                        Message.ShowWarningMessage("更新に失敗しました。");
-                        return;
-                    }
-                    Message.ShowInfoMessage("リストを更新しました。");
-                }
-                this.DialogResult = DialogResult.OK;
+                Message.ShowInfoMessage("リストを作成しました。");
             }
+            else {
+                if (!UpdateList()) {
+                    Message.ShowWarningMessage("更新に失敗しました。");
+                    return;
+                }
+                Message.ShowInfoMessage("リストを更新しました。");
+            }
+            this.DialogResult = DialogResult.OK;
         }
         #endregion (btnOK_Click)
 
@@ -75,20 +88,25 @@ namespace StarlitTwit
         #endregion (btnCansel_Click)
 
         //-------------------------------------------------------------------------------
-        #region -CheckItems アイテムチェック
+        #region txtListName_TextChanged リスト名テキスト変更時
         //-------------------------------------------------------------------------------
         //
-        private bool CheckItems()
+        private void txtListName_TextChanged(object sender, EventArgs e)
         {
-            // TODO:打ってる途中にチェック
-            if (txtListName.Text.Length == 0 || _listNames.Any(str => txtListName.Text.Equals(str))) {
-                Message.ShowWarningMessage("リスト名が異常です。");
-                return false;
+            if (txtListName.Text.Length == 0) {
+                lblWarning.Text = "リスト名を入力してください";
+                btnOK.Enabled = false;
             }
-
-            return true;
+            else if (!txtListName.Text.Equals(_list_id) && _listNames.Any(str => txtListName.Text.Equals(str))) {
+                lblWarning.Text = "既に使用されているリスト名です";
+                btnOK.Enabled = false;
+            }
+            else {
+                lblWarning.Text = "";
+                btnOK.Enabled = true;
+            }
         }
-        #endregion (CheckItems)
+        #endregion (txtListName_TextChanged)
 
         //-------------------------------------------------------------------------------
         #region -MakeList リスト作成 using Twitter API
@@ -117,5 +135,6 @@ namespace StarlitTwit
             return true;
         }
         #endregion (UpdateList)
+
     }
 }

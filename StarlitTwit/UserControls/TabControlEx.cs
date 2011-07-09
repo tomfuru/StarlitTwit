@@ -10,7 +10,8 @@ using System.Collections;
 namespace StarlitTwit
 {
     // 交換について　利用： http://d.hatena.ne.jp/barycentric/20091022/1256225627
-    [Designer(typeof(TabControlExDesigner), typeof(System.Windows.Forms.Design.ParentControlDesigner))]
+    //[Designer(typeof(TabControlExDesigner), typeof(System.Windows.Forms.Design.ParentControlDesigner))]
+    //[Designer(typeof(TabControlExDesigner))]
     public class TabControlEx : TabControl
     {
         //-------------------------------------------------------------------------------

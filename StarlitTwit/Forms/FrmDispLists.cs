@@ -154,9 +154,8 @@ namespace StarlitTwit
             //tsmiListUnSubscribe.Visible = 
 
             // TODO: 実装次第項目削除
-            tsmiEditList.Visible = tsmiDeleteList.Visible = tsSepListEdit.Visible =
-            toolStripMenuItem2.Visible = tsmiListSubscribe.Visible = tsmiListUnSubscribe.Visible =
-            tsmiDispListStatuses.Visible = false;
+            tsmiDeleteList.Visible =
+            toolStripMenuItem2.Visible = tsmiListSubscribe.Visible = tsmiListUnSubscribe.Visible = false;
         }
         #endregion (menuRow_Opening)
         //-------------------------------------------------------------------------------
@@ -165,7 +164,13 @@ namespace StarlitTwit
         //
         private void tsmiEditList_Click(object sender, EventArgs e)
         {
-            // TODO:リスト編集
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            using (FrmEditList frm = new FrmEditList(false, EnumerateExistingList(), listdata.Name)) {
+                frm.ListData = listdata;
+                if (frm.ShowDialog() == DialogResult.OK) {
+                    // TODO:SelectedItems[0]の変更？全更新？
+                }
+            }
         }
         #endregion (tsmiEditList_Click)
         //-------------------------------------------------------------------------------
@@ -174,7 +179,13 @@ namespace StarlitTwit
         //
         private void tsmiDeleteList_Click(object sender, EventArgs e)
         {
-            // TODO:リスト削除
+            if (Message.ShowQuestionMessage("選択中のリストを削除します。") == System.Windows.Forms.DialogResult.Yes) {
+                if (!DeleteList()) {
+
+                    return;
+                }
+                // TODO:項目削除？全更新？
+            }
         }
         #endregion (tsmiDeleteList_Click)
         //-------------------------------------------------------------------------------
@@ -194,8 +205,8 @@ namespace StarlitTwit
         //
         private void tsmiDispListStatuses_Click(object sender, EventArgs e)
         {
-            // TODO:Implement DispListStatuses
-            //Utilization.ShowUserTweet(_mainForm, FrmDispStatuses.EFormType.ListStatuses, 
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowStatusesForm(_mainForm, FrmDispStatuses.EFormType.ListStatuses, listdata.OwnerScreenName, listdata.Slug);
         }
         #endregion (tsmiDispListStatuses_Click)
         //-------------------------------------------------------------------------------
@@ -274,7 +285,7 @@ namespace StarlitTwit
         //
         private void btnAddNewList_Click(object sender, EventArgs e)
         {
-            using (FrmEditList frm = new FrmEditList(true, _listList.Select(list => list.Name))) {
+            using (FrmEditList frm = new FrmEditList(true, EnumerateExistingList())) {
                 if (frm.ShowDialog() == DialogResult.OK) {
                     AddList(frm.ListData.AsEnumerable());
                 }
@@ -331,7 +342,25 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region メソッド
         //-------------------------------------------------------------------------------
-        #region -GetUsers ユーザー取得 using Twitter API
+        #region -EnumerateExistingList 存在しているリストの列挙
+        //-------------------------------------------------------------------------------
+        //
+        private IEnumerable<string> EnumerateExistingList()
+        {
+            return _listList.Select(list => list.Name);
+        }
+        #endregion (EnumerateExistingList)
+        //-------------------------------------------------------------------------------
+        #region -DeleteList リスト削除 using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private bool DeleteList()
+        {
+
+        }
+        #endregion (DeleteList)
+        //-------------------------------------------------------------------------------
+        #region -GetUsers ユーザー取得 using TwitterAPI
         //-------------------------------------------------------------------------------
         //
         private void GetUsers()

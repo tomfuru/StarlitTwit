@@ -2935,8 +2935,13 @@ namespace StarlitTwit
             //例2：Mon, 11 Oct 2010 00:00:34 +0000
             //例3：Sun Oct 10 17:25:16 UTC 2010
             //例4：2011-03-12T14:14:01+00:00
-
-            return DateTime.ParseExact(str, DATETIME_FORMATS, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal);
+            try {
+                return DateTime.ParseExact(str, DATETIME_FORMATS, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal);
+            }
+            catch (ArgumentException) {
+                Log.DebugLog(string.Format("未知のDateTime:{0}", str));
+                return DateTime.Now;
+            }
         }
         #endregion (StringToDateTime)
         //-------------------------------------------------------------------------------

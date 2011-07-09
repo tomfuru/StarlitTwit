@@ -44,10 +44,16 @@ namespace StarlitTwit
         #region #OnTextChanged
         //-------------------------------------------------------------------------------
         //
+        bool suspend = false;
         protected override void OnTextChanged(EventArgs e)
         {
+            if (suspend) { return; }
             base.OnTextChanged(e);
+
+            suspend = true;
+            //this.Text = base.Text;
             AdjustWidth();
+            suspend = false;
         }
         #endregion (#OnTextChanged)
 

@@ -179,13 +179,14 @@ namespace StarlitTwit
         //
         private void GetTweets()
         {
-            this.Invoke(new Action(() =>
-            {
-                tsslabel.Text = "発言取得中...";
-                btnAppend.Enabled = false;
-            }));
             bool disableAppend = false;
             try {
+                this.Invoke(new Action(() =>
+                {
+                    tsslabel.Text = "発言取得中...";
+                    btnAppend.Enabled = false;
+                }));
+
                 IEnumerable<TwitData> d = null;
                 string changedStatusText = null;
                 switch (FormType) {
@@ -248,15 +249,17 @@ namespace StarlitTwit
                 {
                     uctlDispTwit.AddData(d);
                     tsslabel.Text = (changedStatusText == null) ? "取得完了しました。" : changedStatusText;
+                    btnAppend.Enabled = !disableAppend;
+                }));
+            }
+            catch (TwitterAPIException) {
+                this.Invoke(new Action(() =>
+                {
+                    tsslabel.Text = "取得に失敗しました。";
+                    btnAppend.Enabled = !disableAppend;
                 }));
             }
             catch (InvalidOperationException) { }
-            catch (TwitterAPIException) {
-                this.Invoke(new Action(() => tsslabel.Text = "取得に失敗しました。"));
-            }
-            finally {
-                this.Invoke(new Action(() => btnAppend.Enabled = !disableAppend));
-            }
         }
         #endregion (GetTweets)
     }

@@ -435,7 +435,7 @@ namespace StarlitTwit
         private void DispTwit_TweetItemClick(object sender, TweetItemClickEventArgs e)
         {
             if (e.Type == ItemType.HashTag) { MakeNewTab(e.Type, e.Item); }
-            else { Utilization.ShowUserProfile(this, false, e.Item); }
+            else { Utilization.ShowProfileForm(this, false, e.Item); }
         }
         #endregion (DispTwit_TweetItemClick)
         //-------------------------------------------------------------------------------
@@ -646,7 +646,7 @@ namespace StarlitTwit
         private void TwitMenu_DisplayConversation_Click(object sender, TwitRowMenuEventArgs e)
         {
             UctlDispTwit dispTwit = (UctlDispTwit)sender;
-            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.Conversation, null, dispTwit.TraceReply(e.TwitData.StatusID));
+            Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.Conversation, conversations: dispTwit.TraceReply(e.TwitData.StatusID));
         }
         #endregion (TwitMenu_DisplayConversation_Click)
         //-------------------------------------------------------------------------------
@@ -779,7 +779,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_EntityEvent_DisplayUserTweet(object sender, EntityEventArgs e)
         {
-            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.UserStatus, e.Data);
+            Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.UserStatus, e.Data);
         }
         #endregion (TwitMenu_EntityEvent_DisplayUserTweet)
         //-------------------------------------------------------------------------------
@@ -1025,7 +1025,7 @@ namespace StarlitTwit
         //
         private void tsmi自分のお気に入り_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.MyFavorite);
+            Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.MyFavorite);
         }
         #endregion (tsmi自分のお気に入り_Click)
         //-------------------------------------------------------------------------------
@@ -1034,7 +1034,7 @@ namespace StarlitTwit
         //
         private void tsmi自分のリツイート_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.MyRetweet);
+            Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.MyRetweet);
         }
         #endregion (tsmi自分のリツイート_Click)
         //-------------------------------------------------------------------------------
@@ -1043,7 +1043,7 @@ namespace StarlitTwit
         //
         private void tsmiフォロワーのリツイート_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.FollowersRetweet);
+            Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.FollowersRetweet);
         }
         #endregion (tsmiフォロワーのリツイート_Click)
         //-------------------------------------------------------------------------------
@@ -1052,7 +1052,7 @@ namespace StarlitTwit
         //
         private void tsmi自分がされたリツイート_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserTweet(this, FrmDispStatuses.EFormType.FollowersRetweetToMe);
+            Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.FollowersRetweetToMe);
         }
         #endregion (tsmi自分がされたリツイート_Click)
         //-------------------------------------------------------------------------------
@@ -1567,7 +1567,7 @@ namespace StarlitTwit
         //
         private void ShowProfileForm(bool canEdit, string screen_name)
         {
-            if (!Utilization.ShowUserProfile(this, canEdit, screen_name)) {
+            if (!Utilization.ShowProfileForm(this, canEdit, screen_name)) {
                 tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES);
             }
         }

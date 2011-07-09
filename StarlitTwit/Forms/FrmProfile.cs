@@ -258,7 +258,7 @@ namespace StarlitTwit
         //
         private void tsmiDisplay_Statuses_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUserTweet(_mainForm, FrmDispStatuses.EFormType.UserStatus, _profile.ScreenName);
+            Utilization.ShowStatusesForm(_mainForm, FrmDispStatuses.EFormType.UserStatus, _profile.ScreenName);
         }
         #endregion (tsmiDisplay_Statuses_Click)
         //-------------------------------------------------------------------------------

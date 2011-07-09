@@ -20,6 +20,7 @@
 
 ■要修正・確認
 
+・送信履歴
 ・返信Quote
 ・UserStreamのRetweetのPopup
 ・タブの変更の別の方法準備（複数行時に不具合）
