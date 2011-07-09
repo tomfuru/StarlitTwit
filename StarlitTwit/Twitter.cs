@@ -2541,6 +2541,7 @@ namespace StarlitTwit
                     Description = el.Element("description").Value,
                     SubscriberCount = int.Parse(el.Element("subscriber_count").Value),
                     MemberCount = int.Parse(el.Element("member_count").Value),
+                    Following = bool.Parse(el.Element("following").Value),
                     Public = el.Element("mode").Value.Equals("public"),
                     OwnerID = long.Parse(el.Element("user").Element("id").Value),
                     OwnerScreenName = el.Element("user").Element("screen_name").Value,
@@ -3192,6 +3193,8 @@ namespace StarlitTwit
         public int SubscriberCount;
         /// <summary>リストのメンバー数</summary>
         public int MemberCount;
+        /// <summary>リストをフォローしているか</summary>
+        public bool Following;
         /// <summary>公開されているかどうか</summary>
         public bool Public;
 

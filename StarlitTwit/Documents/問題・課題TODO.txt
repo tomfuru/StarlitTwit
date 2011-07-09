@@ -20,6 +20,11 @@
 
 ■要修正・確認
 
+・何かしらの状況でInvalidOperationExceptionが無限に出る
+
+・Listにフォロー(Subscribe)しているかどうか表示
+・ユーザー表示フォームのStatusBarが表示されない
+
 ・送信履歴
 ・返信Quote
 ・UserStreamのRetweetのPopup

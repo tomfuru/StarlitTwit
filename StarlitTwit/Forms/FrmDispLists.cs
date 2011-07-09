@@ -154,7 +154,6 @@ namespace StarlitTwit
             //tsmiListUnSubscribe.Visible = 
 
             // TODO: 実装次第項目削除
-            tsmiDeleteList.Visible =
             toolStripMenuItem2.Visible = tsmiListSubscribe.Visible = tsmiListUnSubscribe.Visible = false;
         }
         #endregion (menuRow_Opening)
@@ -179,11 +178,13 @@ namespace StarlitTwit
         //
         private void tsmiDeleteList_Click(object sender, EventArgs e)
         {
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
             if (Message.ShowQuestionMessage("選択中のリストを削除します。") == System.Windows.Forms.DialogResult.Yes) {
-                if (!DeleteList()) {
-
+                if (!DeleteList(listdata.Slug)) {
+                    Message.ShowInfoMessage("リストの削除に失敗しました。");
                     return;
                 }
+                Message.ShowInfoMessage("リストを削除しました。");
                 // TODO:項目削除？全更新？
             }
         }
@@ -235,7 +236,15 @@ namespace StarlitTwit
         //
         private void tsmiListSubscribe_Click(object sender, EventArgs e)
         {
-            // TODO:Implement List To Subscribe
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            if (Message.ShowQuestionMessage("選択中のリストをフォローします。") == System.Windows.Forms.DialogResult.Yes) {
+                if (!DeleteList(listdata.Slug)) {
+                    Message.ShowInfoMessage("リストのフォローに失敗しました。");
+                    return;
+                }
+                Message.ShowInfoMessage("リストをフォローしました。");
+                // TODO:フォロー表記更新？
+            }
         }
         #endregion (tsmiListSubscribe_Click)
         //-------------------------------------------------------------------------------
@@ -244,7 +253,15 @@ namespace StarlitTwit
         //
         private void tsmiListUnSubscribe_Click(object sender, EventArgs e)
         {
-            // TODO:Implement List To UnSubscribe
+            ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
+            if (Message.ShowQuestionMessage("選択中のリストをフォロー解除します。") == System.Windows.Forms.DialogResult.Yes) {
+                if (!DeleteList(listdata.Slug)) {
+                    Message.ShowInfoMessage("リストのフォロー解除に失敗しました。");
+                    return;
+                }
+                Message.ShowInfoMessage("リストをフォロー解除しました。");
+                // TODO:フォロー表記更新？
+            }
         }
         #endregion (tsmiListUnSubscribe_Click)
         //-------------------------------------------------------------------------------
@@ -354,11 +371,41 @@ namespace StarlitTwit
         #region -DeleteList リスト削除 using TwitterAPI
         //-------------------------------------------------------------------------------
         //
-        private bool DeleteList()
+        private bool DeleteList(string list_id)
         {
-
+            try {
+                FrmMain.Twitter.lists_Delete(list_id);
+            }
+            catch (TwitterAPIException) { return false; }
+            return true;
         }
         #endregion (DeleteList)
+        //-------------------------------------------------------------------------------
+        #region -SubscribeList リストフォロー using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private bool SubscribeList(string listID, string listOwner)
+        {
+            try {
+                FrmMain.Twitter.list_subscribers_Follow(listID, listOwner);
+            }
+            catch (TwitterAPIException) { return false; }
+            return true;
+        }
+        #endregion (SubscribeList)
+        //-------------------------------------------------------------------------------
+        #region -UnsubscribeList リストフォロー解除 using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private bool UnsubscribeList(string listID, string listOwner)
+        {
+            try {
+                FrmMain.Twitter.list_subscribers_Unfollow(listID, listOwner);
+            }
+            catch (TwitterAPIException) { return false; }
+            return true;
+        }
+        #endregion (UnsubscribeList)
         //-------------------------------------------------------------------------------
         #region -GetUsers ユーザー取得 using TwitterAPI
         //-------------------------------------------------------------------------------
@@ -366,51 +413,53 @@ namespace StarlitTwit
         private void GetUsers()
         {
             try {
-                IEnumerable<ListData> listdata = null;
+                try {
+                    IEnumerable<ListData> listdata = null;
 
-                SequentData<ListData> listseq = null;
-                switch (FormType) {
-                    case EFormType.MyList:
-                        listseq = FrmMain.Twitter.lists_Get(cursor: _next_cursor);
-                        break;
-                    case EFormType.MyBelongedList:
-                        listseq = FrmMain.Twitter.lists_memberships(cursor: _next_cursor);
-                        break;
-                    case EFormType.MySubscribingList:
-                        listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
-                        break;
-                    case EFormType.UserList:
-                        listseq = FrmMain.Twitter.lists_Get(UserScreenName, _next_cursor);
-                        break;
-                    case EFormType.UserBelongedList:
-                        listseq = FrmMain.Twitter.lists_memberships(UserScreenName, _next_cursor);
-                        break;
-                    case EFormType.UserSubscribingList:
-                        listseq = FrmMain.Twitter.lists_subscriptions(UserScreenName, _next_cursor);
-                        break;
+                    SequentData<ListData> listseq = null;
+                    switch (FormType) {
+                        case EFormType.MyList:
+                            listseq = FrmMain.Twitter.lists_Get(cursor: _next_cursor);
+                            break;
+                        case EFormType.MyBelongedList:
+                            listseq = FrmMain.Twitter.lists_memberships(cursor: _next_cursor);
+                            break;
+                        case EFormType.MySubscribingList:
+                            listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
+                            break;
+                        case EFormType.UserList:
+                            listseq = FrmMain.Twitter.lists_Get(UserScreenName, _next_cursor);
+                            break;
+                        case EFormType.UserBelongedList:
+                            listseq = FrmMain.Twitter.lists_memberships(UserScreenName, _next_cursor);
+                            break;
+                        case EFormType.UserSubscribingList:
+                            listseq = FrmMain.Twitter.lists_subscriptions(UserScreenName, _next_cursor);
+                            break;
+                    }
+                    if (listseq != null) {
+                        listdata = listseq.Data;
+                        _next_cursor = listseq.NextCursor;
+
+                        this.Invoke(new Action(() =>
+                        {
+                            AddList(listdata);
+                            lblCount.Text = string.Format("{0}個見つかりました", _listList.Count);
+                            tsslLabel.Text = "取得完了しました。";
+                        }));
+                    }
+
+                    this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
                 }
-                if (listseq != null) {
-                    listdata = listseq.Data;
-                    _next_cursor = listseq.NextCursor;
-
+                catch (TwitterAPIException) {
                     this.Invoke(new Action(() =>
                     {
-                        AddList(listdata);
-                        lblCount.Text = string.Format("{0}個見つかりました", _listList.Count);
-                        tsslLabel.Text = "取得完了しました。";
+                        tsslLabel.Text = "取得に失敗しました。";
+                        btnAppend.Enabled = true;
                     }));
                 }
-
-                this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
             }
             catch (InvalidOperationException) { }
-            catch (TwitterAPIException) {
-                this.Invoke(new Action(() =>
-                {
-                    tsslLabel.Text = "取得に失敗しました。";
-                    btnAppend.Enabled = true;
-                }));
-            }
         }
         //-------------------------------------------------------------------------------
         #endregion (GetUsers)

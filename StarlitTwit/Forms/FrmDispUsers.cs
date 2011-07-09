@@ -204,7 +204,7 @@ namespace StarlitTwit
 
             tsmiFollow.Visible = !isBlocking && !prof.FolllowRequestSent && !prof.Following;
             tsmiRemove.Visible = !isBlocking && !prof.FolllowRequestSent && prof.Following;
-            
+
 
             tsmiBlock.Visible = (FormType == EFormType.MyFollower);
             tsmiUnblock.Visible = isBlocking;
@@ -480,62 +480,64 @@ namespace StarlitTwit
         private void GetUsers()
         {
             try {
-                IEnumerable<UserProfile> profiles = null;
-                if (FormType == EFormType.Retweeter) {
-                    profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
-                    _page++;
-                    this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
-                }
-                else if (FormType == EFormType.MyBlocking) {
-                    profiles = FrmMain.Twitter.blocks_blocking(_page, 100);
-                    _page++;
-                    this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
-                }
-                else {
-                    SequentData<UserProfile> proftpl = null;
-                    switch (FormType) {
-                        case EFormType.MyFollower:
-                            proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
-                            break;
-                        case EFormType.MyFollowing:
-                            proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
-                            break;
-                        case EFormType.UserFollower:
-                            proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
-                            break;
-                        case EFormType.UserFollowing:
-                            proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
-                            break;
-                        case EFormType.ListMember:
-                            proftpl = FrmMain.Twitter.list_members_Get(ListID, UserScreenName, _next_cursor);
-                            break;
-                        case EFormType.ListSubscriber:
-                            proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);
-                            break;
+                try {
+                    IEnumerable<UserProfile> profiles = null;
+                    if (FormType == EFormType.Retweeter) {
+                        profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
+                        _page++;
+                        this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
                     }
-                    if (proftpl != null) {
-                        profiles = proftpl.Data;
-                        _next_cursor = proftpl.NextCursor;
+                    else if (FormType == EFormType.MyBlocking) {
+                        profiles = FrmMain.Twitter.blocks_blocking(_page, 100);
+                        _page++;
+                        this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                     }
-                    this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
+                    else {
+                        SequentData<UserProfile> proftpl = null;
+                        switch (FormType) {
+                            case EFormType.MyFollower:
+                                proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
+                                break;
+                            case EFormType.MyFollowing:
+                                proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
+                                break;
+                            case EFormType.UserFollower:
+                                proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
+                                break;
+                            case EFormType.UserFollowing:
+                                proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
+                                break;
+                            case EFormType.ListMember:
+                                proftpl = FrmMain.Twitter.list_members_Get(ListID, UserScreenName, _next_cursor);
+                                break;
+                            case EFormType.ListSubscriber:
+                                proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);
+                                break;
+                        }
+                        if (proftpl != null) {
+                            profiles = proftpl.Data;
+                            _next_cursor = proftpl.NextCursor;
+                        }
+                        this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
+                    }
+                    if (profiles != null) {
+                        this.Invoke(new Action(() =>
+                        {
+                            AddList(profiles);
+                            lblCount.Text = string.Format("{0}人見つかりました", _profileList.Count);
+                            tsslabel.Text = "取得完了しました。";
+                        }));
+                    }
                 }
-                if (profiles != null) {
+                catch (TwitterAPIException) {
                     this.Invoke(new Action(() =>
                     {
-                        AddList(profiles);
-                        lblCount.Text = string.Format("{0}人見つかりました", _profileList.Count);
-                        tsslabel.Text = "取得完了しました。";
+                        tsslabel.Text = "取得に失敗しました。";
+                        btnAppend.Enabled = true;
                     }));
                 }
             }
             catch (InvalidOperationException) { }
-            catch (TwitterAPIException) {
-                this.Invoke(new Action(() =>
-                {
-                    tsslabel.Text = "取得に失敗しました。";
-                    btnAppend.Enabled = true;
-                }));
-            }
         }
         #endregion (GetUsers)
         //-------------------------------------------------------------------------------

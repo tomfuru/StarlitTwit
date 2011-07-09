@@ -181,83 +181,85 @@ namespace StarlitTwit
         {
             bool disableAppend = false;
             try {
-                this.Invoke(new Action(() =>
-                {
-                    tsslabel.Text = "発言取得中...";
-                    btnAppend.Enabled = false;
-                }));
+                try {
+                    this.Invoke(new Action(() =>
+                    {
+                        tsslabel.Text = "発言取得中...";
+                        btnAppend.Enabled = false;
+                    }));
 
-                IEnumerable<TwitData> d = null;
-                string changedStatusText = null;
-                switch (FormType) {
-                    case EFormType.UserStatus:
-                        d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM);
-                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
-                        else { disableAppend = true; }
-                        break;
-                    case EFormType.Conversation:
-                        List<TwitData> list = new List<TwitData>();
-                        disableAppend = true;
-                        while (_last_status_id >= 0) {
-                            TwitData data;
-                            if (!Utilization.GetTwitDataFromID(_last_status_id, out data)) {
-                                changedStatusText = "取得できなかった発言があります。";
-                                disableAppend = false;
-                                break;
+                    IEnumerable<TwitData> d = null;
+                    string changedStatusText = null;
+                    switch (FormType) {
+                        case EFormType.UserStatus:
+                            d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM);
+                            if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                            else { disableAppend = true; }
+                            break;
+                        case EFormType.Conversation:
+                            List<TwitData> list = new List<TwitData>();
+                            disableAppend = true;
+                            while (_last_status_id >= 0) {
+                                TwitData data;
+                                if (!Utilization.GetTwitDataFromID(_last_status_id, out data)) {
+                                    changedStatusText = "取得できなかった発言があります。";
+                                    disableAppend = false;
+                                    break;
+                                }
+                                list.Add(data);
+                                _last_status_id = data.Mention_StatusID;
                             }
-                            list.Add(data);
-                            _last_status_id = data.Mention_StatusID;
-                        }
-                        d = list;
-                        break;
-                    case EFormType.MyRetweet:
-                        d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id, count: GET_NUM);
-                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
-                        else { disableAppend = true; }
-                        break;
-                    case EFormType.FollowersRetweet:
-                        d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id, count: GET_NUM);
-                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
-                        else { disableAppend = true; }
-                        break;
-                    case EFormType.FollowersRetweetToMe:
-                        d = FrmMain.Twitter.statuses_retweets_of_me(max_id: _last_status_id, count: GET_NUM);
-                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
-                        else { disableAppend = true; }
-                        break;
-                    case EFormType.ListStatuses:
-                        d = FrmMain.Twitter.lists_statuses(ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
-                        if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
-                        else { disableAppend = true; }
-                        break;
-                    case EFormType.MyFavorite:
-                        d = FrmMain.Twitter.favorites_get(page: _page);
-                        _page++;
-                        disableAppend = (d.Count() == 0);
-                        break;
-                    case EFormType.UserFavorite:
-                        d = FrmMain.Twitter.favorites_get(UserScreenName, page: _page);
-                        _page++;
-                        disableAppend = (d.Count() == 0);
-                        break;
-                    default:
-                        Debug.Assert(false); // ここには来ない
-                        return;
-                }
+                            d = list;
+                            break;
+                        case EFormType.MyRetweet:
+                            d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id, count: GET_NUM);
+                            if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                            else { disableAppend = true; }
+                            break;
+                        case EFormType.FollowersRetweet:
+                            d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id, count: GET_NUM);
+                            if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                            else { disableAppend = true; }
+                            break;
+                        case EFormType.FollowersRetweetToMe:
+                            d = FrmMain.Twitter.statuses_retweets_of_me(max_id: _last_status_id, count: GET_NUM);
+                            if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                            else { disableAppend = true; }
+                            break;
+                        case EFormType.ListStatuses:
+                            d = FrmMain.Twitter.lists_statuses(ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
+                            if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
+                            else { disableAppend = true; }
+                            break;
+                        case EFormType.MyFavorite:
+                            d = FrmMain.Twitter.favorites_get(page: _page);
+                            _page++;
+                            disableAppend = (d.Count() == 0);
+                            break;
+                        case EFormType.UserFavorite:
+                            d = FrmMain.Twitter.favorites_get(UserScreenName, page: _page);
+                            _page++;
+                            disableAppend = (d.Count() == 0);
+                            break;
+                        default:
+                            Debug.Assert(false); // ここには来ない
+                            return;
+                    }
 
-                this.Invoke(new Action(() =>
-                {
-                    uctlDispTwit.AddData(d);
-                    tsslabel.Text = (changedStatusText == null) ? "取得完了しました。" : changedStatusText;
-                    btnAppend.Enabled = !disableAppend;
-                }));
-            }
-            catch (TwitterAPIException) {
-                this.Invoke(new Action(() =>
-                {
-                    tsslabel.Text = "取得に失敗しました。";
-                    btnAppend.Enabled = !disableAppend;
-                }));
+                    this.Invoke(new Action(() =>
+                    {
+                        uctlDispTwit.AddData(d);
+                        tsslabel.Text = (changedStatusText == null) ? "取得完了しました。" : changedStatusText;
+                        btnAppend.Enabled = !disableAppend;
+                    }));
+                }
+                catch (TwitterAPIException) {
+                    this.Invoke(new Action(() =>
+                    {
+                        tsslabel.Text = "取得に失敗しました。";
+                        btnAppend.Enabled = !disableAppend;
+                    }));
+                }
             }
             catch (InvalidOperationException) { }
         }
