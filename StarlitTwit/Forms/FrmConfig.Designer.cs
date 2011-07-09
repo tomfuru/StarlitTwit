@@ -768,37 +768,37 @@
             // 
             // lblNameFormatSearchSample
             // 
-            this.lblNameFormatSearchSample.AutoSize = true;
+            this.lblNameFormatSearchSample.AutoEllipsis = true;
             this.lblNameFormatSearchSample.Location = new System.Drawing.Point(60, 211);
             this.lblNameFormatSearchSample.Name = "lblNameFormatSearchSample";
-            this.lblNameFormatSearchSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatSearchSample.Size = new System.Drawing.Size(313, 19);
             this.lblNameFormatSearchSample.TabIndex = 18;
             this.lblNameFormatSearchSample.Text = "...";
             // 
             // lblNameFormatDMSample
             // 
-            this.lblNameFormatDMSample.AutoSize = true;
+            this.lblNameFormatDMSample.AutoEllipsis = true;
             this.lblNameFormatDMSample.Location = new System.Drawing.Point(60, 157);
             this.lblNameFormatDMSample.Name = "lblNameFormatDMSample";
-            this.lblNameFormatDMSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatDMSample.Size = new System.Drawing.Size(313, 19);
             this.lblNameFormatDMSample.TabIndex = 17;
             this.lblNameFormatDMSample.Text = "...";
             // 
             // lblNameFormatRTSample
             // 
-            this.lblNameFormatRTSample.AutoSize = true;
+            this.lblNameFormatRTSample.AutoEllipsis = true;
             this.lblNameFormatRTSample.Location = new System.Drawing.Point(60, 103);
             this.lblNameFormatRTSample.Name = "lblNameFormatRTSample";
-            this.lblNameFormatRTSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatRTSample.Size = new System.Drawing.Size(313, 19);
             this.lblNameFormatRTSample.TabIndex = 16;
             this.lblNameFormatRTSample.Text = "...";
             // 
             // lblNameFormatSample
             // 
-            this.lblNameFormatSample.AutoSize = true;
+            this.lblNameFormatSample.AutoEllipsis = true;
             this.lblNameFormatSample.Location = new System.Drawing.Point(60, 49);
             this.lblNameFormatSample.Name = "lblNameFormatSample";
-            this.lblNameFormatSample.Size = new System.Drawing.Size(11, 12);
+            this.lblNameFormatSample.Size = new System.Drawing.Size(313, 19);
             this.lblNameFormatSample.TabIndex = 15;
             this.lblNameFormatSample.Text = "...";
             // 

@@ -422,33 +422,33 @@ namespace StarlitTwit
                 TwitType = TwitType.Normal,
                 UserProtected = true,
                 Favorited = true,
-                UserName = "Twitter",
-                UserScreenName = "twitter",
+                UserName = "つい",
+                UserScreenName = "twi",
                 Time = dt,
                 Source = "web"
             };
             lblNameFormatRTSample.Tag = new TwitData() {
                 TwitType = TwitType.Retweet,
-                UserScreenName = "twitterapi",
+                UserScreenName = "twiapi",
                 Time = DateTime.Now,
                 Favorited = true,
                 RTTwitData = new TwitData() {
-                    UserName = "Twitter",
-                    UserScreenName = "twitter",
+                    UserName = "つい",
+                    UserScreenName = "twi",
                     Source = "web"
                 }
             };
             lblNameFormatDMSample.Tag = new TwitData() {
                 TwitType = TwitType.DirectMessage,
-                UserName = "Twitter",
-                UserScreenName = "twitter",
-                DMScreenName = "twitterapi",
+                UserName = "つい",
+                UserScreenName = "twi",
+                DMScreenName = "twiapi",
                 Time = dt,
                 Source = "web"
             };
             lblNameFormatSearchSample.Tag = new TwitData() {
                 TwitType = TwitType.Search,
-                UserScreenName = "twitter",
+                UserScreenName = "twi",
                 Time = dt,
                 Source = "web"
             };
