@@ -990,7 +990,7 @@ namespace StarlitTwit
         /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public object list_members_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public UserProfile list_members_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1301,7 +1301,7 @@ namespace StarlitTwit
         /// <param name="target_id">[option:2] target user</param>
         /// <param name="target_screen_name">[option:2] target user</param>
         /// <returns></returns>
-        public object friendships_show(long source_id = -1, string source_screen_name = null,
+        public RelationshipData friendships_show(long source_id = -1, string source_screen_name = null,
                                        long target_id = -1, string target_screen_name = null)
         {
             if (source_id == -1 && string.IsNullOrEmpty(source_screen_name)) { throw new ArgumentException("対象ユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
@@ -1336,7 +1336,7 @@ namespace StarlitTwit
         /// <para>指定ユーザーがフォローしているユーザー</para>
         /// </summary>
         /// <returns></returns>
-        public object friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
+        public SequentData<long> friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1367,7 +1367,7 @@ namespace StarlitTwit
         /// <para>指定ユーザーをフォローしているユーザー</para>
         /// </summary>
         /// <returns></returns>
-        public object followers_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
+        public SequentData<long> followers_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();

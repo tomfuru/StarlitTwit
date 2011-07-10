@@ -1578,10 +1578,10 @@ namespace StarlitTwit
         private void MoveStatusHitory(bool isUp)
         {
             if (_nowStatusHistoryIndex == 0) { _statusHistoryList[0] = rtxtTwit.Text; }
-            
+
             if (isUp && _nowStatusHistoryIndex + 1 < _statusHistoryList.Count) {
                 ++_nowStatusHistoryIndex;
-                rtxtTwit.Text = _statusHistoryList[_nowStatusHistoryIndex]; 
+                rtxtTwit.Text = _statusHistoryList[_nowStatusHistoryIndex];
             }
             else if (!isUp && _nowStatusHistoryIndex > 0) {
                 --_nowStatusHistoryIndex;
@@ -1751,6 +1751,13 @@ namespace StarlitTwit
                             // Home
                             if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendArray)) {
                                 this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
+                                // RTの時のPopup
+                                if (twitdata.IsRT() && twitdata.RTTwitData.UserID == Twitter.ID) {
+                                    string title = tasktray.Text + ":リツイート";
+                                    string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName, 
+                                                                twitdata.RTTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT), twitdata.RTTwitData.Text);
+                                    this.PopupTasktray(title, text);
+                                }
                             }
                             // Reply
                             if (!twitdata.IsRT()
@@ -1800,13 +1807,15 @@ namespace StarlitTwit
                                 case UserStreamEventType.favorite:
                                     if (SettingsData.UserStream_ShowPopup_Favorite) {
                                         title = tasktray.Text + ":お気に入り追加";
-                                        text = string.Format("{0} が {1} の発言をお気に入りに追加", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                        text = string.Format("{0} が {1} の発言をお気に入りに追加\n{2}\n{3}", d.SourceUser.ScreenName, d.TargetUser.ScreenName,
+                                                             d.TargetTwit.Time.ToString(Utilization.STR_DATETIMEFORMAT), d.TargetTwit.Text);
                                     }
                                     break;
                                 case UserStreamEventType.unfavorite:
                                     if (SettingsData.UserStream_ShowPopup_Unfavorite) {
                                         title = tasktray.Text + ":お気に入り削除";
-                                        text = string.Format("{0} が {1} の発言をお気に入りから削除", d.SourceUser.ScreenName, d.TargetUser.ScreenName);
+                                        text = string.Format("{0} が {1} の発言をお気に入りから削除\n{2}\n{3}", d.SourceUser.ScreenName, d.TargetUser.ScreenName,
+                                                             d.TargetTwit.Time.ToString(Utilization.STR_DATETIMEFORMAT), d.TargetTwit.Text);
                                     }
                                     break;
                                 case UserStreamEventType.follow:
@@ -1830,13 +1839,13 @@ namespace StarlitTwit
                                 case UserStreamEventType.list_member_added:
                                     if (SettingsData.UserStream_ShowPopup_ListMemberAdd) {
                                         title = tasktray.Text + ":リストメンバー追加";
-                                        text = string.Format("リスト {0} に {1} を追加", d.TargetList.Name, d.TargetUser.ScreenName);
+                                        text = string.Format("{0} がリスト {1} に {2} を追加", d.SourceUser.ScreenName, d.TargetList.Name, d.TargetUser.ScreenName);
                                     }
                                     break;
                                 case UserStreamEventType.list_member_removed:
                                     if (SettingsData.UserStream_ShowPopup_ListMemberRemoved) {
                                         title = tasktray.Text + ":リストメンバー削除";
-                                        text = string.Format("リスト {0} から {1} を削除", d.TargetList.Name, d.TargetUser.ScreenName);
+                                        text = string.Format("{0} がリスト {1} から {2} を削除", d.SourceUser.ScreenName, d.TargetList.Name, d.TargetUser.ScreenName);
                                     }
                                     break;
                                 case UserStreamEventType.list_created:
@@ -1860,13 +1869,13 @@ namespace StarlitTwit
                                 case UserStreamEventType.list_user_subscribed:
                                     if (SettingsData.UserStream_ShowPopup_ListSubscribed) {
                                         title = tasktray.Text + ":リストフォロー";
-                                        text = string.Format("{0} がリスト {1} をフォロー", d.TargetList.Name, d.SourceUser.ScreenName);
+                                        text = string.Format("{0} が {1} のリスト {2} をフォロー", d.SourceUser.ScreenName, d.TargetUser.ScreenName, d.TargetList.Name);
                                     }
                                     break;
                                 case UserStreamEventType.list_user_unsubscribed:
                                     if (SettingsData.UserStream_ShowPopup_ListUnsubscribed) {
                                         title = tasktray.Text + ":リストフォロー解除";
-                                        text = string.Format("{0} がリスト {1} をフォロー解除", d.TargetList.Name, d.SourceUser.ScreenName);
+                                        text = string.Format("{0} が {1} のリスト {2} をフォロー解除", d.SourceUser.ScreenName, d.TargetUser.ScreenName, d.TargetList.Name);
                                     }
                                     break;
                                 case UserStreamEventType.user_update:
@@ -1992,20 +2001,20 @@ namespace StarlitTwit
                                                                              , d.TargetList.Name));
                             break;
                         case UserStreamEventType.list_member_added:
-                            sb.Append(string.Format("{0} {1} is added in List {2}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
-                                                                                  , d.TargetUser.ScreenName, d.TargetList.Name));
+                            sb.Append(string.Format("{0} {1} is added in List {2} by {3}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                  , d.TargetUser.ScreenName, d.TargetList.Name, d.SourceUser.ScreenName));
                             break;
                         case UserStreamEventType.list_member_removed:
-                            sb.Append(string.Format("{0} {1} is remove from List {2}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
-                                                                                  , d.TargetUser.ScreenName, d.TargetList.Name));
+                            sb.Append(string.Format("{0} {1} is removed from List {2} by {3}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                  , d.TargetUser.ScreenName, d.TargetList.Name, d.SourceUser.ScreenName));
                             break;
                         case UserStreamEventType.list_user_subscribed:
-                            sb.Append(string.Format("{0} {1} subscribe List {1}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
-                                                                                , d.SourceUser.ScreenName, d.TargetList.Name));
+                            sb.Append(string.Format("{0} {1} subscribe List {2} of {3}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                , d.SourceUser.ScreenName, d.TargetList.Name, d.TargetUser.ScreenName));
                             break;
                         case UserStreamEventType.list_user_unsubscribed:
-                            sb.Append(string.Format("{0} {1} unsubscribe List {1}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
-                                                                                , d.SourceUser.ScreenName, d.TargetList.Name));
+                            sb.Append(string.Format("{0} {1} unsubscribe List {2} of {3}", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)
+                                                                                , d.SourceUser.ScreenName, d.TargetList.Name, d.TargetUser.ScreenName));
                             break;
                         case UserStreamEventType.user_update:
                             sb.Append(string.Format("{0} Profile Update", d.Time.ToString(Utilization.STR_DATETIMEFORMAT)));

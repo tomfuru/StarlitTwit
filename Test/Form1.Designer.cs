@@ -63,6 +63,8 @@
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.tabPage8 = new StarlitTwit.TabPageEx();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tabPageEx5 = new StarlitTwit.TabPageEx();
+            this.tabPageEx6 = new StarlitTwit.TabPageEx();
             this.anisTabControl1 = new Anis.Controls.AnisTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -81,8 +83,7 @@
             this.tabPageEx4 = new StarlitTwit.TabPageEx();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
-            this.tabPageEx5 = new StarlitTwit.TabPageEx();
-            this.tabPageEx6 = new StarlitTwit.TabPageEx();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -92,6 +93,7 @@
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
+            this.tabPageEx5.SuspendLayout();
             this.anisTabControl1.SuspendLayout();
             this.tabControlEx2.SuspendLayout();
             this.tabPageEx1.SuspendLayout();
@@ -344,7 +346,7 @@
             this.tabControlEx1.Multiline = true;
             this.tabControlEx1.Name = "tabControlEx1";
             this.tabControlEx1.SelectedIndex = 0;
-            this.tabControlEx1.SelectedTab = this.tabPage5;
+            this.tabControlEx1.SelectedTab = this.tabPageEx6;
             this.tabControlEx1.Size = new System.Drawing.Size(182, 291);
             this.tabControlEx1.TabIndex = 10;
             // 
@@ -356,7 +358,6 @@
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(138, 283);
             this.tabPage5.TabIndex = 0;
-            this.tabPage5.Text = "1111";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -376,7 +377,6 @@
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(138, 283);
             this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "2222";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // checkedListBox1
@@ -395,7 +395,6 @@
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage7.Size = new System.Drawing.Size(138, 283);
             this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "3333";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // maskedTextBox1
@@ -413,7 +412,6 @@
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage8.Size = new System.Drawing.Size(138, 283);
             this.tabPage8.TabIndex = 3;
-            this.tabPage8.Text = "4444";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // comboBox1
@@ -423,6 +421,23 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 20);
             this.comboBox1.TabIndex = 0;
+            // 
+            // tabPageEx5
+            // 
+            this.tabPageEx5.BackColor = System.Drawing.Color.Transparent;
+            this.tabPageEx5.Controls.Add(this.button4);
+            this.tabPageEx5.Location = new System.Drawing.Point(4, 4);
+            this.tabPageEx5.Name = "tabPageEx5";
+            this.tabPageEx5.Size = new System.Drawing.Size(138, 283);
+            this.tabPageEx5.TabIndex = 4;
+            // 
+            // tabPageEx6
+            // 
+            this.tabPageEx6.BackColor = System.Drawing.Color.Transparent;
+            this.tabPageEx6.Location = new System.Drawing.Point(4, 4);
+            this.tabPageEx6.Name = "tabPageEx6";
+            this.tabPageEx6.Size = new System.Drawing.Size(138, 283);
+            this.tabPageEx6.TabIndex = 5;
             // 
             // anisTabControl1
             // 
@@ -600,21 +615,14 @@
             this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
             // 
-            // tabPageEx5
+            // button4
             // 
-            this.tabPageEx5.Location = new System.Drawing.Point(4, 4);
-            this.tabPageEx5.Name = "tabPageEx5";
-            this.tabPageEx5.Size = new System.Drawing.Size(138, 283);
-            this.tabPageEx5.TabIndex = 4;
-            this.tabPageEx5.Text = "5555";
-            // 
-            // tabPageEx6
-            // 
-            this.tabPageEx6.Location = new System.Drawing.Point(4, 4);
-            this.tabPageEx6.Name = "tabPageEx6";
-            this.tabPageEx6.Size = new System.Drawing.Size(138, 283);
-            this.tabPageEx6.TabIndex = 5;
-            this.tabPageEx6.Text = "6666";
+            this.button4.Location = new System.Drawing.Point(47, 89);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 0;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -661,6 +669,7 @@
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
             this.tabPage8.ResumeLayout(false);
+            this.tabPageEx5.ResumeLayout(false);
             this.anisTabControl1.ResumeLayout(false);
             this.tabControlEx2.ResumeLayout(false);
             this.tabPageEx1.ResumeLayout(false);
@@ -731,6 +740,7 @@
         private System.Windows.Forms.Button button3;
         private StarlitTwit.TabPageEx tabPageEx5;
         private StarlitTwit.TabPageEx tabPageEx6;
+        private System.Windows.Forms.Button button4;
     }
 }
 
