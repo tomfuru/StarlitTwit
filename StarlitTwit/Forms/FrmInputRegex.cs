@@ -67,8 +67,7 @@ namespace StarlitTwit
 
             btnOK.Enabled = true;
 
-            string str = txtCheck.Text;
-            if (str.Length > 0) {
+            if (txtCheck.Text.Length > 0) {
                 CheckRegex();
             }
             else {
@@ -82,8 +81,11 @@ namespace StarlitTwit
         //
         private void txtCheck_TextChanged(object sender, EventArgs e)
         {
-            if (_regex != null) {
+            if (txtCheck.Text.Length > 0 && _regex != null) {
                 CheckRegex();
+            }
+            else {
+                lblInfo.Text = "";
             }
         }
         #endregion (txtCheck_TextChanged)

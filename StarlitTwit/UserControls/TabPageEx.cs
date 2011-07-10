@@ -98,5 +98,15 @@ namespace StarlitTwit
             }
         }
         #endregion (AdjustWidth)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            return "TabPageEx:{" + _dispText + "}";
+        }
+        #endregion (ToString)
     }
 }

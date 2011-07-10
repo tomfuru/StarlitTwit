@@ -23,6 +23,12 @@ namespace StarlitTwit
 
         private bool _bSuspendDraw = false;
 
+        /// <summary>マウスが上にあるタブ</summary>
+        int _hot = -1;
+        private bool _bExistHoberTab = false;
+        private int _srcTabIndex = -1;
+        private int _dstTabIndex = -1;
+
         [DefaultValue(0)]
         [Description("このインデックスより右のタブのみ動かせます。")]
         public int MinMovableIndex { get; set; }
@@ -33,8 +39,6 @@ namespace StarlitTwit
         #endregion (Variables)
 
         public event EventHandler<TabMoveEventArgs> TabExchanged;
-        /// <summary>マウスが上にあるタブ</summary>
-        int _hot = -1;
         //-------------------------------------------------------------------------------
         #region Constructor
         //-------------------------------------------------------------------------------
@@ -207,42 +211,52 @@ namespace StarlitTwit
                 e.Effect = DragDropEffects.Move;
                 TabPageEx draggedTab = (TabPageEx)e.Data.GetData(typeof(TabPageEx));
 
-                int srcTabIndex = FindIndex(draggedTab);
-                int dstTabIndex = FindIndex(hoverTab);
+                _srcTabIndex = FindIndex(draggedTab);
+                _dstTabIndex = FindIndex(hoverTab);
 
                 // 条件
-                if (srcTabIndex > MaxMovableIndex || srcTabIndex < MinMovableIndex
-                 || dstTabIndex > MaxMovableIndex || dstTabIndex < MinMovableIndex) {
+                if (_srcTabIndex > MaxMovableIndex || _srcTabIndex < MinMovableIndex
+                 || _dstTabIndex > MaxMovableIndex || _dstTabIndex < MinMovableIndex) {
                     e.Effect = DragDropEffects.None;
+                    _bExistHoberTab = false;
                     return;
                 }
 
-                if (srcTabIndex != dstTabIndex) {
-                    //SuspendPaint();
-                    this.SuspendLayout();//★これ大事
-                    //TabPageEx tmp = TabPages[srcTabIndex];
-                    //TabPages[srcTabIndex] = TabPages[dstTabIndex];
-                    //TabPages[dstTabIndex] = tmp;
-                    TabPageEx mvtab = TabPages[srcTabIndex];
-                    this.Visible = false;
-                    TabPages.Remove(mvtab);
-                    TabPages.Insert(dstTabIndex, mvtab);
-                    SelectedTab = draggedTab;
-                    this.Visible = true;
-                    this.ResumeLayout(true);//★これも大事
-                    //ResumePaint();
-
-                    if (TabExchanged != null) {
-                        TabExchanged(this, new TabMoveEventArgs(srcTabIndex, dstTabIndex));
-                    }
+                if (_srcTabIndex != _dstTabIndex) {
+                    _bExistHoberTab = true;
                 }
             }
             else {
                 //タブが取得できなかった場合の処理
+                _bExistHoberTab = false;
                 e.Effect = DragDropEffects.None;//何もしなくて良い
             }
         }
         #endregion (#[override]OnDragOver)
+        //-------------------------------------------------------------------------------
+        #region #[override]OnDragDrop
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnDragDrop(DragEventArgs drgevent)
+        {
+            base.OnDragDrop(drgevent);
+
+            if (_bExistHoberTab) {
+                this.SuspendLayout();//★これ大事
+                TabPageEx mvtab = TabPages[_srcTabIndex];
+                this.Visible = false;
+                TabPages.Remove(mvtab);
+                TabPages.Insert(_dstTabIndex, mvtab);
+                SelectedTab = mvtab;
+                this.Visible = true;
+                this.ResumeLayout(true);//★これも大事
+
+                if (TabExchanged != null) {
+                    TabExchanged(this, new TabMoveEventArgs(_srcTabIndex, _dstTabIndex));
+                }
+            }
+        }
+        #endregion (#[override]OnDragDrop)
         //-------------------------------------------------------------------------------
         #region #[override]OnMouseMove
         //-------------------------------------------------------------------------------
@@ -281,6 +295,7 @@ namespace StarlitTwit
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
+
             ClearDragTarget();
         }
         #endregion (#[override]OnMouseUp)
@@ -500,7 +515,8 @@ namespace StarlitTwit
 
             internal void AddListOnly(TabPageEx item)
             {
-                _tabPageList.Add(item);
+                int index = _baseCollection.IndexOf(item);
+                _tabPageList.Insert(index, item);
             }
 
             public void Add(TabPageEx item)

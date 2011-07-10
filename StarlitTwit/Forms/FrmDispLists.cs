@@ -149,12 +149,9 @@ namespace StarlitTwit
             ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
 
             tsmiEditList.Visible = tsmiDeleteList.Visible = tsSepListEdit.Visible = (FormType == EFormType.MyList);
-            // TODO: リストフォロー確認？
-            //tsmiListSubscribe.Visible = 
-            //tsmiListUnSubscribe.Visible = 
-
-            // TODO: 実装次第項目削除
-            toolStripMenuItem2.Visible = tsmiListSubscribe.Visible = tsmiListUnSubscribe.Visible = false;
+            
+            tsmiListSubscribe.Visible = !listdata.Following;
+            tsmiListUnSubscribe.Visible = listdata.Following;
         }
         #endregion (menuRow_Opening)
         //-------------------------------------------------------------------------------
