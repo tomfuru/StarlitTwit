@@ -55,6 +55,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuRow.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuRow
@@ -174,6 +175,8 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 252);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(392, 22);
@@ -183,7 +186,7 @@
             // tsslabel
             // 
             this.tsslabel.Name = "tsslabel";
-            this.tsslabel.Size = new System.Drawing.Size(396, 17);
+            this.tsslabel.Size = new System.Drawing.Size(346, 17);
             this.tsslabel.Spring = true;
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -269,6 +272,8 @@
             this.Text = "...";
             this.Load += new System.EventHandler(this.FrmFollower_Load);
             this.menuRow.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -520,12 +520,13 @@ namespace StarlitTwit
                         }
                         this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
                     }
+
                     if (profiles != null) {
                         this.Invoke(new Action(() =>
                         {
                             AddList(profiles);
                             lblCount.Text = string.Format("{0}人見つかりました", _profileList.Count);
-                            tsslabel.Text = "取得完了しました。";
+                            tsslabel.Text = (btnAppend.Enabled) ? "取得完了しました" : "全て取得完了しました";
                         }));
                     }
                 }

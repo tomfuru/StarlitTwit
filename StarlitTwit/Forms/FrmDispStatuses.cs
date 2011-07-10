@@ -199,6 +199,7 @@ namespace StarlitTwit
                         case EFormType.Conversation:
                             List<TwitData> list = new List<TwitData>();
                             disableAppend = true;
+                            changedStatusText = "全ての会話を取得完了しました。";
                             while (_last_status_id >= 0) {
                                 TwitData data;
                                 if (!Utilization.GetTwitDataFromID(_last_status_id, out data)) {

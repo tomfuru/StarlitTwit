@@ -442,7 +442,7 @@ namespace StarlitTwit
                         {
                             AddList(listdata);
                             lblCount.Text = string.Format("{0}個見つかりました", _listList.Count);
-                            tsslLabel.Text = "取得完了しました。";
+                            tsslLabel.Text =　(_next_cursor != 0)　? "取得完了しました" : "全て取得完了しました";
                         }));
                     }
 
