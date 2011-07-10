@@ -122,12 +122,12 @@ namespace StarlitTwit
                 case EFormType.ListMember:
                     Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
                     Debug.Assert(ListID != null, "ListIDが設定されていない");
-                    Text = string.Format("リスト{0}のメンバー", UserScreenName);
+                    Text = string.Format("{0}のリスト{1}のメンバー", UserScreenName, ListID);
                     break;
                 case EFormType.ListSubscriber:
                     Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
                     Debug.Assert(ListID != null, "ListIDが設定されていない");
-                    Text = string.Format("リスト{0}のフォロワー", UserScreenName);
+                    Text = string.Format("{0}のリスト{1}のフォロワー", UserScreenName, ListID);
                     break;
                 case EFormType.MyBlocking:
                     Text = "ブロック中のユーザー";
