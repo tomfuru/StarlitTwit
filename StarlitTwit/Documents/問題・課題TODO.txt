@@ -19,8 +19,6 @@
 
 ■要修正・確認
 
-・Conversation表示はじょじょに？
-・RTのPopup設定
 ・UserFormで自分だけ特別扱いが必要？
 
 ・何かしらの状況でInvalidOperationExceptionが無限に出る
@@ -162,6 +160,8 @@
 
 
 ★DONE
+11/07/11
+・RTのPopup設定追加
 11/07/10
 ・ユーザー/リスト/会話について全て取得した時にステータスバーのメッセージを変更
 ・TabControlExのバグを少し修正

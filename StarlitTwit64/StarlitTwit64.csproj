@@ -276,9 +276,15 @@
       <Link>UserControls\TabControlEx.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\TabControlExDesigner.cs">
+      <Link>UserControls\TabControlExDesigner.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\UserControls\TabPageEx.cs">
       <Link>UserControls\TabPageEx.cs</Link>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\TabPageExCollectionEditor.cs">
+      <Link>UserControls\TabPageExCollectionEditor.cs</Link>
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\TextBoxRegex.cs">
       <Link>UserControls\TextBoxRegex.cs</Link>

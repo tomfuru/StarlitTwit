@@ -197,7 +197,6 @@ namespace StarlitTwit
                             else { disableAppend = true; }
                             break;
                         case EFormType.Conversation:
-                            List<TwitData> list = new List<TwitData>();
                             disableAppend = true;
                             changedStatusText = "全ての会話を取得完了しました。";
                             while (_last_status_id >= 0) {
@@ -207,10 +206,10 @@ namespace StarlitTwit
                                     disableAppend = false;
                                     break;
                                 }
-                                list.Add(data);
+                                this.Invoke(new Action(() => uctlDispTwit.AddData(data.AsEnumerable(), true)));
                                 _last_status_id = data.Mention_StatusID;
                             }
-                            d = list;
+                            d = new TwitData[0];
                             break;
                         case EFormType.MyRetweet:
                             d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id, count: GET_NUM);

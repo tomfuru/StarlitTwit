@@ -1752,7 +1752,7 @@ namespace StarlitTwit
                             if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendArray)) {
                                 this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
                                 // RTの時のPopup
-                                if (twitdata.IsRT() && twitdata.RTTwitData.UserID == Twitter.ID) {
+                                if (twitdata.IsRT() && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
                                     string title = tasktray.Text + ":リツイート";
                                     string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName, 
                                                                 twitdata.RTTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT), twitdata.RTTwitData.Text);

@@ -217,6 +217,7 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
+            this.chbUStPopup_Retweet = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProfile_Interval)).BeginInit();
@@ -274,10 +275,10 @@
             this.tabpgGet.Controls.Add(this.label39);
             this.tabpgGet.Controls.Add(this.label10);
             this.tabpgGet.Controls.Add(this.tableLayoutPanel1);
-            this.tabpgGet.Location = new System.Drawing.Point(4, 21);
+            this.tabpgGet.Location = new System.Drawing.Point(4, 22);
             this.tabpgGet.Name = "tabpgGet";
             this.tabpgGet.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgGet.Size = new System.Drawing.Size(386, 325);
+            this.tabpgGet.Size = new System.Drawing.Size(386, 324);
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
@@ -758,10 +759,10 @@
             this.tabpgDisp.Controls.Add(this.txtNameFormat);
             this.tabpgDisp.Controls.Add(this.label9);
             this.tabpgDisp.Controls.Add(this.label8);
-            this.tabpgDisp.Location = new System.Drawing.Point(4, 21);
+            this.tabpgDisp.Location = new System.Drawing.Point(4, 22);
             this.tabpgDisp.Name = "tabpgDisp";
             this.tabpgDisp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgDisp.Size = new System.Drawing.Size(386, 325);
+            this.tabpgDisp.Size = new System.Drawing.Size(386, 324);
             this.tabpgDisp.TabIndex = 1;
             this.tabpgDisp.Text = "表示";
             this.tabpgDisp.UseVisualStyleBackColor = true;
@@ -1104,10 +1105,10 @@
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalText);
             this.tabpgFontAndColor.Controls.Add(this.txtExNormalTitle);
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalTitle);
-            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 21);
+            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 22);
             this.tabpgFontAndColor.Name = "tabpgFontAndColor";
             this.tabpgFontAndColor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 325);
+            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 324);
             this.tabpgFontAndColor.TabIndex = 2;
             this.tabpgFontAndColor.Text = "フォント・色";
             this.tabpgFontAndColor.UseVisualStyleBackColor = true;
@@ -1665,10 +1666,10 @@
             this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
             this.tabpgThumbnail.Controls.Add(this.label45);
-            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
+            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 22);
             this.tabpgThumbnail.Name = "tabpgThumbnail";
             this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
+            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 324);
             this.tabpgThumbnail.TabIndex = 4;
             this.tabpgThumbnail.Text = "サムネイル";
             this.tabpgThumbnail.UseVisualStyleBackColor = true;
@@ -1869,16 +1870,17 @@
             this.tabpgUserStream.Controls.Add(this.chbUStAutoOpenLog);
             this.tabpgUserStream.Controls.Add(this.chbUStEnableAllReplies);
             this.tabpgUserStream.Controls.Add(this.chbUStStartUp);
-            this.tabpgUserStream.Location = new System.Drawing.Point(4, 21);
+            this.tabpgUserStream.Location = new System.Drawing.Point(4, 22);
             this.tabpgUserStream.Name = "tabpgUserStream";
             this.tabpgUserStream.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgUserStream.Size = new System.Drawing.Size(386, 325);
+            this.tabpgUserStream.Size = new System.Drawing.Size(386, 324);
             this.tabpgUserStream.TabIndex = 5;
             this.tabpgUserStream.Text = "UserStream";
             this.tabpgUserStream.UseVisualStyleBackColor = true;
             // 
             // grbUStPopup
             // 
+            this.grbUStPopup.Controls.Add(this.chbUStPopup_Retweet);
             this.grbUStPopup.Controls.Add(this.chbUStPopup_UserUpdate);
             this.grbUStPopup.Controls.Add(this.chbUStPopup_ListDestroyed);
             this.grbUStPopup.Controls.Add(this.chbUStPopup_ListUnsubscribed);
@@ -1894,7 +1896,7 @@
             this.grbUStPopup.Controls.Add(this.chbUStPopup_Favorite);
             this.grbUStPopup.Location = new System.Drawing.Point(20, 50);
             this.grbUStPopup.Name = "grbUStPopup";
-            this.grbUStPopup.Size = new System.Drawing.Size(269, 194);
+            this.grbUStPopup.Size = new System.Drawing.Size(269, 223);
             this.grbUStPopup.TabIndex = 3;
             this.grbUStPopup.TabStop = false;
             this.grbUStPopup.Text = "タスクトレイバルーンを表示するイベント";
@@ -1902,7 +1904,7 @@
             // chbUStPopup_UserUpdate
             // 
             this.chbUStPopup_UserUpdate.AutoSize = true;
-            this.chbUStPopup_UserUpdate.Location = new System.Drawing.Point(6, 172);
+            this.chbUStPopup_UserUpdate.Location = new System.Drawing.Point(6, 194);
             this.chbUStPopup_UserUpdate.Name = "chbUStPopup_UserUpdate";
             this.chbUStPopup_UserUpdate.Size = new System.Drawing.Size(101, 16);
             this.chbUStPopup_UserUpdate.TabIndex = 14;
@@ -1912,7 +1914,7 @@
             // chbUStPopup_ListDestroyed
             // 
             this.chbUStPopup_ListDestroyed.AutoSize = true;
-            this.chbUStPopup_ListDestroyed.Location = new System.Drawing.Point(6, 128);
+            this.chbUStPopup_ListDestroyed.Location = new System.Drawing.Point(6, 150);
             this.chbUStPopup_ListDestroyed.Name = "chbUStPopup_ListDestroyed";
             this.chbUStPopup_ListDestroyed.Size = new System.Drawing.Size(72, 16);
             this.chbUStPopup_ListDestroyed.TabIndex = 13;
@@ -1922,7 +1924,7 @@
             // chbUStPopup_ListUnsubscribed
             // 
             this.chbUStPopup_ListUnsubscribed.AutoSize = true;
-            this.chbUStPopup_ListUnsubscribed.Location = new System.Drawing.Point(138, 150);
+            this.chbUStPopup_ListUnsubscribed.Location = new System.Drawing.Point(138, 172);
             this.chbUStPopup_ListUnsubscribed.Name = "chbUStPopup_ListUnsubscribed";
             this.chbUStPopup_ListUnsubscribed.Size = new System.Drawing.Size(107, 16);
             this.chbUStPopup_ListUnsubscribed.TabIndex = 12;
@@ -1932,7 +1934,7 @@
             // chbUStPopup_ListSubscribed
             // 
             this.chbUStPopup_ListSubscribed.AutoSize = true;
-            this.chbUStPopup_ListSubscribed.Location = new System.Drawing.Point(6, 150);
+            this.chbUStPopup_ListSubscribed.Location = new System.Drawing.Point(6, 172);
             this.chbUStPopup_ListSubscribed.Name = "chbUStPopup_ListSubscribed";
             this.chbUStPopup_ListSubscribed.Size = new System.Drawing.Size(83, 16);
             this.chbUStPopup_ListSubscribed.TabIndex = 11;
@@ -1942,7 +1944,7 @@
             // chbUStPopup_ListUpdated
             // 
             this.chbUStPopup_ListUpdated.AutoSize = true;
-            this.chbUStPopup_ListUpdated.Location = new System.Drawing.Point(138, 106);
+            this.chbUStPopup_ListUpdated.Location = new System.Drawing.Point(138, 128);
             this.chbUStPopup_ListUpdated.Name = "chbUStPopup_ListUpdated";
             this.chbUStPopup_ListUpdated.Size = new System.Drawing.Size(72, 16);
             this.chbUStPopup_ListUpdated.TabIndex = 10;
@@ -1952,7 +1954,7 @@
             // chbUStPopup_Block
             // 
             this.chbUStPopup_Block.AutoSize = true;
-            this.chbUStPopup_Block.Location = new System.Drawing.Point(6, 62);
+            this.chbUStPopup_Block.Location = new System.Drawing.Point(6, 84);
             this.chbUStPopup_Block.Name = "chbUStPopup_Block";
             this.chbUStPopup_Block.Size = new System.Drawing.Size(57, 16);
             this.chbUStPopup_Block.TabIndex = 9;
@@ -1962,7 +1964,7 @@
             // chbUStPopup_ListMemberAdd
             // 
             this.chbUStPopup_ListMemberAdd.AutoSize = true;
-            this.chbUStPopup_ListMemberAdd.Location = new System.Drawing.Point(6, 84);
+            this.chbUStPopup_ListMemberAdd.Location = new System.Drawing.Point(6, 106);
             this.chbUStPopup_ListMemberAdd.Name = "chbUStPopup_ListMemberAdd";
             this.chbUStPopup_ListMemberAdd.Size = new System.Drawing.Size(109, 16);
             this.chbUStPopup_ListMemberAdd.TabIndex = 8;
@@ -1972,7 +1974,7 @@
             // chbUStPopup_ListMemberRemoved
             // 
             this.chbUStPopup_ListMemberRemoved.AutoSize = true;
-            this.chbUStPopup_ListMemberRemoved.Location = new System.Drawing.Point(138, 84);
+            this.chbUStPopup_ListMemberRemoved.Location = new System.Drawing.Point(138, 106);
             this.chbUStPopup_ListMemberRemoved.Name = "chbUStPopup_ListMemberRemoved";
             this.chbUStPopup_ListMemberRemoved.Size = new System.Drawing.Size(109, 16);
             this.chbUStPopup_ListMemberRemoved.TabIndex = 7;
@@ -1982,7 +1984,7 @@
             // chbUStPopup_Unblock
             // 
             this.chbUStPopup_Unblock.AutoSize = true;
-            this.chbUStPopup_Unblock.Location = new System.Drawing.Point(138, 62);
+            this.chbUStPopup_Unblock.Location = new System.Drawing.Point(138, 84);
             this.chbUStPopup_Unblock.Name = "chbUStPopup_Unblock";
             this.chbUStPopup_Unblock.Size = new System.Drawing.Size(81, 16);
             this.chbUStPopup_Unblock.TabIndex = 6;
@@ -1992,7 +1994,7 @@
             // chbUStPopup_ListCreated
             // 
             this.chbUStPopup_ListCreated.AutoSize = true;
-            this.chbUStPopup_ListCreated.Location = new System.Drawing.Point(6, 106);
+            this.chbUStPopup_ListCreated.Location = new System.Drawing.Point(6, 128);
             this.chbUStPopup_ListCreated.Name = "chbUStPopup_ListCreated";
             this.chbUStPopup_ListCreated.Size = new System.Drawing.Size(72, 16);
             this.chbUStPopup_ListCreated.TabIndex = 5;
@@ -2002,7 +2004,7 @@
             // chbUStPopup_Follow
             // 
             this.chbUStPopup_Follow.AutoSize = true;
-            this.chbUStPopup_Follow.Location = new System.Drawing.Point(6, 40);
+            this.chbUStPopup_Follow.Location = new System.Drawing.Point(6, 62);
             this.chbUStPopup_Follow.Name = "chbUStPopup_Follow";
             this.chbUStPopup_Follow.Size = new System.Drawing.Size(59, 16);
             this.chbUStPopup_Follow.TabIndex = 4;
@@ -2012,7 +2014,7 @@
             // chbUStPopup_Unfavorite
             // 
             this.chbUStPopup_Unfavorite.AutoSize = true;
-            this.chbUStPopup_Unfavorite.Location = new System.Drawing.Point(138, 18);
+            this.chbUStPopup_Unfavorite.Location = new System.Drawing.Point(138, 40);
             this.chbUStPopup_Unfavorite.Name = "chbUStPopup_Unfavorite";
             this.chbUStPopup_Unfavorite.Size = new System.Drawing.Size(117, 16);
             this.chbUStPopup_Unfavorite.TabIndex = 3;
@@ -2022,7 +2024,7 @@
             // chbUStPopup_Favorite
             // 
             this.chbUStPopup_Favorite.AutoSize = true;
-            this.chbUStPopup_Favorite.Location = new System.Drawing.Point(6, 18);
+            this.chbUStPopup_Favorite.Location = new System.Drawing.Point(6, 40);
             this.chbUStPopup_Favorite.Name = "chbUStPopup_Favorite";
             this.chbUStPopup_Favorite.Size = new System.Drawing.Size(108, 16);
             this.chbUStPopup_Favorite.TabIndex = 2;
@@ -2032,7 +2034,7 @@
             // chbUStAutoOpenLog
             // 
             this.chbUStAutoOpenLog.AutoSize = true;
-            this.chbUStAutoOpenLog.Location = new System.Drawing.Point(20, 250);
+            this.chbUStAutoOpenLog.Location = new System.Drawing.Point(20, 279);
             this.chbUStAutoOpenLog.Name = "chbUStAutoOpenLog";
             this.chbUStAutoOpenLog.Size = new System.Drawing.Size(223, 16);
             this.chbUStAutoOpenLog.TabIndex = 2;
@@ -2065,10 +2067,10 @@
             this.tabpgFilter.Controls.Add(this.btnFilterRemove);
             this.tabpgFilter.Controls.Add(this.btnFilterAdd);
             this.tabpgFilter.Controls.Add(this.lstFilters);
-            this.tabpgFilter.Location = new System.Drawing.Point(4, 21);
+            this.tabpgFilter.Location = new System.Drawing.Point(4, 22);
             this.tabpgFilter.Name = "tabpgFilter";
             this.tabpgFilter.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFilter.Size = new System.Drawing.Size(386, 325);
+            this.tabpgFilter.Size = new System.Drawing.Size(386, 324);
             this.tabpgFilter.TabIndex = 6;
             this.tabpgFilter.Text = "フィルタ";
             this.tabpgFilter.UseVisualStyleBackColor = true;
@@ -2349,10 +2351,10 @@
             this.tabpgElse.Controls.Add(this.chbDispDMBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyTooltip);
-            this.tabpgElse.Location = new System.Drawing.Point(4, 21);
+            this.tabpgElse.Location = new System.Drawing.Point(4, 22);
             this.tabpgElse.Name = "tabpgElse";
             this.tabpgElse.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgElse.Size = new System.Drawing.Size(386, 325);
+            this.tabpgElse.Size = new System.Drawing.Size(386, 324);
             this.tabpgElse.TabIndex = 3;
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
@@ -2548,6 +2550,16 @@
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
+            // 
+            // chbUStPopup_Retweet
+            // 
+            this.chbUStPopup_Retweet.AutoSize = true;
+            this.chbUStPopup_Retweet.Location = new System.Drawing.Point(6, 18);
+            this.chbUStPopup_Retweet.Name = "chbUStPopup_Retweet";
+            this.chbUStPopup_Retweet.Size = new System.Drawing.Size(135, 16);
+            this.chbUStPopup_Retweet.TabIndex = 15;
+            this.chbUStPopup_Retweet.Text = "自分の発言がリツイート";
+            this.chbUStPopup_Retweet.UseVisualStyleBackColor = true;
             // 
             // FrmConfig
             // 
@@ -2806,5 +2818,6 @@
         private System.Windows.Forms.CheckBox chbUStPopup_ListUnsubscribed;
         private System.Windows.Forms.CheckBox chbUStPopup_ListSubscribed;
         private System.Windows.Forms.CheckBox chbUStPopup_ListUpdated;
+        private System.Windows.Forms.CheckBox chbUStPopup_Retweet;
     }
 }

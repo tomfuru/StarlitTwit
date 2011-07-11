@@ -588,6 +588,7 @@ namespace StarlitTwit
             chbUStStartUp.Checked = SettingsData.UserStreamStartUp;
             chbUStEnableAllReplies.Checked = SettingsData.UserStreamAllReplies;
 
+            chbUStPopup_Retweet.Checked = SettingsData.UserStream_ShowPopup_Retweet;
             chbUStPopup_Favorite.Checked = SettingsData.UserStream_ShowPopup_Favorite;
             chbUStPopup_Unfavorite.Checked = SettingsData.UserStream_ShowPopup_Unfavorite;
             chbUStPopup_Follow.Checked = SettingsData.UserStream_ShowPopup_Follow;
@@ -732,6 +733,7 @@ namespace StarlitTwit
             SettingsData.UserStreamStartUp = chbUStStartUp.Checked;
             SettingsData.UserStreamAllReplies = chbUStEnableAllReplies.Checked;
 
+            SettingsData.UserStream_ShowPopup_Retweet = chbUStPopup_Retweet.Checked;
             SettingsData.UserStream_ShowPopup_Favorite = chbUStPopup_Favorite.Checked;
             SettingsData.UserStream_ShowPopup_Unfavorite = chbUStPopup_Unfavorite.Checked;
             SettingsData.UserStream_ShowPopup_Follow = chbUStPopup_Follow.Checked;
