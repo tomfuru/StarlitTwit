@@ -16,10 +16,9 @@
 ・タブ作成の別窓からの呼び方検討 -> Methodをpublicに
 ・ブロックの確認メッセージ
 ・発言表示フォームの重複確認の確認
+・特定状況において画像表示時NullReferenceExceptionが出るのを修正
 
 ■要修正・確認
-
-・UserFormで自分だけ特別扱いが必要？
 
 ・何かしらの状況でInvalidOperationExceptionが無限に出る
 
@@ -161,6 +160,8 @@
 
 ★DONE
 11/07/11
+・UserFormで自分だけ特別扱い
+・画像表示時のNullReferenceException修正
 ・RTのPopup設定追加
 11/07/10
 ・ユーザー/リスト/会話について全て取得した時にステータスバーのメッセージを変更

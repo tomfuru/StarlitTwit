@@ -201,16 +201,17 @@ namespace StarlitTwit
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
 
             bool isBlocking = (FormType == EFormType.MyBlocking);
+            bool isMe = (prof.UserID == FrmMain.Twitter.ID);
 
-            tsmiFollow.Visible = !isBlocking && !prof.FolllowRequestSent && !prof.Following;
-            tsmiRemove.Visible = !isBlocking && !prof.FolllowRequestSent && prof.Following;
+            tsmiFollow.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent && !prof.Following;
+            tsmiRemove.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent && prof.Following;
 
 
-            tsmiBlock.Visible = (FormType == EFormType.MyFollower);
-            tsmiUnblock.Visible = isBlocking;
+            tsmiBlock.Visible = !isMe && (FormType == EFormType.MyFollower);
+            tsmiUnblock.Visible = !isMe && isBlocking;
 
-            toolStripMenuItem1.Visible = !isBlocking && !prof.FolllowRequestSent;
-            toolStripMenuItem3.Visible = isBlocking;
+            toolStripMenuItem1.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent;
+            toolStripMenuItem3.Visible = !isMe;
         }
         #endregion (menuRow_Opening)
         //-------------------------------------------------------------------------------
@@ -460,7 +461,7 @@ namespace StarlitTwit
                 item.SubItems.Add(p.ScreenName);
                 item.SubItems.Add(p.UserName);
                 if (p.FolllowRequestSent) { item.SubItems.Add("リクエスト済"); }
-                else { item.SubItems.Add((p.Following) ? "フォロー中" : ""); }
+                else { item.SubItems.Add((p.UserID == FrmMain.Twitter.ID) ? "自分" : (p.Following) ? "フォロー中" : ""); }
                 items.Add(item);
 
                 _profileList.Add(p);

@@ -453,6 +453,9 @@ namespace StarlitTwit
             catch (TargetInvocationException ex) {
                 throw ex.InnerException;
             }
+            catch (Exception ex) {
+                throw ex;
+            }
         }
         #endregion (Callback)
 

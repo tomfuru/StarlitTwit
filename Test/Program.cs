@@ -5,6 +5,9 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Net;
 using System.Threading;
+using System.Xml.Linq;
+using System.IO;
+using System.Reflection;
 
 namespace Test
 {
@@ -20,10 +23,28 @@ namespace Test
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new FormFlowTest());
-            Application.Run(new Form1());
-            //Application.Run(new Form2());
+            //test.t();
+            //Application.Run(new Form1());
+            Application.Run(new Form2());
 
             //new TestClass().testMain();
+        }
+    }
+
+    static class TTTest
+    {
+        public static void t()
+        {
+            string str = "";
+
+            using (StringReader reader = new StringReader(str)) {
+                XElement el = XElement.Load(reader);
+                Type type = typeof(StarlitTwit.Twitter);
+                //type.InvokeMember("ConvertToUserProfile", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance, null, StarlitTwit.FrmMain.Twitter, new object[] { el });
+                //MethodInfo[] info = type.GetMethods(BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
+                MethodInfo minfo = type.GetMethod("ConvertToUserProfile", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
+                minfo.Invoke(new StarlitTwit.Twitter(), new object[] { el });
+            }
         }
     }
 
@@ -41,8 +62,8 @@ namespace Test
 
             //WindowsFormsSynchronizationContext.Current;
             SynchronizationContext sc = SynchronizationContext.Current;
-            
-            
+
+
             TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
             tcs.Task.Start();
 
@@ -53,11 +74,11 @@ namespace Test
 
 
             Task t = Task.Factory.StartNew(() => enum1());
-            
-            
-            
 
-            
+
+
+
+
 
             //-------------------------------------------------------------------------------
             IEnumerable<int> enumerable = enum1();
@@ -69,10 +90,9 @@ namespace Test
 
         private IEnumerable<int> enum1()
         {
-            for (int i = 0; i < 30; i++)
-			{
+            for (int i = 0; i < 30; i++) {
                 yield return i;
-			}
+            }
         }
 
 

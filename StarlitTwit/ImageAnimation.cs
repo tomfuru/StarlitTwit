@@ -133,10 +133,9 @@ namespace StarlitTwit
                 _image.SelectActiveFrame(FrameDimension, 0);
             }
             catch (InvalidOperationException ex) {
-                Log.DebugLog(ex);
-                Debug.Assert(false, "Image.SelectActiveFrame失敗");
+                //Log.DebugLog(ex);
+                //Debug.Assert(false, "Image.SelectActiveFrame失敗");
             }
-
         }
         #endregion (Constructor)
 
@@ -231,8 +230,9 @@ namespace StarlitTwit
                     _image.SelectActiveFrame(FrameDimension, _nowFrameCount);
                 }
                 catch (InvalidOperationException ex) {
-                    Log.DebugLog(ex);
-                    Debug.Assert(false, "Image.SelectActiveFrame失敗");
+                    //Log.DebugLog(ex);
+                    //Debug.Assert(false, "Image.SelectActiveFrame失敗");
+                    return;
                 }
             }
             if (FrameUpdated != null) { FrameUpdated(this, EventArgs.Empty); }

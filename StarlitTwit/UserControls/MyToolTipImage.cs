@@ -200,7 +200,8 @@ namespace StarlitTwit
                 if (_img == null) {
                     if (!_gettingImage) {
                         _gettingImage = true;
-                        Utilization.InvokeTransaction(() => GetImages());
+                        string[] urls = (string[])_imgURLs.Clone();
+                        Utilization.InvokeTransaction(() => GetImages(urls));
                     }
 
                     size = StarlitTwit.Properties.Resources.NowLoadingL.Size;
@@ -316,12 +317,12 @@ namespace StarlitTwit
         /// <summary>
         /// 画像を取得します。
         /// </summary>
-        private void GetImages()
+        private void GetImages(string[] urls)
         {
             _imageAnimation.StartAnimation();
 
             List<Image> list = new List<Image>();
-            foreach (var url in _imgURLs) {
+            foreach (var url in urls) {
                 Image img = Utilization.GetImageFromURL(url);
                 if (img != null) { list.Add(img); }
             }

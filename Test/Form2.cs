@@ -19,6 +19,12 @@ namespace Test
         public Form2()
         {
             InitializeComponent();
+
+            Image img = Image.FromFile(@"H:\My Documents\Visual Studio 2010\Projects\TwitterClient\StarlitTwit\Resources\NowLoadingS.gif");
+            //Image img2 = (Image)img.Clone();
+            //Image img3 = (Image)img.Clone();
+
+            //img2.SelectActiveFrame(
         }
 
         //-------------------------------------------------------------------------------
