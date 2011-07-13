@@ -21,6 +21,9 @@ namespace StarlitTwit
         /// <summary>テキストボックス内の特殊項目(URL除く)がクリックされた時に発生するイベント</summary>
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
 
+        private Font _urlFont = null;
+        private Font _entityFont = null;
+
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
@@ -28,6 +31,11 @@ namespace StarlitTwit
         {
             InitializeComponent();
             base.DetectUrls = false;
+
+            FontStyle style = FontStyle.Underline;
+            _urlFont = new Font(this.Font.FontFamily, this.Font.Size, style);
+            style |= FontStyle.Bold;
+            _entityFont = new Font(this.Font.FontFamily, this.Font.Size, style);
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -81,20 +89,33 @@ namespace StarlitTwit
             int index = this.GetCharIndexFromPosition(e.Location);
 
             bool onhash = false;
-            Range range = Range.Empty;
+            EntityData entityData = default(EntityData);
             foreach (var item in _entities) {
-                if (onhash = item.range.InRange(index)) { range = item.range; break; }
+                if (onhash = item.range.InRange(index)) { entityData = item; break; }
             }
-            if (onhash) {
-                Point p = this.GetPositionFromCharIndex(range.Start);
-                Rectangle rec = new Rectangle(p, TextRenderer.MeasureText(this.Text.Substring(range.Start, range.Length), this.Font));
 
-                if (rec.Contains(e.Location)) {
-                    _onRange = range;
-                    if (this.Cursor != Cursors.Hand) {
-                        this.Cursor = Cursors.Hand;
+            if (onhash) {
+                Range range = entityData.range;
+                int i2 = range.Start;
+                // 一行ごとにまとめてRectangleを求め含まれているか確認する
+                while (i2 < range.Start + range.Length) {
+                    int startInd = i2;
+                    Point p = this.GetPositionFromCharIndex(i2);
+                    i2++;
+                    while (i2 < range.Start + range.Length) {
+                        Point p2 = this.GetPositionFromCharIndex(i2);
+                        if (p2.Y > p.Y) { break; }
+                        i2++;
                     }
-                    return;
+                    
+                    Rectangle rec = new Rectangle(p, TextRenderer.MeasureText(this.Text.Substring(startInd, i2 - startInd), (entityData.type.HasValue) ? _entityFont : _urlFont));
+                    if (rec.Contains(e.Location)) {
+                        _onRange = range;
+                        if (this.Cursor != Cursors.Hand) {
+                            this.Cursor = Cursors.Hand;
+                        }
+                        return;
+                    }
                 }
             }
 
@@ -115,8 +136,8 @@ namespace StarlitTwit
                     var entity = Array.Find(_entities, info => info.range.Equals(_onRange));
 
                     if (entity.type.HasValue) {
-                        if (TweetItemClick != null) { 
-                            TweetItemClick.Invoke(this, new TweetItemClickEventArgs(entity.str, entity.type.Value)); 
+                        if (TweetItemClick != null) {
+                            TweetItemClick.Invoke(this, new TweetItemClickEventArgs(entity.str, entity.type.Value));
                         }
                     }
                     else {
@@ -159,16 +180,14 @@ namespace StarlitTwit
 
             foreach (var item in data) {
                 this.Select(item.range.Start, item.range.Length);
-                FontStyle style = FontStyle.Underline;
-                if (item.type.HasValue) { style |= FontStyle.Bold; }
-                this.SelectionFont = new Font(this.Font.FontFamily, this.Font.Size, style);
+                this.SelectionFont = (item.type.HasValue) ? _entityFont : _urlFont;
                 this.SelectionColor = Color.Blue;
             }
         }
         #endregion (ChangeFonts)
     }
 
-    
+
 
     //-------------------------------------------------------------------------------
     #region (Class)TweetItemClickEventArgs  クリックしたアイテムの情報
