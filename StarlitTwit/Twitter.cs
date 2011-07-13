@@ -61,7 +61,9 @@ namespace StarlitTwit
 
         public const bool DEFAULT_INCLUDE_ENTITIES = false;
 
-        public const string HASH_REGEX_PATTERN = @"(?<entity>(@|#[a-zA-Z_])[a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])";
+        public const string MENTION_REGEX_PATTERN = @"@(?<entity>[a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])";
+        //public const string HASHTAG_REGEX_PATTERN = @"(?<entity>#(?!\d+($|\s))\w+)($|\s)";
+        public const string HASHTAG_REGEX_PATTERN = @"(?<entity>#(?!\d+($|\s))[a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}]+)($|[^a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}])";
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -3004,25 +3006,21 @@ namespace StarlitTwit
         //
         private IEnumerable<EntityData> GetEntitiesByRegex(string text)
         {
-            List<EntityData> list = new List<EntityData>();
-            Regex r = new Regex(HASH_REGEX_PATTERN);
-            foreach (Match m in r.Matches(text)) {
+           // @から始まるUserMentionのEntity
+            Regex rm = new Regex(MENTION_REGEX_PATTERN);
+            foreach (Match m in rm.Matches(text)) {
                 Group g = m.Groups["entity"];
-                switch (g.Value[0]) {
-                    case '@':
-                        yield return new EntityData(ItemType.User, new Range(g.Index, g.Length), g.Value.Substring(1));
-                        break;
-                    case '#':
-                        yield return new EntityData(ItemType.HashTag, new Range(g.Index, g.Length), g.Value);
-                        break;
-                    default:
-                        Debug.Assert(false, "ここには来ない");
-                        break;
-                }
+                yield return new EntityData(ItemType.User, new Range(g.Index - 1, g.Length + 1), g.Value);
             }
-
-            Regex r2 = new Regex(Utilization.URL_REGEX_PATTERN);
-            foreach (Match m in r2.Matches(text)) {
+            // #から始まるHashTagのEntity
+            Regex rh = new Regex(HASHTAG_REGEX_PATTERN);
+            foreach (Match m in rh.Matches(text)) {
+                Group g = m.Groups["entity"];
+                yield return new EntityData(ItemType.HashTag, new Range(g.Index, g.Length), g.Value);
+            }
+            // URLのEntity
+            Regex ru = new Regex(Utilization.URL_REGEX_PATTERN);
+            foreach (Match m in ru.Matches(text)) {
                 string value;
                 if (m.Value[0] == 't') { value = 'h' + m.Value; }
                 else { value = m.Value; }
