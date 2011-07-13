@@ -16,8 +16,6 @@ namespace StarlitTwit
         private EntityData[] _entities;
         private Range _onRange = Range.Empty;
 
-        public const string HASH_REGEX_PATTERN = @"(?<entity>[@#][a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])";
-
         /// <summary>テキストボックス内の特殊項目(URL除く)がクリックされた時に発生するイベント</summary>
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
 
