@@ -132,7 +132,7 @@ namespace StarlitTwit
             try {
                 _image.SelectActiveFrame(FrameDimension, 0);
             }
-            catch (InvalidOperationException ex) {
+            catch (InvalidOperationException/* ex*/) {
                 //Log.DebugLog(ex);
                 //Debug.Assert(false, "Image.SelectActiveFrame失敗");
             }
@@ -229,7 +229,7 @@ namespace StarlitTwit
                 try {
                     _image.SelectActiveFrame(FrameDimension, _nowFrameCount);
                 }
-                catch (InvalidOperationException ex) {
+                catch (InvalidOperationException/* ex*/) {
                     //Log.DebugLog(ex);
                     //Debug.Assert(false, "Image.SelectActiveFrame失敗");
                     return;
