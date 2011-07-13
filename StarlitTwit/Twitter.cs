@@ -63,7 +63,7 @@ namespace StarlitTwit
 
         public const string MENTION_REGEX_PATTERN = @"@(?<entity>[a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])";
         //public const string HASHTAG_REGEX_PATTERN = @"(?<entity>#(?!\d+($|\s))\w+)($|\s)";
-        public const string HASHTAG_REGEX_PATTERN = @"(?<entity>#(?!\d+($|[^a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}]))[a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}]+)($|[^a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}])";
+        public const string HASHTAG_REGEX_PATTERN = @"(?<entity>#(?!\d+($|[^a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}\p{Lm}]))[a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}\p{Lm}]+)($|[^a-zａ-ｚA-ZＡ-Ｚ_\p{Nd}\p{Lo}\p{Lm}])";
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
