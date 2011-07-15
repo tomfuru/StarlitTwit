@@ -164,7 +164,10 @@ namespace StarlitTwit
         private const string STR_USERSTREAM = "UserStream利用中";
         private const string STR_USERSTREAM_ENDING = "UserStream終了中...";
 
-        private const string FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
+        private const string STR_FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
+
+        private const string STR_DONE_DELETE = "発言を削除しました。";
+        private const string STR_DONE_RETWEET = "リツイートしました。";
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -631,7 +634,7 @@ namespace StarlitTwit
         private void TwitMenu_Retweet_Click(object sender, TwitRowMenuEventArgs e)
         {
             if (Message.ShowQuestionMessage("リツイートしますか？") == DialogResult.Yes) {
-                Twitter.statuses_retweet(e.TwitData.StatusID);
+                Retweet(e.TwitData.StatusID);
             }
         }
         #endregion (TwitMenu_Retweet_Click)
@@ -692,7 +695,7 @@ namespace StarlitTwit
         private void TwitMenu_Delete_Click(object sender, TwitRowMenuEventArgs e)
         {
             if (Message.ShowQuestionMessage("削除してよろしいですか？") == DialogResult.Yes) {
-                Delete(e.TwitData.StatusID, e.TwitData.IsDM());
+                Delete(e.TwitData.StatusID, e.TwitData.IsDM()); 
             }
         }
         #endregion (TwitMenu_Delete_Click)
@@ -1609,7 +1612,7 @@ namespace StarlitTwit
         private void ShowProfileForm(bool canEdit, string screen_name)
         {
             if (!Utilization.ShowProfileForm(this, canEdit, screen_name)) {
-                tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(STR_FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES);
             }
         }
         #endregion (ShowProfileForm)
@@ -2422,9 +2425,27 @@ namespace StarlitTwit
 
             ForAllUctlDispTwit((uctl) => uctl.RemoveTweet(statusid));
 
-            Message.ShowInfoMessage("削除しました。");
+            tssLabel.SetText(STR_DONE_DELETE, 1);
         }
         #endregion (Delete)
+        //-------------------------------------------------------------------------------
+        #region -Retweet リツイートを行います using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private void Retweet(long id)
+        {
+            try {
+                Twitter.statuses_retweet(id);
+            }
+            catch (TwitterAPIException ex) {
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                SYSTEMSOUND.Play();
+                return;
+            }
+
+            tssLabel.SetText(STR_DONE_RETWEET, 1);
+        }
+        #endregion (Retweet)
 
         //===============================================================================
         #region -CreateFavorite お気に入り登録を行います using TwitterAPI
@@ -2790,7 +2811,7 @@ namespace StarlitTwit
                 this.Invoke(new Action(() =>
                 {
                     if (profile != null) { SetProfileData(profile); }
-                    else { tssLabel.SetText(FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
+                    else { tssLabel.SetText(STR_FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
                     tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
                 }));
                 _profileRenew_IsForce = false;

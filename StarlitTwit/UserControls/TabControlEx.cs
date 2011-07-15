@@ -522,6 +522,7 @@ namespace StarlitTwit
             public void Add(TabPageEx item)
             {
                 _baseCollection.Add(item);
+                item.AdjustWidth();
             }
 
             public void Clear()
