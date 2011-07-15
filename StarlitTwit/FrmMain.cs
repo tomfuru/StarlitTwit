@@ -1692,6 +1692,17 @@ namespace StarlitTwit
             }));
             _usingUserStream = true;
             try {
+                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
+
+                _frmUserStreamWatch = new FrmUserStreamWatch();
+                if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
+
+                this.Invoke(new Action(() =>
+                {
+                    lblUserStreamInfo.Text = STR_USERSTREAM;
+                    tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
+                }));
+
                 // RESTによるデータ取り込み
                 Utilization.InvokeTransactionDoingEvents(() =>
                 {
@@ -1703,19 +1714,8 @@ namespace StarlitTwit
                         tssLabel.RemoveText(labelText);
                     }
                 });
-
-                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
-
-                _frmUserStreamWatch = new FrmUserStreamWatch();
-                if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
             }
             catch (InvalidOperationException) { }
-
-            this.Invoke(new Action(() =>
-            {
-                lblUserStreamInfo.Text = STR_USERSTREAM;
-                tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
-            }));
         }
         #endregion (StartUserStream)
         //-------------------------------------------------------------------------------
