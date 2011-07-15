@@ -13,6 +13,16 @@ namespace StarlitTwit
     public class RichTextBoxExBase : RichTextBox
     {
         //-------------------------------------------------------------------------------
+        #region Variables
+        //-------------------------------------------------------------------------------
+        /// <summary>履歴管理クラス</summary>
+        private HistoryManager<Tuple<string, int>> _strHistory = new HistoryManager<Tuple<string, int>>(new Tuple<string, int>("", 0));
+        /// <summary>履歴追加抑制</summary>
+        private bool _suspendHistoryAdd = false;
+        //-------------------------------------------------------------------------------
+        #endregion (Variables)
+
+        //-------------------------------------------------------------------------------
         #region Constructor
         //-------------------------------------------------------------------------------
         //
@@ -34,6 +44,19 @@ namespace StarlitTwit
                     this.Paste(DataFormats.GetFormat(DataFormats.Text));
                     e.Handled = true;
                 }
+                else if (!e.Shift && e.KeyCode == Keys.Z) {
+                    if (_strHistory.CanUndo()) {
+                        this.Undo();
+                    }
+                    e.Handled = true;
+                }
+                else if ((e.Shift && e.KeyCode == Keys.Z) || e.KeyCode == Keys.Y) {
+                    if (_strHistory.CanRedo()) {
+                        this.Redo();
+                    }
+                    e.Handled = true;
+                }
+                
             }
         }
         #endregion (%[override]OnKeyDown)
@@ -72,6 +95,21 @@ namespace StarlitTwit
             set { _surpressDefaultMenuChange = value; }
         }
         #endregion (SurpressDefaultMenuStateChange)
+        //-------------------------------------------------------------------------------
+        #region KeepHistoryNum プロパティ：
+        //-------------------------------------------------------------------------------
+        private int _keepHistoryNum = 5;
+        /// <summary>
+        /// 履歴を保持する個数を取得または設定します。
+        /// </summary>
+        [DefaultValue(5)]
+        [Description("履歴を保持する個数を取得または設定します。")]
+        public int KeepHistoryNum
+        {
+            get { return _keepHistoryNum; }
+            set { _keepHistoryNum = value; }
+        }
+        #endregion (KeepHistoryNum)
         //-------------------------------------------------------------------------------
         #region CutMenu プロパティ：切り取りメニュー
         //-------------------------------------------------------------------------------
@@ -132,6 +170,46 @@ namespace StarlitTwit
             }
         }
         #endregion (PasteMenu)
+        //-------------------------------------------------------------------------------
+        #region UndoMenu プロパティ：元に戻すメニュー
+        //-------------------------------------------------------------------------------
+        private ToolStripMenuItem _undoMenu;
+        /// <summary>
+        /// 元に戻すメニュー
+        /// </summary>
+        public ToolStripMenuItem UndoMenu
+        {
+            get { return _undoMenu; }
+            set
+            {
+                if (_undoMenu != null) {
+                    _undoMenu.Click -= UndoMenu_Click;
+                }
+                _undoMenu = value;
+                value.Click += UndoMenu_Click;
+            }
+        }
+        #endregion (UndoMenu)
+        //-------------------------------------------------------------------------------
+        #region RedoMenu プロパティ：やり直しメニュー
+        //-------------------------------------------------------------------------------
+        private ToolStripMenuItem _redoMenu;
+        /// <summary>
+        /// やり直しメニュー
+        /// </summary>
+        public ToolStripMenuItem RedoMenu
+        {
+            get { return _redoMenu; }
+            set
+            {
+                if (_redoMenu != null) {
+                    _redoMenu.Click -= RedoMenu_Click;
+                }
+                _redoMenu = value;
+                value.Click += RedoMenu_Click;
+            }
+        }
+        #endregion (RedoMenu)
 
         //-------------------------------------------------------------------------------
         #region ContextMenu_Opening メニューオープン時
@@ -167,6 +245,36 @@ namespace StarlitTwit
             this.Paste();
         }
         #endregion (PasteMenu_Click)
+        //-------------------------------------------------------------------------------
+        #region UndoMenu_Click 元に戻すメニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void UndoMenu_Click(object sender, EventArgs e)
+        {
+            this.Undo();
+        }
+        #endregion (UndoMenu_Click)
+        #region RedoMenu_Click やり直しメニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void RedoMenu_Click(object sender, EventArgs e)
+        {
+            this.Redo();
+        }
+        #endregion (RedoMenu_Click)
+
+        //-------------------------------------------------------------------------------
+        #region #[override]OnTextChanged テキスト変更時
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnTextChanged(EventArgs e)
+        {
+            base.OnTextChanged(e);
+            if (!_suspendHistoryAdd) {
+                _strHistory.AddHistory(new Tuple<string, int>(this.Text, this.SelectionStart));
+            }
+        }
+        #endregion (#[override]OnTextChanged)
 
         //-------------------------------------------------------------------------------
         #region #DefaultMenuStateChange デフォルトメニュー状態変更
@@ -174,6 +282,13 @@ namespace StarlitTwit
         //
         protected void DefaultMenuStateChange()
         {
+            if (_undoMenu != null) {
+                _undoMenu.Enabled = _strHistory.CanUndo();
+            }
+            if (_redoMenu != null) {
+                _redoMenu.Enabled = _strHistory.CanRedo();
+            }
+
             if (_surpressDefaultMenuChange) { return; }
 
             bool existSelection = (SelectionLength > 0);
@@ -229,6 +344,36 @@ namespace StarlitTwit
             this.Paste(DataFormats.GetFormat(DataFormats.Text));
         }
         #endregion (Paste)
+        //-------------------------------------------------------------------------------
+        #region +[new]Undo 元に戻す
+        //-------------------------------------------------------------------------------
+        //
+        public new void Undo()
+        {
+            if (_strHistory.CanUndo()) {
+                _suspendHistoryAdd = true;
+                var tup = _strHistory.Undo();
+                this.Text = tup.Item1;
+                this.SelectionStart = tup.Item2;
+                _suspendHistoryAdd = false;
+            }
+        }
+        #endregion (Undo)
+        //-------------------------------------------------------------------------------
+        #region +[new]Redo やり直し
+        //-------------------------------------------------------------------------------
+        //
+        public void Redo()
+        {
+            if (_strHistory.CanRedo()) {
+                _suspendHistoryAdd = true;
+                var tup = _strHistory.Redo();
+                this.Text = tup.Item1;
+                this.SelectionStart = tup.Item2;
+                _suspendHistoryAdd = false;
+            }
+        }
+        #endregion (Redo)
         //-------------------------------------------------------------------------------
         #region +CanPaste 貼り付け可能か
         //-------------------------------------------------------------------------------

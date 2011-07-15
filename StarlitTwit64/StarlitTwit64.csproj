@@ -181,6 +181,12 @@
       <Link>FrmMain.designer.cs</Link>
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Function\HistoryManager.cs">
+      <Link>Function\HistoryManager.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Function\ImageAnimation.cs">
+      <Link>Function\ImageAnimation.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\Function\PictureGetter.cs">
       <Link>Function\PictureGetter.cs</Link>
     </Compile>
@@ -189,9 +195,6 @@
     </Compile>
     <Compile Include="..\StarlitTwit\Function\URLShortener.cs">
       <Link>Function\URLShortener.cs</Link>
-    </Compile>
-    <Compile Include="..\StarlitTwit\ImageAnimation.cs">
-      <Link>ImageAnimation.cs</Link>
     </Compile>
     <Compile Include="..\StarlitTwit\SerializableClass\SerializableColor.cs">
       <Link>SerializableClass\SerializableColor.cs</Link>
