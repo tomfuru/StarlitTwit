@@ -509,10 +509,10 @@ namespace StarlitTwit
                                 proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
                                 break;
                             case EFormType.ListMember:
-                                proftpl = FrmMain.Twitter.list_members_Get(ListID, UserScreenName, _next_cursor);
+                                proftpl = FrmMain.Twitter.list_members(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
                                 break;
                             case EFormType.ListSubscriber:
-                                proftpl = FrmMain.Twitter.list_subscribers_Get(ListID, UserScreenName, _next_cursor);
+                                proftpl = FrmMain.Twitter.list_subscribers(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
                                 break;
                         }
                         if (proftpl != null) {

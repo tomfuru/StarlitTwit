@@ -149,7 +149,7 @@ namespace StarlitTwit
             ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
 
             tsmiEditList.Visible = tsmiDeleteList.Visible = tsSepListEdit.Visible = (FormType == EFormType.MyList);
-            
+
             tsmiListSubscribe.Visible = !listdata.Following;
             tsmiListUnSubscribe.Visible = listdata.Following;
         }
@@ -371,7 +371,7 @@ namespace StarlitTwit
         private bool DeleteList(string list_id)
         {
             try {
-                FrmMain.Twitter.lists_Delete(list_id);
+                FrmMain.Twitter.lists_destroy(slug: list_id);
             }
             catch (TwitterAPIException) { return false; }
             return true;
@@ -384,7 +384,7 @@ namespace StarlitTwit
         private bool SubscribeList(string listID, string listOwner)
         {
             try {
-                FrmMain.Twitter.list_subscribers_Follow(listID, listOwner);
+                FrmMain.Twitter.list_subscribers_create(slug: listID, owner_screen_name: listOwner);
             }
             catch (TwitterAPIException) { return false; }
             return true;
@@ -397,7 +397,7 @@ namespace StarlitTwit
         private bool UnsubscribeList(string listID, string listOwner)
         {
             try {
-                FrmMain.Twitter.list_subscribers_Unfollow(listID, listOwner);
+                FrmMain.Twitter.list_subscribers_destroy(slug: listID, owner_screen_name: listOwner);
             }
             catch (TwitterAPIException) { return false; }
             return true;
@@ -425,13 +425,13 @@ namespace StarlitTwit
                             listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
                             break;
                         case EFormType.UserList:
-                            listseq = FrmMain.Twitter.lists_Get(UserScreenName, _next_cursor);
+                            listseq = FrmMain.Twitter.lists_Get(screen_name: UserScreenName, cursor: _next_cursor);
                             break;
                         case EFormType.UserBelongedList:
-                            listseq = FrmMain.Twitter.lists_memberships(UserScreenName, _next_cursor);
+                            listseq = FrmMain.Twitter.lists_memberships(screen_name: UserScreenName, cursor: _next_cursor);
                             break;
                         case EFormType.UserSubscribingList:
-                            listseq = FrmMain.Twitter.lists_subscriptions(UserScreenName, _next_cursor);
+                            listseq = FrmMain.Twitter.lists_subscriptions(screen_name: UserScreenName, cursor: _next_cursor);
                             break;
                     }
                     if (listseq != null) {
@@ -442,7 +442,7 @@ namespace StarlitTwit
                         {
                             AddList(listdata);
                             lblCount.Text = string.Format("{0}個見つかりました", _listList.Count);
-                            tsslLabel.Text =　(_next_cursor != 0)　? "取得完了しました" : "全て取得完了しました";
+                            tsslLabel.Text = (_next_cursor != 0) ? "取得完了しました" : "全て取得完了しました";
                         }));
                     }
 

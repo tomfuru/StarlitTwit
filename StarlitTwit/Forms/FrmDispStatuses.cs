@@ -227,7 +227,7 @@ namespace StarlitTwit
                             else { disableAppend = true; }
                             break;
                         case EFormType.ListStatuses:
-                            d = FrmMain.Twitter.lists_statuses(ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
+                            d = FrmMain.Twitter.lists_statuses(-1, ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;

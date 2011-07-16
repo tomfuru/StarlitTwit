@@ -1100,7 +1100,587 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region Lists Resources
         //-------------------------------------------------------------------------------
+        //list_all
+        //-------------------------------------------------------------------------------
+        #region $+lists_statuses
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/statuses</para>
+        /// <para>Returns tweet timeline for members of the specified list.</para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public IEnumerable<TwitData> lists_statuses(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+            long since_id = -1, long max_id = -1, int per_page = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (string.IsNullOrEmpty(owner_screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}/lists/statuses.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToTwitDataArray(el);
+        }
+        #endregion (lists_statuses)
+        //-------------------------------------------------------------------------------
+        #region $+lists_memberships
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists_memberships メソッド</para>
+        /// <para>Returns the lists the specified user has been added to.</para>
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <param name="screen_name">[select option]追加されているリストを調べるユーザー名</param>
+        /// <param name="filter_to_owner_lists">[option]trueに設定すると認証</param>
+        public SequentData<ListData> lists_memberships(long user_id = -1, string screen_name = "", long cursor = -1, bool filter_to_owner_lists = false)
+        {
+            if (((user_id <= 0 && string.IsNullOrEmpty(screen_name)) || filter_to_owner_lists) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (filter_to_owner_lists) { paramdic.Add("filter_to_owned_lists", filter_to_owner_lists.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/memberships.xml", URLapi), GET, paramdic);
+            XElement el = GetByAPI(url);
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
+                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (lists_memberships)
+        //-------------------------------------------------------------------------------
+        #region +lists_subscriptions?
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists_subscriptionsメソッド</para>
+        /// <para>List the lists the specified user follows</para>
+        /// </summary>
+        /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
+        /// <remarks>APIでは非推奨だが重複しているわけではないと思われるのでObsoleteにはしていない</remarks>
+        public SequentData<ListData> lists_subscriptions(string screen_name = "", long cursor = -1)
+        {
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, user), GET, paramdic);
+            XElement el = GetByAPI(url);
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
+                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (lists_subscriptions)
+        //===============================================================================
+        #region $+list_subscribers
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers メソッド</para> 
+        /// <para>Returns the subscribers of the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
+        /// <returns></returns>
+        public SequentData<UserProfile> list_subscribers(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                                         long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
+                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (list_subscribers_Get)
+        //-------------------------------------------------------------------------------
+        #region $+list_subscribers_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers/create メソッド</para>
+        /// <para>Subscribes the authenticated user to the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData list_subscribers_create(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers/create.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_subscribers_create)
+        //-------------------------------------------------------------------------------
+        #region $+list_subscribers_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers/show メソッド</para>
+        /// <para>Check if the specified user is a member of the specified list.</para>
+        /// <para>見つからなければ404エラーを返す</para>
+        /// </summary>
+        /// <param name="user_id">[select1]削除するユーザーのID</param>
+        /// <param name="screen_name">[select1]削除するユーザーのScreenName</param>
+        /// <param name="list_id">[select2]リストID</param>
+        /// <param name="slug">[select2]リストのslug</param>
+        /// <param name="owner_screen_name">[select2 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select2 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public UserProfile list_subscribers_show(long user_id = -1, string screen_name = "",
+                                                 long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                                 bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers/show.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (list_subscribers_show)
+        //-------------------------------------------------------------------------------
+        #region $+list_subscribers_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers/destroy メソッド</para>
+        /// <para>Unsubscribes the authenticated user from the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData list_subscribers_destroy(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers/destroy.xml", URLapi), POST);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_subscribers_destroy)
+        //===============================================================================
+        #region $+list_create_all
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/create_all メソッド</para>
+        /// <para>Adds multiple members to a list, by specifying a comma-separated list of member ids or screen names.</para>
+        /// <para>最大100人まで一斉に追加可能</para>
+        /// </summary>
+        /// <param name="list_id">[select1]リストID</param>
+        /// <param name="slug">[select1]リストのslug</param>
+        /// <param name="owner_screen_name">[select1 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select1 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <param name="user_ids">[select2]</param>
+        /// <param name="screen_names">[select2]</param>
+        /// <remarks>リストの最大人数は500．</remarks>
+        /// <returns></returns>
+        public object list_create_all(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1, long[] user_ids = null, string[] screen_names = null)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
+                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids)); }
+                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/create_all.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            throw new NotImplementedException();
+        }
+        #endregion (list_create_all)
+        //-------------------------------------------------------------------------------
+        #region $+list_members_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/member メソッド</para>
+        /// <para>Check if the specified user is a member of the specified list.</para>
+        /// <para>見つからなければ404エラーを返す</para>
+        /// </summary>
+        /// <param name="user_id">[select1]削除するユーザーのID</param>
+        /// <param name="screen_name">[select1]削除するユーザーのScreenName</param>
+        /// <param name="list_id">[select2]リストID</param>
+        /// <param name="slug">[select2]リストのslug</param>
+        /// <param name="owner_screen_name">[select2 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select2 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public UserProfile list_members_show(long user_id = -1, string screen_name = "",
+                                             long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                             bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (list_members_show)
+        //-------------------------------------------------------------------------------
+        #region $+list_members
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members メソッド</para> 
+        /// <para>Returns the members of the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
+        /// <returns></returns>
+        public SequentData<UserProfile> list_members(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                                         long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
+                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (list_members)
+        //-------------------------------------------------------------------------------
+        #region $+list_members_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members/create メソッド</para>
+        /// <para>Add a member to a list.</para>
+        /// </summary>
+        /// <param name="list_id">[select1]リストID</param>
+        /// <param name="slug">[select1]リストのslug</param>
+        /// <param name="user_id">[select2]削除するユーザーのID</param>
+        /// <param name="screen_name">[select2]削除するユーザーのScreenName</param>
+        /// <param name="owner_screen_name">[select1 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select1 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData list_members_create(long list_id = -1, string slug = "", long user_id = -1, string screen_name = "",
+                                             string owner_screen_name = "", long owner_id = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/create.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_members_create)
+        //-------------------------------------------------------------------------------
+        #region $+list_members_destory
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members/destroy メソッド</para>
+        /// <para>Removes the specified member from the list</para>
+        /// </summary>
+        /// <param name="list_id">[select1]リストID</param>
+        /// <param name="slug">[select1]リストのslug</param>
+        /// <param name="user_id">[select2]削除するユーザーのID</param>
+        /// <param name="screen_name">[select2]削除するユーザーのScreenName</param>
+        /// <param name="owner_screen_name">[select1 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select1 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData list_members_destroy(long list_id = -1, string slug = "", long user_id = -1, string screen_name = "",
+                                             string owner_screen_name = "", long owner_id = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/destroy.xml", URLapi), POST, paramdic);
+
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (list_members_destroy)
+        //===============================================================================
+        #region $+lists_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/destroy メソッド</para>
+        /// <para>Deletes the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <returns></returns>
+        /// <remarks>owner_screen_name or owner_idは必要?</remarks>
+        public ListData lists_destroy(long list_id = -1, string slug = "")
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストIDかslugのどちらか1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/destroy.xml", URLapi), POST);
+
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (lists_destroy)
+        //-------------------------------------------------------------------------------
+        #region $+lists_update
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/update メソッド</para>
+        /// <para>Updates the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="name">[option]リストの新しい名前</param>
+        /// <param name="isPrivate">[option]privateにする時にtrue</param>
+        /// <param name="description">[option]リストの説明</param>
+        /// <returns>変更前が返る？/owner_screen_name or owner_idは必要?</returns>
+        public ListData lists_update(long list_id = -1, string slug = "",
+                                     string name = null, bool isPrivate = false, string description = null)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストIDかslugのどちらか1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
+                paramdic.Add("mode", (isPrivate) ? "private" : "public");
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/update.xml", URLapi), POST, paramdic);
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (lists_update)
+        //-------------------------------------------------------------------------------
+        #region $+lists_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/create メソッド</para>
+        /// <para>Creates a new list for the authenticated user</para>
+        /// </summary>
+        /// <param name="name">リストの名前</param>
+        /// <param name="isPrivate">[option]privateにする時にtrue</param>
+        /// <param name="description">[option]リストの説明</param>
+        /// <returns></returns>
+        public ListData lists_create(string name, bool isPrivate = false, string description = null)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("name", Utilization.UrlEncode(name));
+                if (isPrivate) { paramdic.Add("mode", "private"); }
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/create.xml", URLapi), POST, paramdic);
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (lists_create)
+        //-------------------------------------------------------------------------------
+        #region $+lists
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists メソッド</para>
+        /// <para>Returns the lists of the specified (or authenticated) user.</para>
+        /// </summary>
+        /// <param name="user_id">[select]リストの所有者のUserID</param>
+        /// <param name="screen_name">[select]リストの所有者のScreenName。</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
+        /// <returns></returns>
+        public SequentData<ListData> lists_Get(long user_id = -1, string screen_name = "", long cursor = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (user_id <= 0 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("UserIDかScreenNameのどちらか1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
+                                             long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (lists_Get)
+        //-------------------------------------------------------------------------------
+        #region $+lists_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/show メソッド</para>
+        /// <para>Returns the specified list</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData lists_Show(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/show.xml", URLapi), GET);
+            return ConvertToListData(GetByAPI(url));
+        }
+        #endregion (lists_Show)
         //-------------------------------------------------------------------------------
         #endregion (Lists)
 
@@ -1207,440 +1787,6 @@ namespace StarlitTwit
         #endregion (Deprecated)
 
         //===============================================================================
-        #region list/ (リスト関連)
-        //-------------------------------------------------------------------------------
-        #region lists_Create リスト作成
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト作成メソッド
-        /// </summary>
-        /// <param name="name">リストの名前</param>
-        /// <param name="isPrivate">[option]privateにする時にtrue</param>
-        /// <param name="description">[option]リストの説明</param>
-        /// <returns></returns>
-        public ListData lists_Create(string name, bool isPrivate = false, string description = null)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("name", Utilization.UrlEncode(name));
-                if (isPrivate) { paramdic.Add("mode", "private"); }
-                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + ScreenName + @"/lists.xml", POST, paramdic);
-            return ConvertToListData(PostToAPI(url));
-        }
-        #endregion (lists_Create)
-        //-------------------------------------------------------------------------------
-        #region lists_Update リスト更新
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト更新
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="name">[option]リストの新しい名前</param>
-        /// <param name="isPrivate">[option]privateにする時にtrue</param>
-        /// <param name="description">[option]リストの説明</param>
-        /// <returns>変更前が返る？</returns>
-        public ListData lists_Update(string list_id, string name = null, bool isPrivate = false, string description = null)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
-                paramdic.Add("mode", (isPrivate) ? "private" : "public");
-                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), POST, paramdic);
-            return ConvertToListData(PostToAPI(url));
-        }
-        #endregion (lists_Update)
-        //-------------------------------------------------------------------------------
-        #region lists_Get リストのリスト取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// リストのリストを取得します。返り値：(リストのリスト，next_cursor, previous_cursor）
-        /// </summary>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="cursor">[option]データベース上のカーソル</param>
-        /// <returns></returns>
-        public SequentData<ListData> lists_Get(string screen_name = "", long cursor = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(URLapi + user + @"/lists.xml", GET, paramdic);
-
-            XElement el = GetByAPI(url);
-
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (lists_Get)
-        //-------------------------------------------------------------------------------
-        #region lists_Show リスト情報取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト情報取得
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <returns></returns>
-        public ListData lists_Show(string list_id, string screen_name = null)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-            string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), GET);
-            return ConvertToListData(GetByAPI(url));
-        }
-        #endregion (lists_Show)
-        //-------------------------------------------------------------------------------
-        #region lists_Delete リスト削除
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト削除
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <returns></returns>
-        public ListData lists_Delete(string list_id)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), DELETE);
-
-            return ConvertToListData(DeleteToAPI(url));
-        }
-        #endregion (lists_Delete)
-        //-------------------------------------------------------------------------------
-        #region lists_statuses リスト発言取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists/statuses リストの発言取得
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="per_page">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> lists_statuses(string list_id, string screen_name = "", long since_id = -1, long max_id = -1, int per_page = -1, int page = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-            }
-
-            string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}/statuses.xml", URLapi, scrname, list_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return ConvertToTwitDataArray(el);
-        }
-        #endregion (lists_statuses)
-        //-------------------------------------------------------------------------------
-        #region lists_memberships
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists_membershipsメソッド
-        /// </summary>
-        /// <param name="screen_name">追加されているリストを調べるユーザー名</param>
-        public SequentData<ListData> lists_memberships(string screen_name = "", long cursor = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, user), GET, paramdic);
-            XElement el = GetByAPI(url);
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
-                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (lists_memberships)
-        //-------------------------------------------------------------------------------
-        #region lists_subscriptions
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists_subscriptionsメソッド
-        /// </summary>
-        /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
-        public SequentData<ListData> lists_subscriptions(string screen_name = "", long cursor = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, user), GET, paramdic);
-            XElement el = GetByAPI(url);
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
-                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (lists_subscriptions)
-        //-------------------------------------------------------------------------------
-        #endregion (list)
-
-        //-------------------------------------------------------------------------------
-        #region list members/ (リスト所属ユーザー関連)
-        //-------------------------------------------------------------------------------
-        #region list_members_Get
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/members メソッド</para> 
-        /// <para>リストメンバー取得</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="cursor">データベース上のカーソル</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public SequentData<UserProfile> list_members_Get(string list_id, string screen_name = "", long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, user, list_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
-                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (list_members_Get)
-        //-------------------------------------------------------------------------------
-        #region list_members_Add
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/member メソッド</para>
-        /// <para>リストメンバー追加</para>
-        /// </summary>
-        /// <param name="id">追加するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <returns></returns>
-        public ListData list_members_Add(string id, string list_id)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("id", id);
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, ScreenName, list_id), POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_members_Add)
-        //-------------------------------------------------------------------------------
-        #region list_create_all (使用不可能)
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/create_all メソッド</para>
-        /// <para>リストメンバー一斉追加</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="user_ids">[select]</param>
-        /// <param name="screen_names">[select]</param>
-        /// <returns></returns>
-        private object list_create_all(string list_id, long[] user_ids = null, string[] screen_names = null)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
-                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
-            }
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids)); }
-                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/create_all.xml", URLapi, ScreenName, list_id), POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            throw new NotImplementedException();
-        }
-        #endregion (list_create_all)
-        //-------------------------------------------------------------------------------
-        #region list_members_Delete
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/member メソッド</para>
-        /// <para>リストメンバー削除</para>
-        /// </summary>
-        /// <param name="id">削除するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <returns></returns>
-        public ListData list_members_Delete(string id, string list_id)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("id", id);
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, ScreenName, list_id), DELETE, paramdic);
-
-            XElement el = DeleteToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_members_Delete)
-        //-------------------------------------------------------------------------------
-        #region list_members_Check
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/member メソッド</para>
-        /// <para>リストメンバー所属確認</para>
-        /// <para>見つからなければ404エラーを返す</para>
-        /// </summary>
-        /// <param name="user_id">確認するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile list_members_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (list_members_Check)
-        //-------------------------------------------------------------------------------
-        #endregion (list members/ (リスト所属ユーザー関連))
-
-        //-------------------------------------------------------------------------------
-        #region list subscribers/ (リストフォローユーザー関連)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Get
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para> 
-        /// <para>リストフォローメンバー取得</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="cursor">[option]データベース上のカーソル</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public SequentData<UserProfile> list_subscribers_Get(string list_id, string screen_name = "", long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
-                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (list_subscribers_Get)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Follow
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para>
-        /// <para>リストをフォロー</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <returns></returns>
-        public ListData list_subscribers_Follow(string list_id, string screen_name = "")
-        {
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), POST);
-
-            XElement el = PostToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_subscribers_Follow)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Unfollow
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para>
-        /// <para>リストをフォロー解除</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <returns></returns>
-        public ListData list_subscribers_Unfollow(string list_id, string screen_name = "")
-        {
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), DELETE);
-
-            XElement el = DeleteToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_subscribers_Unfollow)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Check
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para>
-        /// <para>リストフォロー確認</para>
-        /// <para>見つからなければ404エラーを返す</para>
-        /// </summary>
-        /// <param name="id">確認するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile list_subscribers_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (list_subscribers_Check)
-        //-------------------------------------------------------------------------------
-        #endregion (list subscribers/ (リストフォローユーザー関連))
-
-        //-------------------------------------------------------------------------------
         #region account/ (アカウント関連)
         //-------------------------------------------------------------------------------
         #region account_rate_limit_status
@@ -1724,13 +1870,6 @@ namespace StarlitTwit
 
         //-------------------------------------------------------------------------------
         #endregion (account/ (アカウント関連))
-
-        //-------------------------------------------------------------------------------
-        #region favorites/ (お気に入り関連)
-        //-------------------------------------------------------------------------------
-
-        //-------------------------------------------------------------------------------
-        #endregion (favorites/)
 
         //-------------------------------------------------------------------------------
         #region blocks/ (ブロック関連）
