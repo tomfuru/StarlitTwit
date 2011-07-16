@@ -1754,7 +1754,7 @@ namespace StarlitTwit
                                 // RTの時のPopup
                                 if (twitdata.IsRT() && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
                                     string title = tasktray.Text + ":リツイート";
-                                    string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName, 
+                                    string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName,
                                                                 twitdata.RTTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT), twitdata.RTTwitData.Text);
                                     this.PopupTasktray(title, text);
                                 }
@@ -2053,7 +2053,7 @@ namespace StarlitTwit
                 //else 
                 if (uctldisp == uctlDispHome) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Home : SettingsData.RenewGetNum_Home;
-                    d = Twitter.statuses_home_timeline(count: iCount);
+                    d = Twitter.statuses_home_timeline(count: iCount, include_rts: true);
                     //d = d.Where(twitdata => StatusFilter.ThroughFilters( SettingsData
                 }
                 else if (uctldisp == uctlDispReply) {
@@ -2131,7 +2131,7 @@ namespace StarlitTwit
             IEnumerable<TwitData> d;
             try {
                 if (uctldisp == uctlDispHome) {
-                    d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, since_id: since_id);
+                    d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, since_id: since_id, include_rts: true);
                 }
                 else if (uctldisp == uctlDispReply) {
                     d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, since_id: since_id, include_rts: true);
@@ -2191,7 +2191,7 @@ namespace StarlitTwit
             IEnumerable<TwitData> d;
             try {
                 if (uctldisp == uctlDispHome) {
-                    d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, max_id: max_id);
+                    d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, max_id: max_id, include_rts: true);
                 }
                 else if (uctldisp == uctlDispReply) {
                     d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, max_id: max_id, include_rts: true);
@@ -2272,7 +2272,7 @@ namespace StarlitTwit
                     IEnumerable<TwitData> d = null;
                     if (uctldisp == uctlDispHome) {
                         if (i == MAX_HOME / 200 + 1) { break; } // 800まで
-                        d = Twitter.statuses_home_timeline(count: 200, page: i);
+                        d = Twitter.statuses_home_timeline(count: 200, page: i, include_rts: true);
                     }
                     else if (uctldisp == uctlDispReply) {
                         if (i == MAX_MENTION / 200 + 1) { break; } // 800まで

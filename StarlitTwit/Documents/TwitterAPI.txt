@@ -1,5 +1,27 @@
 ﻿仕様
 
+*Twitter API Resources(Most Recent)
+Timelines
+Tweets
+Search
+Direct Message
+Friends&Tweets
+Users
+Favorites
+Lists
+Accounts
+Notification
+Saved Searches
+Local Trends
+Place&Geo
+Trends
+Block
+Spam Reporting
+OAuth
+Help
+Legal
+Deprecated
+
 ●friends_timeline---------------------------------------------------------------------------------
 
 <statuses type="array">

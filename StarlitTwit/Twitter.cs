@@ -16,26 +16,27 @@ using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
-/* Twitter API Resource 
- * statuses (Timeline)
- * statuses (Status)
- * users
- * local trends
- * list
- * list members
- * list subscribers
- * direct messages
- * friendships
- * friends and followers
- * account
- * favorites
- * notifications
- * blocks
- * spam reporting
- * oauth
- * geo
- * legal
- * help
+/* Twitter API Resources(Most Recent)
+ * Timelines
+ * Tweets
+ * Search
+ * Direct Message
+ * Friends&Tweets
+ * Users
+ * Favorites
+ * Lists
+ * Accounts
+ * Notification
+ * Saved Searches
+ * Local Trends
+ * Place&Geo
+ * Trends
+ * Block
+ * Spam Reporting
+ * OAuth
+ * Help
+ * Legal
+ * Deprecated
  */
 
 namespace StarlitTwit
@@ -56,6 +57,7 @@ namespace StarlitTwit
         private const string POST = "POST";
         private const string DELETE = "DELETE";
         public static readonly string URLapi;
+        public static readonly string URLapiSSL;
         public static readonly string URLtwi;
         public static readonly string URLsearch;
 
@@ -90,6 +92,7 @@ namespace StarlitTwit
         {
             URLtwi = @"http://twitter.com/";
             URLapi = @"http://api.twitter.com/" + API_VERSION.ToString() + '/';
+            URLapiSSL = @"https://api.twitter.com/" + API_VERSION.ToString() + '/';
             URLsearch = @"http://search.twitter.com/";
         }
         //
@@ -105,16 +108,75 @@ namespace StarlitTwit
         #endregion (コンストラクタ)
 
         //-------------------------------------------------------------------------------
-        #region statuses/ (Timeline関連)
+        #region Timelines Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_home_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/home_timelineメソッド</para>
+        /// <para>Returns the 20 most recent statuses, including retweets if they exist, posted by the authenticating user and the user's they follow.</para>
+        /// <para>上限800</para>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TwitData> statuses_home_timeline(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                                bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
+                                                bool exclude_replies = false, bool contributor_details = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (exclude_replies) { paramdic.Add("exclude_replies", exclude_replies.ToString().ToLower()); }
+                if (contributor_details) { paramdic.Add("contributor_details", contributor_details.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/home_timeline.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_home_timeline)
+        //-------------------------------------------------------------------------------
+        #region +statuses_mentions
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/mentionsメソッド</para>
+        /// <para>Returns the 20 most recent mentions (status containing @username) for the authenticating user</para>
+        /// <para>上限800</para>
+        /// </summary>
+        public IEnumerable<TwitData> statuses_mentions(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                            bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
+                                            bool contributor_details = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (contributor_details) { paramdic.Add("contributor_details", contributor_details.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/mentions.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_mentions)
         //-------------------------------------------------------------------------------
         #region +statuses_public_timeline
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/public_timelineメソッド
+        /// <para>statuses/public_timelineメソッド</para>
+        /// <para>Returns the 20 most recent statuses, including retweets if they exist, from non-protected users</para>
+        /// <para>The public timeline is cached for 60 seconds</para>
         /// </summary>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
         public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -129,157 +191,20 @@ namespace StarlitTwit
         }
         #endregion (statuses_public_timeline)
         //-------------------------------------------------------------------------------
-        #region +statuses_home_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/home_timelineメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> statuses_home_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                 bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/home_timeline.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_home_timeline)
-        //-------------------------------------------------------------------------------
-        #region +statuses_friends_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/friends_timelineメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_rts">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                    bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends_timeline.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_friends_timeline)
-        //-------------------------------------------------------------------------------
-        #region +statuses_user_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/user_timelineメソッド
-        /// </summary>
-        /// <param name="user_id">[option]</param>
-        /// <param name="screen_name">[option]</param>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_rts">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                           bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/user_timeline.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_user_timeline)
-        //-------------------------------------------------------------------------------
-        #region +statuses_mentions
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/mentionsメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_rts">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_mentions(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                            bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/mentions.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_mentions)
-        //-------------------------------------------------------------------------------
         #region +statuses_retweeted_by_me
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweeted_by_meメソッド
+        /// <para>statuses/retweeted_by_meメソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by the authenticating user</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweeted_by_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_by_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
                                                    bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -294,15 +219,10 @@ namespace StarlitTwit
         #region +statuses_retweeted_to_me
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweeted_to_meメソッド
+        /// <para>statuses/retweeted_to_meメソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by users the authenticating user follow</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweeted_to_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_to_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
                                                    bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -324,22 +244,17 @@ namespace StarlitTwit
         #region +statuses_retweets_of_me
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweets_of_meメソッド
+        /// <para>statuses/retweets_of_meメソッド</para>
+        /// <para>Returns the 20 most recent tweets of the authenticated user that have been retweeted by others</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweets_of_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweets_of_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
                                                   bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -351,19 +266,183 @@ namespace StarlitTwit
         }
         #endregion (statuses_retweets_of_me)
         //-------------------------------------------------------------------------------
-        #endregion (statuses/ (Timeline関連))
+        #region +statuses_user_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// statuses/user_timelineメソッド
+        /// </summary>
+        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                           bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
+                                           bool exclude_replies = false, bool contributor_details = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (exclude_replies) { paramdic.Add("exclude_replies", exclude_replies.ToString().ToLower()); }
+                if (contributor_details) { paramdic.Add("contributor_details", contributor_details.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/user_timeline.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_user_timeline)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweeted_to_user
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweeted_to_user メソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by users the specified user follows</para>
+        /// </summary>
+        /// <param name="id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public IEnumerable<TwitData> statuses_retweeted_to_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                           bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (id > 0) { paramdic.Add("id", id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweeted_to_user.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_retweeted_to_user)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweeted_by_user
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweeted_by_user</para>
+        /// <para>Returns the 20 most recent retweets posted by the specified user</para>
+        /// </summary>
+        /// <param name="id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public IEnumerable<TwitData> statuses_retweeted_by_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                           bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (id > 0) { paramdic.Add("id", id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweeted_by_user.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_retweeted_by_user)
+        //-------------------------------------------------------------------------------
+        #endregion (Timelines)
 
         //-------------------------------------------------------------------------------
-        #region statuses/ (Status関連)
+        #region Tweets Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_id_retweeted_by
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/id/retweeted_byメソッド</para>
+        /// <para>Show user objects of up to 100 members who retweeted the status</para>
+        /// </summary>
+        /// <param name="id">[required]</param>
+        /// <remarks>trim_user/include_entitiesはAPIに公式でない？</remarks>
+        public IEnumerable<UserProfile> statuses_id_retweeted_by(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by.xml", URLapi, id), GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPI(url));
+        }
+        #endregion (statuses_id_retweeted_by)
+        //-------------------------------------------------------------------------------
+        #region +statuses_id_retweeted_by_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/id/retweeted_by/idsメソッド </para>
+        /// <para>Show user ids of up to 100 users who retweeted the status</para>
+        /// </summary>
+        /// <param name="id">[required]</param>
+        /// <remarks>stringify_idsオプションは不要？</remarks>
+        public IEnumerable<long> statuses_id_retweeted_by_ids(long id, int count = -1, int page = -1)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by/ids.xml", URLapi, id), GET, paramdic);
+            XElement el = GetByAPI(url);
+
+            var ids = from elem in el.Elements("id")
+                      select long.Parse(elem.Value);
+            return ids;
+        }
+        #endregion (statuses_id_retweeted_by_ids)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweets
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweetsメソッド</para>
+        /// <para>Returns up to 100 of the first retweets of a given tweet</para>
+        /// </summary>
+        /// <param name="id">[required]リツイートを見る発言のID</param>
+        /// <param name="count">[option] &lt;100</param>
+        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/retweets/{1}.xml", URLapi, id), GET, paramdic);
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_retweets)
         //-------------------------------------------------------------------------------
         #region +statuses_show
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/showメソッド
+        /// <para>statuses/showメソッド</para>
+        /// <para>Returns a single status, specified by the id parameter below</para>
         /// </summary>
-        /// <param name="id">取得する発言ID</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
+        /// <param name="withAuthParam">認証をつけてAPI呼び出しするかどうか</param>
+        /// <param name="id">[required]取得する発言ID</param>
         public TwitData statuses_show(bool withAuthParam, long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -390,11 +469,55 @@ namespace StarlitTwit
         }
         #endregion (statuses_show)
         //-------------------------------------------------------------------------------
+        #region +statuses_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/destroyメソッド</para>
+        /// <para>Destroys the status specified by the required ID parameter</para>
+        /// </summary>
+        /// <param name="id">[required]削除するID</param>
+        public TwitData statuses_destroy(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/destroy/" + id.ToString() + ".xml", POST, paramdic);
+            return ConvertToTwitData(PostToAPI(url));
+        }
+        #endregion (statuses_destroy)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweet
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweetメソッド</para>
+        /// <para>Retweets a tweet</para>
+        /// </summary>
+        /// <param name="id">[required]リツイート対象の発言ID</param>
+        /// <remarks>403:update limit</remarks>
+        public void statuses_retweet(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweet/" + id.ToString() + ".xml", POST, paramdic);
+            TwitData d = ConvertToTwitData(PostToAPI(url));
+        }
+        #endregion (statuses_retweet)
+        //-------------------------------------------------------------------------------
         #region +statuses_update
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/updateメソッド
+        /// <para>statuses/updateメソッド</para>
+        /// <para>Updates the authenticating user's status, also known as tweeting</para>
         /// </summary>
+        /// <param name="status">[required]発言内容</param>
+        /// <param name="place_id">[option]GET geo/reverse_geocodeで取得できるID</param>
         public TwitData statuses_update(string status, long in_reply_to_status_id = -1, double latitude = double.NaN, double longtitude = double.NaN,
                                     string place_id = "", bool display_coordinates = false, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
@@ -419,111 +542,228 @@ namespace StarlitTwit
         }
         #endregion (statuses_update)
         //-------------------------------------------------------------------------------
-        #region +statuses_destroy
+        #endregion (Tweets)
+
+        //-------------------------------------------------------------------------------
+        #region Search Resources
+        //-------------------------------------------------------------------------------
+        #region +search
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/destroyメソッド
+        /// <para>search メソッド</para>
+        /// <para>Returns tweets that match a specified query</para>
         /// </summary>
-        /// <param name="id">削除するID</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData statuses_destroy(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        /// <param name="q">[required]検索条件</param>
+        /// <param name="lang">[unuse]ISO 639-1 code</param>
+        /// <param name="locale">[option](only ja is currently effective)</param>
+        /// <param name="rpp">[option] &lt;=100</param>
+        /// <param name="page">[option] rpp * page &lt;=1500</param>
+        /// <param name="max_id">[unuse]</param>
+        /// <param name="since">[unuse]YYYY-MM-DD</param>
+        /// <param name="until">[option]YYYY-MM-DD</param>
+        /// <param name="geocode">[unuse]</param>
+        /// <param name="show_user"></param>
+        /// <param name="result_type">[recent/popular/mixed]</param>
+        /// <returns></returns>
+        /// <remarks>API Documentationにはsince,max_id無</remarks>
+        public IEnumerable<TwitData> search(string q = "", string lang = "", string locale = "ja",
+            int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
+            string until = "", object geocode = null, bool show_user = false, string result_type = "")
         {
+            if (string.IsNullOrEmpty(q)) { throw new ArgumentException("qかphraseのどちらかの引数は必須です。"); }
+
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (!string.IsNullOrEmpty(q)) { paramdic.Add("q", Utilization.UrlEncode(q)); }
+                if (!string.IsNullOrEmpty(lang)) { paramdic.Add("lang", lang); }
+                if (!string.IsNullOrEmpty(locale)) { paramdic.Add("locale", locale); }
+                if (rpp > 0) { paramdic.Add("rpp", rpp.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                //if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                //if (!string.IsNullOrEmpty(since)) { paramdic.Add("since", since); }
+                if (!string.IsNullOrEmpty(until)) { paramdic.Add("until", until); }
+                // geocode
+                if (show_user) { paramdic.Add("show_user", show_user.ToString().ToLower()); }
+                if (!string.IsNullOrEmpty(result_type)) { paramdic.Add("result_type", result_type); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/destroy/" + id.ToString() + ".xml", POST, paramdic);
-            return ConvertToTwitData(PostToAPI(url));
+            string url = GetUrlWithOAuthParameters(URLsearch + "search.json", GET, paramdic);
+
+            XElement el = GetByAPIJson(url);
+
+            IEnumerable<TwitData> data = ConvertToTwitDataJson(el);
+            //string[] user_names = data
+            //    .Where((tdata) => !tdata.UserProtected)
+            //    .Select((tdata) => tdata.UserScreenName)
+            //    .Distinct()
+            //    .ToArray();
+
+            //UserData[] userData = users_lookup(screen_names: user_names);
+
+            return data;
         }
-        #endregion (statuses_destroy)
+        #endregion (search)
         //-------------------------------------------------------------------------------
-        #region +statuses_retweet
+        #endregion (Search)
+
+        //-------------------------------------------------------------------------------
+        #region Direct Messages Resources
+        //-------------------------------------------------------------------------------
+        #region +direct_messages
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweetメソッド
+        /// <para>direct_messagesメソッド</para>
+        /// <para>Returns the 20 most recent direct messages sent to the authenticating user</para>
         /// </summary>
-        /// <param name="id">リツイート対象の発言ID</param>
-        /// <remarks>403:update limit</remarks>
-        public void statuses_retweet(long id)
-        {
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweet/" + id.ToString() + ".xml", POST);
-            TwitData d = ConvertToTwitData(PostToAPI(url));
-        }
-        #endregion (statuses_retweet)
-        //-------------------------------------------------------------------------------
-        #region +statuses_retweets
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/retweetsメソッド
-        /// </summary>
-        /// <param name="id">リツイートを見る発言のID</param>
-        /// <param name="count">[option] &lt;100</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+                                                     bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages.xml", GET, paramdic);
+
+            return ConvertToTwitDataArrayDM(GetByAPI(url));
+        }
+        #endregion (direct_messages)
+        //-------------------------------------------------------------------------------
+        #region +direct_messages_sent
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>direct_messages/sentメソッド</para>
+        /// <para>Returns the 20 most recent direct messages sent by the authenticating user</para>
+        /// </summary>
+        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/retweets/{1}.xml", URLapi, id), GET, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages/sent.xml", GET, paramdic);
+
+            return ConvertToTwitDataArrayDM(GetByAPI(url));
+        }
+        #endregion (direct_messages_sent)
+        //-------------------------------------------------------------------------------
+        #region +direct_messages_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>direct_messages/destroyメソッド</para>
+        /// <para>Destroys the direct message specified in the required ID parameter</para>
+        /// </summary>
+        /// <param name="id">削除先発言ID</param>
+        public TwitData direct_messages_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages/destroy/" + id.ToString() + ".xml", POST, paramdic);
+            return ConvertToTwitDataDM(PostToAPI(url));
+        }
+        #endregion (direct_messages_destroy)
+        //-------------------------------------------------------------------------------
+        #region +direct_messages_new
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>direct_messages/newメソッド</para>
+        /// <para>Sends a new direct message to the specified user from the authenticating user</para>
+        /// </summary>
+        /// <param name="screen_name">[select]送信先の名前</param>
+        /// <param name="user_id">[select]送信先のユーザーID</param>
+        /// <param name="text">送信テキスト</param>
+        /// <param name="include_entities">[option]</param>
+        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (string.IsNullOrEmpty(screen_name) && user_id <= 0) { throw new ArgumentException("ScreenNameかUserIDの少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                paramdic.Add("text", Utilization.UrlEncode(text));
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages/new.xml", POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToTwitDataDM(el);
+        }
+        #endregion (direct_messages_new)
+        //-------------------------------------------------------------------------------
+        #region -direct_messages_id (Not Found?)
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>direct_messages_idメソッド</para>
+        /// <para>Returns a single direct message, specified by an id parameter</para>
+        /// </summary>
+        /// <param name="id">[required]DirctMessageのID</param>
+        /// <returns></returns>
+        private TwitData direct_messages_id(long id)
+        {
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}direct_messages/{1}.xml", URLapiSSL, id), GET);
+
+            return ConvertToTwitDataDM(GetByAPI(url));
+        }
+        #endregion (direct_messages_id)
+        //-------------------------------------------------------------------------------
+        #endregion (Direct Message)
+
+        //-------------------------------------------------------------------------------
+        #region Deprecated Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_friends_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// statuses/friends_timelineメソッド
+        /// </summary>
+        /// <param name="since_id">[option]</param>
+        /// <param name="max_id">[option]</param>
+        /// <param name="count">[option]</param>
+        /// <param name="page">[option]</param>
+        /// <param name="trim_user">[option]</param>
+        /// <param name="include_rts">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        [Obsolete("statuses/home_timelineを使用してください。")]
+        public IEnumerable<TwitData> statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+                                                    bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends_timeline.xml", GET, paramdic);
+
             return ConvertToTwitDataArray(GetByAPI(url));
         }
-        #endregion (statuses_retweets)
+        #endregion (statuses_friends_timeline)
         //-------------------------------------------------------------------------------
-        #region +statuses_id_retweeted_by
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/id/retweeted_byメソッド
-        /// </summary>
-        public IEnumerable<UserProfile> statuses_id_retweeted_by(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
+        #endregion (Deprecated)
 
-            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by.xml", URLapi, id), GET, paramdic);
-            return ConvertToUserProfileArray(GetByAPI(url));
-        }
-        #endregion (statuses_id_retweeted_by)
-        //-------------------------------------------------------------------------------
-        #region +statuses_id_retweeted_by_ids
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/id/retweeted_by/idsメソッド 
-        /// </summary>
-        public IEnumerable<long> statuses_id_retweeted_by_ids(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by/ids.xml", URLapi, id), GET, paramdic);
-            XElement el = GetByAPI(url);
-
-            var ids = from elem in el.Elements("id")
-                      select long.Parse(elem.Value);
-            return ids;
-        }
-        #endregion (statuses_id_retweeted_by_ids)
-        //-------------------------------------------------------------------------------
-        #endregion (statuses/ (Status関連))
-
-        //-------------------------------------------------------------------------------
+        //===============================================================================
         #region users/ (ユーザー情報関連)
         //-------------------------------------------------------------------------------
         #region users_show
@@ -998,7 +1238,7 @@ namespace StarlitTwit
             {
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
-            
+
             string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
             string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
 
@@ -1052,7 +1292,7 @@ namespace StarlitTwit
         public ListData list_subscribers_Follow(string list_id, string screen_name = "")
         {
             string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml",URLapi,user,list_id), POST);
+            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), POST);
 
             XElement el = PostToAPI(url);
             return ConvertToListData(el);
@@ -1106,111 +1346,6 @@ namespace StarlitTwit
         #endregion (list_subscribers_Check)
         //-------------------------------------------------------------------------------
         #endregion (list subscribers/ (リストフォローユーザー関連))
-
-        //-------------------------------------------------------------------------------
-        #region direct_messages/ (ダイレクトメッセージ関連)
-        //-------------------------------------------------------------------------------
-        #region direct_messages
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messagesメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages.xml", GET, paramdic);
-
-            return ConvertToTwitDataArrayDM(GetByAPI(url));
-        }
-        #endregion (direct_messages)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_sent
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/sentメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/sent.xml", GET, paramdic);
-
-            return ConvertToTwitDataArrayDM(GetByAPI(url));
-        }
-        #endregion (direct_messages_sent)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_new
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/newメソッド
-        /// </summary>
-        /// <param name="screen_name">送信先の名前</param>
-        /// <param name="user_id">送信先のユーザーID</param>
-        /// <param name="text">送信テキスト</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("screen_name", screen_name);
-                paramdic.Add("user_id", user_id.ToString());
-                paramdic.Add("text", Utilization.UrlEncode(text));
-
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/new.xml", POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            return ConvertToTwitDataDM(el);
-        }
-        #endregion (direct_messages_new)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_destroy
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/destroyメソッド
-        /// </summary>
-        /// <param name="id">削除先発言ID</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/destroy/" + id.ToString() + ".xml", POST, paramdic);
-            return ConvertToTwitDataDM(PostToAPI(url));
-        }
-        #endregion (direct_messages_destroy)
-        //-------------------------------------------------------------------------------
-        #endregion (direct_messages/)
 
         //-------------------------------------------------------------------------------
         #region friendships/ (フレンド関連)
@@ -1626,7 +1761,7 @@ namespace StarlitTwit
         /// <param name="page"></param>
         /// <param name="include_entities"></param>
         /// <returns></returns>
-        public IEnumerable<UserProfile> blocks_blocking(int page = -1,int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public IEnumerable<UserProfile> blocks_blocking(int page = -1, int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1658,68 +1793,6 @@ namespace StarlitTwit
         #endregion (blocks_blocking_ids)
         //-------------------------------------------------------------------------------
         #endregion (blocks/ (ブロック関連）)
-
-        //-------------------------------------------------------------------------------
-        #region search/ (検索関連)
-        //-------------------------------------------------------------------------------
-        #region search
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>検索を行います。引数qかphraseのどちらかは必須です。</para>
-        /// </summary>
-        /// <param name="q">[select option]"検索条件"</param>
-        /// <param name="phrase">[select option]"(検索語句)&(検索条件)"</param>
-        /// <param name="lang">[unuse]</param>
-        /// <param name="rpp">[option] &lt;=100</param>
-        /// <param name="page">[option] rpp * page &lt;=1500</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="since_id">[option]</param>
-        /// <param name="since">[option]YYYY-MM-DD</param>
-        /// <param name="until">[option]YYYY-MM-DD</param>
-        /// <param name="geocode">[unuse]</param>
-        /// <param name="show_user"></param>
-        /// <param name="result_type">[recent/popular/mixed]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> search(string q = "", string phrase = "", string lang = "jp",
-            int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
-            string until = "", object geocode = null, bool show_user = false, string result_type = "")
-        {
-            if (string.IsNullOrEmpty(q) && string.IsNullOrEmpty(phrase)) { throw new ArgumentException("qかphraseのどちらかの引数は必須です。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (!string.IsNullOrEmpty(q)) { paramdic.Add("q", Utilization.UrlEncode(q)); }
-                if (!string.IsNullOrEmpty(phrase)) { paramdic.Add("phrase", Utilization.UrlEncode(phrase)); }
-                //paramdic.Add("lang", lang);
-                if (rpp > 0) { paramdic.Add("rpp", rpp.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (!string.IsNullOrEmpty(since)) { paramdic.Add("since", since); }
-                if (!string.IsNullOrEmpty(until)) { paramdic.Add("until", until); }
-                // geocode
-                if (show_user) { paramdic.Add("show_user", "true"); }
-                if (!string.IsNullOrEmpty(result_type)) { paramdic.Add("result_type", result_type); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLsearch + "search.json", GET, paramdic);
-
-            XElement el = GetByAPIJson(url);
-
-            IEnumerable<TwitData> data = ConvertToTwitDataJson(el);
-            //string[] user_names = data
-            //    .Where((tdata) => !tdata.UserProtected)
-            //    .Select((tdata) => tdata.UserScreenName)
-            //    .Distinct()
-            //    .ToArray();
-
-            //UserData[] userData = users_lookup(screen_names: user_names);
-
-            return data;
-        }
-        #endregion (search)
-        //-------------------------------------------------------------------------------
-        #endregion (search)
 
         //-------------------------------------------------------------------------------
         #region oauth/ (OAuth認証関連)
@@ -3006,7 +3079,7 @@ namespace StarlitTwit
         //
         private IEnumerable<EntityData> GetEntitiesByRegex(string text)
         {
-           // @から始まるUserMentionのEntity
+            // @から始まるUserMentionのEntity
             Regex rm = new Regex(MENTION_REGEX_PATTERN);
             foreach (Match m in rm.Matches(text)) {
                 Group g = m.Groups["entity"];
