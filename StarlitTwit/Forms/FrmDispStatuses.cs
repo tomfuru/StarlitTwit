@@ -232,12 +232,12 @@ namespace StarlitTwit
                             else { disableAppend = true; }
                             break;
                         case EFormType.MyFavorite:
-                            d = FrmMain.Twitter.favorites_get(page: _page);
+                            d = FrmMain.Twitter.favorites(page: _page);
                             _page++;
                             disableAppend = (d.Count() == 0);
                             break;
                         case EFormType.UserFavorite:
-                            d = FrmMain.Twitter.favorites_get(UserScreenName, page: _page);
+                            d = FrmMain.Twitter.favorites(UserScreenName, page: _page);
                             _page++;
                             disableAppend = (d.Count() == 0);
                             break;

@@ -7,6 +7,7 @@ Search
 Direct Message
 Friends&Tweets
 Users
+Suggested Users
 Favorites
 Lists
 Accounts
