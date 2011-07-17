@@ -25,8 +25,8 @@ using Newtonsoft.Json;
  % Users
  - Suggested Users
  * Favorites
- * Lists
- * Accounts
+ % Lists
+ % Accounts
  - Notification
  - Saved Searches
  - Local Trends
@@ -57,9 +57,9 @@ namespace StarlitTwit
         private const string GET = "GET";
         private const string POST = "POST";
         private const string DELETE = "DELETE";
+        public static readonly string URLtwi;
         public static readonly string URLapi;
         public static readonly string URLapiSSL;
-        public static readonly string URLtwi;
         public static readonly string URLsearch;
 
         public const bool DEFAULT_INCLUDE_ENTITIES = false;
@@ -1687,9 +1687,205 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region Accounts Resources
         //-------------------------------------------------------------------------------
+        #region +account_rate_limit_status
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>account/rate_limit_statusメソッド</para>
+        /// <para>Returns the remaining number of API requests available to the requesting user before the API limit is reached for the current hour.</para>
+        /// </summary>
+        /// <param name="withAuth">認証を行うかどうか。認証しない場合はIP依存のデータが返る</param>
+        /// <returns>残数データ</returns>
+        public APILimitData account_rate_limit_status(bool withAuth)
+        {
+            string urlbase = URLapi + @"account/rate_limit_status.xml";
+            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET)
+                                    : urlbase;
 
+            XElement el = GetByAPI(url);
+            return ConvertToAPILimitData(el);
+        }
+        #endregion (account_rate_limit_status)
+        // account/verify_credentials
+        // account/end_session
+        // account/update_delivery_device
+        //-------------------------------------------------------------------------------
+        #region +account_update_profile プロフィール更新
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>account_update_profileメソッド</para>
+        /// <para>Sets values that users are able to set under the "Account" tab of their settings page</para>
+        /// </summary>
+        /// <param name="name">[select at least one]</param>
+        /// <param name="url">[select at least one]</param>
+        /// <param name="location">[select at least one]</param>
+        /// <param name="description">[select at least one]</param>
+        /// <returns></returns>
+        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, 
+                                                  bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url)
+             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
+                if (!string.IsNullOrEmpty(url)) { paramdic.Add("url", Utilization.UrlEncode(url)); }
+                if (!string.IsNullOrEmpty(location)) { paramdic.Add("location", Utilization.UrlEncode(location)); }
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+            string url_post = GetUrlWithOAuthParameters(URLapi + @"account/update_profile.xml", POST, paramdic);
+
+            XElement el = PostToAPI(url_post);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (account_update_profile)
+        // account/update_profile_background_image
+        // account/update_profile_colors
+        //-------------------------------------------------------------------------------
+        #region +account_update_profile_image 画像更新
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>account/update_profile_image メソッド</para>　
+        /// <para>Updates the authenticating user's profile image.</para>
+        /// <para>返り値のUserProfileではURLが反映されてない可能性があるので，最低5秒待ってから取得する。</para>
+        /// </summary>
+        /// <param name="imgFileName">画像ファイルパス</param>
+        /// <param name="image">画像</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile account_update_profile_image(string imgFileName, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            string contentType;
+            Guid guid = image.RawFormat.Guid;
+            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
+            else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
+            else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
+            else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
+
+            return ConvertToUserProfile(PostImageToAPI(url, imgFileName, image, contentType));
+        }
+        #endregion (account_update_profile_image)
+        // account/totals
+        // account/settings(GET)
+        // account/settings(POST)
         //-------------------------------------------------------------------------------
         #endregion (Accounts)
+
+        //-------------------------------------------------------------------------------
+        #region Block Resources
+        //-------------------------------------------------------------------------------
+        #region +blocks_blocking
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>blocks/blocking メソッド</para>
+        /// <para>Returns an array of user objects that the authenticating user is blocking.</para>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserProfile> blocks_blocking(int page = -1, int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking.xml", GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPI(url, true));
+        }
+        #endregion (blocks_blocking)
+        //-------------------------------------------------------------------------------
+        #region +blocks_blocking_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>blocks/blocking/ids メソッド</para>
+        /// <para>Returns an array of numeric user ids the authenticating user is blocking.</para>
+        /// </summary>
+        /// <remarks>stringify_idsは不要?</remarks>
+        public IEnumerable<long> blocks_blocking_ids()
+        {
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking/ids.xml", GET);
+            XElement el = GetByAPI(url, true);
+
+            var ids = from id in el.Elements("id")
+                      select long.Parse(id.Value);
+            return ids;
+        }
+        #endregion (blocks_blocking_ids)
+        //-------------------------------------------------------------------------------
+        #region -blocks_exists (未実装)
+        //-------------------------------------------------------------------------------
+        //
+        private void blocks_exists()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion (blocks_exists)
+        //-------------------------------------------------------------------------------
+        #region +blocks_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>blocks/create メソッド</para>
+        /// <para>Blocks the specified user from following the authenticating user</para>
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public UserProfile blocks_create(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/create.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (blocks_create)
+        //-------------------------------------------------------------------------------
+        #region +blocks_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>blocks/destroy メソッド</para>
+        /// <para>Un-blocks the user specified in the ID parameter for the authenticating user</para>
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public UserProfile blocks_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/destroy.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (blocks_destroy)
+        //-------------------------------------------------------------------------------
+        #endregion (Block)
 
         //-------------------------------------------------------------------------------
         #region Deprecated Resources
@@ -1786,198 +1982,10 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (Deprecated)
 
-        //===============================================================================
-        #region account/ (アカウント関連)
         //-------------------------------------------------------------------------------
-        #region account_rate_limit_status
+        #region OAuth Resources
         //-------------------------------------------------------------------------------
-        /// <summary>
-        /// abbount/rate_limit_statusメソッド
-        /// </summary>
-        /// <param name="withAuth">認証を行うかどうか。認証しない場合はIP依存のデータが返る</param>
-        /// <returns>残数データ</returns>
-        public APILimitData account_rate_limit_status(bool withAuth)
-        {
-            string urlbase = URLapi + @"account/rate_limit_status.xml";
-            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET)
-                                    : urlbase;
-
-            XElement el = GetByAPI(url);
-            return ConvertToAPILimitData(el);
-        }
-        #endregion (account_rate_limit_status)
-        //-------------------------------------------------------------------------------
-        #region account_update_profile プロフィール更新
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// account_update_profileメソッド
-        /// </summary>
-        /// <param name="name">[option]</param>
-        /// <param name="url">[option]</param>
-        /// <param name="location">[option]</param>
-        /// <param name="description">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url)
-             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
-                if (!string.IsNullOrEmpty(url)) { paramdic.Add("url", Utilization.UrlEncode(url)); }
-                if (!string.IsNullOrEmpty(location)) { paramdic.Add("location", Utilization.UrlEncode(location)); }
-                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-            string url_post = GetUrlWithOAuthParameters(URLapi + @"account/update_profile.xml", POST, paramdic);
-
-            XElement el = PostToAPI(url_post);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (account_update_profile)
-        //-------------------------------------------------------------------------------
-        #region account_update_profile_image 画像更新
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>account/update_profile_image メソッド</para>　
-        /// <para>返り値のUserProfileではURLが反映されてない可能性があるので，最低5秒待ってから取得する。</para>
-        /// </summary>
-        /// <param name="imgFileName">画像ファイルパス</param>
-        /// <param name="image">画像</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile account_update_profile_image(string imgFileName, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            string contentType;
-            Guid guid = image.RawFormat.Guid;
-            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
-            else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
-            else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
-            else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
-
-            return ConvertToUserProfile(PostImageToAPI(url, imgFileName, image, contentType));
-        }
-        #endregion (account_update_profile_image)
-
-        //-------------------------------------------------------------------------------
-        #endregion (account/ (アカウント関連))
-
-        //-------------------------------------------------------------------------------
-        #region blocks/ (ブロック関連）
-        //-------------------------------------------------------------------------------
-        #region blocks_create
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// blocks/create メソッド
-        /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile blocks_create(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/create.xml", POST, paramdic);
-            XElement el = PostToAPI(url);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (blocks_create)
-        //-------------------------------------------------------------------------------
-        #region blocks_destroy
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// blocks/destroy メソッド
-        /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile blocks_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/destroy.xml", POST, paramdic);
-            XElement el = PostToAPI(url);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (blocks_destroy)
-        //-------------------------------------------------------------------------------
-        #region blocks_exists (未実装)
-        //-------------------------------------------------------------------------------
-        //
-        private void blocks_exists()
-        {
-            throw new NotImplementedException();
-        }
-        #endregion (blocks_exists)
-        //-------------------------------------------------------------------------------
-        #region blocks_blocking
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// blocks/blocking メソッド
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="include_entities"></param>
-        /// <returns></returns>
-        public IEnumerable<UserProfile> blocks_blocking(int page = -1, int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking.xml", GET, paramdic);
-            return ConvertToUserProfileArray(GetByAPI(url, true));
-        }
-        #endregion (blocks_blocking)
-        //-------------------------------------------------------------------------------
-        #region blocks_blocking_ids
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// blocks/blocking/ids メソッド
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<long> blocks_blocking_ids()
-        {
-            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking/ids.xml", GET);
-            XElement el = GetByAPI(url, true);
-
-            var ids = from id in el.Elements("id")
-                      select long.Parse(id.Value);
-            return ids;
-        }
-        #endregion (blocks_blocking_ids)
-        //-------------------------------------------------------------------------------
-        #endregion (blocks/ (ブロック関連）)
-
-        //-------------------------------------------------------------------------------
-        #region oauth/ (OAuth認証関連)
-        //-------------------------------------------------------------------------------
-        #region OAuth OAuth認証
+        #region +OAuth OAuth認証
         //-------------------------------------------------------------------------------
         //
         public bool OAuth(out UserInfo userdata)
@@ -2012,7 +2020,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (OAuth)
         //-------------------------------------------------------------------------------
-        #region oauth_request_token
+        #region -oauth_request_token
         //-------------------------------------------------------------------------------
         /// <summary>
         /// request_tokenを返します。
@@ -2022,7 +2030,7 @@ namespace StarlitTwit
         /// <returns></returns>
         private string oauth_request_token(out string request_token_Secret)
         {
-            string url = URLtwi + "oauth/request_token";
+            string url = URLapiSSL + "oauth/request_token";
 
             SortedDictionary<string, string> parameters = GenerateParameters("");
             string signature = GenerateSignature("", GET, url, parameters);
@@ -2036,7 +2044,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (oauth_request_token)
         //-------------------------------------------------------------------------------
-        #region oauth_authorize_URL
+        #region -oauth_authorize_URL
         //-------------------------------------------------------------------------------
         /// <summary>
         /// ユーザーが認証するためのURLを返します。
@@ -2045,12 +2053,12 @@ namespace StarlitTwit
         /// <returns></returns>
         private string oauth_authorize_URL(string strRequestToken)
         {
-            return URLtwi + "oauth/authorize?oauth_token=" + strRequestToken;
+            return URLapiSSL + "oauth/authorize?oauth_token=" + strRequestToken;
         }
         //-------------------------------------------------------------------------------
         #endregion (oauth_authorize)
         //-------------------------------------------------------------------------------
-        #region oauth_access_token
+        #region -oauth_access_token
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 最終認証を行います。正式なoauth_tokenが返ります。
@@ -2061,7 +2069,7 @@ namespace StarlitTwit
         /// <param name="access_token_secret">正式なoauth_token_secret</param>
         private UserInfo oauth_access_token(string pin, string reqToken, string reqTokenSecret)
         {
-            string url = URLtwi + "oauth/access_token";
+            string url = URLapiSSL + "oauth/access_token";
 
             SortedDictionary<string, string> parameters = GenerateParameters(reqToken);
             parameters.Add("oauth_verifier", pin);
@@ -2081,8 +2089,9 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (oauth_access_token)
+
         //-------------------------------------------------------------------------------
-        #endregion (oauth/)
+        #endregion (OAuth)
 
         //===============================================================================
         #region stream_statuses_sample (test)
