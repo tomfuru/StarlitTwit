@@ -216,7 +216,7 @@ namespace StarlitTwit
 
                     long next_cursor = -1;
                     do {
-                        var lsttpl = FrmMain.Twitter.lists_Get(screen_name: _listOwner, cursor: next_cursor);
+                        var lsttpl = FrmMain.Twitter.lists(screen_name: _listOwner, cursor: next_cursor);
                         _listData = lsttpl.Data;
                         next_cursor = lsttpl.NextCursor;
                         if (_listData.Count() > 0) {

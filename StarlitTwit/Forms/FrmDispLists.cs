@@ -416,7 +416,7 @@ namespace StarlitTwit
                     SequentData<ListData> listseq = null;
                     switch (FormType) {
                         case EFormType.MyList:
-                            listseq = FrmMain.Twitter.lists_Get(cursor: _next_cursor);
+                            listseq = FrmMain.Twitter.lists(cursor: _next_cursor);
                             break;
                         case EFormType.MyBelongedList:
                             listseq = FrmMain.Twitter.lists_memberships(cursor: _next_cursor);
@@ -425,7 +425,7 @@ namespace StarlitTwit
                             listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
                             break;
                         case EFormType.UserList:
-                            listseq = FrmMain.Twitter.lists_Get(screen_name: UserScreenName, cursor: _next_cursor);
+                            listseq = FrmMain.Twitter.lists(screen_name: UserScreenName, cursor: _next_cursor);
                             break;
                         case EFormType.UserBelongedList:
                             listseq = FrmMain.Twitter.lists_memberships(screen_name: UserScreenName, cursor: _next_cursor);
