@@ -20,6 +20,8 @@
 ・Entity等が改行してる時に2行目のところでリンクが反応しない
 
 ■要修正・確認
+・被ったTwitDataがきたら更新したほうがいい
+・listのAPIからくるxmlの仕様が変わった？
 ・TextBox履歴はSelectionLengthも持っておいたほうが良い
 ・ユーザーのお気に入り/Retweet(/フォロワーのRetweet)表示
 ・FollowerID,FriendIDはプロフィール更新時に数確認して更新？
