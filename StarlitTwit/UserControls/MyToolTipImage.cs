@@ -22,6 +22,8 @@ namespace StarlitTwit
         private Image[] _img = null;
         /// <summary>現在表示中イメージインデックス</summary>
         private int _imgIndex = 0;
+        /// <summary>ロード中画像インデックス(1,2,...)</summary>
+        private int _loadIndex = 1;
         /// <summary>表示切替タイマー</summary>
         //private Timer _switchTimer = new Timer() { Interval = 3000 };
         System.Timers.Timer _switchTimer = new System.Timers.Timer(3000);

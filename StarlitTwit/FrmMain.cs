@@ -82,9 +82,9 @@ namespace StarlitTwit
         /// <summary>UserStream中かどうか</summary>
         private volatile bool _usingUserStream = false;
         /// <summary>FriendのID配列</summary>
-        private long[] _friendArray;
+        private HashSet<long> _friendIDSet = null;
         /// <summary>FollowerのID配列</summary>
-        private long[] _followArray;
+        private HashSet<long> _followerIDSet = null;
         #region 発言状態関連
         //-------------------------------------------------------------------------------
         /// <summary>発言状態かどうか</summary>
@@ -137,7 +137,11 @@ namespace StarlitTwit
         /// <summary>残りAPI表示フォーマット</summary>
         private const string REST_API_FORMAT = "API残: {0}/{1}";
         /// <summary>取得中表示フォーマット</summary>
-        private const string STR_GETTING_PROFILE = "プロフィール取得中...";
+        private const string STR_FMT_GETTING = "{0}取得中...";
+        private const string STR_PROFILE = "プロフィール";
+        private const string STR_FRIEND_IDS = "フレンドID";
+        private const string STR_FOLLOWER_IDS = "フォロワーID";
+
         private const string GETTING_FORMAT_FOR_USERSTREAM = "UserStream開始のために タブ:{0} 取得中...";
         private const string GETTING_FORMAT = "タブ:{0} 取得中...";
         private const string STR_FIRST_GET_NUM = "初期取得件数:";
@@ -221,6 +225,8 @@ namespace StarlitTwit
             Normal,
             /// <summary>リプライ状態</summary>
             Reply,
+            /// <summary>引用リプライ状態</summary>
+            QuoteReply,
             /// <summary>複数リプライ状態</summary>
             MultiReply,
             /// <summary>ダイレクトメッセージ送信状態</summary>
@@ -364,6 +370,9 @@ namespace StarlitTwit
                 switch (_stateStatusState) {
                     case StatusState.Reply:
                         if (!txtbox.Text.StartsWith(_RecipiantName)) { ReSetStatusState(); }
+                        break;
+                    case StatusState.QuoteReply:
+                        if (!txtbox.Text.Contains(_RecipiantName)) { ReSetStatusState(); }
                         break;
                     case StatusState.MultiReply:
                         if (txtbox.Text.Length == 0) { ReSetStatusState(); }
@@ -548,6 +557,9 @@ namespace StarlitTwit
                 case RowEventType.Quote:
                     TwitMenu_Quote_Click(sender, e);
                     break;
+                case RowEventType.QuoteReply:
+                    TwitMenu_QuoteReply_Click(sender, e);
+                    break;
                 case RowEventType.Retweet:
                     TwitMenu_Retweet_Click(sender, e);
                     break;
@@ -628,6 +640,21 @@ namespace StarlitTwit
         }
         #endregion (TwitMenu_Quote_Click)
         //-------------------------------------------------------------------------------
+        #region TwitMenu_QuoteReply_Click 引用リプライ
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_QuoteReply_Click(object sender, TwitRowMenuEventArgs e)
+        {
+            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+
+            rtxtTwit.Focus();
+            rtxtTwit.Select(0, 0);
+
+            _RecipiantName = '@' + e.TwitData.UserScreenName;
+            SetStatusState(StatusState.QuoteReply, e.TwitData.UserScreenName + "宛の引用リプライ");
+        }
+        #endregion (TwitMenu_QuoteReply_Click)
+        //-------------------------------------------------------------------------------
         #region TwitMenu_Retweet_Click リツイート
         //-------------------------------------------------------------------------------
         //
@@ -695,7 +722,7 @@ namespace StarlitTwit
         private void TwitMenu_Delete_Click(object sender, TwitRowMenuEventArgs e)
         {
             if (Message.ShowQuestionMessage("削除してよろしいですか？") == DialogResult.Yes) {
-                Delete(e.TwitData.StatusID, e.TwitData.IsDM()); 
+                Delete(e.TwitData.StatusID, e.TwitData.IsDM());
             }
         }
         #endregion (TwitMenu_Delete_Click)
@@ -1746,18 +1773,18 @@ namespace StarlitTwit
             try {
                 switch (type) {
                     case UserStreamItemType.friendlist:
-                        _friendArray = ((IEnumerable<long>)data).ToArray();
+                        _friendIDSet = new HashSet<long>((IEnumerable<long>)data);
                         break;
                     case UserStreamItemType.status: {
                             TwitData twitdata = (TwitData)data;
-                            while (_friendArray == null) { Thread.Sleep(10); } // 待機
+                            while (_friendIDSet == null) { Thread.Sleep(10); } // 待機
                             // Home
-                            if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendArray)) {
+                            if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet)) {
                                 this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
                                 // RTの時のPopup
                                 if (twitdata.IsRT() && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
                                     string title = tasktray.Text + ":リツイート";
-                                    string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName, 
+                                    string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName,
                                                                 twitdata.RTTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT), twitdata.RTTwitData.Text);
                                     this.PopupTasktray(title, text);
                                 }
@@ -2057,7 +2084,9 @@ namespace StarlitTwit
                 if (uctldisp == uctlDispHome) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Home : SettingsData.RenewGetNum_Home;
                     d = Twitter.statuses_home_timeline(count: iCount);
-                    //d = d.Where(twitdata => StatusFilter.ThroughFilters( SettingsData
+                    if (_friendIDSet != null) {
+                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                    }
                 }
                 else if (uctldisp == uctlDispReply) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Reply : SettingsData.RenewGetNum_Reply;
@@ -2135,6 +2164,9 @@ namespace StarlitTwit
             try {
                 if (uctldisp == uctlDispHome) {
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, since_id: since_id);
+                    if (_friendIDSet != null) {
+                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                    }
                 }
                 else if (uctldisp == uctlDispReply) {
                     d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, since_id: since_id, include_rts: true);
@@ -2195,6 +2227,9 @@ namespace StarlitTwit
             try {
                 if (uctldisp == uctlDispHome) {
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, max_id: max_id);
+                    if (_friendIDSet != null) {
+                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                    }
                 }
                 else if (uctldisp == uctlDispReply) {
                     d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, max_id: max_id, include_rts: true);
@@ -2276,6 +2311,9 @@ namespace StarlitTwit
                     if (uctldisp == uctlDispHome) {
                         if (i == MAX_HOME / 200 + 1) { break; } // 800まで
                         d = Twitter.statuses_home_timeline(count: 200, page: i);
+                        if (_friendIDSet != null) {
+                            d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                        }
                     }
                     else if (uctldisp == uctlDispReply) {
                         if (i == MAX_MENTION / 200 + 1) { break; } // 800まで
@@ -2339,6 +2377,64 @@ namespace StarlitTwit
             return true;
         }
         #endregion (GetSpecifyTimeTweets)
+
+        //===============================================================================
+        #region -GetFollowerIDs フォロワーID取得
+        //-------------------------------------------------------------------------------
+        //
+        private bool GetFollowerIDs()
+        {
+            long cursor = -1;
+            try {
+                HashSet<long> set = new HashSet<long>();
+                while (cursor != 0) {
+                    var idstup = Twitter.followers_ids(true, Twitter.ID, null, cursor);
+                    cursor = idstup.NextCursor;
+                    set.UnionWith(idstup.Data);
+                }
+                _followerIDSet = set;
+            }
+            catch (TwitterAPIException ex) {
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                return false;
+            }
+            return true;
+        }
+        #endregion (GetFollowerIDs)
+        //-------------------------------------------------------------------------------
+        #region -GetFriendIDs フレンドID取得
+        //-------------------------------------------------------------------------------
+        //
+        private bool GetFriendIDs()
+        {
+            long cursor = -1;
+            try {
+                HashSet<long> set = new HashSet<long>();
+                while (cursor != 0) {
+                    var idstup = Twitter.friends_ids(true, Twitter.ID, null, cursor);
+                    cursor = idstup.NextCursor;
+                    set.UnionWith(idstup.Data);
+                }
+                _friendIDSet = set;
+            }
+            catch (TwitterAPIException ex) {
+                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                return false;
+            }
+            return true;
+        }
+        #endregion (GetFriendIDs)
+
+        //-------------------------------------------------------------------------------
+		#region +IsOneWayFollowing 自分はフォローしているが相手からフォローされていないかどうか判断
+		//-------------------------------------------------------------------------------
+		//
+		public bool IsOneWayFollowing(long id)
+		{
+			if (_followerIDSet == null || _friendIDSet == null) { return false; }
+            return _friendIDSet.Contains(id) && !_followerIDSet.Contains(id);
+		}
+		#endregion (IsOneWayFollowing)
 
         //===============================================================================
         #region -Update 投稿を行います using TwitterAPI
@@ -2796,6 +2892,9 @@ namespace StarlitTwit
         //===============================================================================
         #region -AutoGetTweet (別スレッド)自動ツイート取得
         //-------------------------------------------------------------------------------
+        /// <summary></summary>
+        private bool _friendsRenew_IsForce = true;
+        private bool _followersRenew_IsForce = true;
         /// <summary>プロフィール更新強制</summary>
         private bool _profileRenew_IsForce = false;
         /// <summary>プロフィール更新基準時刻</summary>
@@ -2805,7 +2904,7 @@ namespace StarlitTwit
         {
             Action<DateTime> GetProfile = (dt) =>
             {
-                string labelText = STR_GETTING_PROFILE;
+                string labelText = string.Format(STR_FMT_GETTING, STR_PROFILE);
                 tssLabel.SetText(labelText);
                 UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
                 this.Invoke(new Action(() =>
@@ -2822,6 +2921,7 @@ namespace StarlitTwit
             if (_isAuthenticated && SettingsData.UserStreamStartUp) {
                 GetProfile(DateTime.Now);
                 StartUserStream(SettingsData.UserStreamAllReplies);
+                _friendsRenew_IsForce = false;
             }
 
             while (!_isAuthenticated) { Thread.Sleep(1000); } // 未認証時はストップ
@@ -2832,6 +2932,24 @@ namespace StarlitTwit
                     _mreThreadTabConfirm.Set();
                     _mreThreadTabRun.Wait();
                     _mreThreadTabConfirm.Reset();
+
+                    // friend,followingID配列取得
+                    if (_followersRenew_IsForce) {
+                        string labelText = string.Format(STR_FMT_GETTING, STR_FOLLOWER_IDS);
+                        tssLabel.SetText(labelText);
+                        if (GetFollowerIDs()) {
+                            _followersRenew_IsForce = false;
+                        }
+                        tssLabel.RemoveText(labelText);
+                    }
+                    if (_friendsRenew_IsForce) {
+                        string labelText = string.Format(STR_FMT_GETTING, STR_FRIEND_IDS);
+                        tssLabel.SetText(labelText);
+                        if (GetFriendIDs()) {
+                            _friendsRenew_IsForce = false;
+                        }
+                        tssLabel.RemoveText(labelText);
+                    }
 
                     DateTime now = DateTime.Now;
                     // プロフィール更新

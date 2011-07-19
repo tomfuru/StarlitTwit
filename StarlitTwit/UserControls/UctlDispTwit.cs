@@ -326,6 +326,16 @@ namespace StarlitTwit
             }
         }
         #endregion (tsmiQuote_Click)
+        #region tsmiQuoteReply_Click 引用リプライメニュークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiQuoteReply_Click(object sender, EventArgs e)
+        {
+            if (RowContextMenu_Click != null) {
+                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.QuoteReply, SelectedTwitData));
+            }
+        }
+        #endregion (tsmiQuoteReply_Click)
         #region tsmiRetweet_Click リツイートメニュークリック時
         //-------------------------------------------------------------------------------
         //
@@ -1463,8 +1473,6 @@ namespace StarlitTwit
             }
         }
         #endregion (GetIcons)
-
-
         //-------------------------------------------------------------------------------
         #endregion (メソッド)
 
@@ -1657,6 +1665,8 @@ namespace StarlitTwit
         Reply,
         /// <summary>引用 メニュー</summary>
         Quote,
+        /// <summary>引用リプライ　メニュー</summary>
+        QuoteReply,
         /// <summary>リツイート メニュー</summary>
         Retweet,
         /// <summary>ダイレクトメッセージ メニュー</summary>

@@ -19,7 +19,7 @@ namespace StarlitTwit
         /// <param name="filters">フィルター配列</param>
         /// <param name="friends_ids">フォローしている人のID</param>
         /// <returns></returns>
-        public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, long[] friends_ids)
+        public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, HashSet<long> friends_ids)
         {
             Debug.Assert(twitdata != null && filters != null && friends_ids != null);
             return filters.Where(sfi => sfi.Enabled)
@@ -38,7 +38,7 @@ namespace StarlitTwit
         /// <param name="friends_ids">フォローしている人のID</param>
         /// <returns></returns>
         /// <remarks>通ると判断したらすぐにtrueを返していくようにする</remarks>
-        public static bool ThroughFilter(TwitData twitdata, StatusFilterInfo filter, long[] friends_ids)
+        public static bool ThroughFilter(TwitData twitdata, StatusFilterInfo filter, HashSet<long> friends_ids)
         {
             Debug.Assert(twitdata != null && filter != null && friends_ids != null);
 

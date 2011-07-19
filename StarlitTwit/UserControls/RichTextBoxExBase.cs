@@ -363,7 +363,7 @@ namespace StarlitTwit
         #region +[new]Redo やり直し
         //-------------------------------------------------------------------------------
         //
-        public void Redo()
+        public new void Redo()
         {
             if (_strHistory.CanRedo()) {
                 _suspendHistoryAdd = true;
