@@ -16,26 +16,28 @@ using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
-/* Twitter API Resource 
- * statuses (Timeline)
- * statuses (Status)
- * users
- * local trends
- * list
- * list members
- * list subscribers
- * direct messages
- * friendships
- * friends and followers
- * account
- * favorites
- * notifications
- * blocks
- * spam reporting
- * oauth
- * geo
- * legal
- * help
+/* Twitter API Resources(Most Recent)
+ * Timelines
+ * Tweets
+ * Search
+ * Direct Message
+ % Friends&Tweets
+ % Users
+ - Suggested Users
+ * Favorites
+ % Lists
+ % Accounts
+ - Notification
+ - Saved Searches
+ - Local Trends
+ - Place&Geo
+ - Trends
+ % Block
+ - Spam Reporting
+ * OAuth
+ - Help
+ - Legal
+ * Deprecated
  */
 
 namespace StarlitTwit
@@ -55,8 +57,9 @@ namespace StarlitTwit
         private const string GET = "GET";
         private const string POST = "POST";
         private const string DELETE = "DELETE";
-        public static readonly string URLapi;
         public static readonly string URLtwi;
+        public static readonly string URLapi;
+        public static readonly string URLapiSSL;
         public static readonly string URLsearch;
 
         public const bool DEFAULT_INCLUDE_ENTITIES = false;
@@ -90,6 +93,7 @@ namespace StarlitTwit
         {
             URLtwi = @"http://twitter.com/";
             URLapi = @"http://api.twitter.com/" + API_VERSION.ToString() + '/';
+            URLapiSSL = @"https://api.twitter.com/" + API_VERSION.ToString() + '/';
             URLsearch = @"http://search.twitter.com/";
         }
         //
@@ -105,16 +109,75 @@ namespace StarlitTwit
         #endregion (コンストラクタ)
 
         //-------------------------------------------------------------------------------
-        #region statuses/ (Timeline関連)
+        #region Timelines Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_home_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/home_timelineメソッド</para>
+        /// <para>Returns the 20 most recent statuses, including retweets if they exist, posted by the authenticating user and the user's they follow.</para>
+        /// <para>上限800</para>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TwitData> statuses_home_timeline(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                                bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
+                                                bool exclude_replies = false, bool contributor_details = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (exclude_replies) { paramdic.Add("exclude_replies", exclude_replies.ToString().ToLower()); }
+                if (contributor_details) { paramdic.Add("contributor_details", contributor_details.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/home_timeline.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_home_timeline)
+        //-------------------------------------------------------------------------------
+        #region +statuses_mentions
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/mentionsメソッド</para>
+        /// <para>Returns the 20 most recent mentions (status containing @username) for the authenticating user.</para>
+        /// <para>上限800</para>
+        /// </summary>
+        public IEnumerable<TwitData> statuses_mentions(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                            bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
+                                            bool contributor_details = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (contributor_details) { paramdic.Add("contributor_details", contributor_details.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/mentions.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_mentions)
         //-------------------------------------------------------------------------------
         #region +statuses_public_timeline
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/public_timelineメソッド
+        /// <para>statuses/public_timelineメソッド</para>
+        /// <para>Returns the 20 most recent statuses, including retweets if they exist, from non-protected users.</para>
+        /// <para>The public timeline is cached for 60 seconds</para>
         /// </summary>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
         public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -129,157 +192,20 @@ namespace StarlitTwit
         }
         #endregion (statuses_public_timeline)
         //-------------------------------------------------------------------------------
-        #region +statuses_home_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/home_timelineメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> statuses_home_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                 bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/home_timeline.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_home_timeline)
-        //-------------------------------------------------------------------------------
-        #region +statuses_friends_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/friends_timelineメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_rts">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                                    bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends_timeline.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_friends_timeline)
-        //-------------------------------------------------------------------------------
-        #region +statuses_user_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/user_timelineメソッド
-        /// </summary>
-        /// <param name="user_id">[option]</param>
-        /// <param name="screen_name">[option]</param>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_rts">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                           bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/user_timeline.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_user_timeline)
-        //-------------------------------------------------------------------------------
-        #region +statuses_mentions
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/mentionsメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_rts">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_mentions(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
-                                            bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/mentions.xml", GET, paramdic);
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_mentions)
-        //-------------------------------------------------------------------------------
         #region +statuses_retweeted_by_me
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweeted_by_meメソッド
+        /// <para>statuses/retweeted_by_meメソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by the authenticating user.</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweeted_by_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_by_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
                                                    bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -294,15 +220,10 @@ namespace StarlitTwit
         #region +statuses_retweeted_to_me
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweeted_to_meメソッド
+        /// <para>statuses/retweeted_to_meメソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by users the authenticating user follow.</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweeted_to_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_to_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
                                                    bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -324,22 +245,17 @@ namespace StarlitTwit
         #region +statuses_retweets_of_me
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweets_of_meメソッド
+        /// <para>statuses/retweets_of_meメソッド</para>
+        /// <para>Returns the 20 most recent tweets of the authenticated user that have been retweeted by others.</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweets_of_me(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweets_of_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
                                                   bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -351,19 +267,184 @@ namespace StarlitTwit
         }
         #endregion (statuses_retweets_of_me)
         //-------------------------------------------------------------------------------
-        #endregion (statuses/ (Timeline関連))
+        #region +statuses_user_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/user_timelineメソッド</para>
+        /// <para> 	 Returns the 20 most recent statuses posted by the authenticating user.</para>
+        /// </summary>
+        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                           bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
+                                           bool exclude_replies = false, bool contributor_details = false)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (exclude_replies) { paramdic.Add("exclude_replies", exclude_replies.ToString().ToLower()); }
+                if (contributor_details) { paramdic.Add("contributor_details", contributor_details.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/user_timeline.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_user_timeline)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweeted_to_user
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweeted_to_user メソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by users the specified user follows.</para>
+        /// </summary>
+        /// <param name="id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public IEnumerable<TwitData> statuses_retweeted_to_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                           bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (id > 0) { paramdic.Add("id", id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweeted_to_user.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_retweeted_to_user)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweeted_by_user
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweeted_by_user メソッド</para>
+        /// <para>Returns the 20 most recent retweets posted by the specified user.</para>
+        /// </summary>
+        /// <param name="id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public IEnumerable<TwitData> statuses_retweeted_by_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+                                           bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (id > 0) { paramdic.Add("id", id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweeted_by_user.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_retweeted_by_user)
+        //-------------------------------------------------------------------------------
+        #endregion (Timelines)
 
         //-------------------------------------------------------------------------------
-        #region statuses/ (Status関連)
+        #region Tweets Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_id_retweeted_by
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/id/retweeted_byメソッド</para>
+        /// <para>Show user objects of up to 100 members who retweeted the status.</para>
+        /// </summary>
+        /// <param name="id">[required]</param>
+        /// <remarks>trim_user/include_entitiesはAPIに公式でない？</remarks>
+        public IEnumerable<UserProfile> statuses_id_retweeted_by(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by.xml", URLapi, id), GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPI(url));
+        }
+        #endregion (statuses_id_retweeted_by)
+        //-------------------------------------------------------------------------------
+        #region +statuses_id_retweeted_by_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/id/retweeted_by/idsメソッド </para>
+        /// <para>Show user ids of up to 100 users who retweeted the status.</para>
+        /// </summary>
+        /// <param name="id">[required]</param>
+        /// <remarks>stringify_idsオプションは不要？</remarks>
+        public IEnumerable<long> statuses_id_retweeted_by_ids(long id, int count = -1, int page = -1)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by/ids.xml", URLapi, id), GET, paramdic);
+            XElement el = GetByAPI(url);
+
+            var ids = from elem in el.Elements("id")
+                      select long.Parse(elem.Value);
+            return ids;
+        }
+        #endregion (statuses_id_retweeted_by_ids)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweets
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweetsメソッド</para>
+        /// <para>Returns up to 100 of the first retweets of a given tweet.</para>
+        /// </summary>
+        /// <param name="id">[required]リツイートを見る発言のID</param>
+        /// <param name="count">[option] &lt;100</param>
+        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/retweets/{1}.xml", URLapi, id), GET, paramdic);
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_retweets)
         //-------------------------------------------------------------------------------
         #region +statuses_show
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/showメソッド
+        /// <para>statuses/showメソッド</para>
+        /// <para>Returns a single status, specified by the id parameter below.</para>
         /// </summary>
-        /// <param name="id">取得する発言ID</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
+        /// <param name="withAuthParam">認証をつけてAPI呼び出しするかどうか</param>
+        /// <param name="id">[required]取得する発言ID</param>
         public TwitData statuses_show(bool withAuthParam, long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -390,11 +471,55 @@ namespace StarlitTwit
         }
         #endregion (statuses_show)
         //-------------------------------------------------------------------------------
+        #region +statuses_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/destroyメソッド</para>
+        /// <para>Destroys the status specified by the required ID parameter.</para>
+        /// </summary>
+        /// <param name="id">[required]削除するID</param>
+        public TwitData statuses_destroy(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/destroy/" + id.ToString() + ".xml", POST, paramdic);
+            return ConvertToTwitData(PostToAPI(url));
+        }
+        #endregion (statuses_destroy)
+        //-------------------------------------------------------------------------------
+        #region +statuses_retweet
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/retweetメソッド</para>
+        /// <para>Retweets a tweet.</para>
+        /// </summary>
+        /// <param name="id">[required]リツイート対象の発言ID</param>
+        /// <remarks>403:update limit</remarks>
+        public void statuses_retweet(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweet/" + id.ToString() + ".xml", POST, paramdic);
+            TwitData d = ConvertToTwitData(PostToAPI(url));
+        }
+        #endregion (statuses_retweet)
+        //-------------------------------------------------------------------------------
         #region +statuses_update
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/updateメソッド
+        /// <para>statuses/updateメソッド</para>
+        /// <para>Updates the authenticating user's status, also known as tweeting.</para>
         /// </summary>
+        /// <param name="status">[required]発言内容</param>
+        /// <param name="place_id">[option]GET geo/reverse_geocodeで取得できるID</param>
         public TwitData statuses_update(string status, long in_reply_to_status_id = -1, double latitude = double.NaN, double longtitude = double.NaN,
                                     string place_id = "", bool display_coordinates = false, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
@@ -419,708 +544,82 @@ namespace StarlitTwit
         }
         #endregion (statuses_update)
         //-------------------------------------------------------------------------------
-        #region +statuses_destroy
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/destroyメソッド
-        /// </summary>
-        /// <param name="id">削除するID</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData statuses_destroy(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
+        #endregion (Tweets)
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/destroy/" + id.ToString() + ".xml", POST, paramdic);
-            return ConvertToTwitData(PostToAPI(url));
-        }
-        #endregion (statuses_destroy)
         //-------------------------------------------------------------------------------
-        #region +statuses_retweet
+        #region Search Resources
+        //-------------------------------------------------------------------------------
+        #region +search
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// statuses/retweetメソッド
+        /// <para>search メソッド</para>
+        /// <para>Returns tweets that match a specified query.</para>
         /// </summary>
-        /// <param name="id">リツイート対象の発言ID</param>
-        /// <remarks>403:update limit</remarks>
-        public void statuses_retweet(long id)
+        /// <param name="q">[required]検索条件</param>
+        /// <param name="lang">[unuse]ISO 639-1 code</param>
+        /// <param name="locale">[option](only ja is currently effective)</param>
+        /// <param name="rpp">[option] &lt;=100</param>
+        /// <param name="page">[option] rpp * page &lt;=1500</param>
+        /// <param name="max_id">[unuse]</param>
+        /// <param name="since">[unuse]YYYY-MM-DD</param>
+        /// <param name="until">[option]YYYY-MM-DD</param>
+        /// <param name="geocode">[unuse]</param>
+        /// <param name="show_user"></param>
+        /// <param name="result_type">[recent/popular/mixed]</param>
+        /// <returns></returns>
+        /// <remarks>API Documentationにはsince,max_id無</remarks>
+        public IEnumerable<TwitData> search(string q = "", string lang = "", string locale = "ja",
+            int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
+            string until = "", object geocode = null, bool show_user = false, string result_type = "")
         {
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweet/" + id.ToString() + ".xml", POST);
-            TwitData d = ConvertToTwitData(PostToAPI(url));
-        }
-        #endregion (statuses_retweet)
-        //-------------------------------------------------------------------------------
-        #region +statuses_retweets
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/retweetsメソッド
-        /// </summary>
-        /// <param name="id">リツイートを見る発言のID</param>
-        /// <param name="count">[option] &lt;100</param>
-        /// <param name="trim_user">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> statuses_retweets(long id, int count = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
+            if (string.IsNullOrEmpty(q)) { throw new ArgumentException("qかphraseのどちらかの引数は必須です。"); }
 
-            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/retweets/{1}.xml", URLapi, id), GET, paramdic);
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_retweets)
-        //-------------------------------------------------------------------------------
-        #region +statuses_id_retweeted_by
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/id/retweeted_byメソッド
-        /// </summary>
-        public IEnumerable<UserProfile> statuses_id_retweeted_by(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (!string.IsNullOrEmpty(q)) { paramdic.Add("q", Utilization.UrlEncode(q)); }
+                if (!string.IsNullOrEmpty(lang)) { paramdic.Add("lang", lang); }
+                if (!string.IsNullOrEmpty(locale)) { paramdic.Add("locale", locale); }
+                if (rpp > 0) { paramdic.Add("rpp", rpp.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by.xml", URLapi, id), GET, paramdic);
-            return ConvertToUserProfileArray(GetByAPI(url));
-        }
-        #endregion (statuses_id_retweeted_by)
-        //-------------------------------------------------------------------------------
-        #region +statuses_id_retweeted_by_ids
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// statuses/id/retweeted_by/idsメソッド 
-        /// </summary>
-        public IEnumerable<long> statuses_id_retweeted_by_ids(long id, int count = -1, int page = -1, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}statuses/{1}/retweeted_by/ids.xml", URLapi, id), GET, paramdic);
-            XElement el = GetByAPI(url);
-
-            var ids = from elem in el.Elements("id")
-                      select long.Parse(elem.Value);
-            return ids;
-        }
-        #endregion (statuses_id_retweeted_by_ids)
-        //-------------------------------------------------------------------------------
-        #endregion (statuses/ (Status関連))
-
-        //-------------------------------------------------------------------------------
-        #region users/ (ユーザー情報関連)
-        //-------------------------------------------------------------------------------
-        #region users_show
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// users/show メソッド
-        /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile users_show(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"users/show.xml", GET, paramdic);
-            return ConvertToUserProfile(GetByAPI(url));
-        }
-        //-------------------------------------------------------------------------------
-        #endregion (users_show)
-        //-------------------------------------------------------------------------------
-        #region users_lookup
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// users/lookup メソッド
-        /// </summary>
-        /// <param name="user_ids">[select]</param>
-        /// <param name="screen_names">[select]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<UserProfile> users_lookup(long[] user_ids = null, string[] screen_names = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
-                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
-            }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids)); }
-                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"users/lookup.xml", POST, paramdic);
-            return ConvertToUserProfileArray(PostToAPI(url));
-        }
-        #endregion (users_lookup)
-        //-------------------------------------------------------------------------------
-        #region users_profile_image
-        //-------------------------------------------------------------------------------
-        #region EImageSize 列挙体
-        //-------------------------------------------------------------------------------
-        /// <summary>users/profile_imageメソッドで使用する画像サイズ</summary>
-        public enum EImageSize
-        {
-            /// <summary>73*73</summary>
-            bigger,
-            /// <summary>48*48</summary>
-            normal,
-            /// <summary>24*24</summary>
-            mini
-        }
-        //-------------------------------------------------------------------------------
-        #endregion (EImageSize )
-        /// <summary>
-        /// users/profile_image メソッド
-        /// </summary>
-        /// <param name="screen_name"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        public Tuple<string, Image> users_profile_image(string screen_name, EImageSize size = EImageSize.normal)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("size", size.ToString());
-            }
-
-            string url = string.Format("{0}users/profile_image/{1}.xml?{2}", URLapi, screen_name, JoinParameters(paramdic));
-
-            return GetByAPIImage(url);
-        }
-        #endregion (users_profile_image)
-        //-------------------------------------------------------------------------------
-        #region statuses_friends
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// フォローしている人を返します。返り値：(ユーザーリスト，next_cursor, previous_cursor）
-        /// </summary>
-        /// <param name="user_id">[option]</param>
-        /// <param name="screen_name">[option]</param>
-        /// <param name="cursor">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public SequentData<UserProfile> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id >= 0) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                paramdic.Add("cursor", cursor.ToString());
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends.xml", GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (statuses_friends)
-        //-------------------------------------------------------------------------------
-        #region statuses_followers
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// フォローされている人を返します。返り値：(ユーザーリスト，next_cursor, previous_cursor）
-        /// </summary>
-        /// <param name="user_id">[option]</param>
-        /// <param name="screen_name">[option]</param>
-        /// <param name="cursor">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public SequentData<UserProfile> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id >= 0) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                paramdic.Add("cursor", cursor.ToString());
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/followers.xml", GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (statuses_followers)
-        //-------------------------------------------------------------------------------
-        // suggestions
-        // suggestions/slug
-        //-------------------------------------------------------------------------------
-        #endregion (users/)
-
-        //-------------------------------------------------------------------------------
-        #region list/ (リスト関連)
-        //-------------------------------------------------------------------------------
-        #region lists_Create リスト作成
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト作成メソッド
-        /// </summary>
-        /// <param name="name">リストの名前</param>
-        /// <param name="isPrivate">[option]privateにする時にtrue</param>
-        /// <param name="description">[option]リストの説明</param>
-        /// <returns></returns>
-        public ListData lists_Create(string name, bool isPrivate = false, string description = null)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("name", Utilization.UrlEncode(name));
-                if (isPrivate) { paramdic.Add("mode", "private"); }
-                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + ScreenName + @"/lists.xml", POST, paramdic);
-            return ConvertToListData(PostToAPI(url));
-        }
-        #endregion (lists_Create)
-        //-------------------------------------------------------------------------------
-        #region lists_Update リスト更新
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト更新
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="name">[option]リストの新しい名前</param>
-        /// <param name="isPrivate">[option]privateにする時にtrue</param>
-        /// <param name="description">[option]リストの説明</param>
-        /// <returns>変更前が返る？</returns>
-        public ListData lists_Update(string list_id, string name = null, bool isPrivate = false, string description = null)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
-                paramdic.Add("mode", (isPrivate) ? "private" : "public");
-                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), POST, paramdic);
-            return ConvertToListData(PostToAPI(url));
-        }
-        #endregion (lists_Update)
-        //-------------------------------------------------------------------------------
-        #region lists_Get リストのリスト取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// リストのリストを取得します。返り値：(リストのリスト，next_cursor, previous_cursor）
-        /// </summary>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="cursor">[option]データベース上のカーソル</param>
-        /// <returns></returns>
-        public SequentData<ListData> lists_Get(string screen_name = "", long cursor = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(URLapi + user + @"/lists.xml", GET, paramdic);
-
-            XElement el = GetByAPI(url);
-
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (lists_Get)
-        //-------------------------------------------------------------------------------
-        #region lists_Show リスト情報取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト情報取得
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <returns></returns>
-        public ListData lists_Show(string list_id, string screen_name = null)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-            string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), GET);
-            return ConvertToListData(GetByAPI(url));
-        }
-        #endregion (lists_Show)
-        //-------------------------------------------------------------------------------
-        #region lists_Delete リスト削除
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists リスト削除
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <returns></returns>
-        public ListData lists_Delete(string list_id)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}.xml", URLapi, ScreenName, list_id), DELETE);
-
-            return ConvertToListData(DeleteToAPI(url));
-        }
-        #endregion (lists_Delete)
-        //-------------------------------------------------------------------------------
-        #region lists_statuses リスト発言取得
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists/statuses リストの発言取得
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="per_page">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <returns></returns>
-        public IEnumerable<TwitData> lists_statuses(string list_id, string screen_name = "", long since_id = -1, long max_id = -1, int per_page = -1, int page = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                //if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                //if (!string.IsNullOrEmpty(since)) { paramdic.Add("since", since); }
+                if (!string.IsNullOrEmpty(until)) { paramdic.Add("until", until); }
+                // geocode
+                if (show_user) { paramdic.Add("show_user", show_user.ToString().ToLower()); }
+                if (!string.IsNullOrEmpty(result_type)) { paramdic.Add("result_type", result_type); }
             }
 
-            string scrname = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(URLsearch + "search.json", GET, paramdic);
 
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/{2}/statuses.xml", URLapi, scrname, list_id), GET, paramdic);
+            XElement el = GetByAPIJson(url);
 
-            XElement el = GetByAPI(url);
-            return ConvertToTwitDataArray(el);
+            IEnumerable<TwitData> data = ConvertToTwitDataJson(el);
+            //string[] user_names = data
+            //    .Where((tdata) => !tdata.UserProtected)
+            //    .Select((tdata) => tdata.UserScreenName)
+            //    .Distinct()
+            //    .ToArray();
+
+            //UserData[] userData = users_lookup(screen_names: user_names);
+
+            return data;
         }
-        #endregion (lists_statuses)
+        #endregion (search)
         //-------------------------------------------------------------------------------
-        #region lists_memberships
+        #endregion (Search)
+
+        //-------------------------------------------------------------------------------
+        #region Direct Messages Resources
+        //-------------------------------------------------------------------------------
+        #region +direct_messages
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// lists_membershipsメソッド
+        /// <para>direct_messagesメソッド</para>
+        /// <para>Returns the 20 most recent direct messages sent to the authenticating user.</para>
         /// </summary>
-        /// <param name="screen_name">追加されているリストを調べるユーザー名</param>
-        public SequentData<ListData> lists_memberships(string screen_name = "", long cursor = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/memberships.xml", URLapi, user), GET, paramdic);
-            XElement el = GetByAPI(url);
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
-                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (lists_memberships)
-        //-------------------------------------------------------------------------------
-        #region lists_subscriptions
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// lists_subscriptionsメソッド
-        /// </summary>
-        /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
-        public SequentData<ListData> lists_subscriptions(string screen_name = "", long cursor = -1)
-        {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, user), GET, paramdic);
-            XElement el = GetByAPI(url);
-            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
-                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (lists_subscriptions)
-        //-------------------------------------------------------------------------------
-        #endregion (list)
-
-        //-------------------------------------------------------------------------------
-        #region list members/ (リスト所属ユーザー関連)
-        //-------------------------------------------------------------------------------
-        #region list_members_Get
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/members メソッド</para> 
-        /// <para>リストメンバー取得</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="cursor">データベース上のカーソル</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public SequentData<UserProfile> list_members_Get(string list_id, string screen_name = "", long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, user, list_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
-                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (list_members_Get)
-        //-------------------------------------------------------------------------------
-        #region list_members_Add
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/member メソッド</para>
-        /// <para>リストメンバー追加</para>
-        /// </summary>
-        /// <param name="id">追加するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <returns></returns>
-        public ListData list_members_Add(string id, string list_id)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("id", id);
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, ScreenName, list_id), POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_members_Add)
-        //-------------------------------------------------------------------------------
-        #region list_create_all (使用不可能)
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/create_all メソッド</para>
-        /// <para>リストメンバー一斉追加</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="user_ids">[select]</param>
-        /// <param name="screen_names">[select]</param>
-        /// <returns></returns>
-        private object list_create_all(string list_id, long[] user_ids = null, string[] screen_names = null)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
-                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
-            }
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids)); }
-                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/create_all.xml", URLapi, ScreenName, list_id), POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            throw new NotImplementedException();
-        }
-        #endregion (list_create_all)
-        //-------------------------------------------------------------------------------
-        #region list_members_Delete
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/member メソッド</para>
-        /// <para>リストメンバー削除</para>
-        /// </summary>
-        /// <param name="id">削除するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <returns></returns>
-        public ListData list_members_Delete(string id, string list_id)
-        {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("id", id);
-            }
-
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members.xml", URLapi, ScreenName, list_id), DELETE, paramdic);
-
-            XElement el = DeleteToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_members_Delete)
-        //-------------------------------------------------------------------------------
-        #region list_members_Check
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/member メソッド</para>
-        /// <para>リストメンバー所属確認</para>
-        /// <para>見つからなければ404エラーを返す</para>
-        /// </summary>
-        /// <param name="user_id">確認するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile list_members_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-            
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (list_members_Check)
-        //-------------------------------------------------------------------------------
-        #endregion (list members/ (リスト所属ユーザー関連))
-
-        //-------------------------------------------------------------------------------
-        #region list subscribers/ (リストフォローユーザー関連)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Get
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para> 
-        /// <para>リストフォローメンバー取得</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="cursor">[option]データベース上のカーソル</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public SequentData<UserProfile> list_subscribers_Get(string list_id, string screen_name = "", long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("cursor", cursor.ToString());
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
-                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (list_subscribers_Get)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Follow
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para>
-        /// <para>リストをフォロー</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <returns></returns>
-        public ListData list_subscribers_Follow(string list_id, string screen_name = "")
-        {
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml",URLapi,user,list_id), POST);
-
-            XElement el = PostToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_subscribers_Follow)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Unfollow
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para>
-        /// <para>リストをフォロー解除</para>
-        /// </summary>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <returns></returns>
-        public ListData list_subscribers_Unfollow(string list_id, string screen_name = "")
-        {
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/subscribers.xml", URLapi, user, list_id), DELETE);
-
-            XElement el = DeleteToAPI(url);
-            return ConvertToListData(el);
-        }
-        #endregion (list_subscribers_Unfollow)
-        //-------------------------------------------------------------------------------
-        #region list_subscribers_Check
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>list/subscribers メソッド</para>
-        /// <para>リストフォロー確認</para>
-        /// <para>見つからなければ404エラーを返す</para>
-        /// </summary>
-        /// <param name="id">確認するユーザーのID(の文字列)かScreenName</param>
-        /// <param name="screen_name">[option]リストの作成者のScreenName。省略すると自分。</param>
-        /// <param name="list_id">リストのID(の文字列)かslug</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile list_subscribers_Check(string user_id, string list_id, string screen_name = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format("{0}{1}/{2}/members/{3}.xml", URLapi, user, list_id, user_id), GET, paramdic);
-
-            XElement el = GetByAPI(url);
-            return ConvertToUserProfile(el);
-        }
-        #endregion (list_subscribers_Check)
-        //-------------------------------------------------------------------------------
-        #endregion (list subscribers/ (リストフォローユーザー関連))
-
-        //-------------------------------------------------------------------------------
-        #region direct_messages/ (ダイレクトメッセージ関連)
-        //-------------------------------------------------------------------------------
-        #region direct_messages
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messagesメソッド
-        /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="include_entities">[option]</param>
-        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public IEnumerable<TwitData> direct_messages(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+                                                     bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1129,24 +628,21 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages.xml", GET, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages.xml", GET, paramdic);
 
             return ConvertToTwitDataArrayDM(GetByAPI(url));
         }
         #endregion (direct_messages)
         //-------------------------------------------------------------------------------
-        #region direct_messages_sent
+        #region +direct_messages_sent
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// direct_messages/sentメソッド
+        /// <para>direct_messages/sentメソッド</para>
+        /// <para>Returns the 20 most recent direct messages sent by the authenticating user.</para>
         /// </summary>
-        /// <param name="since_id">[option]</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="count">[option]</param>
-        /// <param name="page">[option]</param>
-        /// <param name="include_entities">[option]</param>
         public IEnumerable<TwitData> direct_messages_sent(long since_id = -1, long max_id = -1, int count = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1158,46 +654,19 @@ namespace StarlitTwit
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/sent.xml", GET, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages/sent.xml", GET, paramdic);
 
             return ConvertToTwitDataArrayDM(GetByAPI(url));
         }
         #endregion (direct_messages_sent)
         //-------------------------------------------------------------------------------
-        #region direct_messages_new
+        #region +direct_messages_destroy
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// direct_messages/newメソッド
-        /// </summary>
-        /// <param name="screen_name">送信先の名前</param>
-        /// <param name="user_id">送信先のユーザーID</param>
-        /// <param name="text">送信テキスト</param>
-        /// <param name="include_entities">[option]</param>
-        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("screen_name", screen_name);
-                paramdic.Add("user_id", user_id.ToString());
-                paramdic.Add("text", Utilization.UrlEncode(text));
-
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/new.xml", POST, paramdic);
-
-            XElement el = PostToAPI(url);
-            return ConvertToTwitDataDM(el);
-        }
-        #endregion (direct_messages_new)
-        //-------------------------------------------------------------------------------
-        #region direct_messages_destroy
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// direct_messages/destroyメソッド
+        /// <para>direct_messages/destroyメソッド</para>
+        /// <para>Destroys the direct message specified in the required ID parameter.</para>
         /// </summary>
         /// <param name="id">削除先発言ID</param>
-        /// <param name="include_entities">[option]</param>
         public TwitData direct_messages_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1205,170 +674,69 @@ namespace StarlitTwit
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"direct_messages/destroy/" + id.ToString() + ".xml", POST, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages/destroy/" + id.ToString() + ".xml", POST, paramdic);
             return ConvertToTwitDataDM(PostToAPI(url));
         }
         #endregion (direct_messages_destroy)
         //-------------------------------------------------------------------------------
-        #endregion (direct_messages/)
-
-        //-------------------------------------------------------------------------------
-        #region friendships/ (フレンド関連)
-        //-------------------------------------------------------------------------------
-        #region friendships_create フォロー
+        #region +direct_messages_new
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// friendships/create メソッド
+        /// <para>direct_messages/newメソッド</para>
+        /// <para>Sends a new direct message to the specified user from the authenticating user.</para>
         /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="follow">通知するか[option]</param>
+        /// <param name="screen_name">[select]送信先の名前</param>
+        /// <param name="user_id">[select]送信先のユーザーID</param>
+        /// <param name="text">送信テキスト</param>
         /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = true, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public TwitData direct_messages_new(string screen_name, long user_id, string text, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (string.IsNullOrEmpty(screen_name) && user_id <= 0) { throw new ArgumentException("ScreenNameかUserIDの少なくとも1つは必要です。"); }
+
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
                 if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (follow) { paramdic.Add("follow", follow.ToString().ToLower()); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                paramdic.Add("text", Utilization.UrlEncode(text));
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/create.xml", POST, paramdic);
+            string url = GetUrlWithOAuthParameters(URLapiSSL + @"direct_messages/new.xml", POST, paramdic);
+
             XElement el = PostToAPI(url);
-            return ConvertToUserProfile(el);
+            return ConvertToTwitDataDM(el);
         }
-        #endregion (friendships_create)
+        #endregion (direct_messages_new)
         //-------------------------------------------------------------------------------
-        #region friendships_destroy フォロー解除
+        #region -direct_messages_id (Not Found?)
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// friendships/destroy メソッド
+        /// <para>direct_messages_idメソッド</para>
+        /// <para>Returns a single direct message, specified by an id parameter.</para>
         /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="include_entities">[option]</param>
+        /// <param name="id">[required]DirctMessageのID</param>
         /// <returns></returns>
-        public UserProfile friendships_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        private TwitData direct_messages_id(long id)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}direct_messages/{1}.xml", URLapiSSL, id), GET);
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/destroy.xml", POST, paramdic);
-            XElement el = PostToAPI(url);
-            return ConvertToUserProfile(el);
+            return ConvertToTwitDataDM(GetByAPI(url));
         }
-        #endregion (friendships_destroy)
+        #endregion (direct_messages_id)
         //-------------------------------------------------------------------------------
-        #region friendships_exists フォロー有無
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// フォロー有無を取得します。return [ユーザーA follows ユーザーB]?
-        /// </summary>
-        /// <param name="withAuth">認証を含めるか</param>
-        /// <param name="user_a">ユーザーA</param>
-        /// <param name="user_b">ユーザーB</param>
-        /// <returns>ユーザーA follows ユーザーB?</returns>
-        public bool friendships_exists(bool withAuth, string user_a, string user_b)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                paramdic.Add("user_a", user_a);
-                paramdic.Add("user_b", user_b);
-            }
-
-            string urlbase = URLapi + @"friendships/exists.xml?";
-            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
-                                    : urlbase + '?' + JoinParameters(paramdic);
-            XElement el = GetByAPI(url);
-
-            return bool.Parse(el.Value);
-        }
-        #endregion (friendships_exists)
-        //-------------------------------------------------------------------------------
-        #region friendships_show 2ユーザー間の情報確認
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// friendships/show メソッド
-        /// </summary>
-        /// <param name="source_id">[option:1] subject user</param>
-        /// <param name="source_screen_name">[option:1] subject user</param>
-        /// <param name="target_id">[option:2] target user</param>
-        /// <param name="target_screen_name">[option:2] target user</param>
-        /// <returns></returns>
-        public RelationshipData friendships_show(long source_id = -1, string source_screen_name = null,
-                                       long target_id = -1, string target_screen_name = null)
-        {
-            if (source_id == -1 && string.IsNullOrEmpty(source_screen_name)) { throw new ArgumentException("対象ユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-            if (target_id == -1 && string.IsNullOrEmpty(target_screen_name)) { throw new ArgumentException("ターゲットユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (source_id != -1) { paramdic.Add("source_id", source_id.ToString()); }
-                if (!string.IsNullOrEmpty(source_screen_name)) { paramdic.Add("source_screen_name", source_screen_name); }
-                if (target_id != -1) { paramdic.Add("target_id", target_id.ToString()); }
-                if (!string.IsNullOrEmpty(target_screen_name)) { paramdic.Add("target_screen_name", target_screen_name); }
-            }
-
-            string urlbase = URLapi + @"friendships/show.xml";
-            string url = urlbase + '?' + JoinParameters(paramdic);
-
-            XElement el = GetByAPI(url);
-
-            return ConvertToRelationshipData(el);
-        }
-        #endregion (friendships_show)
-        //-------------------------------------------------------------------------------
-        #endregion (friendships/ (フレンド関連))
+        #endregion (Direct Message)
 
         //-------------------------------------------------------------------------------
-        #region friends and followers/ (フォロー・フォロワー関係)
+        #region Friends & Followers Resources
         //-------------------------------------------------------------------------------
-        #region friends_ids
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>friends/ids メソッド</para>
-        /// <para>指定ユーザーがフォローしているユーザー</para>
-        /// </summary>
-        /// <returns></returns>
-        public SequentData<long> friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
-        {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                paramdic.Add("cursor", cursor.ToString());
-            }
-
-            string urlbase = URLapi + @"friends/ids.xml";
-            string url = (withAuthParam) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
-                                         : urlbase + '?' + JoinParameters(paramdic);
-
-            XElement el = GetByAPI(url, withAuthParam);
-
-            var ids = from id in el.Element("ids").Elements("id")
-                      select long.Parse(id.Value);
-
-            return new SequentData<long>(ids,
-               long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
-        }
-        #endregion (friends_ids)
-        //-------------------------------------------------------------------------------
-        #region followers_ids
+        #region +followers_ids
         //-------------------------------------------------------------------------------
         /// <summary>
         /// <para>followers/ids メソッド</para>
-        /// <para>指定ユーザーをフォローしているユーザー</para>
+        /// <para>Returns an array of numeric IDs for every user following the specified user.</para>
         /// </summary>
         /// <returns></returns>
+        /// <remarks>APIによるとAuth必要らしい？stringify_idsは不要？</remarks>
         public SequentData<long> followers_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
             if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
@@ -1393,109 +761,282 @@ namespace StarlitTwit
         }
         #endregion (followers_ids)
         //-------------------------------------------------------------------------------
-        #endregion (friends and followers/ (フォロー・フォロワー関係))
-
-        //-------------------------------------------------------------------------------
-        #region account/ (アカウント関連)
-        //-------------------------------------------------------------------------------
-        #region account_rate_limit_status
+        #region +friends_ids
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// abbount/rate_limit_statusメソッド
+        /// <para>friends/ids メソッド</para>
+        /// <para>Returns an array of numeric IDs for every user the specified user is following.</para>
         /// </summary>
-        /// <param name="withAuth">認証を行うかどうか。認証しない場合はIP依存のデータが返る</param>
-        /// <returns>残数データ</returns>
-        public APILimitData account_rate_limit_status(bool withAuth)
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        /// <remarks>stringify_idsは不要？</remarks>
+        public SequentData<long> friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
-            string urlbase = URLapi + @"account/rate_limit_status.xml";
-            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET)
-                                    : urlbase;
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string urlbase = URLapi + @"friends/ids.xml";
+            string url = (withAuthParam) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
+                                         : urlbase + '?' + JoinParameters(paramdic);
+
+            XElement el = GetByAPI(url, withAuthParam);
+
+            var ids = from id in el.Element("ids").Elements("id")
+                      select long.Parse(id.Value);
+
+            return new SequentData<long>(ids,
+               long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (friends_ids)
+        //-------------------------------------------------------------------------------
+        #region +friendships_exists
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friendships/exists メソッド</para>
+        /// <para>Test for the existence of friendship between two users.</para>
+        /// <para>return [userA follows userB]?</para>
+        /// </summary>
+        /// <param name="withAuth">認証を含めるか</param>
+        /// <param name="user_id_a">[select:A] userA ID</param>
+        /// <param name="screen_name_a">[select:A] userA ScreenName</param>
+        /// <param name="user_b_id">[select:B] userB ID</param>
+        /// <param name="screen_name_b">[select:B] userB ScreenName</param>
+        /// <returns>ユーザーA follows ユーザーB?</returns>
+        public bool friendships_exists(bool withAuth, long user_id_a = -1, string screen_name_a = "",
+                                                      long user_id_b = -1, string screen_name_b = "")
+        {
+            if (user_id_a <= 0 && string.IsNullOrEmpty(screen_name_a)) { throw new ArgumentException("ユーザーA：ユーザーIDかScreenNameの少なくとも1つは必要です。"); }
+            if (user_id_b <= 0 && string.IsNullOrEmpty(screen_name_b)) { throw new ArgumentException("ユーザーB：ユーザーIDかScreenNameの少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id_a > 0) { paramdic.Add("user_id_a", user_id_a.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name_a)) { paramdic.Add("screen_name_a", screen_name_a); }
+                if (user_id_b > 0) { paramdic.Add("user_id_b", user_id_b.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name_b)) { paramdic.Add("screen_name_b", screen_name_b); }
+            }
+
+            string urlbase = URLapi + @"friendships/exists.xml?";
+            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET, paramdic)
+                                    : urlbase + '?' + JoinParameters(paramdic);
+            XElement el = GetByAPI(url);
+
+            return bool.Parse(el.Value);
+        }
+        #endregion (friendships_exists)
+        //friendships/incoming
+        //frinedships/outgoing
+        //-------------------------------------------------------------------------------
+        #region +friendships_show 2ユーザー間の情報確認
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friendships/show メソッド</para>
+        /// <para>Returns detailed information about the relationship between two users.</para>
+        /// </summary>
+        /// <param name="source_id">[option:1] subject user</param>
+        /// <param name="source_screen_name">[option:1] subject user</param>
+        /// <param name="target_id">[option:2] target user</param>
+        /// <param name="target_screen_name">[option:2] target user</param>
+        /// <returns></returns>
+        public RelationshipData friendships_show(long source_id = -1, string source_screen_name = null,
+                                       long target_id = -1, string target_screen_name = null)
+        {
+            if (source_id <= 0 && string.IsNullOrEmpty(source_screen_name)) { throw new ArgumentException("対象ユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (target_id <= 0 && string.IsNullOrEmpty(target_screen_name)) { throw new ArgumentException("ターゲットユーザー：ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (source_id > 0) { paramdic.Add("source_id", source_id.ToString()); }
+                if (!string.IsNullOrEmpty(source_screen_name)) { paramdic.Add("source_screen_name", source_screen_name); }
+                if (target_id > 0) { paramdic.Add("target_id", target_id.ToString()); }
+                if (!string.IsNullOrEmpty(target_screen_name)) { paramdic.Add("target_screen_name", target_screen_name); }
+            }
+
+            string urlbase = URLapi + @"friendships/show.xml";
+            string url = urlbase + '?' + JoinParameters(paramdic);
 
             XElement el = GetByAPI(url);
-            return ConvertToAPILimitData(el);
+
+            return ConvertToRelationshipData(el);
         }
-        #endregion (account_rate_limit_status)
+        #endregion (friendships_show)
         //-------------------------------------------------------------------------------
-        #region account_update_profile プロフィール更新
+        #region +friendships_create フォロー
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// account_update_profileメソッド
+        /// <para>friendships/create メソッド</para>
+        /// <para>Allows the authenticating users to follow the user specified in the ID parameter.</para>
         /// </summary>
-        /// <param name="name">[option]</param>
-        /// <param name="url">[option]</param>
-        /// <param name="location">[option]</param>
-        /// <param name="description">[option]</param>
-        /// <param name="include_entities">[option]</param>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <param name="follow">notificationを有効にするか[option]</param>
         /// <returns></returns>
-        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        /// <remarks>include_entitiesはAPI Documentationには無し</remarks>
+        public UserProfile friendships_create(long user_id = -1, string screen_name = null, bool follow = true, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url)
-             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。"); }
-
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
-                if (!string.IsNullOrEmpty(url)) { paramdic.Add("url", Utilization.UrlEncode(url)); }
-                if (!string.IsNullOrEmpty(location)) { paramdic.Add("location", Utilization.UrlEncode(location)); }
-                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (follow) { paramdic.Add("follow", follow.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
-            string url_post = GetUrlWithOAuthParameters(URLapi + @"account/update_profile.xml", POST, paramdic);
 
-            XElement el = PostToAPI(url_post);
+            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/create.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
             return ConvertToUserProfile(el);
         }
-        #endregion (account_update_profile)
+        #endregion (friendships_create)
         //-------------------------------------------------------------------------------
-        #region account_update_profile_image 画像更新
+        #region +friendships_destroy フォロー解除
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// <para>account/update_profile_image メソッド</para>　
-        /// <para>返り値のUserProfileではURLが反映されてない可能性があるので，最低5秒待ってから取得する。</para>
+        /// <para>friendships/destroy メソッド</para>
+        /// <para>Allows the authenticating users to unfollow the user specified in the ID parameter.</para>
         /// </summary>
-        /// <param name="imgFileName">画像ファイルパス</param>
-        /// <param name="image">画像</param>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
         /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public UserProfile account_update_profile_image(string imgFileName, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public UserProfile friendships_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
-            string contentType;
-            Guid guid = image.RawFormat.Guid;
-            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
-            else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
-            else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
-            else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
-
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
-
-            return ConvertToUserProfile(PostImageToAPI(url, imgFileName, image, contentType));
+            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/destroy.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
         }
-        #endregion (account_update_profile_image)
+        #endregion (friendships_destroy)
+        // friendships/lookup
+        // friendships/update
+        // friendships/no_retweet_ids
+        //-------------------------------------------------------------------------------
+        #endregion (Friends & Followers)
 
         //-------------------------------------------------------------------------------
-        #endregion (account/ (アカウント関連))
-
+        #region Users Resources
         //-------------------------------------------------------------------------------
-        #region favorites/ (お気に入り関連)
-        //-------------------------------------------------------------------------------
-        #region favorites_get お気に入り取得
+        #region +users_lookup
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// favorites_get お気に入り取得
+        /// <para>users/lookup メソッド</para>
+        /// <para>Return up to 100 users worth of extended information, specified by either ID, screen name, or combination of the two.</para>
         /// </summary>
-        /// <param name="screen_name">user_idより優先</param>
-        /// <param name="user_id"></param>
-        /// <param name="page"></param>
-        /// <param name="since_id"></param>
-        /// <param name="include_entities"></param>
-        /// <param name="skip_status"></param>
+        /// <param name="user_ids">[select]</param>
+        /// <param name="screen_names">[select]</param>
+        /// <param name="include_entities">[option]</param>
         /// <returns></returns>
-        public IEnumerable<TwitData> favorites_get(string screen_name = "", long user_id = -1, int page = -1, long since_id = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        public IEnumerable<UserProfile> users_lookup(long[] user_ids = null, string[] screen_names = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
+                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids)); }
+                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names)); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"users/lookup.xml", POST, paramdic);
+            return ConvertToUserProfileArray(PostToAPI(url));
+        }
+        #endregion (users_lookup)
+        //-------------------------------------------------------------------------------
+        #region +users_profile_image
+        //-------------------------------------------------------------------------------
+        #region EImageSize 列挙体
+        //-------------------------------------------------------------------------------
+        /// <summary>users/profile_imageメソッドで使用する画像サイズ</summary>
+        public enum EImageSize
+        {
+            /// <summary>73*73</summary>
+            bigger,
+            /// <summary>48*48</summary>
+            normal,
+            /// <summary>24*24</summary>
+            mini
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (EImageSize )
+        /// <summary>
+        /// <para>users/profile_image メソッド</para>
+        /// <para>Access the profile image in various sizes for the user with the indicated screen_name</para>
+        /// </summary>
+        /// <param name="screen_name">[required]ユーザー名</param>
+        /// <param name="size">[option]画像サイズ</param>
+        /// <returns></returns>
+        public Tuple<string, Image> users_profile_image(string screen_name, EImageSize size = EImageSize.normal)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("size", size.ToString());
+            }
+
+            string url = string.Format("{0}users/profile_image/{1}.xml?{2}", URLapi, screen_name, JoinParameters(paramdic));
+
+            return GetByAPIImage(url);
+        }
+        #endregion (users_profile_image)
+        //users/search
+        //-------------------------------------------------------------------------------
+        #region +users_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>users/show メソッド</para>
+        /// <para>Returns extended information of a given user, specified by ID or screen name as per the required id parameter.</para>
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public UserProfile users_show(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"users/show.xml", GET, paramdic);
+            return ConvertToUserProfile(GetByAPI(url));
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (users_show)
+        //users/contributees
+        //users/contributors
+        //-------------------------------------------------------------------------------
+        #endregion (Users)
+
+        //-------------------------------------------------------------------------------
+        #region Favorites Resources
+        //-------------------------------------------------------------------------------
+        #region +favorites
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>favorites メソッド(お気に入り取得)</para>
+        /// <para>Returns the 20 most recent favorite statuses for the authenticating user or user specified by the ID parameter in the requested format.</para>
+        /// </summary>
+        /// <param name="screen_name">[select]user_idより優先</param>
+        /// <param name="user_id">[select]</param>
+        /// <remarks>since_idとskip_statusはAPI Documentationにない</remarks>
+        public IEnumerable<TwitData> favorites(string screen_name = "", long user_id = -1, int page = -1, long since_id = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1504,7 +1045,7 @@ namespace StarlitTwit
                 if (page >= 0) { paramdic.Add("page", page.ToString()); }
                 if (since_id >= 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-                if (skip_status) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
             }
 
             string url = GetUrlWithOAuthParameters(URLapi + @"favorites.xml", GET, paramdic);
@@ -1512,14 +1053,14 @@ namespace StarlitTwit
             XElement el = GetByAPI(url);
             return ConvertToTwitDataArray(el);
         }
-        #endregion (favorites_get)
+        #endregion (favorites)
         //-------------------------------------------------------------------------------
-        #region favorites_create お気に入り設定
+        #region +favorites_create
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// favorites_create お気に入り設定
+        /// <para>favorites_create メソッド</para>
+        /// <para>Favorites the status specified in the ID parameter as the authenticating user.</para>
         /// </summary>
-        /// <returns></returns>
         public TwitData favorites_create(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1534,12 +1075,12 @@ namespace StarlitTwit
         }
         #endregion (favorites_create)
         //-------------------------------------------------------------------------------
-        #region favorites_destroy お気に入り削除
+        #region +favorites_destroy
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// favorites_destroy お気に入り削除）
+        /// <para>favorites_destroy メソッド(お気に入り削除)</para>
+        /// <para>Un-favorites the status specified in the ID parameter as the authenticating user.</para>
         /// </summary>
-        /// <returns></returns>
         public TwitData favorites_destroy(long id, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1554,85 +1095,715 @@ namespace StarlitTwit
         }
         #endregion (favorites_destroy)
         //-------------------------------------------------------------------------------
-        #endregion (favorites/)
+        #endregion (Favorites)
 
         //-------------------------------------------------------------------------------
-        #region blocks/ (ブロック関連）
+        #region Lists Resources
         //-------------------------------------------------------------------------------
-        #region blocks_create
+        //list_all
+        //-------------------------------------------------------------------------------
+        #region +lists_statuses
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// blocks/create メソッド
+        /// <para>lists/statuses</para>
+        /// <para>Returns tweet timeline for members of the specified list.</para>
+        /// <para></para>
         /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="include_entities">[option]</param>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
         /// <returns></returns>
-        public UserProfile blocks_create(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public IEnumerable<TwitData> lists_statuses(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+            long since_id = -1, long max_id = -1, int per_page = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (string.IsNullOrEmpty(owner_screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/create.xml", POST, paramdic);
-            XElement el = PostToAPI(url);
-            return ConvertToUserProfile(el);
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/statuses.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToTwitDataArray(el);
         }
-        #endregion (blocks_create)
+        #endregion (lists_statuses)
         //-------------------------------------------------------------------------------
-        #region blocks_destroy
+        #region +lists_memberships
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// blocks/destroy メソッド
+        /// <para>lists_memberships メソッド</para>
+        /// <para>Returns the lists the specified user has been added to.</para>
         /// </summary>
-        /// <param name="user_id">[select]</param>
-        /// <param name="screen_name">[select]</param>
-        /// <param name="include_entities">[option]</param>
-        /// <returns></returns>
-        public UserProfile blocks_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        /// <param name="user_id">[select option]追加されているリストを調べるユーザーID。両方なければ認証ユーザー</param>
+        /// <param name="screen_name">[select option]追加されているリストを調べるユーザー名。両方なければ認証ユーザー</param>
+        /// <param name="filter_to_owner_lists">[option]trueに設定すると認証ユーザーの所有するリストのみ</param>
+        public SequentData<ListData> lists_memberships(long user_id = -1, string screen_name = "", long cursor = -1, bool filter_to_owner_lists = false)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (((user_id <= 0 && string.IsNullOrEmpty(screen_name)) || filter_to_owner_lists) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
                 if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (filter_to_owner_lists) { paramdic.Add("filter_to_owned_lists", filter_to_owner_lists.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/destroy.xml", POST, paramdic);
-            XElement el = PostToAPI(url);
-            return ConvertToUserProfile(el);
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/memberships.xml", URLapi), GET, paramdic);
+            XElement el = GetByAPI(url);
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
+                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
         }
-        #endregion (blocks_destroy)
+        #endregion (lists_memberships)
         //-------------------------------------------------------------------------------
-        #region blocks_exists (未実装)
-        //-------------------------------------------------------------------------------
-        //
-        private void blocks_exists()
-        {
-            throw new NotImplementedException();
-        }
-        #endregion (blocks_exists)
-        //-------------------------------------------------------------------------------
-        #region blocks_blocking
+        #region +lists_subscriptions?
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// blocks/blocking メソッド
+        /// <para>lists_subscriptionsメソッド</para>
+        /// <para>List the lists the specified user follows</para>
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="include_entities"></param>
+        /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
+        /// <remarks>APIでは非推奨だが重複しているわけではないと思われるのでObsoleteにはしていない</remarks>
+        public SequentData<ListData> lists_subscriptions(string screen_name = "", long cursor = -1)
+        {
+            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, user), GET, paramdic);
+            XElement el = GetByAPI(url);
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
+                long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (lists_subscriptions)
+        //===============================================================================
+        #region +list_subscribers
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers メソッド</para> 
+        /// <para>Returns the subscribers of the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
         /// <returns></returns>
-        public IEnumerable<UserProfile> blocks_blocking(int page = -1,int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public SequentData<UserProfile> list_subscribers(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                                         long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
+                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (list_subscribers_Get)
+        //-------------------------------------------------------------------------------
+        #region +list_subscribers_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers/create メソッド</para>
+        /// <para>Subscribes the authenticated user to the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData list_subscribers_create(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers/create.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_subscribers_create)
+        //-------------------------------------------------------------------------------
+        #region +list_subscribers_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers/show メソッド</para>
+        /// <para>Check if the specified user is a member of the specified list.</para>
+        /// <para>見つからなければ404エラーを返す</para>
+        /// </summary>
+        /// <param name="user_id">[select1]削除するユーザーのID</param>
+        /// <param name="screen_name">[select1]削除するユーザーのScreenName</param>
+        /// <param name="list_id">[select2]リストID</param>
+        /// <param name="slug">[select2]リストのslug</param>
+        /// <param name="owner_screen_name">[select2 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select2 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public UserProfile list_subscribers_show(long user_id = -1, string screen_name = "",
+                                                 long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                                 bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers/show.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (list_subscribers_show)
+        //-------------------------------------------------------------------------------
+        #region +list_subscribers_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/subscribers/destroy メソッド</para>
+        /// <para>Unsubscribes the authenticated user from the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData list_subscribers_destroy(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/subscribers/destroy.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_subscribers_destroy)
+        //===============================================================================
+        #region +list_create_all
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/create_all メソッド</para>
+        /// <para>Adds multiple members to a list, by specifying a comma-separated list of member ids or screen names.</para>
+        /// <para>最大100人まで一斉に追加可能</para>
+        /// </summary>
+        /// <param name="list_id">[select1]リストID</param>
+        /// <param name="slug">[select1]リストのslug</param>
+        /// <param name="user_ids">[select2]</param>
+        /// <param name="screen_names">[select2]</param>
+        /// <remarks>リストの最大人数は500．</remarks>
+        /// <returns></returns>
+        public object list_create_all(long list_id = -1, string slug = "", long[] user_ids = null, string[] screen_names = null)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストの特定に必要な情報が足りません。"); }
+            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
+                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) {
+                    paramdic.Add("slug", slug);
+                    paramdic.Add("owner_id", ID.ToString());
+                }
+                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids, false)); }
+                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names, false)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/create_all.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_create_all)
+        //-------------------------------------------------------------------------------
+        #region +list_members_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/member メソッド</para>
+        /// <para>Check if the specified user is a member of the specified list.</para>
+        /// <para>見つからなければ404エラーを返す</para>
+        /// </summary>
+        /// <param name="user_id">[select1]削除するユーザーのID</param>
+        /// <param name="screen_name">[select1]削除するユーザーのScreenName</param>
+        /// <param name="list_id">[select2]リストID</param>
+        /// <param name="slug">[select2]リストのslug</param>
+        /// <param name="owner_screen_name">[select2 option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select2 option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public UserProfile list_members_show(long user_id = -1, string screen_name = "",
+                                             long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                             bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/show.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (list_members_show)
+        //-------------------------------------------------------------------------------
+        #region +list_members
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members メソッド</para> 
+        /// <para>Returns the members of the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="owner_screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
+        /// <returns></returns>
+        public SequentData<UserProfile> list_members(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
+                                                         long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")),
+                    long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (list_members)
+        //-------------------------------------------------------------------------------
+        #region +list_members_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members/create メソッド</para>
+        /// <para>Add a member to a list.</para>
+        /// </summary>
+        /// <param name="list_id">[select1]リストID</param>
+        /// <param name="slug">[select1]リストのslug</param>
+        /// <param name="user_id">[select2]削除するユーザーのID</param>
+        /// <param name="screen_name">[select2]削除するユーザーのScreenName</param>
+        /// <returns></returns>
+        public ListData list_members_create(long list_id = -1, string slug = "", long user_id = -1, string screen_name = "")
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストの特定に必要な情報が足りません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) {
+                    paramdic.Add("slug", slug);
+                    paramdic.Add("owner_id", ID.ToString());
+                }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/create.xml", URLapi), POST, paramdic);
+
+            XElement el = PostToAPI(url);
+            return ConvertToListData(el);
+        }
+        #endregion (list_members_create)
+        //-------------------------------------------------------------------------------
+        #region +list_members_destory
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>list/members/destroy メソッド</para>
+        /// <para>Removes the specified member from the list</para>
+        /// </summary>
+        /// <param name="list_id">[select1]リストID</param>
+        /// <param name="slug">[select1]リストのslug</param>
+        /// <param name="user_id">[select2]削除するユーザーのID</param>
+        /// <param name="screen_name">[select2]削除するユーザーのScreenName</param>
+        /// <returns></returns>
+        public ListData list_members_destroy(long list_id = -1, string slug = "", long user_id = -1, string screen_name = "")
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストの特定に必要な情報が足りません。"); }
+
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) {
+                    paramdic.Add("slug", slug);
+                    paramdic.Add("owner_id", ID.ToString());
+                }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/members/destroy.xml", URLapi), POST, paramdic);
+
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (list_members_destroy)
+        //===============================================================================
+        #region +lists_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/destroy メソッド</para>
+        /// <para>Deletes the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <returns></returns>
+        /// <remarks>owner_screen_name or owner_idは必要?</remarks>
+        public ListData lists_destroy(long list_id = -1, string slug = "")
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストIDかslugのどちらか1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) {
+                    paramdic.Add("slug", slug);
+                    paramdic.Add("owner_id", ID.ToString());
+                }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/destroy.xml", URLapiSSL), POST, paramdic);
+
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (lists_destroy)
+        //-------------------------------------------------------------------------------
+        #region +lists_update
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/update メソッド</para>
+        /// <para>Updates the specified list.</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="name">[option]リストの新しい名前</param>
+        /// <param name="isPrivate">[option]privateにする時にtrue</param>
+        /// <param name="description">[option]リストの説明</param>
+        /// <returns>変更前が返る？/owner_screen_name or owner_idは必要?</returns>
+        public ListData lists_update(long list_id = -1, string slug = "",
+                                     string name = null, bool isPrivate = false, string description = null)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストIDかslugのどちらか1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) {
+                    paramdic.Add("slug", slug);
+                    paramdic.Add("owner_id", ID.ToString());
+                }
+                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
+                paramdic.Add("mode", (isPrivate) ? "private" : "public");
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/update.xml", URLapi), POST, paramdic);
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (lists_update)
+        //-------------------------------------------------------------------------------
+        #region +lists_create
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/create メソッド</para>
+        /// <para>Creates a new list for the authenticated user</para>
+        /// </summary>
+        /// <param name="name">リストの名前</param>
+        /// <param name="isPrivate">[option]privateにする時にtrue</param>
+        /// <param name="description">[option]リストの説明</param>
+        /// <returns></returns>
+        public ListData lists_create(string name, bool isPrivate = false, string description = null)
+        {
+            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("name", Utilization.UrlEncode(name));
+                if (isPrivate) { paramdic.Add("mode", "private"); }
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/create.xml", URLapi), POST, paramdic);
+            return ConvertToListData(PostToAPI(url));
+        }
+        #endregion (lists_create)
+        //-------------------------------------------------------------------------------
+        #region +lists
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists メソッド</para>
+        /// <para>Returns the lists of the specified (or authenticated) user.</para>
+        /// </summary>
+        /// <param name="user_id">[select]リストの所有者のUserID。両方なければ認証ユーザー</param>
+        /// <param name="screen_name">[select]リストの所有者のScreenName。両方なければ認証ユーザー</param>
+        /// <param name="cursor">[option]データベース上のカーソル</param>
+        /// <returns></returns>
+        public SequentData<ListData> lists(long user_id = -1, string screen_name = "", long cursor = -1)
+        {
+            if (user_id < 0 && string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists.xml", URLapi), GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
+                                             long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (lists_Get)
+        //-------------------------------------------------------------------------------
+        #region +lists_show
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/show メソッド</para>
+        /// <para>Returns the specified list</para>
+        /// </summary>
+        /// <param name="list_id">[select]リストID</param>
+        /// <param name="slug">[select]リストのslug</param>
+        /// <param name="screen_name">[select option]slugを指定する場合にowner_idかどちらかが必要．リストの作成者のScreenName</param>
+        /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
+        /// <returns></returns>
+        public ListData lists_show(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
+        {
+            if (list_id <= 0 &&
+                (string.IsNullOrEmpty(slug) ||
+                 (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
+                throw new ArgumentException("リストの特定に必要な情報が足りません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (list_id > 0) { paramdic.Add("list_id", list_id.ToString()); }
+                if (!string.IsNullOrEmpty(slug)) { paramdic.Add("slug", slug); }
+                if (!string.IsNullOrEmpty(owner_screen_name)) { paramdic.Add("owner_screen_name", owner_screen_name); }
+                if (owner_id > 0) { paramdic.Add("owner_id", owner_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/show.xml", URLapiSSL), GET, paramdic);
+            return ConvertToListData(GetByAPI(url));
+        }
+        #endregion (lists_Show)
+        //-------------------------------------------------------------------------------
+        #endregion (Lists)
+
+        //-------------------------------------------------------------------------------
+        #region Accounts Resources
+        //-------------------------------------------------------------------------------
+        #region +account_rate_limit_status
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>account/rate_limit_statusメソッド</para>
+        /// <para>Returns the remaining number of API requests available to the requesting user before the API limit is reached for the current hour.</para>
+        /// </summary>
+        /// <param name="withAuth">認証を行うかどうか。認証しない場合はIP依存のデータが返る</param>
+        /// <returns>残数データ</returns>
+        public APILimitData account_rate_limit_status(bool withAuth)
+        {
+            string urlbase = URLapi + @"account/rate_limit_status.xml";
+            string url = (withAuth) ? GetUrlWithOAuthParameters(urlbase, GET)
+                                    : urlbase;
+
+            XElement el = GetByAPI(url);
+            return ConvertToAPILimitData(el);
+        }
+        #endregion (account_rate_limit_status)
+        // account/verify_credentials
+        // account/end_session
+        // account/update_delivery_device
+        //-------------------------------------------------------------------------------
+        #region +account_update_profile プロフィール更新
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>account_update_profileメソッド</para>
+        /// <para>Sets values that users are able to set under the "Account" tab of their settings page</para>
+        /// </summary>
+        /// <param name="name">[select at least one]</param>
+        /// <param name="url">[select at least one]</param>
+        /// <param name="location">[select at least one]</param>
+        /// <param name="description">[select at least one]</param>
+        /// <returns></returns>
+        public UserProfile account_update_profile(string name = null, string url = null, string location = null, string description = null,
+                                                  bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(url)
+             && string.IsNullOrEmpty(location) && string.IsNullOrEmpty(description)) { throw new ArgumentException("更新内容が少なくとも1つ必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(name)) { paramdic.Add("name", Utilization.UrlEncode(name)); }
+                if (!string.IsNullOrEmpty(url)) { paramdic.Add("url", Utilization.UrlEncode(url)); }
+                if (!string.IsNullOrEmpty(location)) { paramdic.Add("location", Utilization.UrlEncode(location)); }
+                if (!string.IsNullOrEmpty(description)) { paramdic.Add("description", Utilization.UrlEncode(description)); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+            string url_post = GetUrlWithOAuthParameters(URLapi + @"account/update_profile.xml", POST, paramdic);
+
+            XElement el = PostToAPI(url_post);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (account_update_profile)
+        // account/update_profile_background_image
+        // account/update_profile_colors
+        //-------------------------------------------------------------------------------
+        #region +account_update_profile_image 画像更新
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>account/update_profile_image メソッド</para>　
+        /// <para>Updates the authenticating user's profile image.</para>
+        /// <para>返り値のUserProfileではURLが反映されてない可能性があるので，最低5秒待ってから取得する。</para>
+        /// </summary>
+        /// <param name="imgFileName">画像ファイルパス</param>
+        /// <param name="image">画像</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        public UserProfile account_update_profile_image(string imgFileName, Image image, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            string contentType;
+            Guid guid = image.RawFormat.Guid;
+            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
+            else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
+            else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
+            else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
+
+            return ConvertToUserProfile(PostImageToAPI(url, imgFileName, image, contentType));
+        }
+        #endregion (account_update_profile_image)
+        // account/totals
+        // account/settings(GET)
+        // account/settings(POST)
+        //-------------------------------------------------------------------------------
+        #endregion (Accounts)
+
+        //-------------------------------------------------------------------------------
+        #region Block Resources
+        //-------------------------------------------------------------------------------
+        #region +blocks_blocking
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>blocks/blocking メソッド</para>
+        /// <para>Returns an array of user objects that the authenticating user is blocking.</para>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserProfile> blocks_blocking(int page = -1, int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
             }
 
             string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking.xml", GET, paramdic);
@@ -1640,12 +1811,13 @@ namespace StarlitTwit
         }
         #endregion (blocks_blocking)
         //-------------------------------------------------------------------------------
-        #region blocks_blocking_ids
+        #region +blocks_blocking_ids
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// blocks/blocking/ids メソッド
+        /// <para>blocks/blocking/ids メソッド</para>
+        /// <para>Returns an array of numeric user ids the authenticating user is blocking.</para>
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>stringify_idsは不要?</remarks>
         public IEnumerable<long> blocks_blocking_ids()
         {
             string url = GetUrlWithOAuthParameters(URLapi + @"blocks/blocking/ids.xml", GET);
@@ -1657,74 +1829,73 @@ namespace StarlitTwit
         }
         #endregion (blocks_blocking_ids)
         //-------------------------------------------------------------------------------
-        #endregion (blocks/ (ブロック関連）)
-
+        #region -blocks_exists (未実装)
         //-------------------------------------------------------------------------------
-        #region search/ (検索関連)
+        //
+        private void blocks_exists()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion (blocks_exists)
         //-------------------------------------------------------------------------------
-        #region search
+        #region +blocks_create
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// <para>検索を行います。引数qかphraseのどちらかは必須です。</para>
+        /// <para>blocks/create メソッド</para>
+        /// <para>Blocks the specified user from following the authenticating user</para>
         /// </summary>
-        /// <param name="q">[select option]"検索条件"</param>
-        /// <param name="phrase">[select option]"(検索語句)&(検索条件)"</param>
-        /// <param name="lang">[unuse]</param>
-        /// <param name="rpp">[option] &lt;=100</param>
-        /// <param name="page">[option] rpp * page &lt;=1500</param>
-        /// <param name="max_id">[option]</param>
-        /// <param name="since_id">[option]</param>
-        /// <param name="since">[option]YYYY-MM-DD</param>
-        /// <param name="until">[option]YYYY-MM-DD</param>
-        /// <param name="geocode">[unuse]</param>
-        /// <param name="show_user"></param>
-        /// <param name="result_type">[recent/popular/mixed]</param>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
         /// <returns></returns>
-        public IEnumerable<TwitData> search(string q = "", string phrase = "", string lang = "jp",
-            int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
-            string until = "", object geocode = null, bool show_user = false, string result_type = "")
+        public UserProfile blocks_create(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
         {
-            if (string.IsNullOrEmpty(q) && string.IsNullOrEmpty(phrase)) { throw new ArgumentException("qかphraseのどちらかの引数は必須です。"); }
-
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (!string.IsNullOrEmpty(q)) { paramdic.Add("q", Utilization.UrlEncode(q)); }
-                if (!string.IsNullOrEmpty(phrase)) { paramdic.Add("phrase", Utilization.UrlEncode(phrase)); }
-                //paramdic.Add("lang", lang);
-                if (rpp > 0) { paramdic.Add("rpp", rpp.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
-                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (!string.IsNullOrEmpty(since)) { paramdic.Add("since", since); }
-                if (!string.IsNullOrEmpty(until)) { paramdic.Add("until", until); }
-                // geocode
-                if (show_user) { paramdic.Add("show_user", "true"); }
-                if (!string.IsNullOrEmpty(result_type)) { paramdic.Add("result_type", result_type); }
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
             }
 
-            string url = GetUrlWithOAuthParameters(URLsearch + "search.json", GET, paramdic);
-
-            XElement el = GetByAPIJson(url);
-
-            IEnumerable<TwitData> data = ConvertToTwitDataJson(el);
-            //string[] user_names = data
-            //    .Where((tdata) => !tdata.UserProtected)
-            //    .Select((tdata) => tdata.UserScreenName)
-            //    .Distinct()
-            //    .ToArray();
-
-            //UserData[] userData = users_lookup(screen_names: user_names);
-
-            return data;
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/create.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
         }
-        #endregion (search)
+        #endregion (blocks_create)
         //-------------------------------------------------------------------------------
-        #endregion (search)
+        #region +blocks_destroy
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>blocks/destroy メソッド</para>
+        /// <para>Un-blocks the user specified in the ID parameter for the authenticating user</para>
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public UserProfile blocks_destroy(long user_id = -1, string screen_name = null, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool skip_status = false)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"blocks/destroy.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (blocks_destroy)
+        //-------------------------------------------------------------------------------
+        #endregion (Block)
 
         //-------------------------------------------------------------------------------
-        #region oauth/ (OAuth認証関連)
+        #region OAuth Resources
         //-------------------------------------------------------------------------------
-        #region OAuth OAuth認証
+        #region +OAuth OAuth認証
         //-------------------------------------------------------------------------------
         //
         public bool OAuth(out UserInfo userdata)
@@ -1759,7 +1930,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (OAuth)
         //-------------------------------------------------------------------------------
-        #region oauth_request_token
+        #region -oauth_request_token
         //-------------------------------------------------------------------------------
         /// <summary>
         /// request_tokenを返します。
@@ -1769,7 +1940,7 @@ namespace StarlitTwit
         /// <returns></returns>
         private string oauth_request_token(out string request_token_Secret)
         {
-            string url = URLtwi + "oauth/request_token";
+            string url = URLapiSSL + "oauth/request_token";
 
             SortedDictionary<string, string> parameters = GenerateParameters("");
             string signature = GenerateSignature("", GET, url, parameters);
@@ -1783,7 +1954,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (oauth_request_token)
         //-------------------------------------------------------------------------------
-        #region oauth_authorize_URL
+        #region -oauth_authorize_URL
         //-------------------------------------------------------------------------------
         /// <summary>
         /// ユーザーが認証するためのURLを返します。
@@ -1792,12 +1963,12 @@ namespace StarlitTwit
         /// <returns></returns>
         private string oauth_authorize_URL(string strRequestToken)
         {
-            return URLtwi + "oauth/authorize?oauth_token=" + strRequestToken;
+            return URLapiSSL + "oauth/authorize?oauth_token=" + strRequestToken;
         }
         //-------------------------------------------------------------------------------
         #endregion (oauth_authorize)
         //-------------------------------------------------------------------------------
-        #region oauth_access_token
+        #region -oauth_access_token
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 最終認証を行います。正式なoauth_tokenが返ります。
@@ -1808,7 +1979,7 @@ namespace StarlitTwit
         /// <param name="access_token_secret">正式なoauth_token_secret</param>
         private UserInfo oauth_access_token(string pin, string reqToken, string reqTokenSecret)
         {
-            string url = URLtwi + "oauth/access_token";
+            string url = URLapiSSL + "oauth/access_token";
 
             SortedDictionary<string, string> parameters = GenerateParameters(reqToken);
             parameters.Add("oauth_verifier", pin);
@@ -1828,8 +1999,104 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (oauth_access_token)
+
         //-------------------------------------------------------------------------------
-        #endregion (oauth/)
+        #endregion (OAuth)
+
+        //-------------------------------------------------------------------------------
+        #region Deprecated Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_friends_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// statuses/friends_timelineメソッド
+        /// </summary>
+        /// <param name="since_id">[option]</param>
+        /// <param name="max_id">[option]</param>
+        /// <param name="count">[option]</param>
+        /// <param name="page">[option]</param>
+        /// <param name="trim_user">[option]</param>
+        /// <param name="include_rts">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        [Obsolete("statuses/home_timelineを使用してください。")]
+        public IEnumerable<TwitData> statuses_friends_timeline(long since_id = -1, long max_id = -1, int count = -1, int page = -1,
+                                                    bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends_timeline.xml", GET, paramdic);
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_friends_timeline)
+        //-------------------------------------------------------------------------------
+        #region +statuses_friends
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォローしている人を返します。返り値：(ユーザーリスト，next_cursor, previous_cursor）
+        /// </summary>
+        /// <param name="user_id">[option]</param>
+        /// <param name="screen_name">[option]</param>
+        /// <param name="cursor">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        [Obsolete("follower/idsとusers/lookupを使用してください。")]
+        public SequentData<UserProfile> statuses_friends(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id >= 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/friends.xml", GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (statuses_friends)
+        //-------------------------------------------------------------------------------
+        #region +statuses_followers
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// フォローされている人を返します。返り値：(ユーザーリスト，next_cursor, previous_cursor）
+        /// </summary>
+        /// <param name="user_id">[option]</param>
+        /// <param name="screen_name">[option]</param>
+        /// <param name="cursor">[option]</param>
+        /// <param name="include_entities">[option]</param>
+        /// <returns></returns>
+        [Obsolete("friends/idsとusers/lookupを使用してください。")]
+        public SequentData<UserProfile> statuses_followers(long user_id = -1, string screen_name = null, long cursor = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id >= 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                paramdic.Add("cursor", cursor.ToString());
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"statuses/followers.xml", GET, paramdic);
+
+            XElement el = GetByAPI(url);
+            return new SequentData<UserProfile>(ConvertToUserProfileArray(el.Element("users")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (statuses_followers)
+        //-------------------------------------------------------------------------------
+        #endregion (Deprecated)
 
         //===============================================================================
         #region stream_statuses_sample (test)
@@ -2985,14 +3252,14 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
-        private string ConcatWithComma(Array array)
+        private string ConcatWithComma(Array array, bool withSpace = true)
         {
             bool isfirst = true;
             StringBuilder sb = new StringBuilder();
             foreach (object o in array) {
                 if (!isfirst) {
-                    //sb.Append(',');
-                    sb.Append(", ");
+                    if (withSpace) { sb.Append(", "); }
+                    else { sb.Append(','); }
                 }
                 isfirst = false;
                 sb.Append(o.ToString());
@@ -3006,7 +3273,7 @@ namespace StarlitTwit
         //
         private IEnumerable<EntityData> GetEntitiesByRegex(string text)
         {
-           // @から始まるUserMentionのEntity
+            // @から始まるUserMentionのEntity
             Regex rm = new Regex(MENTION_REGEX_PATTERN);
             foreach (Match m in rm.Matches(text)) {
                 Group g = m.Groups["entity"];
@@ -3324,9 +3591,9 @@ namespace StarlitTwit
         public bool Blocking;
         /// <summary>Nortificationが有効か</summary>
         public bool Notification_Enabled;
-        /// <summary></summary>
+        /// <summary>Retweetを受け取るように設定されているか？[要確認]</summary>
         public bool Want_Retweets;
-        /// <summary></summary>
+        /// <summary>？[要確認]</summary>
         public bool AllReplies;
 
         //-------------------------------------------------------------------------------

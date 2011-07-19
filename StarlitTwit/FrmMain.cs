@@ -2114,7 +2114,7 @@ namespace StarlitTwit
                             d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: iCount);
                             break;
                         case TabSearchType.List:
-                            d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: iCount);
+                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: iCount);
                             break;
                         default:
                             Debug.Assert(false, "異常な検索タイプ");
@@ -2190,7 +2190,7 @@ namespace StarlitTwit
                             d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, since_id: since_id);
                             break;
                         case TabSearchType.List:
-                            d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: tabdata.RenewGetNum, since_id: since_id);
+                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: tabdata.RenewGetNum, since_id: since_id);
                             break;
                         default:
                             Debug.Assert(false, "異常な検索タイプ");
@@ -2253,7 +2253,7 @@ namespace StarlitTwit
                             d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, max_id: max_id);
                             break;
                         case TabSearchType.List:
-                            d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: tabdata.RenewGetNum, max_id: max_id);
+                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: tabdata.RenewGetNum, max_id: max_id);
                             break;
                         default:
                             Debug.Assert(false, "異常な検索タイプ");
@@ -2345,7 +2345,7 @@ namespace StarlitTwit
                                 break;
                             case TabSearchType.List:
                                 if (i == MAX_LIST / 200 + 1) { isBreak = true; break; }// 800まで
-                                d = Twitter.lists_statuses(tabdata.SearchWord, tabdata.ListOwner, per_page: 200, page: i);
+                                d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: 200, page: i);
                                 break;
                             default:
                                 Debug.Assert(false, "異常な検索タイプ");

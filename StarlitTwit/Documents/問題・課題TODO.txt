@@ -21,6 +21,12 @@
 ・RT/Deleteは失敗も成功もステータスバーに表示(失敗はエラー内容)
 
 ■要修正・確認
+・被ったTwitDataがきたら更新したほうがいい
+・listのAPIからくるxmlの仕様が変わった？
+・TextBox履歴はSelectionLengthも持っておいたほうが良い
+・ユーザーのお気に入り/Retweet(/フォロワーのRetweet)表示
+・FollowerID,FriendIDはプロフィール更新時に数確認して更新？
+・リストメンバーでフォロー有無が出てない？（他は？
 ・リストタブ右クリックでリスト情報？
 ・画像表示中・ダブルクリックによる選択可能状態の時はスクロールしないor行追加待機？
 ・何かしらの状況でInvalidOperationExceptionが無限に出る

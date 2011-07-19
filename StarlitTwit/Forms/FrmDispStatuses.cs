@@ -227,17 +227,17 @@ namespace StarlitTwit
                             else { disableAppend = true; }
                             break;
                         case EFormType.ListStatuses:
-                            d = FrmMain.Twitter.lists_statuses(ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
+                            d = FrmMain.Twitter.lists_statuses(-1, ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;
                         case EFormType.MyFavorite:
-                            d = FrmMain.Twitter.favorites_get(page: _page);
+                            d = FrmMain.Twitter.favorites(page: _page);
                             _page++;
                             disableAppend = (d.Count() == 0);
                             break;
                         case EFormType.UserFavorite:
-                            d = FrmMain.Twitter.favorites_get(UserScreenName, page: _page);
+                            d = FrmMain.Twitter.favorites(UserScreenName, page: _page);
                             _page++;
                             disableAppend = (d.Count() == 0);
                             break;
