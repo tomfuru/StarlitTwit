@@ -973,10 +973,12 @@ namespace StarlitTwit
                         TwitData lastdata = data.LastOrDefault();
                         foreach (TwitData t in data) {
                             // 重複排除
-                            if (_rowDataList.ContainsKey(t.StatusID) || (checkRetweetDup && CheckRTDup(t))) {
+                            if (_rowDataList.ContainsKey(t.StatusID)) {
                                 if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastdata.StatusID); }
+                                _rowDataList[t.StatusID].TwitData = t;
                                 continue;
                             }
+                            else if (checkRetweetDup && CheckRTDup(t)) { continue; }
 
                             RowData rowdata = new RowData() {
                                 TwitData = t,
