@@ -24,6 +24,8 @@ namespace StarlitTwit
         private int _imgIndex = 0;
         /// <summary>ロード中画像インデックス(1,2,...)</summary>
         private int _loadIndex = 1;
+        /// <summary>画像枚数</summary>
+        private int _pictureNum = -1;
         /// <summary>表示切替タイマー</summary>
         //private Timer _switchTimer = new Timer() { Interval = 3000 };
         System.Timers.Timer _switchTimer = new System.Timers.Timer(3000);
@@ -150,6 +152,8 @@ namespace StarlitTwit
                         return;
                     }
 
+                    _loadIndex %= _img.Length;
+                    _loadIndex++;
                     _imgIndex++;
                     _imgIndex %= _img.Length;
 
@@ -236,6 +240,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region #[override]Disp_Paint 表示
         //-------------------------------------------------------------------------------
+        private static readonly Brush BRUSH = new SolidBrush(Color.Black);
         /// <summary>
         /// ツールチップ描画
         /// </summary>
@@ -253,6 +258,10 @@ namespace StarlitTwit
                             (_img != null) ? _img[_imgIndex] :
                                              StarlitTwit.Properties.Resources.failed;
                 g.DrawImage(img, PADDING, PADDING, Size.Width - PADDING * 2, Size.Height - PADDING * 2);
+
+                if (_pictureNum > 1 && _loadIndex > 0) {
+                    g.DrawString(string.Format("{0}/{1}", _loadIndex, _pictureNum), DisplayForm.Font, BRUSH, 5.0f, 5.0f);
+                }
             }
         }
         #endregion (Disp_Paint)
@@ -323,11 +332,15 @@ namespace StarlitTwit
         {
             _imageAnimation.StartAnimation();
 
+            _pictureNum = urls.Length;
+            _loadIndex = 0;
             List<Image> list = new List<Image>();
             foreach (var url in urls) {
+                _loadIndex++;
                 Image img = Utilization.GetImageFromURL(url);
                 if (img != null) { list.Add(img); }
             }
+            _loadIndex = 1;
 
             if (list.Count > 0) {
                 lock (_lockimg) { _img = list.ToArray(); }
@@ -373,6 +386,7 @@ namespace StarlitTwit
                 }
                 _img = null;
             }
+            _pictureNum = -1;
         }
         #endregion (DisposeImages)
 
