@@ -56,7 +56,7 @@ namespace StarlitTwit
                     }
                     e.Handled = true;
                 }
-                
+
             }
         }
         #endregion (%[override]OnKeyDown)
@@ -122,11 +122,9 @@ namespace StarlitTwit
             get { return _cutmenu; }
             set
             {
-                if (_cutmenu != null) {
-                    _cutmenu.Click += CutMenu_Click;
-                }
+                if (_cutmenu != null) { _cutmenu.Click += CutMenu_Click; }
                 _cutmenu = value;
-                value.Click += CutMenu_Click;
+                if (value != null) { value.Click += CutMenu_Click; }
             }
         }
         #endregion (CutMenu)
@@ -142,11 +140,9 @@ namespace StarlitTwit
             get { return _copyMenu; }
             set
             {
-                if (_copyMenu != null) {
-                    _copyMenu.Click -= CopyMenu_Click;
-                }
+                if (_copyMenu != null) { _copyMenu.Click -= CopyMenu_Click; }
                 _copyMenu = value;
-                value.Click += CopyMenu_Click;
+                if (value == null) { value.Click += CopyMenu_Click; }
             }
         }
         #endregion (CopyMenu)
@@ -162,11 +158,9 @@ namespace StarlitTwit
             get { return _pasteMenu; }
             set
             {
-                if (_pasteMenu != null) {
-                    _pasteMenu.Click -= PasteMenu_Click;
-                }
+                if (_pasteMenu != null) { _pasteMenu.Click -= PasteMenu_Click; }
                 _pasteMenu = value;
-                value.Click += PasteMenu_Click;
+                if (value == null) { value.Click += PasteMenu_Click; }
             }
         }
         #endregion (PasteMenu)
@@ -182,11 +176,9 @@ namespace StarlitTwit
             get { return _undoMenu; }
             set
             {
-                if (_undoMenu != null) {
-                    _undoMenu.Click -= UndoMenu_Click;
-                }
+                if (_undoMenu != null) { _undoMenu.Click -= UndoMenu_Click; }
                 _undoMenu = value;
-                value.Click += UndoMenu_Click;
+                if (value == null) { value.Click += UndoMenu_Click; }
             }
         }
         #endregion (UndoMenu)
@@ -202,11 +194,9 @@ namespace StarlitTwit
             get { return _redoMenu; }
             set
             {
-                if (_redoMenu != null) {
-                    _redoMenu.Click -= RedoMenu_Click;
-                }
+                if (_redoMenu != null) { _redoMenu.Click -= RedoMenu_Click; }
                 _redoMenu = value;
-                value.Click += RedoMenu_Click;
+                if (value == null) { value.Click += RedoMenu_Click; }
             }
         }
         #endregion (RedoMenu)

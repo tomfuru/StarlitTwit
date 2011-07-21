@@ -65,6 +65,13 @@ namespace StarlitTwit
         static readonly Longcomp CLONGCOMP = new Longcomp();
         /// <summary>調整時ロックオブジェクト</summary>
         private object _lockObj = new object();
+
+        /// <summary>Popupを起こすためのアクション</summary>
+        public Action<string> PopupAction { get; set; }
+        /// <summary>データ追加抑制フラグ，専用メソッドで操作</summary>
+        private bool _suspendDataAdd = false;
+        /// <summary>追加予定データリスト</summary>
+        private List<Tuple<IEnumerable<TwitData>, bool, bool>> _addDataList = new List<Tuple<IEnumerable<TwitData>, bool, bool>>();
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -186,6 +193,7 @@ namespace StarlitTwit
         public UctlDispTwit()
         {
             MaxTweetID = MinTweetID = -1;
+            PopupAction = null;
 
             InitializeComponent();
 
@@ -738,6 +746,7 @@ namespace StarlitTwit
         private void Row_TextBoxEnter(object sender, EventArgs e)
         {
             _enableKey = false;
+            SuspendAddData();
         }
         #endregion (Row_TextBoxEnter)
         #region Row_TextBoxLeave テキストボックスLeave時
@@ -746,8 +755,26 @@ namespace StarlitTwit
         private void Row_TextBoxLeave(object sender, EventArgs e)
         {
             _enableKey = true;
+            ResumeAddData();
         }
         #endregion (Row_TextBoxLeave)
+        //-------------------------------------------------------------------------------
+        #region Row_ShowPopupImage 画像ポップアップ表示時
+        //-------------------------------------------------------------------------------
+        //
+        private void Row_ShowPopupImage(object sender, EventArgs e)
+        {
+            SuspendAddData();
+        }
+        #endregion (Row_ShowPopupImage)
+        #region Row_HidePopupImage 画像ポップアップ消滅時
+        //-------------------------------------------------------------------------------
+        //
+        private void Row_HidePopupImage(object sender, EventArgs e)
+        {
+            ResumeAddData();
+        }
+        #endregion (Row_HidePopupImage)
         //-------------------------------------------------------------------------------
         #region pnlflow_MouseWheel マウスホイール時
         //-------------------------------------------------------------------------------
@@ -816,94 +843,16 @@ namespace StarlitTwit
         /// <param name="suspendSetBoundary">[option]境界セットを抑制する時true</param>
         /// <param name="checkRetweetDup">[option]RTのための重複確認をするかどうか</param>
         /// <returns>最初のツイートのデータ</returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public string AddData(IEnumerable<TwitData> data, bool suspendSetBoundary = false, bool checkRetweetDup = false)
         {
-            lock (_lockObj) {
-                string retText = "";
-
-                // 選択保存用
-                long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ?
-                                       _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
-                ChangeSelectRow(null);
-                // 位置保存用
-                long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ?
-                                (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID :
-                                                        _rowList[0].TwitData.StatusID : -1;
-
-                List<string> imageURLList = new List<string>();
-                //-----内部情報設定-----
-                List<RowData> addrowList = new List<RowData>();
-                TwitData lastdata = data.LastOrDefault();
-                foreach (TwitData t in data) {
-                    // 重複排除
-                    if (_rowDataList.ContainsKey(t.StatusID) || (checkRetweetDup && CheckRTDup(t))) {
-                        if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastdata.StatusID); }
-                        continue;
-                    }
-
-                    RowData rowdata = new RowData() {
-                        TwitData = t,
-                        IsBoundary = (!suspendSetBoundary && t.StatusID == lastdata.StatusID)
-                    };
-
-                    // 返り値用
-                    if (string.IsNullOrEmpty(retText)) { retText = Utilization.MakePopupText(t); }
-
-                    // 画像URL登録
-                    string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
-                    if (!ImageListWrapper.ImageContainsKey(iconURL) && !imageURLList.Contains(iconURL)) {
-                        imageURLList.Add(iconURL);
-                    }
-
-                    addrowList.Add(rowdata);
-                    _rowDataList.Add(t.StatusID, rowdata);
-                    if (t.IsRT()) { _RTidSet.Add(t.RTTwitData.StatusID); } // RT元データを集合に追加
-
-                    //Console.WriteLine(t.StatusID);
-
-                    // 最小・最大ID更新
-                    if (MaxTweetID == -1) { MaxTweetID = MinTweetID = t.StatusID; } // 最初
-                    else {
-                        MaxTweetID = Math.Max(MaxTweetID, t.StatusID);
-                        MinTweetID = Math.Min(MinTweetID, t.StatusID);
-                    }
+            lock (_addDataList) {
+                if (_addDataList.Count > 0 && _addDataList[_addDataList.Count - 1].Item2 == suspendSetBoundary && _addDataList[_addDataList.Count - 1].Item3 == checkRetweetDup) {
+                    _addDataList[_addDataList.Count - 1] = new Tuple<IEnumerable<TwitData>, bool, bool>(_addDataList[_addDataList.Count - 1].Item1.Concat(data), suspendSetBoundary, checkRetweetDup);
                 }
-
-                // 追加分Replyツールチップ設定
-                SetRowReplyText(addrowList);
-
-                // アイコン取得要請
-                ImageListWrapper.RequestAddImages(imageURLList);
-
-                //-----コントロール設定-----
-                // 選択復元
-                if (selectedData >= 0) {
-                    int newIndex = _rowDataList.IndexOfKey(selectedData);
-                    SelectedIndex = newIndex;
-                    ChangeSelectRow(newIndex);
-                }
-
-                vscrbar.Maximum = _rowDataList.Count - 1;
-
-                if (locIndex >= 0) {
-                    // 位置復元
-                    int baseIndex = _rowDataList.IndexOfKey(locIndex);
-                    if (_existNotAllRow_Top) {
-                        AdjustControl(baseIndex, false);
-                    }
-                    else {
-                        _suspend_vscrbar_ValueChangeEvent = true;
-                        vscrbar.Value = baseIndex;
-                        _suspend_vscrbar_ValueChangeEvent = false;
-                        AdjustControl(vscrbar.Value, true); // コントロール位置調整
-                    }
-                }
-                else { AdjustControl(vscrbar.Value, true); } // コントロール位置調整
-
-
-                return retText;
+                else { _addDataList.Add(new Tuple<IEnumerable<TwitData>, bool, bool>(data, suspendSetBoundary, checkRetweetDup)); }
             }
+            if (!_suspendDataAdd) { return AddDataInternal(false); }
+            return "";
         }
         #endregion (AddData)
         //-------------------------------------------------------------------------------
@@ -994,6 +943,109 @@ namespace StarlitTwit
         }
         #endregion (TraceReply)
         //===============================================================================
+        #region -AddDataInternal データ追加本体
+        //-------------------------------------------------------------------------------
+        //
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private string AddDataInternal(bool popup)
+        {
+            string retText = "";
+            lock (_addDataList) {
+                List<string> imageURLList = new List<string>();
+                List<RowData> addrowList = new List<RowData>();
+
+                // 選択保存用
+                long selectedData = (SelectedIndex >= 0 && SelectedIndex < _rowDataList.Count) ?
+                                       _rowDataList.Values[SelectedIndex].TwitData.StatusID : -1;
+                ChangeSelectRow(null);
+                // 位置保存用
+                long locIndex = (vscrbar.Enabled && vscrbar.Value > 0) ?
+                                (_existNotAllRow_Top) ? _rowList[_iVisibleRowNum - 1].TwitData.StatusID :
+                                                        _rowList[0].TwitData.StatusID : -1;
+
+                foreach (var adddata in _addDataList) {
+                    var data = adddata.Item1;
+                    bool suspendSetBoundary = adddata.Item2;
+                    bool checkRetweetDup = adddata.Item3;
+
+                    lock (_lockObj) {
+                        //-----内部情報設定-----
+                        TwitData lastdata = data.LastOrDefault();
+                        foreach (TwitData t in data) {
+                            // 重複排除
+                            if (_rowDataList.ContainsKey(t.StatusID) || (checkRetweetDup && CheckRTDup(t))) {
+                                if (!suspendSetBoundary && _rowDataList[t.StatusID].IsBoundary) { _rowDataList[t.StatusID].IsBoundary = (t.StatusID == lastdata.StatusID); }
+                                continue;
+                            }
+
+                            RowData rowdata = new RowData() {
+                                TwitData = t,
+                                IsBoundary = (!suspendSetBoundary && t.StatusID == lastdata.StatusID)
+                            };
+
+                            // 返り値用
+                            if (string.IsNullOrEmpty(retText)) { retText = Utilization.MakePopupText(t); }
+
+                            // 画像URL登録
+                            string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
+                            if (!ImageListWrapper.ImageContainsKey(iconURL) && !imageURLList.Contains(iconURL)) {
+                                imageURLList.Add(iconURL);
+                            }
+
+                            addrowList.Add(rowdata);
+                            _rowDataList.Add(t.StatusID, rowdata);
+                            if (t.IsRT()) { _RTidSet.Add(t.RTTwitData.StatusID); } // RT元データを集合に追加
+
+                            //Console.WriteLine(t.StatusID);
+
+                            // 最小・最大ID更新
+                            if (MaxTweetID == -1) { MaxTweetID = MinTweetID = t.StatusID; } // 最初
+                            else {
+                                MaxTweetID = Math.Max(MaxTweetID, t.StatusID);
+                                MinTweetID = Math.Min(MinTweetID, t.StatusID);
+                            }
+                        }
+                    }
+                }
+                // 追加分Replyツールチップ設定
+                SetRowReplyText(addrowList);
+
+                // アイコン取得要請
+                ImageListWrapper.RequestAddImages(imageURLList);
+
+                //-----コントロール設定-----
+                // 選択復元
+                if (selectedData >= 0) {
+                    int newIndex = _rowDataList.IndexOfKey(selectedData);
+                    SelectedIndex = newIndex;
+                    ChangeSelectRow(newIndex);
+                }
+
+                vscrbar.Maximum = _rowDataList.Count - 1;
+
+                if (locIndex >= 0) {
+                    // 位置復元
+                    int baseIndex = _rowDataList.IndexOfKey(locIndex);
+                    if (_existNotAllRow_Top) {
+                        AdjustControl(baseIndex, false);
+                    }
+                    else {
+                        _suspend_vscrbar_ValueChangeEvent = true;
+                        vscrbar.Value = baseIndex;
+                        _suspend_vscrbar_ValueChangeEvent = false;
+                        AdjustControl(vscrbar.Value, true); // コントロール位置調整
+                    }
+                }
+                else { AdjustControl(vscrbar.Value, true); } // コントロール位置調整
+
+                _addDataList.Clear();
+            }
+
+            if (popup && PopupAction != null) { PopupAction(retText); }
+            return retText;
+        }
+        #endregion (AddDataInternal)
+        //-------------------------------------------------------------------------------
         #region -AdjustControl コントロールの内容・位置・サイズの調整を行います。
         //-------------------------------------------------------------------------------
         /// <summary>
@@ -1231,6 +1283,8 @@ namespace StarlitTwit
             row.TweetItemClick += Row_TweetItemClick;
             row.TextBoxEnter += Row_TextBoxEnter;
             row.TextBoxLeave += Row_TextBoxLeave;
+            row.ShowPopupImage += Row_ShowPopupImage;
+            row.HidePopupImage += Row_HidePopupImage;
             return row;
         }
         #endregion (MakeTwitRow)
@@ -1438,7 +1492,6 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (SuspendPaint)
-        //-------------------------------------------------------------------------------
         #region -ResumePaint 描画再開
         //-------------------------------------------------------------------------------
         /// <summary>描画再開</summary>
@@ -1447,6 +1500,26 @@ namespace StarlitTwit
             _bSuspendDraw = false;
         }
         #endregion (ResumePaint)
+        //-------------------------------------------------------------------------------
+        #region -SuspendAddData データ追加抑制
+        //-------------------------------------------------------------------------------
+        //
+        private void SuspendAddData()
+        {
+            _suspendDataAdd = true;
+            //Console.WriteLine("suspend data!");
+        }
+        #endregion (SuspendAddData)
+        #region -ResumeAddData データ追加再開
+        //-------------------------------------------------------------------------------
+        //
+        private void ResumeAddData()
+        {
+            _suspendDataAdd = false;
+            //Console.WriteLine("resume data!");
+            AddDataInternal(true);
+        }
+        #endregion (ResumeAddData)
         //-------------------------------------------------------------------------------
         #region #[override]WndProc
         //-------------------------------------------------------------------------------

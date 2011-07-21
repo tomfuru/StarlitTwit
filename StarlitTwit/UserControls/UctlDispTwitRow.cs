@@ -197,6 +197,12 @@ namespace StarlitTwit
         [Category("動作")]
         [Description("テキストボックスへのフォーカスがなくなった時")]
         public event EventHandler TextBoxLeave;
+        [Category("動作")]
+        [Description("画像ポップアップが表示した時")]
+        public event EventHandler ShowPopupImage;
+        [Category("動作")]
+        [Description("画像ポップアップが消滅した時")]
+        public event EventHandler HidePopupImage;
         //-------------------------------------------------------------------------------
         #endregion (Public イベント)
         //-------------------------------------------------------------------------------
@@ -349,6 +355,23 @@ namespace StarlitTwit
             if (TextBoxLeave != null) { TextBoxLeave(this, EventArgs.Empty); }
         }
         #endregion (txtGet_Leave)
+        //-------------------------------------------------------------------------------
+        #region myToolTipImage_ShowToolTip ToolTip表示時
+        //-------------------------------------------------------------------------------
+        //
+        private void myToolTipImage_ShowToolTip(object sender, CancelEventArgs e)
+        {
+            if (ShowPopupImage != null) { ShowPopupImage(sender, e); }
+        }
+        #endregion (myToolTipImage_ShowToolTip)
+        #region myToolTipImage_HideToolTip ToolTip消滅時
+        //-------------------------------------------------------------------------------
+        //
+        private void myToolTipImage_HideToolTip(object sender, EventArgs e)
+        {
+            if (HidePopupImage != null) { HidePopupImage(sender, e); }
+        }
+        #endregion (myToolTipImage_HideToolTip)
         //-------------------------------------------------------------------------------
         #region rtxtGet_MouseWheel テキストボックスフォーカス時でマウスホイール
         //-------------------------------------------------------------------------------

@@ -121,6 +121,8 @@
             this.myToolTipImage.DisplayControl = this.lblTweet;
             this.myToolTipImage.DisplayDuration = 0;
             this.myToolTipImage.MaximumSize = new System.Drawing.Size(500, 500);
+            this.myToolTipImage.ShowToolTip += new System.EventHandler<System.ComponentModel.CancelEventArgs>(this.myToolTipImage_ShowToolTip);
+            this.myToolTipImage.HideToolTip += new System.EventHandler(this.myToolTipImage_HideToolTip);
             // 
             // UctlDispTwitRow
             // 

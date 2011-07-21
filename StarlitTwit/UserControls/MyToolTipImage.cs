@@ -198,8 +198,6 @@ namespace StarlitTwit
         /// </summary>
         protected override void OnShowToolTip(CancelEventArgs e)
         {
-            base.OnShowToolTip(e);
-
             lock (_lockimg) {
                 if (_imgURLs == null || _imgURLs.Length == 0) { e.Cancel = true; return; }
                 Size size;
@@ -222,6 +220,7 @@ namespace StarlitTwit
                 }
                 Size = GetPreferSize(size);
             }
+            base.OnShowToolTip(e);
         }
         //-------------------------------------------------------------------------------
         #endregion (#[override]OnShowToolTip)
@@ -233,6 +232,7 @@ namespace StarlitTwit
         /// </summary>
         protected override void OnHideToolTip()
         {
+            base.OnHideToolTip();
             _switchTimer.Stop();
         }
         #endregion (OnHideToolTip)

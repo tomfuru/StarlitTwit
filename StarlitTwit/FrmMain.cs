@@ -35,6 +35,9 @@ namespace StarlitTwit
             this.tabpgHistory.Text = "History";
             this.tabpgDirect.Text = "Direct";
 
+            this.uctlDispReply.PopupAction = PopupTasktrayReply;
+            this.uctlDispDirect.PopupAction = PopupTasktrayDM;
+
             // 初期設定
             System.Net.ServicePointManager.Expect100Continue = false;
             System.Net.WebRequest.DefaultWebProxy = null;
@@ -2136,14 +2139,10 @@ namespace StarlitTwit
                 // バルーン設定
                 if (!isFirst) {
                     if (uctldisp == uctlDispReply && SettingsData.DisplayReplyBaloon) {
-                        if (!string.IsNullOrEmpty(baloontext)) {
-                            PopupTasktray(tasktray.Text + "：Reply 新着有り", baloontext);
-                        }
+                        PopupTasktrayReply(baloontext);
                     }
                     else if (uctldisp == uctlDispDirect && SettingsData.DisplayDMBaloon) {
-                        if (!string.IsNullOrEmpty(baloontext)) {
-                            PopupTasktray(tasktray.Text + "：DirectMessage 新着有り", baloontext);
-                        }
+                        PopupTasktrayDM(baloontext);
                     }
                 }
             }));
@@ -2377,6 +2376,30 @@ namespace StarlitTwit
             return true;
         }
         #endregion (GetSpecifyTimeTweets)
+
+        //-------------------------------------------------------------------------------
+        #region -PopupTasktrayReply リプライのタスクトレイポップアップ
+        //-------------------------------------------------------------------------------
+        //
+        private void PopupTasktrayReply(string text)
+        {
+            if (!string.IsNullOrEmpty(text)) {
+                PopupTasktray(tasktray.Text + "：Reply 新着有り", text);
+            }
+        }
+        #endregion (PopupTasktrayReply)
+        //-------------------------------------------------------------------------------
+        #region -PopupTasktrayDM DirectMessageのタスクトレイポップアップ
+        //-------------------------------------------------------------------------------
+        //
+        private void PopupTasktrayDM(string text)
+        {
+            if (!string.IsNullOrEmpty(text)) {
+                PopupTasktray(tasktray.Text + "：DirectMessage 新着有り", text);
+            }
+
+        }
+        #endregion (PopupTasktrayDM)
 
         //===============================================================================
         #region -GetFollowerIDs フォロワーID取得
