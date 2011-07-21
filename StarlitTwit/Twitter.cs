@@ -568,7 +568,7 @@ namespace StarlitTwit
         /// <param name="result_type">[recent/popular/mixed]</param>
         /// <returns></returns>
         /// <remarks>API Documentationにはsince,max_id無</remarks>
-        public IEnumerable<TwitData> search(string q = "", string lang = "", string locale = "ja",
+        public IEnumerable<TwitData> search(string q, string lang = "", string locale = "ja",
             int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
             string until = "", object geocode = null, bool show_user = false, string result_type = "")
         {
@@ -830,8 +830,8 @@ namespace StarlitTwit
             return bool.Parse(el.Value);
         }
         #endregion (friendships_exists)
-        //friendships/incoming
-        //frinedships/outgoing
+        //*friendships/incoming
+        //*frinedships/outgoing
         //-------------------------------------------------------------------------------
         #region +friendships_show 2ユーザー間の情報確認
         //-------------------------------------------------------------------------------
@@ -920,7 +920,7 @@ namespace StarlitTwit
             return ConvertToUserProfile(el);
         }
         #endregion (friendships_destroy)
-        // friendships/lookup
+        //*friendships/lookup
         // friendships/update
         // friendships/no_retweet_ids
         //-------------------------------------------------------------------------------
@@ -992,7 +992,32 @@ namespace StarlitTwit
             return GetByAPIImage(url);
         }
         #endregion (users_profile_image)
-        //users/search
+        //-------------------------------------------------------------------------------
+        #region +users_search
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>users/search メソッド</para>
+        /// <para>Runs a search for users similar to Find People button on Twitter.com.</para>
+        /// </summary>
+        /// <param name="q">[required]</param>
+        /// <param name="page">[option]</param>
+        /// <param name="per_page">[option] 20以下</param>
+        /// <returns></returns>
+        /// <remarks>Only the first 1000 matches are available.</remarks>
+        public IEnumerable<UserProfile> users_search(string q, int page = -1, int per_page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("q", q);
+                if (page > 0) { paramdic.Add("page", page.ToString()); }
+                if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}users/search.xml", URLapi), GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPI(url));
+        }
+        #endregion (users_search)
         //-------------------------------------------------------------------------------
         #region +users_show
         //-------------------------------------------------------------------------------
@@ -1019,8 +1044,8 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (users_show)
-        //users/contributees
-        //users/contributors
+        // users/contributees
+        // users/contributors
         //-------------------------------------------------------------------------------
         #endregion (Users)
 
@@ -1100,7 +1125,31 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region Lists Resources
         //-------------------------------------------------------------------------------
-        //list_all
+        #region +list_all
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>lists/all</para>
+        /// <para>Returns all lists the authenticating or specified user subscribes to, including their own.</para>
+        /// </summary>
+        /// <param name="screen_name">[option]双方ない時は認証ユーザー</param>
+        /// <param name="user_id">[option]双方ない時は認証ユーザー</param>
+        /// <returns></returns>
+        public IEnumerable<ListData> list_all(string screen_name = "", long user_id = -1)
+        {
+            if (string.IsNullOrEmpty(screen_name) && user_id <= 0 && string.IsNullOrEmpty(ScreenName)) {
+                throw new InvalidOperationException("認証されていません。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}lists/all.xml", URLapi), GET, paramdic);
+            return ConvertToListDataArray(GetByAPI(url));
+        }
+        #endregion (list_all)
         //-------------------------------------------------------------------------------
         #region +lists_statuses
         //-------------------------------------------------------------------------------
