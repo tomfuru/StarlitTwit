@@ -907,6 +907,17 @@ namespace StarlitTwit
         }
         #endregion (tsmiファイル_終了_Click)
         //===============================================================================
+        #region tsmiSearchUser_Click ユーザー検索
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiSearchUser_Click(object sender, EventArgs e)
+        {
+            using (FrmDispUsers frm = new FrmDispUsers(this, this.imageListWrapper, FrmDispUsers.EFormType.UserSearch)) {
+                frm.ShowDialog();
+            }
+        }
+        #endregion (tsmiSearchUser_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiAPIRestriction_Click API制限
         //-------------------------------------------------------------------------------
         //

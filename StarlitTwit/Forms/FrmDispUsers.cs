@@ -36,6 +36,10 @@ namespace StarlitTwit
         private Bitmap _loadingimg;
         /// <summary>アニメーション管理クラス</summary>
         private ImageAnimation _imageAnimation;
+        // 検索時用
+        private TextBox txtSearchWord = null;
+        private Button btnSearch = null;
+        private string _strSearchWord = "";
         //-------------------------------------------------------------------------------
         #endregion (Variables)
 
@@ -57,6 +61,7 @@ namespace StarlitTwit
             _loadingimg = (Bitmap)StarlitTwit.Properties.Resources.NowLoadingS.Clone();
             _imageAnimation = new ImageAnimation(_loadingimg);
             _imageAnimation.FrameUpdated += Image_Animate;
+
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -79,13 +84,14 @@ namespace StarlitTwit
             UserFollowing,
             /// <summary>リツイートしたユーザー</summary>
             Retweeter,
-            //
             /// <summary>リストのメンバー</summary>
             ListMember,
             /// <summary>リストのフォロワー</summary>
             ListSubscriber,
             /// <summary>ブロック中のユーザー</summary>
-            MyBlocking
+            MyBlocking,
+            /// <summary>ユーザー検索用</summary>
+            UserSearch
         }
         //-------------------------------------------------------------------------------
         #endregion (EFormType)
@@ -132,14 +138,39 @@ namespace StarlitTwit
                 case EFormType.MyBlocking:
                     Text = "ブロック中のユーザー";
                     break;
+                case EFormType.UserSearch:
+                    const int MOVEVALUE = 33;
+                    Text = "ユーザー検索";
+                    this.Height += MOVEVALUE;
+                    lstvList.Location = new Point(lstvList.Location.X, lstvList.Location.Y + MOVEVALUE);
+                    lstvList.Height -= MOVEVALUE;
+                    lblCount.Location = new Point(lblCount.Location.X, lblCount.Location.Y + MOVEVALUE);
+                    txtSearchWord = new TextBox() {
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                        Location = new Point(12, 10),
+                        Name = "txtSearchWord",
+                        Width = 276
+                    };
+                    btnSearch = new Button() {
+                        Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                        Location = new Point(305, 10),
+                        Name = "btnSearch",
+                        Text = "検索"
+                    };
+                    btnSearch.Click += btnSearch_Click;
+                    this.Controls.Add(txtSearchWord);
+                    this.Controls.Add(btnSearch);
+                    break;
             }
 
             if (FormType != EFormType.MyFollowing) {
                 lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 90 });
             }
-            tsslabel.Text = "取得中...";
             lblCount.Text = "";
-            Utilization.InvokeTransaction(() => GetUsers());
+            if (FormType != EFormType.UserSearch) {
+                tsslabel.Text = "取得中...";
+                Utilization.InvokeTransaction(() => GetUsers());
+            }
         }
         #endregion (FrmFollower_Load)
         //-------------------------------------------------------------------------------
@@ -191,6 +222,21 @@ namespace StarlitTwit
             }
         }
         #endregion (lstvList_MouseMove)
+        //-------------------------------------------------------------------------------
+        #region btnSearch_Click 検索クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            btnSearch.Enabled = false;
+            lstvList.Items.Clear();
+            _profileList.Clear();
+            _page = 1;
+            _strSearchWord = txtSearchWord.Text;
+            tsslabel.Text = "検索中...";
+            Utilization.InvokeTransaction(() => GetUsers());
+        }
+        #endregion (btnSearch_Click)
         //-------------------------------------------------------------------------------
         #region menuRow_Opening メニューオープン時
         //-------------------------------------------------------------------------------
@@ -356,6 +402,7 @@ namespace StarlitTwit
         {
             tsslabel.Text = "取得中...";
             btnAppend.Enabled = false;
+            if (btnSearch != null) { btnSearch.Enabled = false; }
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)
@@ -493,6 +540,11 @@ namespace StarlitTwit
                         _page++;
                         this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                     }
+                    else if (FormType == EFormType.UserSearch) {
+                        profiles = FrmMain.Twitter.users_search(_strSearchWord, _page, 20);
+                        _page++;
+                        this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
+                    }
                     else {
                         SequentData<UserProfile> proftpl = null;
                         switch (FormType) {
@@ -536,6 +588,11 @@ namespace StarlitTwit
                     {
                         tsslabel.Text = "取得に失敗しました。";
                         btnAppend.Enabled = true;
+                    }));
+                }
+                finally {
+                    this.Invoke(new Action(() => {
+                        if (btnSearch != null) { btnSearch.Enabled = true; }
                     }));
                 }
             }

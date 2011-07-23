@@ -54,6 +54,7 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuRow.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -74,7 +75,7 @@
             this.tsmiBlock,
             this.tsmiUnblock});
             this.menuRow.Name = "contextMenuStrip1";
-            this.menuRow.Size = new System.Drawing.Size(208, 242);
+            this.menuRow.Size = new System.Drawing.Size(208, 220);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiFollow
@@ -186,7 +187,7 @@
             // tsslabel
             // 
             this.tsslabel.Name = "tsslabel";
-            this.tsslabel.Size = new System.Drawing.Size(346, 17);
+            this.tsslabel.Size = new System.Drawing.Size(377, 17);
             this.tsslabel.Spring = true;
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -219,7 +220,8 @@
             this.lstvList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
-            this.columnHeader3});
+            this.columnHeader3,
+            this.columnHeader4});
             this.lstvList.ContextMenuStrip = this.menuRow;
             this.lstvList.FullRowSelect = true;
             this.lstvList.GridLines = true;
@@ -251,6 +253,11 @@
             // 
             this.columnHeader3.Text = "名称";
             this.columnHeader3.Width = 100;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "";
+            this.columnHeader4.Width = 90;
             // 
             // FrmDispUsers
             // 
@@ -304,5 +311,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem tsmiBlock;
         private System.Windows.Forms.ToolStripMenuItem tsmiUnblock;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
     }
 }

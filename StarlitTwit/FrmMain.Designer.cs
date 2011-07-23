@@ -27,6 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.tsmi_ファイル = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,18 +72,18 @@
             this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsslRestAPI = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuTab = new System.Windows.Forms.ContextMenuStrip();
+            this.menuTab = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiTab_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTab_EditTab = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTab_DeleteTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.tasktray = new System.Windows.Forms.NotifyIcon();
-            this.menuTasktray = new System.Windows.Forms.ContextMenuStrip();
+            this.tasktray = new System.Windows.Forms.NotifyIcon(this.components);
+            this.menuTasktray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiTasktray_Display = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiTasktray_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuContainer2 = new System.Windows.Forms.ContextMenuStrip();
+            this.menuContainer2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiCon2_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuShortenType = new System.Windows.Forms.ContextMenuStrip();
+            this.menuShortenType = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.splContainer = new System.Windows.Forms.SplitContainer();
@@ -112,6 +113,7 @@
             this.tabpgDirect = new StarlitTwit.TabPageEx();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
+            this.tsmiSearchUser = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -179,6 +181,7 @@
             this.tsmiSpecifyTime,
             this.tsmiClearTweets,
             this.toolStripMenuItem2,
+            this.tsmiSearchUser,
             this.tsmiAPIRestriction,
             this.tsmi認証,
             this.toolStripMenuItem3,
@@ -857,6 +860,7 @@
             this.uctlDispHome.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHome.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHome.Name = "uctlDispHome";
+            this.uctlDispHome.PopupAction = null;
             this.uctlDispHome.Size = new System.Drawing.Size(480, 492);
             this.uctlDispHome.TabIndex = 2;
             // 
@@ -865,7 +869,7 @@
             this.tabpgReply.Controls.Add(this.uctlDispReply);
             this.tabpgReply.Location = new System.Drawing.Point(4, 19);
             this.tabpgReply.Name = "tabpgReply";
-            this.tabpgReply.Size = new System.Drawing.Size(480, 490);
+            this.tabpgReply.Size = new System.Drawing.Size(480, 492);
             this.tabpgReply.TabIndex = 1;
             this.tabpgReply.UseVisualStyleBackColor = true;
             // 
@@ -878,6 +882,7 @@
             this.uctlDispReply.Location = new System.Drawing.Point(0, 0);
             this.uctlDispReply.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispReply.Name = "uctlDispReply";
+            this.uctlDispReply.PopupAction = null;
             this.uctlDispReply.Size = new System.Drawing.Size(480, 492);
             this.uctlDispReply.TabIndex = 1;
             // 
@@ -886,7 +891,7 @@
             this.tabpgHistory.Controls.Add(this.uctlDispHistory);
             this.tabpgHistory.Location = new System.Drawing.Point(4, 19);
             this.tabpgHistory.Name = "tabpgHistory";
-            this.tabpgHistory.Size = new System.Drawing.Size(480, 490);
+            this.tabpgHistory.Size = new System.Drawing.Size(480, 492);
             this.tabpgHistory.TabIndex = 0;
             this.tabpgHistory.UseVisualStyleBackColor = true;
             // 
@@ -899,6 +904,7 @@
             this.uctlDispHistory.Location = new System.Drawing.Point(0, 0);
             this.uctlDispHistory.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispHistory.Name = "uctlDispHistory";
+            this.uctlDispHistory.PopupAction = null;
             this.uctlDispHistory.Size = new System.Drawing.Size(480, 492);
             this.uctlDispHistory.TabIndex = 0;
             // 
@@ -907,7 +913,7 @@
             this.tabpgDirect.Controls.Add(this.uctlDispDirect);
             this.tabpgDirect.Location = new System.Drawing.Point(4, 19);
             this.tabpgDirect.Name = "tabpgDirect";
-            this.tabpgDirect.Size = new System.Drawing.Size(480, 490);
+            this.tabpgDirect.Size = new System.Drawing.Size(480, 492);
             this.tabpgDirect.TabIndex = 4;
             this.tabpgDirect.UseVisualStyleBackColor = true;
             // 
@@ -920,6 +926,7 @@
             this.uctlDispDirect.Location = new System.Drawing.Point(0, 0);
             this.uctlDispDirect.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispDirect.Name = "uctlDispDirect";
+            this.uctlDispDirect.PopupAction = null;
             this.uctlDispDirect.Size = new System.Drawing.Size(480, 492);
             this.uctlDispDirect.TabIndex = 2;
             // 
@@ -931,6 +938,13 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // tsmiSearchUser
+            // 
+            this.tsmiSearchUser.Name = "tsmiSearchUser";
+            this.tsmiSearchUser.Size = new System.Drawing.Size(209, 22);
+            this.tsmiSearchUser.Text = "ユーザー検索(&S)";
+            this.tsmiSearchUser.Click += new System.EventHandler(this.tsmiSearchUser_Click);
             // 
             // FrmMain
             // 
@@ -1054,6 +1068,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
         private System.Windows.Forms.ToolStripSeparator tsSep子画面;
         private System.Windows.Forms.ToolStripMenuItem tsmi全小画面を消去;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSearchUser;
 
     }
 }

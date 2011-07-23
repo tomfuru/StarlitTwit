@@ -148,6 +148,12 @@
       <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseTools.cs" />
+    <Compile Include="Forms\FrmSearchUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmSearchUser.Designer.cs">
+      <DependentUpon>FrmSearchUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Function\HistoryManager.cs" />
     <Compile Include="Function\PictureGetter.cs" />
     <Compile Include="Function\StatusFilter.cs" />
@@ -267,6 +273,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmRenewProfileImage.resx">
       <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmSearchUser.resx">
+      <DependentUpon>FrmSearchUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmUserStreamWatch.resx">
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>

@@ -95,7 +95,7 @@ namespace StarlitTwit
 
                 if (_thread == null || !_thread.IsAlive) {
                     _thread = new Thread(GetImages);
-                    _thread.IsBackground = false;
+                    _thread.IsBackground = true;
                     _thread.Start();
                 }
             }
