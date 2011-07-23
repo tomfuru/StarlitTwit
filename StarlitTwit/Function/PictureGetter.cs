@@ -52,6 +52,8 @@ namespace StarlitTwit
         private const string MINI = "mini";
         private const char S = 's';
         private const char T = 't';
+        private const char M = 'm';
+        private const char L = 'l';
         private const string THUMBNAIL = "thumbnail";
         private const string MEDIUM = "medium";
         private const string BIG = "big";
@@ -310,6 +312,40 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion ((class)twipplephoto Converter)
         //-------------------------------------------------------------------------------
+        #region (class)instagram Converter
+        //-------------------------------------------------------------------------------
+        private class instagramConverter : IThumbnailConverter
+        {
+            private const string CHECKPATTERN = @"^http://instagr.am/p/[0-9a-zA-Z]+/$";
+            private const string THUMBFORMAT = @"http://instagr.am/p/{0}/media/?size={1}";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return Regex.IsMatch(url, CHECKPATTERN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                char type;
+                switch (FrmMain.SettingsData.ThumbType_instagram) {
+                    case instagramThumbnailType.t:
+                        type = T;
+                        break;
+                    case instagramThumbnailType.m:
+                        type = M;
+                        break;
+                    case instagramThumbnailType.l:
+                        type = L;
+                        break;
+                    default:
+                        return null;
+                }
+                return string.Format(THUMBFORMAT,url.Split(new char[]{'/'},StringSplitOptions.RemoveEmptyEntries).Last(),type);
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)instagram Converter)
+        //-------------------------------------------------------------------------------
         #endregion ((classes)実装コンバータ)
 
         //-------------------------------------------------------------------------------
@@ -329,7 +365,8 @@ namespace StarlitTwit
                             new movapicConverter(),
                             new plixiConverter(),
                             new ow_lyConverter(),
-                            new TwipplePhotoConverter()
+                            new TwipplePhotoConverter(),
+                            new instagramConverter()
                         };
         }
         //-------------------------------------------------------------------------------
@@ -494,4 +531,16 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (twipplephotoThumbnailType)
+    //-------------------------------------------------------------------------------
+    #region instagramThumbnailType 列挙体：
+    //-------------------------------------------------------------------------------
+    public enum instagramThumbnailType
+    {
+        t,
+        m,
+        l,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (instagramThumbnailType)
 }

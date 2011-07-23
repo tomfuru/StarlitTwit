@@ -246,6 +246,8 @@ namespace StarlitTwit
         public owlyThumbnailType ThumbType_ow_ly;
         /// <summary>TwipplePhotoサムネイル</summary>
         public twipplephotoThumbnailType ThumbType_twipplephoto;
+        /// <summary>instagramサムネイル</summary>
+        public instagramThumbnailType ThumbType_instagram;
         //-------------------------------------------------------------------------------
         #endregion (画像サムネイル関係)
         //-------------------------------------------------------------------------------

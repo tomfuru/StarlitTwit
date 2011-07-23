@@ -153,10 +153,12 @@ namespace StarlitTwit
                     };
                     btnSearch = new Button() {
                         Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                        Enabled = false,
                         Location = new Point(305, 10),
                         Name = "btnSearch",
                         Text = "検索"
                     };
+                    txtSearchWord.TextChanged += txtSearchWord_TextChanged;
                     btnSearch.Click += btnSearch_Click;
                     this.Controls.Add(txtSearchWord);
                     this.Controls.Add(btnSearch);
@@ -223,11 +225,21 @@ namespace StarlitTwit
         }
         #endregion (lstvList_MouseMove)
         //-------------------------------------------------------------------------------
+        #region txtSearchWord_TextChanged 検索テキストボックス変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void txtSearchWord_TextChanged(object sender, EventArgs e)
+        {
+            btnSearch.Enabled = (txtSearchWord.Text.Length > 0) ;
+        }
+        #endregion (txtSearchWord_TextChanged)
+        //-------------------------------------------------------------------------------
         #region btnSearch_Click 検索クリック時
         //-------------------------------------------------------------------------------
         //
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            txtSearchWord.Enabled = false;
             btnSearch.Enabled = false;
             lstvList.Items.Clear();
             _profileList.Clear();
@@ -402,7 +414,10 @@ namespace StarlitTwit
         {
             tsslabel.Text = "取得中...";
             btnAppend.Enabled = false;
-            if (btnSearch != null) { btnSearch.Enabled = false; }
+            if (btnSearch != null) {
+                btnSearch.Enabled = false;
+                txtSearchWord.Enabled = false;
+            }
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)
@@ -592,7 +607,10 @@ namespace StarlitTwit
                 }
                 finally {
                     this.Invoke(new Action(() => {
-                        if (btnSearch != null) { btnSearch.Enabled = true; }
+                        if (btnSearch != null) { 
+                            btnSearch.Enabled = true;
+                            txtSearchWord.Enabled = true;
+                        }
                     }));
                 }
             }
