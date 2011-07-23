@@ -317,11 +317,12 @@ namespace StarlitTwit
         private class instagramConverter : IThumbnailConverter
         {
             private const string CHECKPATTERN = @"^http://instagr.am/p/[0-9a-zA-Z]+/$";
+            private const string CHECKPATTERN2 = @"http://instagram.com/p/[0-9a-zA-Z]+/$";
             private const string THUMBFORMAT = @"http://instagr.am/p/{0}/media/?size={1}";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
             {
-                return Regex.IsMatch(url, CHECKPATTERN);
+                return Regex.IsMatch(url, CHECKPATTERN) || Regex.IsMatch(url,CHECKPATTERN2);
             }
 
             string IThumbnailConverter.ConvertToThumbnailURL(string url)
