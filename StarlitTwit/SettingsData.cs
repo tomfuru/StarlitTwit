@@ -264,7 +264,7 @@ namespace StarlitTwit
         /// <summary>タブデータ</summary>
         public SerializableDictionary<string, TabData> TabDataDic;
         /// <summary>キー</summary>
-        public List<UserInfo> UserInfoList;
+        public List<UserAuthInfo> UserInfoList;
         //-------------------------------------------------------------------------------
         #endregion (その他)
         //-------------------------------------------------------------------------------
@@ -387,13 +387,13 @@ namespace StarlitTwit
     //-------------------------------------------------------------------------------
     #endregion (TabData)
     //-----------------------------------------------------------------------------------
-    #region +UserData 構造体：ユーザーデータ
+    #region +UserAuthInfo 構造体：ユーザー認証情報
     //-------------------------------------------------------------------------------
     /// <summary>
     /// ユーザー名やOAuth認証のためのユーザートークンを格納する構造体です。
     /// </summary>
     [Serializable]
-    public struct UserInfo
+    public struct UserAuthInfo
     {
         public string ScreenName;
         public long ID;

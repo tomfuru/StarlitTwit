@@ -15,6 +15,7 @@ namespace StarlitTwit
         //private List<EntityData> _entityList;
         private EntityData[] _entities;
         private Range _onRange = Range.Empty;
+        private Range _mouseDownRange;
 
         /// <summary>テキストボックス内の特殊項目(URL除く)がクリックされた時に発生するイベント</summary>
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
@@ -124,15 +125,25 @@ namespace StarlitTwit
         }
         #endregion (RichTextBoxHash_MouseMove)
         //-------------------------------------------------------------------------------
-        #region RichTextBoxHash_MouseClick マウスクリック時
+        #region RichTextBoxHash_MouseDown マウスダウン時
         //-------------------------------------------------------------------------------
         //
-        private void RichTextBoxHash_MouseClick(object sender, MouseEventArgs e)
+        private void RichTextBoxHash_MouseDown(object sender, MouseEventArgs e)
         {
             if (EnableEntity && e.Button == MouseButtons.Left) {
-                if (!_onRange.IsEmpty) {
+                _mouseDownRange = _onRange;
+            }
+        }
+        #endregion (RichTextBoxHash_MouseDown)
+        //-------------------------------------------------------------------------------
+        #region RichTextBoxHash_MouseUp マウスアップ時
+        //-------------------------------------------------------------------------------
+        //
+        private void RichTextBoxHash_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (EnableEntity && e.Button == MouseButtons.Left) {
+                if (!_onRange.IsEmpty && !_mouseDownRange.IsEmpty && _onRange.Start == _mouseDownRange.Start && _onRange.Length == _mouseDownRange.Length) {
                     var entity = Array.Find(_entities, info => info.range.Equals(_onRange));
-
                     if (entity.type.HasValue) {
                         if (TweetItemClick != null) {
                             TweetItemClick.Invoke(this, new TweetItemClickEventArgs(entity.str, entity.type.Value));
@@ -144,7 +155,8 @@ namespace StarlitTwit
                 }
             }
         }
-        #endregion (RichTextBoxHash_MouseClick)
+        #endregion (RichTextBoxHash_MouseUp)
+
         //-------------------------------------------------------------------------------
         #region contextMenu_Opening メニューオープン時
         //-------------------------------------------------------------------------------

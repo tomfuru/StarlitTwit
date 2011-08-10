@@ -73,8 +73,9 @@
             this.CutMenu = this.tsmiCut;
             this.PasteMenu = this.tsmiPaste;
             this.SurpressDefaultMenuStateChange = true;
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.RichTextBoxHash_MouseClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RichTextBoxHash_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.RichTextBoxHash_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RichTextBoxHash_MouseUp);
             this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
