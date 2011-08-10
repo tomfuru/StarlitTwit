@@ -1947,7 +1947,7 @@ namespace StarlitTwit
         #region +OAuth OAuth認証
         //-------------------------------------------------------------------------------
         //
-        public bool OAuth(out UserInfo userdata)
+        public bool OAuth(out UserAuthInfo userdata)
         {
             try {
                 string req_token, req_token_secret;
@@ -1966,12 +1966,12 @@ namespace StarlitTwit
                     }
                 }
 
-                if (pin == null) { userdata = new UserInfo(); return false; }
+                if (pin == null) { userdata = new UserAuthInfo(); return false; }
 
                 userdata = oauth_access_token(pin, req_token, req_token_secret);
             }
             catch (WebException) {
-                userdata = new UserInfo();
+                userdata = new UserAuthInfo();
                 return false;
             }
             return true;
@@ -2026,7 +2026,7 @@ namespace StarlitTwit
         /// <param name="reqToken">request_token</param>
         /// <param name="reqTokenSecret">request_token_secret</param>
         /// <param name="access_token_secret">正式なoauth_token_secret</param>
-        private UserInfo oauth_access_token(string pin, string reqToken, string reqTokenSecret)
+        private UserAuthInfo oauth_access_token(string pin, string reqToken, string reqTokenSecret)
         {
             string url = URLapiSSL + "oauth/access_token";
 
@@ -2037,7 +2037,7 @@ namespace StarlitTwit
             string response = HttpGet(url, parameters);
             Dictionary<string, string> dic = ParseResponse(response);
 
-            UserInfo userdata = new UserInfo() {
+            UserAuthInfo userdata = new UserAuthInfo() {
                 AccessToken = dic["oauth_token"],
                 AccessTokenSecret = dic["oauth_token_secret"],
                 ID = long.Parse(dic["user_id"]),

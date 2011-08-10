@@ -279,7 +279,7 @@ namespace StarlitTwit
                 TransitToAuthenticatedMode();
             }
             else {
-                SettingsData.UserInfoList = new List<UserInfo>();
+                SettingsData.UserInfoList = new List<UserAuthInfo>();
                 _isAuthenticated = false;
             }
 
@@ -943,7 +943,7 @@ namespace StarlitTwit
             LockAndProcess(_mreThreadConfirm, _mreThreadRun, new Action(() =>
             {
                 tssLabel.RemoveText(STR_WAITING_AUTHFORM);
-                UserInfo userdata;
+                UserAuthInfo userdata;
                 if (Twitter.OAuth(out userdata)) {
 
                     Twitter.AccessToken = userdata.AccessToken;
