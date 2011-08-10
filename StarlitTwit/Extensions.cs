@@ -78,7 +78,7 @@ namespace StarlitTwit
         #endregion (ForEach<T>)
 
         //-------------------------------------------------------------------------------
-        #region +[extension]Dictionary<K,V>.SaveRemove 項目がある場合のみ消去
+        #region +[extension]Dictionary<K,V>.SafeRemove 項目がある場合のみ消去
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 項目がある場合のみ消去を行います。
@@ -88,7 +88,7 @@ namespace StarlitTwit
         /// <param name="dic">this</param>
         /// <param name="keyitem">削除する項目</param>
         /// <returns></returns>
-        public static bool SaveRemove<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey keyitem)
+        public static bool SafeRemove<TKey, TValue>(this Dictionary<TKey, TValue> dic, TKey keyitem)
         {
             if (dic.ContainsKey(keyitem)) {
                 dic.Remove(keyitem);

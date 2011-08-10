@@ -157,7 +157,7 @@ namespace StarlitTwit
         public void RemoveText(string text)
         {
             lock (_objSync) {
-                _textDic.SaveRemove(text);
+                _textDic.SafeRemove(text);
             }
         }
         #endregion (RemoveText)
@@ -224,7 +224,7 @@ namespace StarlitTwit
                     }
                     else {
                         lock (_objSync) {
-                            _textDic.SaveRemove(text);
+                            _textDic.SafeRemove(text);
                         }
                     }
                 }
