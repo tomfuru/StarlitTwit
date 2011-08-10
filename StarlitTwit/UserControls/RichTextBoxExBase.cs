@@ -142,7 +142,7 @@ namespace StarlitTwit
             {
                 if (_copyMenu != null) { _copyMenu.Click -= CopyMenu_Click; }
                 _copyMenu = value;
-                if (value == null) { value.Click += CopyMenu_Click; }
+                if (value != null) { value.Click += CopyMenu_Click; }
             }
         }
         #endregion (CopyMenu)
@@ -160,7 +160,7 @@ namespace StarlitTwit
             {
                 if (_pasteMenu != null) { _pasteMenu.Click -= PasteMenu_Click; }
                 _pasteMenu = value;
-                if (value == null) { value.Click += PasteMenu_Click; }
+                if (value != null) { value.Click += PasteMenu_Click; }
             }
         }
         #endregion (PasteMenu)
@@ -178,7 +178,7 @@ namespace StarlitTwit
             {
                 if (_undoMenu != null) { _undoMenu.Click -= UndoMenu_Click; }
                 _undoMenu = value;
-                if (value == null) { value.Click += UndoMenu_Click; }
+                if (value != null) { value.Click += UndoMenu_Click; }
             }
         }
         #endregion (UndoMenu)
@@ -196,7 +196,7 @@ namespace StarlitTwit
             {
                 if (_redoMenu != null) { _redoMenu.Click -= RedoMenu_Click; }
                 _redoMenu = value;
-                if (value == null) { value.Click += RedoMenu_Click; }
+                if (value != null) { value.Click += RedoMenu_Click; }
             }
         }
         #endregion (RedoMenu)
