@@ -60,6 +60,7 @@ namespace StarlitTwit
         public static readonly string URLtwi;
         public static readonly string URLapi;
         public static readonly string URLapiSSL;
+        public static readonly string URLapiSSLnoVer;
         public static readonly string URLsearch;
 
         public const bool DEFAULT_INCLUDE_ENTITIES = false;
@@ -94,6 +95,7 @@ namespace StarlitTwit
             URLtwi = @"http://twitter.com/";
             URLapi = @"http://api.twitter.com/" + API_VERSION.ToString() + '/';
             URLapiSSL = @"https://api.twitter.com/" + API_VERSION.ToString() + '/';
+            URLapiSSLnoVer = @"https://api.twitter.com/";
             URLsearch = @"http://search.twitter.com/";
         }
         //
@@ -1944,42 +1946,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region OAuth Resources
         //-------------------------------------------------------------------------------
-        #region +OAuth OAuth認証
-        //-------------------------------------------------------------------------------
-        //
-        public bool OAuth(out UserAuthInfo userdata)
-        {
-            try {
-                string req_token, req_token_secret;
-
-                req_token = oauth_request_token(out req_token_secret);
-
-                string authURL = oauth_authorize_URL(req_token);
-
-                string pin = null;
-                // フォーム表示
-                using (FrmAuthWebBrowser frmweb = new FrmAuthWebBrowser()) {
-                    frmweb.SetURL(authURL);
-
-                    if (frmweb.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                        pin = frmweb.PIN;
-                    }
-                }
-
-                if (pin == null) { userdata = new UserAuthInfo(); return false; }
-
-                userdata = oauth_access_token(pin, req_token, req_token_secret);
-            }
-            catch (WebException) {
-                userdata = new UserAuthInfo();
-                return false;
-            }
-            return true;
-        }
-        //-------------------------------------------------------------------------------
-        #endregion (OAuth)
-        //-------------------------------------------------------------------------------
-        #region -oauth_request_token
+        #region +oauth_request_token
         //-------------------------------------------------------------------------------
         /// <summary>
         /// request_tokenを返します。
@@ -1987,9 +1954,9 @@ namespace StarlitTwit
         /// <param name="request_token_Secret"></param>
         /// <remarks>参考/利用：http://d.hatena.ne.jp/nojima718/20100129/1264792636 </remarks>
         /// <returns></returns>
-        private string oauth_request_token(out string request_token_Secret)
+        public string oauth_request_token(out string request_token_Secret)
         {
-            string url = URLapiSSL + "oauth/request_token";
+            string url = URLapiSSLnoVer + "oauth/request_token";
 
             SortedDictionary<string, string> parameters = GenerateParameters("");
             string signature = GenerateSignature("", GET, url, parameters);
@@ -2003,21 +1970,21 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (oauth_request_token)
         //-------------------------------------------------------------------------------
-        #region -oauth_authorize_URL
+        #region +oauth_authorize_URL
         //-------------------------------------------------------------------------------
         /// <summary>
         /// ユーザーが認証するためのURLを返します。
         /// </summary>
         /// <param name="strRequestToken"></param>
         /// <returns></returns>
-        private string oauth_authorize_URL(string strRequestToken)
+        public string oauth_authorize_URL(string strRequestToken)
         {
-            return URLapiSSL + "oauth/authorize?oauth_token=" + strRequestToken;
+            return URLapiSSLnoVer + "oauth/authorize?oauth_token=" + strRequestToken;
         }
         //-------------------------------------------------------------------------------
         #endregion (oauth_authorize)
         //-------------------------------------------------------------------------------
-        #region -oauth_access_token
+        #region +oauth_access_token
         //-------------------------------------------------------------------------------
         /// <summary>
         /// 最終認証を行います。正式なoauth_tokenが返ります。
@@ -2026,9 +1993,9 @@ namespace StarlitTwit
         /// <param name="reqToken">request_token</param>
         /// <param name="reqTokenSecret">request_token_secret</param>
         /// <param name="access_token_secret">正式なoauth_token_secret</param>
-        private UserAuthInfo oauth_access_token(string pin, string reqToken, string reqTokenSecret)
+        public UserAuthInfo oauth_access_token(string pin, string reqToken, string reqTokenSecret)
         {
-            string url = URLapiSSL + "oauth/access_token";
+            string url = URLapiSSLnoVer + "oauth/access_token";
 
             SortedDictionary<string, string> parameters = GenerateParameters(reqToken);
             parameters.Add("oauth_verifier", pin);
@@ -2044,11 +2011,9 @@ namespace StarlitTwit
                 ScreenName = dic["screen_name"]
             };
             return userdata;
-
         }
         //-------------------------------------------------------------------------------
         #endregion (oauth_access_token)
-
         //-------------------------------------------------------------------------------
         #endregion (OAuth)
 
@@ -2549,8 +2514,7 @@ namespace StarlitTwit
         /// <remarks>参考/利用：http://d.hatena.ne.jp/nojima718/20100129/1264792636 </remarks>
         private string HttpGet(string url, IDictionary<string, string> parameters)
         {
-            WebRequest req = WebRequest.Create(url + '?' + JoinParameters(parameters));
-            WebResponse res = req.GetResponse();
+            WebResponse res = RequestWeb(url + '?' + JoinParameters(parameters), GET, false);
             Stream stream = res.GetResponseStream();
             StreamReader reader = new StreamReader(stream);
             string result = reader.ReadToEnd();

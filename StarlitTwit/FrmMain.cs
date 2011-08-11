@@ -944,7 +944,7 @@ namespace StarlitTwit
             {
                 tssLabel.RemoveText(STR_WAITING_AUTHFORM);
                 UserAuthInfo userdata;
-                if (Twitter.OAuth(out userdata)) {
+                if (OAuth_Authenticate(out userdata)) {
 
                     Twitter.AccessToken = userdata.AccessToken;
                     Twitter.AccessTokenSecret = userdata.AccessTokenSecret;
@@ -2820,6 +2820,40 @@ namespace StarlitTwit
             }
         }
         #endregion (SelectedUctlDispTwit)
+
+        //===============================================================================
+        #region -OAuth OAuth認証
+        //-------------------------------------------------------------------------------
+        //
+        private bool OAuth_Authenticate(out UserAuthInfo userdata)
+        {
+            try {
+                string req_token, req_token_secret;
+
+                req_token = Twitter.oauth_request_token(out req_token_secret);
+
+                string authURL = Twitter.oauth_authorize_URL(req_token);
+
+                string pin = null;
+                // フォーム表示
+                using (FrmAuthWebBrowser frmweb = new FrmAuthWebBrowser()) {
+                    frmweb.SetURL(authURL);
+                    if (frmweb.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                        pin = frmweb.PIN;
+                    }
+                }
+                if (pin == null) { userdata = new UserAuthInfo(); return false; }
+
+                userdata = Twitter.oauth_access_token(pin, req_token, req_token_secret);
+            }
+            catch (TwitterAPIException) {
+                userdata = new UserAuthInfo();
+                return false;
+            }
+            return true;
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (OAuth)
 
         //-------------------------------------------------------------------------------
         #region -LockAndProcess ロックを行って処理を行います。
