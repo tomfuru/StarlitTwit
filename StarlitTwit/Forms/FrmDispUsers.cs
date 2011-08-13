@@ -264,12 +264,11 @@ namespace StarlitTwit
             tsmiFollow.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent && !prof.Following;
             tsmiRemove.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent && prof.Following;
 
-
             tsmiBlock.Visible = !isMe && (FormType == EFormType.MyFollower);
             tsmiUnblock.Visible = !isMe && isBlocking;
 
-            toolStripMenuItem1.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent;
-            toolStripMenuItem3.Visible = !isMe;
+            tsSepUnderFollow.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent;
+            tsSepOverBlock.Visible = !isMe && (FormType == EFormType.MyFollower || isBlocking);
         }
         #endregion (menuRow_Opening)
         //-------------------------------------------------------------------------------
@@ -386,6 +385,7 @@ namespace StarlitTwit
                 }
                 catch (TwitterAPIException) { tsslabel.Text = "ブロックに失敗しました。"; return; }
                 RemoveSelectedItem();
+                tsslabel.Text = "ブロックを行いました。";
             }
         }
         #endregion (tsmiBlock_Click)
