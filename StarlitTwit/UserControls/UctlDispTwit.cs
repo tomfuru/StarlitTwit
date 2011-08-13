@@ -713,7 +713,13 @@ namespace StarlitTwit
                     }
                     break;
                 case Keys.Home:
-                    lock (_lockObj) { vscrbar.Value = SelectedIndex = 0; }
+                    lock (_lockObj) {
+                        SelectedIndex = 0;
+                        if (vscrbar.Value == 0) {
+                            AdjustControl(0, true); // (nextValue=)value=0の時は更新してやらないといけない
+                        }
+                        else { vscrbar.Value = 0; }
+                    }
                     break;
                 case Keys.End:
                     lock (_lockObj) { vscrbar.Value = SelectedIndex = _rowDataList.Count - 1; }
