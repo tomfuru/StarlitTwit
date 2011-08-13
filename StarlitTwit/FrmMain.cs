@@ -464,14 +464,14 @@ namespace StarlitTwit
         }
         #endregion (DispTwit_TweetItemClick)
         //-------------------------------------------------------------------------------
-        #region llblFollowing_LinkClicked フォロー数ラベルクリック時
+        #region llblFriend_LinkClicked フォロー数ラベルクリック時
         //-------------------------------------------------------------------------------
         //
-        private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void llblFriend_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollowing);
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFriend);
         }
-        #endregion (llblFollowing_LinkClicked)
+        #endregion (llblFriend_LinkClicked)
         //-------------------------------------------------------------------------------
         #region llblFollower_LinkClicked フォロワー数ラベルクリック時
         //-------------------------------------------------------------------------------
@@ -1665,7 +1665,7 @@ namespace StarlitTwit
         {
             if (!lblUserName.Font.Bold) {
                 lblUserName.Font = new Font(lblUserName.Font, FontStyle.Bold);
-                llblFollower.Enabled = llblFollowing.Enabled = llblList.Enabled = true;
+                llblFollower.Enabled = llblFriend.Enabled = llblList.Enabled = true;
             }
             StringBuilder namesb = new StringBuilder();
             if (profile.Protected) { namesb.Append(Utilization.CHR_LOCKED); }
@@ -1674,7 +1674,7 @@ namespace StarlitTwit
             namesb.Append(profile.UserName);
             lblUserName.Text = namesb.ToString();
             llblFollower.Text = profile.FollowerNum.ToString();
-            llblFollowing.Text = profile.FollowingNum.ToString();
+            llblFriend.Text = profile.FriendNum.ToString();
             llblList.Text = profile.ListedNum.ToString();
             lblStatuses.Text = profile.StatusNum.ToString();
         }

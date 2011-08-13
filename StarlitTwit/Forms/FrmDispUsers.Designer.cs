@@ -35,7 +35,7 @@
             this.tsmiFollow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.tsSepUnderFollow = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiDispFollowing = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispFriend = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDispFollower = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +65,7 @@
             this.tsmiFollow,
             this.tsmiRemove,
             this.tsSepUnderFollow,
-            this.tsmiDispFollowing,
+            this.tsmiDispFriend,
             this.tsmiDispFollower,
             this.toolStripMenuItem2,
             this.tsmiDisplayUserProfile,
@@ -99,10 +99,10 @@
             // 
             // tsmiDispFollowing
             // 
-            this.tsmiDispFollowing.Name = "tsmiDispFollowing";
-            this.tsmiDispFollowing.Size = new System.Drawing.Size(249, 22);
-            this.tsmiDispFollowing.Text = "フォローしているユーザー(&D)";
-            this.tsmiDispFollowing.Click += new System.EventHandler(this.tsmiDispFollowing_Click);
+            this.tsmiDispFriend.Name = "tsmiDispFriend";
+            this.tsmiDispFriend.Size = new System.Drawing.Size(249, 22);
+            this.tsmiDispFriend.Text = "フォローしているユーザー(&D)";
+            this.tsmiDispFriend.Click += new System.EventHandler(this.tsmiDispFriend_Click);
             // 
             // tsmiDispFollower
             // 
@@ -308,7 +308,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblCount;
         private System.Windows.Forms.ToolStripMenuItem tsmiDispFollower;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDispFollowing;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispFriend;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator tsSepOverBlock;
         private System.Windows.Forms.ToolStripMenuItem tsmiBlock;
