@@ -25,7 +25,6 @@
 ・System.Webを参照したら'.'含むものを検索できる？
 
 ■ソース・実装仕様関係(未)
-・Following->Friendに統一
 ・On～でoverrideしてできるイベントはそちらで統一
 
 ■要修正・確認
@@ -188,6 +187,7 @@
 
 ★DONE
 11/08/13
+・Following->Friendに統一
 ・サブ画面はEscで画面消す
 ・いろいろな画面のTabStopを正しく設定
 ・最上ページでのHome,PageUpで選択状態が一番上にならないのを修正

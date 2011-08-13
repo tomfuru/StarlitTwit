@@ -3001,7 +3001,7 @@ namespace StarlitTwit
                     _mreThreadTabRun.Wait();
                     _mreThreadTabConfirm.Reset();
 
-                    // friend,followingID配列取得
+                    // friend,followerID配列取得
                     if (_followersRenew_IsForce) {
                         string labelText = string.Format(STR_FMT_GETTING, STR_FOLLOWER_IDS);
                         tssLabel.SetText(labelText);

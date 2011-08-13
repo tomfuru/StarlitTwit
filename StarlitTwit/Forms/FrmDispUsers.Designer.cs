@@ -97,7 +97,7 @@
             this.tsSepUnderFollow.Name = "tsSepUnderFollow";
             this.tsSepUnderFollow.Size = new System.Drawing.Size(246, 6);
             // 
-            // tsmiDispFollowing
+            // tsmiDispFriend
             // 
             this.tsmiDispFriend.Name = "tsmiDispFriend";
             this.tsmiDispFriend.Size = new System.Drawing.Size(249, 22);
