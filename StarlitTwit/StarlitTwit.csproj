@@ -238,12 +238,6 @@
     <Compile Include="UserControls\UctlDispTwitRow.Designer.cs">
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UctlLine.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UctlLine.Designer.cs">
-      <DependentUpon>UctlLine.cs</DependentUpon>
-    </Compile>
     <Compile Include="Utilization.cs" />
     <EmbeddedResource Include="Forms\FrmConfig.resx">
       <DependentUpon>FrmConfig.cs</DependentUpon>
@@ -317,9 +311,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UctlDispTwitRow.resx">
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UctlLine.resx">
-      <DependentUpon>UctlLine.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
