@@ -96,8 +96,8 @@
             this.lblStatusesl = new System.Windows.Forms.Label();
             this.llblFollower = new System.Windows.Forms.LinkLabel();
             this.lblFollowerl = new System.Windows.Forms.Label();
-            this.llblFollowing = new System.Windows.Forms.LinkLabel();
-            this.lblFollowingl = new System.Windows.Forms.Label();
+            this.llblFriend = new System.Windows.Forms.LinkLabel();
+            this.lblFriendl = new System.Windows.Forms.Label();
             this.lblUserName = new System.Windows.Forms.Label();
             this.btnStateReset = new System.Windows.Forms.Button();
             this.lblTweetStatus = new System.Windows.Forms.Label();
@@ -615,8 +615,8 @@
             this.splContainer.Panel1.Controls.Add(this.lblStatusesl);
             this.splContainer.Panel1.Controls.Add(this.llblFollower);
             this.splContainer.Panel1.Controls.Add(this.lblFollowerl);
-            this.splContainer.Panel1.Controls.Add(this.llblFollowing);
-            this.splContainer.Panel1.Controls.Add(this.lblFollowingl);
+            this.splContainer.Panel1.Controls.Add(this.llblFriend);
+            this.splContainer.Panel1.Controls.Add(this.lblFriendl);
             this.splContainer.Panel1.Controls.Add(this.lblUserName);
             this.splContainer.Panel1.Controls.Add(this.btnStateReset);
             this.splContainer.Panel1.Controls.Add(this.lblTweetStatus);
@@ -642,7 +642,7 @@
             this.llblList.Enabled = false;
             this.llblList.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.llblList.LinkColor = System.Drawing.Color.Black;
-            this.llblList.Location = new System.Drawing.Point(305, 22);
+            this.llblList.Location = new System.Drawing.Point(289, 22);
             this.llblList.Name = "llblList";
             this.llblList.Size = new System.Drawing.Size(11, 12);
             this.llblList.TabIndex = 3;
@@ -653,7 +653,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(279, 22);
+            this.label1.Location = new System.Drawing.Point(263, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(26, 12);
             this.label1.TabIndex = 14;
@@ -694,7 +694,7 @@
             // lblStatuses
             // 
             this.lblStatuses.AutoSize = true;
-            this.lblStatuses.Location = new System.Drawing.Point(238, 22);
+            this.lblStatuses.Location = new System.Drawing.Point(222, 22);
             this.lblStatuses.Name = "lblStatuses";
             this.lblStatuses.Size = new System.Drawing.Size(11, 12);
             this.lblStatuses.TabIndex = 2;
@@ -703,7 +703,7 @@
             // lblStatusesl
             // 
             this.lblStatusesl.AutoSize = true;
-            this.lblStatusesl.Location = new System.Drawing.Point(188, 22);
+            this.lblStatusesl.Location = new System.Drawing.Point(172, 22);
             this.lblStatusesl.Name = "lblStatusesl";
             this.lblStatusesl.Size = new System.Drawing.Size(52, 12);
             this.lblStatusesl.TabIndex = 0;
@@ -715,7 +715,7 @@
             this.llblFollower.Enabled = false;
             this.llblFollower.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.llblFollower.LinkColor = System.Drawing.Color.Black;
-            this.llblFollower.Location = new System.Drawing.Point(149, 22);
+            this.llblFollower.Location = new System.Drawing.Point(133, 22);
             this.llblFollower.Name = "llblFollower";
             this.llblFollower.Size = new System.Drawing.Size(11, 12);
             this.llblFollower.TabIndex = 1;
@@ -726,34 +726,34 @@
             // lblFollowerl
             // 
             this.lblFollowerl.AutoSize = true;
-            this.lblFollowerl.Location = new System.Drawing.Point(99, 22);
+            this.lblFollowerl.Location = new System.Drawing.Point(83, 22);
             this.lblFollowerl.Name = "lblFollowerl";
             this.lblFollowerl.Size = new System.Drawing.Size(50, 12);
             this.lblFollowerl.TabIndex = 12;
             this.lblFollowerl.Text = "Follower:";
             // 
-            // llblFollowing
+            // llblFriend
             // 
-            this.llblFollowing.AutoSize = true;
-            this.llblFollowing.Enabled = false;
-            this.llblFollowing.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.llblFollowing.LinkColor = System.Drawing.Color.Black;
-            this.llblFollowing.Location = new System.Drawing.Point(65, 23);
-            this.llblFollowing.Name = "llblFollowing";
-            this.llblFollowing.Size = new System.Drawing.Size(11, 12);
-            this.llblFollowing.TabIndex = 0;
-            this.llblFollowing.TabStop = true;
-            this.llblFollowing.Text = "-";
-            this.llblFollowing.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblFollowing_LinkClicked);
+            this.llblFriend.AutoSize = true;
+            this.llblFriend.Enabled = false;
+            this.llblFriend.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.llblFriend.LinkColor = System.Drawing.Color.Black;
+            this.llblFriend.Location = new System.Drawing.Point(49, 23);
+            this.llblFriend.Name = "llblFriend";
+            this.llblFriend.Size = new System.Drawing.Size(11, 12);
+            this.llblFriend.TabIndex = 0;
+            this.llblFriend.TabStop = true;
+            this.llblFriend.Text = "-";
+            this.llblFriend.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblFriend_LinkClicked);
             // 
-            // lblFollowingl
+            // lblFriendl
             // 
-            this.lblFollowingl.AutoSize = true;
-            this.lblFollowingl.Location = new System.Drawing.Point(10, 22);
-            this.lblFollowingl.Name = "lblFollowingl";
-            this.lblFollowingl.Size = new System.Drawing.Size(55, 12);
-            this.lblFollowingl.TabIndex = 11;
-            this.lblFollowingl.Text = "Following:";
+            this.lblFriendl.AutoSize = true;
+            this.lblFriendl.Location = new System.Drawing.Point(10, 22);
+            this.lblFriendl.Name = "lblFriendl";
+            this.lblFriendl.Size = new System.Drawing.Size(39, 12);
+            this.lblFriendl.TabIndex = 11;
+            this.lblFriendl.Text = "Friend:";
             // 
             // lblUserName
             // 
@@ -876,7 +876,7 @@
             this.tabpgReply.Controls.Add(this.uctlDispReply);
             this.tabpgReply.Location = new System.Drawing.Point(4, 19);
             this.tabpgReply.Name = "tabpgReply";
-            this.tabpgReply.Size = new System.Drawing.Size(480, 492);
+            this.tabpgReply.Size = new System.Drawing.Size(480, 490);
             this.tabpgReply.TabIndex = 1;
             this.tabpgReply.UseVisualStyleBackColor = true;
             // 
@@ -898,7 +898,7 @@
             this.tabpgHistory.Controls.Add(this.uctlDispHistory);
             this.tabpgHistory.Location = new System.Drawing.Point(4, 19);
             this.tabpgHistory.Name = "tabpgHistory";
-            this.tabpgHistory.Size = new System.Drawing.Size(480, 492);
+            this.tabpgHistory.Size = new System.Drawing.Size(480, 490);
             this.tabpgHistory.TabIndex = 0;
             this.tabpgHistory.UseVisualStyleBackColor = true;
             // 
@@ -920,7 +920,7 @@
             this.tabpgDirect.Controls.Add(this.uctlDispDirect);
             this.tabpgDirect.Location = new System.Drawing.Point(4, 19);
             this.tabpgDirect.Name = "tabpgDirect";
-            this.tabpgDirect.Size = new System.Drawing.Size(480, 492);
+            this.tabpgDirect.Size = new System.Drawing.Size(480, 490);
             this.tabpgDirect.TabIndex = 4;
             this.tabpgDirect.UseVisualStyleBackColor = true;
             // 
@@ -1022,8 +1022,8 @@
         private System.Windows.Forms.ContextMenuStrip menuContainer2;
         private System.Windows.Forms.ToolStripMenuItem tsmiCon2_MakeTab;
         private System.Windows.Forms.Label lblUserName;
-        private System.Windows.Forms.LinkLabel llblFollowing;
-        private System.Windows.Forms.Label lblFollowingl;
+        private System.Windows.Forms.LinkLabel llblFriend;
+        private System.Windows.Forms.Label lblFriendl;
         private System.Windows.Forms.LinkLabel llblFollower;
         private System.Windows.Forms.Label lblFollowerl;
         private System.Windows.Forms.ToolStripMenuItem tsmi_プロフィール;
