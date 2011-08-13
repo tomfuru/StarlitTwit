@@ -2291,6 +2291,9 @@ namespace StarlitTwit
                     catch (WebException ex) {
                         throw new TwitterAPIException(1, ex.Message);
                     }
+                    catch (IOException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
                 }
             }
         }
@@ -2316,6 +2319,9 @@ namespace StarlitTwit
                     catch (WebException ex) {
                         throw new TwitterAPIException(1, ex.Message);
                     }
+                    catch (IOException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
                 }
             }
         }
@@ -2335,6 +2341,9 @@ namespace StarlitTwit
                     img = Image.FromStream(s);
                 }
                 catch (WebException ex) {
+                    throw new TwitterAPIException(1, ex.Message);
+                }
+                catch (IOException ex) {
                     throw new TwitterAPIException(1, ex.Message);
                 }
             }
@@ -2363,6 +2372,9 @@ namespace StarlitTwit
                     catch (WebException ex) {
                         throw new TwitterAPIException(1, ex.Message);
                     }
+                    catch (IOException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
                 }
             }
         }
@@ -2387,6 +2399,9 @@ namespace StarlitTwit
                         throw new TwitterAPIException(1000, ex.Message);
                     }
                     catch (WebException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
+                    catch (IOException ex) {
                         throw new TwitterAPIException(1, ex.Message);
                     }
                 }
