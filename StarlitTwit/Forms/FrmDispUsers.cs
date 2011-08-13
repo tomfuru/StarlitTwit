@@ -20,7 +20,7 @@ namespace StarlitTwit
         #region Variables
         //-------------------------------------------------------------------------------
         public EFormType FormType { get; private set; }
-        /// <summary>FormType=UserFriend,UserFollowerの時に設定しなければならない</summary>
+        /// <summary>FormType=UserFollowing,UserFollowerの時に設定しなければならない</summary>
         public string UserScreenName { get; set; }
         /// <summary>FormType=ListMember,ListSubscriberの時に設定しなければならない</summary>
         public string ListID { get; set; }
@@ -77,11 +77,11 @@ namespace StarlitTwit
             /// <summary>自分をフォローしているユーザー</summary>
             MyFollower,
             /// <summary>自分がフォローしているユーザー</summary>
-            MyFriend,
+            MyFollowing,
             /// <summary>他ユーザーをフォローしているユーザー</summary>
             UserFollower,
             /// <summary>他ユーザーがフォローしているユーザー</summary>
-            UserFriend,
+            UserFollowing,
             /// <summary>リツイートしたユーザー</summary>
             Retweeter,
             /// <summary>リストのメンバー</summary>
@@ -110,14 +110,14 @@ namespace StarlitTwit
                 case EFormType.MyFollower:
                     Text = "フォローされている人";
                     break;
-                case EFormType.MyFriend:
+                case EFormType.MyFollowing:
                     Text = "フォローしている人";
                     break;
                 case EFormType.UserFollower:
                     Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
                     Text = string.Format("{0}をフォローしている人", UserScreenName);
                     break;
-                case EFormType.UserFriend:
+                case EFormType.UserFollowing:
                     Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていない");
                     Text = string.Format("{0}がフォローしている人", UserScreenName);
                     break;
@@ -165,7 +165,7 @@ namespace StarlitTwit
                     break;
             }
 
-            if (FormType != EFormType.MyFriend) {
+            if (FormType != EFormType.MyFollowing) {
                 lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 90 });
             }
             lblCount.Text = "";
@@ -308,7 +308,7 @@ namespace StarlitTwit
                             lstvList.SelectedItems[0].SubItems[3].Text = "";
                             ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
                             break;
-                        case EFormType.MyFriend:
+                        case EFormType.MyFollowing:
                             RemoveSelectedItem();
                             break;
                     }
@@ -317,25 +317,25 @@ namespace StarlitTwit
         }
         #endregion (tsmiRemove_Click)
         //-------------------------------------------------------------------------------
-        #region tsmiDispFriends_Click フレンドを見るクリック時
+        #region tsmiDispFollowing_Click フレンドを見るクリック時
         //-------------------------------------------------------------------------------
         //
-        private void tsmiDispFriends_Click(object sender, EventArgs e)
+        private void tsmiDispFollowing_Click(object sender, EventArgs e)
         {
-            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFriend,
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFollowing,
                                          ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
         }
-        #endregion (tsmiDispFriends_Click)
+        #endregion (tsmiDispFollowing_Click)
         //-------------------------------------------------------------------------------
-        #region tsmiDispFollowers_Click フォロワーを見るクリック時
+        #region tsmiDispFollower_Click フォロワーを見るクリック時
         //-------------------------------------------------------------------------------
         //
-        private void tsmiDispFollowers_Click(object sender, EventArgs e)
+        private void tsmiDispFollower_Click(object sender, EventArgs e)
         {
             Utilization.ShowUsersForm(_mainForm, _imageListWrapper, EFormType.UserFollower,
                                          ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
         }
-        #endregion (tsmiDispFollowers_Click)
+        #endregion (tsmiDispFollower_Click)
         //-------------------------------------------------------------------------------
         #region tsmiDisplayUserProfile_Click プロフィール表示クリック時
         //-------------------------------------------------------------------------------
@@ -495,7 +495,7 @@ namespace StarlitTwit
             sb.AppendLine("●自己紹介：");
             sb.AppendLine(p.Description);
             sb.Append("●フォロー数：");
-            sb.AppendLine(p.FriendNum.ToString());
+            sb.AppendLine(p.FollowingNum.ToString());
             sb.Append("●フォロワー数：");
             sb.AppendLine(p.FollowerNum.ToString());
             sb.Append("●発言数：");
@@ -566,13 +566,13 @@ namespace StarlitTwit
                             case EFormType.MyFollower:
                                 proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
                                 break;
-                            case EFormType.MyFriend:
+                            case EFormType.MyFollowing:
                                 proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
                                 break;
                             case EFormType.UserFollower:
                                 proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
                                 break;
-                            case EFormType.UserFriend:
+                            case EFormType.UserFollowing:
                                 proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
                                 break;
                             case EFormType.ListMember:

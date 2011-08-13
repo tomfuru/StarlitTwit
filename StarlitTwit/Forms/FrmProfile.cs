@@ -223,10 +223,10 @@ namespace StarlitTwit
             FrmDispUsers.EFormType formType;
             string username = null;
             if (CanEdit) {
-                formType = FrmDispUsers.EFormType.MyFriend;
+                formType = FrmDispUsers.EFormType.MyFollowing;
             }
             else {
-                formType = FrmDispUsers.EFormType.UserFriend;
+                formType = FrmDispUsers.EFormType.UserFollowing;
                 username = _profile.ScreenName;
             }
 
@@ -332,7 +332,7 @@ namespace StarlitTwit
             lblFollow.Visible = profile.Following;
 
             lblFollowerNum.Text = profile.FollowerNum.ToString();
-            lblFriendNum.Text = profile.FriendNum.ToString();
+            lblFollowingNum.Text = profile.FollowingNum.ToString();
             lblFavoriteNum.Text = profile.FavoriteNum.ToString();
             lblStatusNum.Text = profile.StatusNum.ToString();
             lblListedNum.Text = profile.ListedNum.ToString();

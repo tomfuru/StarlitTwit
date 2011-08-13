@@ -167,7 +167,7 @@
 
 ・ユーザー情報
  -(protected)screen_name/user_name	未認証時は(未認証)
- -friend数
+ -following数
  -follower数
 
 ●発言表示コントロール

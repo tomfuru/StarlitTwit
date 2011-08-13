@@ -2941,7 +2941,7 @@ namespace StarlitTwit
                     Description = el.Element("description").Value,
                     Following = TryParseBool(el.Element("following").Value),
                     FollowerNum = int.Parse(el.Element("followers_count").Value),
-                    FriendNum = int.Parse(el.Element("friends_count").Value),
+                    FollowingNum = int.Parse(el.Element("friends_count").Value),
                     StatusNum = int.Parse(el.Element("statuses_count").Value),
                     ListedNum = int.Parse(el.Element("listed_count").Value),
                     FavoriteNum = int.Parse(el.Element("favourites_count").Value),
@@ -3539,7 +3539,7 @@ namespace StarlitTwit
         /// <summary>ユーザー名</summary>
         public string UserName;
         /// <summary>フォロー数</summary>
-        public int FriendNum;
+        public int FollowingNum;
         /// <summary>フォロワー数</summary>
         public int FollowerNum;
         /// <summary>発言数</summary>

@@ -594,14 +594,14 @@ namespace StarlitTwit
         /// 既にあるFrmUsersと同じものがあるかどうか探し，あれば最前面にします。
         /// </summary>
         /// <param name="type">タイプ</param>
-        /// <param name="screen_name">UserFollower,UserFriendタイプのみ必要</param>
+        /// <param name="screen_name">UserFollower,UserFollowingタイプのみ必要</param>
         /// <param name="retweet_id">Retweeterタイプのみ必要</param>
         /// <returns>あればtrue,なければfalse</returns>
         public static bool ExistFrmUsers(FrmDispUsers.EFormType type, string screen_name = null, string listID = null, long retweet_id = -1)
         {
             Func<FrmDispUsers, bool> judgeFunc = f =>
                 f.FormType == type
-                && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFriend) && f.UserScreenName != screen_name)
+                && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFollowing) && f.UserScreenName != screen_name)
                 && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id)
                 && !((type == FrmDispUsers.EFormType.ListMember || type == FrmDispUsers.EFormType.ListSubscriber) && f.UserScreenName != screen_name && f.ListID != listID);
             

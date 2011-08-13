@@ -464,14 +464,14 @@ namespace StarlitTwit
         }
         #endregion (DispTwit_TweetItemClick)
         //-------------------------------------------------------------------------------
-        #region llblFriend_LinkClicked フォロー数ラベルクリック時
+        #region llblFollowing_LinkClicked フォロー数ラベルクリック時
         //-------------------------------------------------------------------------------
         //
-        private void llblFriend_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFriend);
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollowing);
         }
-        #endregion (llblFriend_LinkClicked)
+        #endregion (llblFollowing_LinkClicked)
         //-------------------------------------------------------------------------------
         #region llblFollower_LinkClicked フォロワー数ラベルクリック時
         //-------------------------------------------------------------------------------
@@ -1665,7 +1665,7 @@ namespace StarlitTwit
         {
             if (!lblUserName.Font.Bold) {
                 lblUserName.Font = new Font(lblUserName.Font, FontStyle.Bold);
-                llblFollower.Enabled = llblFriend.Enabled = llblList.Enabled = true;
+                llblFollower.Enabled = llblFollowing.Enabled = llblList.Enabled = true;
             }
             StringBuilder namesb = new StringBuilder();
             if (profile.Protected) { namesb.Append(Utilization.CHR_LOCKED); }
@@ -1674,7 +1674,7 @@ namespace StarlitTwit
             namesb.Append(profile.UserName);
             lblUserName.Text = namesb.ToString();
             llblFollower.Text = profile.FollowerNum.ToString();
-            llblFriend.Text = profile.FriendNum.ToString();
+            llblFollowing.Text = profile.FollowingNum.ToString();
             llblList.Text = profile.ListedNum.ToString();
             lblStatuses.Text = profile.StatusNum.ToString();
         }
@@ -3001,7 +3001,7 @@ namespace StarlitTwit
                     _mreThreadTabRun.Wait();
                     _mreThreadTabConfirm.Reset();
 
-                    // friend,followerID配列取得
+                    // friend,followingID配列取得
                     if (_followersRenew_IsForce) {
                         string labelText = string.Format(STR_FMT_GETTING, STR_FOLLOWER_IDS);
                         tssLabel.SetText(labelText);

@@ -52,7 +52,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.lblFollowerNum = new System.Windows.Forms.Label();
             this.lblFavoriteNum = new System.Windows.Forms.Label();
-            this.lblFriendNum = new System.Windows.Forms.Label();
+            this.lblFollowingNum = new System.Windows.Forms.Label();
             this.lblStatusNum = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.lblTimeZone = new System.Windows.Forms.Label();
@@ -361,14 +361,14 @@
             // 
             // lblFollowingNum
             // 
-            this.lblFriendNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblFriendNum.AutoSize = true;
-            this.lblFriendNum.Location = new System.Drawing.Point(92, 100);
-            this.lblFriendNum.Name = "lblFriendNum";
-            this.lblFriendNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblFriendNum.Size = new System.Drawing.Size(11, 12);
-            this.lblFriendNum.TabIndex = 28;
-            this.lblFriendNum.Text = "...";
+            this.lblFollowingNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFollowingNum.AutoSize = true;
+            this.lblFollowingNum.Location = new System.Drawing.Point(92, 100);
+            this.lblFollowingNum.Name = "lblFollowingNum";
+            this.lblFollowingNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblFollowingNum.Size = new System.Drawing.Size(11, 12);
+            this.lblFollowingNum.TabIndex = 28;
+            this.lblFollowingNum.Text = "...";
             // 
             // lblStatusNum
             // 
@@ -658,7 +658,7 @@
             this.Controls.Add(this.lblTimeZone);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.lblStatusNum);
-            this.Controls.Add(this.lblFriendNum);
+            this.Controls.Add(this.lblFollowingNum);
             this.Controls.Add(this.lblFavoriteNum);
             this.Controls.Add(this.lblFollowerNum);
             this.Controls.Add(this.label13);
@@ -733,7 +733,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label lblFollowerNum;
         private System.Windows.Forms.Label lblFavoriteNum;
-        private System.Windows.Forms.Label lblFriendNum;
+        private System.Windows.Forms.Label lblFollowingNum;
         private System.Windows.Forms.Label lblStatusNum;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lblTimeZone;

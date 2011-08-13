@@ -35,8 +35,8 @@
             this.tsmiFollow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.tsSepUnderFollow = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiDispFriends = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiDispFollowers = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispFollowing = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDispFollower = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplayUserProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplayUserTweet = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +65,8 @@
             this.tsmiFollow,
             this.tsmiRemove,
             this.tsSepUnderFollow,
-            this.tsmiDispFriends,
-            this.tsmiDispFollowers,
+            this.tsmiDispFollowing,
+            this.tsmiDispFollower,
             this.toolStripMenuItem2,
             this.tsmiDisplayUserProfile,
             this.tsmiDisplayUserTweet,
@@ -97,19 +97,19 @@
             this.tsSepUnderFollow.Name = "tsSepUnderFollow";
             this.tsSepUnderFollow.Size = new System.Drawing.Size(246, 6);
             // 
-            // tsmiDispFriends
+            // tsmiDispFollowing
             // 
-            this.tsmiDispFriends.Name = "tsmiDispFriends";
-            this.tsmiDispFriends.Size = new System.Drawing.Size(249, 22);
-            this.tsmiDispFriends.Text = "フォローしているユーザー(&D)";
-            this.tsmiDispFriends.Click += new System.EventHandler(this.tsmiDispFriends_Click);
+            this.tsmiDispFollowing.Name = "tsmiDispFollowing";
+            this.tsmiDispFollowing.Size = new System.Drawing.Size(249, 22);
+            this.tsmiDispFollowing.Text = "フォローしているユーザー(&D)";
+            this.tsmiDispFollowing.Click += new System.EventHandler(this.tsmiDispFollowing_Click);
             // 
             // tsmiDispFollower
             // 
-            this.tsmiDispFollowers.Name = "tsmiDispFollower";
-            this.tsmiDispFollowers.Size = new System.Drawing.Size(249, 22);
-            this.tsmiDispFollowers.Text = "フォローされているユーザー(&E)";
-            this.tsmiDispFollowers.Click += new System.EventHandler(this.tsmiDispFollowers_Click);
+            this.tsmiDispFollower.Name = "tsmiDispFollower";
+            this.tsmiDispFollower.Size = new System.Drawing.Size(249, 22);
+            this.tsmiDispFollower.Text = "フォローされているユーザー(&E)";
+            this.tsmiDispFollower.Click += new System.EventHandler(this.tsmiDispFollower_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -307,8 +307,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplayUserProfile;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblCount;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDispFollowers;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDispFriends;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispFollower;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDispFollowing;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator tsSepOverBlock;
         private System.Windows.Forms.ToolStripMenuItem tsmiBlock;
