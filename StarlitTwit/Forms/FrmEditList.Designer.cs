@@ -148,7 +148,6 @@
             this.Name = "FrmEditList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "リスト";
-            this.Load += new System.EventHandler(this.FrmEditList_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

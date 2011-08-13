@@ -50,24 +50,28 @@ namespace StarlitTwit
         #endregion (コンストラクタ)
 
         //-------------------------------------------------------------------------------
-        #region FrmProfile_Load ロード時イベント
+        #region #[override]OnLoad ロード時イベント
         //-------------------------------------------------------------------------------
         //
-        private void FrmProfile_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             Utilization.SetModelessDialogCenter(this);
             SetProfile(_profile);
             if (CanEdit) { SaveProfileTemporary(); }
             txtName.Select(0, 0);
         }
-        #endregion (FrmProfile_Load)
+        #endregion (OnLoad)
 
         //-------------------------------------------------------------------------------
-        #region FrmProfile_FormClosing クローズ中イベント
+        #region #[override]OnFormClosing クローズ中イベント
         //-------------------------------------------------------------------------------
         //
-        private void FrmProfile_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            base.OnFormClosing(e);
+
             if (CanEdit && (_bakName != txtName.Text
                             || _bakLoc != txtLocation.Text
                             || _bakUrl != txtUrl.Text
@@ -77,7 +81,7 @@ namespace StarlitTwit
                 }
             }
         }
-        #endregion (FrmProfile_FormClosing)
+        #endregion (OnFormClosing)
 
         //-------------------------------------------------------------------------------
         #region btnImageChange_Click (画像)変更ボタンクリック

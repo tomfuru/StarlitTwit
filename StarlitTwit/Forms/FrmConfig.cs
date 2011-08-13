@@ -42,11 +42,13 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region イベント
         //-------------------------------------------------------------------------------
-        #region FrmConfig_Load フォームロード時
+        #region #[override]OnLoad フォームロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmConfig_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             if (SettingsData == null) {
                 this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
                 throw new ArgumentException("無効な設定データです。");
@@ -54,7 +56,7 @@ namespace StarlitTwit
 
             SetSettingsData();
         }
-        #endregion (FrmConfig_Load)
+        #endregion (OnLoad)
         //-------------------------------------------------------------------------------
         #region btnOK_Click OKボタンクリック時
         //-------------------------------------------------------------------------------

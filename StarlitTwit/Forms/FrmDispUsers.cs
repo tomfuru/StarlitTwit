@@ -99,11 +99,13 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region イベント
         //-------------------------------------------------------------------------------
-        #region FrmFollower_Load ロード時
+        #region #[override]OnLoad ロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmFollower_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             Utilization.SetModelessDialogCenter(this);
 
             switch (FormType) {
@@ -174,7 +176,7 @@ namespace StarlitTwit
                 Utilization.InvokeTransaction(() => GetUsers());
             }
         }
-        #endregion (FrmFollower_Load)
+        #endregion (OnLoad)
         //-------------------------------------------------------------------------------
         #region btnClose_Click 閉じるボタン
         //-------------------------------------------------------------------------------

@@ -355,7 +355,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "タブ作成";
-            this.Load += new System.EventHandler(this.FrmMakeTab_Load);
             this.pnlKeyword.ResumeLayout(false);
             this.pnlKeyword.PerformLayout();
             this.pnlUser.ResumeLayout(false);

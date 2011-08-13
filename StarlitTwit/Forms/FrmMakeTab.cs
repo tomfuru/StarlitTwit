@@ -46,11 +46,13 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region イベント
         //-------------------------------------------------------------------------------
-        #region FrmMakeTab_Load ロード時
+        #region #[override]OnLoad ロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmMakeTab_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             cmbSearchType.Items.AddRange(new object[] {
                 TabSearchType.Keyword,
                 TabSearchType.User,
@@ -65,7 +67,7 @@ namespace StarlitTwit
             }
         }
         //-------------------------------------------------------------------------------
-        #endregion (FrmMakeTab_Load)
+        #endregion (OnLoad)
         //-------------------------------------------------------------------------------
         #region btnOK_Click OK
         //-------------------------------------------------------------------------------

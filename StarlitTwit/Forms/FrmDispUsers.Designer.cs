@@ -279,7 +279,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "...";
-            this.Load += new System.EventHandler(this.FrmFollower_Load);
             this.menuRow.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

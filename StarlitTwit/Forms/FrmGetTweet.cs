@@ -77,11 +77,13 @@ namespace StarlitTwit
         #endregion (DateTimeTo)
 
         //-------------------------------------------------------------------------------
-        #region FrmGetTweet_Load ロード時
+        #region #[override]OnLoad ロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmGetTweet_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             if (chbFromEnable.Checked = EnableDateTimeFrom) {
                 dtpFrom.Value = this.DateTimeFrom;
             }
@@ -91,7 +93,7 @@ namespace StarlitTwit
             }
             dtpTo.Enabled = chbToEnable.Checked;
         }
-        #endregion (FrmGetTweet_Load)
+        #endregion (OnLoad)
 
         //-------------------------------------------------------------------------------
         #region chbFromEnable_CheckedChanged Fromチェックボックス
