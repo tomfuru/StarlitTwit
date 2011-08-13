@@ -2288,6 +2288,9 @@ namespace StarlitTwit
                         //Log.DebugLog(ex);
                         throw new TwitterAPIException(1000, ex.Message);
                     }
+                    catch (WebException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
                 }
             }
         }
@@ -2310,6 +2313,9 @@ namespace StarlitTwit
                         //Log.DebugLog(ex);
                         throw new TwitterAPIException(1000, ex.Message);
                     }
+                    catch (WebException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
                 }
             }
         }
@@ -2325,7 +2331,12 @@ namespace StarlitTwit
             string imgUrl = res.ResponseUri.ToString();
             Image img;
             using (Stream s = res.GetResponseStream()) {
-                img = Image.FromStream(s);
+                try {
+                    img = Image.FromStream(s);
+                }
+                catch (WebException ex) {
+                    throw new TwitterAPIException(1, ex.Message);
+                }
             }
 
             return new Tuple<string, Image>(imgUrl, img);
@@ -2349,6 +2360,9 @@ namespace StarlitTwit
                         //Log.DebugLog(ex);
                         throw new TwitterAPIException(1000, ex.Message);
                     }
+                    catch (WebException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
+                    }
                 }
             }
         }
@@ -2371,6 +2385,9 @@ namespace StarlitTwit
                     catch (XmlException ex) {
                         //Log.DebugLog(ex);
                         throw new TwitterAPIException(1000, ex.Message);
+                    }
+                    catch (WebException ex) {
+                        throw new TwitterAPIException(1, ex.Message);
                     }
                 }
             }
