@@ -181,7 +181,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 252);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(392, 22);
-            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // tsslabel
@@ -197,7 +197,7 @@
             this.btnClose.Location = new System.Drawing.Point(305, 226);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 3;
+            this.btnClose.TabIndex = 2;
             this.btnClose.Text = "閉じる";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -209,7 +209,7 @@
             this.lblCount.Location = new System.Drawing.Point(279, 1);
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(11, 12);
-            this.lblCount.TabIndex = 4;
+            this.lblCount.TabIndex = 3;
             this.lblCount.Text = "...";
             // 
             // lstvList

@@ -79,10 +79,10 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDisplay_OwnList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplay_BelongList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDisplay_SubscriptList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRenew = new System.Windows.Forms.ToolStripMenuItem();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
-            this.tsmiDisplay_SubscriptList = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
@@ -93,7 +93,7 @@
             this.btnRenew.Location = new System.Drawing.Point(94, 456);
             this.btnRenew.Name = "btnRenew";
             this.btnRenew.Size = new System.Drawing.Size(75, 23);
-            this.btnRenew.TabIndex = 4;
+            this.btnRenew.TabIndex = 7;
             this.btnRenew.Text = "更新";
             this.btnRenew.UseVisualStyleBackColor = true;
             this.btnRenew.Click += new System.EventHandler(this.btnRenew_Click);
@@ -104,7 +104,7 @@
             this.btnClose.Location = new System.Drawing.Point(175, 456);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 5;
+            this.btnClose.TabIndex = 8;
             this.btnClose.Text = "閉じる";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -227,7 +227,7 @@
             this.txtName.Name = "txtName";
             this.txtName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtName.Size = new System.Drawing.Size(169, 19);
-            this.txtName.TabIndex = 0;
+            this.txtName.TabIndex = 1;
             // 
             // txtLocation
             // 
@@ -236,7 +236,7 @@
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtLocation.Size = new System.Drawing.Size(169, 19);
-            this.txtLocation.TabIndex = 1;
+            this.txtLocation.TabIndex = 2;
             // 
             // txtUrl
             // 
@@ -245,7 +245,7 @@
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtUrl.Size = new System.Drawing.Size(169, 19);
-            this.txtUrl.TabIndex = 2;
+            this.txtUrl.TabIndex = 4;
             // 
             // label4
             // 
@@ -433,7 +433,7 @@
             this.llblWeb.Location = new System.Drawing.Point(75, 254);
             this.llblWeb.Name = "llblWeb";
             this.llblWeb.Size = new System.Drawing.Size(171, 16);
-            this.llblWeb.TabIndex = 34;
+            this.llblWeb.TabIndex = 5;
             this.llblWeb.TabStop = true;
             this.llblWeb.Text = "...";
             this.llblWeb.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llblWeb_LinkClicked);
@@ -467,7 +467,7 @@
             this.btnImageChange.Location = new System.Drawing.Point(14, 79);
             this.btnImageChange.Name = "btnImageChange";
             this.btnImageChange.Size = new System.Drawing.Size(48, 18);
-            this.btnImageChange.TabIndex = 38;
+            this.btnImageChange.TabIndex = 0;
             this.btnImageChange.Text = "変更";
             this.btnImageChange.UseVisualStyleBackColor = true;
             this.btnImageChange.Click += new System.EventHandler(this.btnImageChange_Click);
@@ -603,6 +603,13 @@
             this.tsmiDisplay_BelongList.Text = "所属リスト表示(&B)";
             this.tsmiDisplay_BelongList.Click += new System.EventHandler(this.tsmiDisplay_BelongList_Click);
             // 
+            // tsmiDisplay_SubscriptList
+            // 
+            this.tsmiDisplay_SubscriptList.Name = "tsmiDisplay_SubscriptList";
+            this.tsmiDisplay_SubscriptList.Size = new System.Drawing.Size(202, 22);
+            this.tsmiDisplay_SubscriptList.Text = "フォローリスト表示(&S)";
+            this.tsmiDisplay_SubscriptList.Click += new System.EventHandler(this.tsmiDisplay_SubscriptList_Click);
+            // 
             // tsmiRenew
             // 
             this.tsmiRenew.Name = "tsmiRenew";
@@ -620,7 +627,7 @@
             this.rtxtDescription.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.rtxtDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rtxtDescription.Size = new System.Drawing.Size(231, 88);
-            this.rtxtDescription.TabIndex = 3;
+            this.rtxtDescription.TabIndex = 6;
             this.rtxtDescription.Text = "";
             this.rtxtDescription.TextChanged += new System.EventHandler(this.rtxtDescription_TextChanged);
             // 
@@ -633,13 +640,6 @@
             this.picbIcon.Size = new System.Drawing.Size(48, 48);
             this.picbIcon.TabIndex = 12;
             this.picbIcon.TabStop = false;
-            // 
-            // tsmiDisplay_SubscriptList
-            // 
-            this.tsmiDisplay_SubscriptList.Name = "tsmiDisplay_SubscriptList";
-            this.tsmiDisplay_SubscriptList.Size = new System.Drawing.Size(202, 22);
-            this.tsmiDisplay_SubscriptList.Text = "フォローリスト表示(&S)";
-            this.tsmiDisplay_SubscriptList.Click += new System.EventHandler(this.tsmiDisplay_SubscriptList_Click);
             // 
             // FrmProfile
             // 

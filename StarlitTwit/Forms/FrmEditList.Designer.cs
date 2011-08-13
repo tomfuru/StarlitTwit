@@ -44,7 +44,7 @@
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 6;
             this.label1.Text = "リスト名";
             // 
             // label3
@@ -53,7 +53,7 @@
             this.label3.Location = new System.Drawing.Point(13, 38);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
-            this.label3.TabIndex = 2;
+            this.label3.TabIndex = 7;
             this.label3.Text = "説明";
             // 
             // txtListName
@@ -61,7 +61,7 @@
             this.txtListName.Location = new System.Drawing.Point(68, 10);
             this.txtListName.Name = "txtListName";
             this.txtListName.Size = new System.Drawing.Size(179, 19);
-            this.txtListName.TabIndex = 3;
+            this.txtListName.TabIndex = 0;
             this.txtListName.TextChanged += new System.EventHandler(this.txtListName_TextChanged);
             // 
             // txtDescription
@@ -70,7 +70,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(179, 45);
-            this.txtDescription.TabIndex = 4;
+            this.txtDescription.TabIndex = 1;
             // 
             // rdbPublic
             // 
@@ -79,7 +79,7 @@
             this.rdbPublic.Location = new System.Drawing.Point(266, 13);
             this.rdbPublic.Name = "rdbPublic";
             this.rdbPublic.Size = new System.Drawing.Size(47, 16);
-            this.rdbPublic.TabIndex = 5;
+            this.rdbPublic.TabIndex = 2;
             this.rdbPublic.TabStop = true;
             this.rdbPublic.Text = "公開";
             this.rdbPublic.UseVisualStyleBackColor = true;
@@ -90,7 +90,7 @@
             this.rdbUnPublic.Location = new System.Drawing.Point(266, 36);
             this.rdbUnPublic.Name = "rdbUnPublic";
             this.rdbUnPublic.Size = new System.Drawing.Size(59, 16);
-            this.rdbUnPublic.TabIndex = 6;
+            this.rdbUnPublic.TabIndex = 3;
             this.rdbUnPublic.Text = "非公開";
             this.rdbUnPublic.UseVisualStyleBackColor = true;
             // 
@@ -100,7 +100,7 @@
             this.btnCansel.Location = new System.Drawing.Point(250, 87);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(75, 23);
-            this.btnCansel.TabIndex = 7;
+            this.btnCansel.TabIndex = 5;
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
@@ -112,7 +112,7 @@
             this.btnOK.Location = new System.Drawing.Point(169, 87);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 8;
+            this.btnOK.TabIndex = 4;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -124,7 +124,7 @@
             this.lblWarning.Location = new System.Drawing.Point(12, 92);
             this.lblWarning.Name = "lblWarning";
             this.lblWarning.Size = new System.Drawing.Size(11, 12);
-            this.lblWarning.TabIndex = 9;
+            this.lblWarning.TabIndex = 8;
             this.lblWarning.Text = "...";
             // 
             // FrmEditList

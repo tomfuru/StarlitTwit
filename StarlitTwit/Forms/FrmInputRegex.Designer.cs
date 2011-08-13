@@ -51,7 +51,7 @@
             this.btnOK.Location = new System.Drawing.Point(122, 115);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 1;
+            this.btnOK.TabIndex = 2;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -62,7 +62,7 @@
             this.btnCansel.Location = new System.Drawing.Point(203, 115);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(75, 23);
-            this.btnCansel.TabIndex = 2;
+            this.btnCansel.TabIndex = 3;
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
@@ -72,7 +72,7 @@
             this.txtCheck.Location = new System.Drawing.Point(12, 88);
             this.txtCheck.Name = "txtCheck";
             this.txtCheck.Size = new System.Drawing.Size(168, 19);
-            this.txtCheck.TabIndex = 3;
+            this.txtCheck.TabIndex = 1;
             this.txtCheck.TextChanged += new System.EventHandler(this.txtCheck_TextChanged);
             // 
             // label1
@@ -90,7 +90,7 @@
             this.lblInfo.Location = new System.Drawing.Point(186, 91);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Size = new System.Drawing.Size(11, 12);
-            this.lblInfo.TabIndex = 5;
+            this.lblInfo.TabIndex = 6;
             this.lblInfo.Text = "...";
             // 
             // label3
@@ -99,7 +99,7 @@
             this.label3.Location = new System.Drawing.Point(12, 73);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 12);
-            this.label3.TabIndex = 6;
+            this.label3.TabIndex = 5;
             this.label3.Text = "確認用テキスト";
             // 
             // FrmInputRegex
