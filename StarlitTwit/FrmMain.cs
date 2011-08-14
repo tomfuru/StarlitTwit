@@ -299,6 +299,12 @@ namespace StarlitTwit
         //
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if (e.CloseReason != CloseReason.ApplicationExitCall 
+             && Message.ShowQuestionMessage("終了します。") == System.Windows.Forms.DialogResult.No) {
+                e.Cancel = true;
+                return;
+            }
+
             // UserStream終了を待つ
             if (_usingUserStream && _userStreamCancellationTS != null) {
                 _userStreamCancellationTS.Cancel();
@@ -897,6 +903,17 @@ namespace StarlitTwit
             });
         }
         #endregion (tsmiファイル_設定_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiファイル_再起動_Click 再起動
+        //-------------------------------------------------------------------------------
+        private void tsmiファイル_再起動_Click(object sender, EventArgs e)
+        {
+            if (Message.ShowQuestionMessage("再起動します。") == System.Windows.Forms.DialogResult.No) { return; }
+
+            RestartProcess();
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (tsmiファイル_再起動_Click)
         //-------------------------------------------------------------------------------
         #region tsmiファイル_終了_Click 終了
         //-------------------------------------------------------------------------------
@@ -2460,15 +2477,15 @@ namespace StarlitTwit
         #endregion (GetFriendIDs)
 
         //-------------------------------------------------------------------------------
-		#region +IsOneWayFollowing 自分はフォローしているが相手からフォローされていないかどうか判断
-		//-------------------------------------------------------------------------------
-		//
-		public bool IsOneWayFollowing(long id)
-		{
-			if (_followerIDSet == null || _friendIDSet == null) { return false; }
+        #region +IsOneWayFollowing 自分はフォローしているが相手からフォローされていないかどうか判断
+        //-------------------------------------------------------------------------------
+        //
+        public bool IsOneWayFollowing(long id)
+        {
+            if (_followerIDSet == null || _friendIDSet == null) { return false; }
             return _friendIDSet.Contains(id) && !_followerIDSet.Contains(id);
-		}
-		#endregion (IsOneWayFollowing)
+        }
+        #endregion (IsOneWayFollowing)
 
         //===============================================================================
         #region -Update 投稿を行います using TwitterAPI
@@ -2854,6 +2871,22 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (OAuth)
+
+        //-------------------------------------------------------------------------------
+        #region -RestartProcess プロセス再起動
+        //-------------------------------------------------------------------------------
+        //
+        private void RestartProcess()
+        {
+            // パラメータ取得
+            string[] args = Environment.GetCommandLineArgs();
+            string arguments = string.Join(" ", args, 1, args.Length - 1);
+
+            // 再起動
+            Application.Exit();
+            System.Diagnostics.Process.Start(Application.ExecutablePath, arguments);
+        }
+        #endregion (RestartProcess)
 
         //-------------------------------------------------------------------------------
         #region -LockAndProcess ロックを行って処理を行います。
