@@ -56,6 +56,8 @@ namespace StarlitTwit
         public static Twitter Twitter { get; private set; }
         /// <summary>設定データ</summary>
         public static SettingsData SettingsData { get; private set; }
+        /// <summary>設定データファイルパス</summary>
+        private string _settingsDataPath;
 
         /// <summary>タブと表示コントロールの辞書</summary>
         private Dictionary<TabPageEx, UctlDispTwit> _dispTwitDic = new Dictionary<TabPageEx, UctlDispTwit>();
@@ -250,8 +252,9 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
             //tabTwitDisp.SelectedIndex = 0;
+            _settingsDataPath = Utilization.GetDefaultSettingsDataFilePath();
 
-            SettingsData = SettingsData.Restore();
+            SettingsData = SettingsData.Restore(_settingsDataPath);
 
             // ↓設定を復元↓
 
@@ -327,7 +330,7 @@ namespace StarlitTwit
             SettingsData.WindowSize = this.Size;
             SettingsData.WindowMaximized = (this.WindowState == FormWindowState.Maximized);
 
-            SettingsData.Save();
+            SettingsData.Save(_settingsDataPath);
 
             tasktray.Visible = false;
         }
@@ -455,7 +458,7 @@ namespace StarlitTwit
                 foreach (var kvp in list) {
                     SettingsData.TabDataDic.Add(kvp.Key, kvp.Value);
                 }
-                SettingsData.Save();
+                SettingsData.Save(_settingsDataPath);
             }
         }
         #endregion (tabTwitDisp_TabMoved)
@@ -876,7 +879,7 @@ namespace StarlitTwit
                     frmconf.SettingsData = SettingsData;
                     if (frmconf.ShowDialog() == DialogResult.OK) {
                         //SettingsData = frmconf.SettingsData; // classなので不要
-                        SettingsData.Save();
+                        SettingsData.Save(_settingsDataPath);
 
                         // 設定の適用
                         foreach (var tabpage in DEFAULT_TABPAGES) {
@@ -978,7 +981,7 @@ namespace StarlitTwit
                     if (index >= 0) { SettingsData.UserInfoList.RemoveAt(index); }
 
                     SettingsData.UserInfoList.Insert(0, userdata);
-                    SettingsData.Save();
+                    SettingsData.Save(_settingsDataPath);
 
                     Message.ShowInfoMessage("認証に成功しました");
 
@@ -1304,7 +1307,7 @@ namespace StarlitTwit
                             _dispTwitDic[tabpg].Tag = tabpg.Tag = tabpg.Text = frm.TabData.TabName;
                             SettingsData.TabDataDic.Add((string)tabpg.Tag, frm.TabData);
                         }
-                        SettingsData.Save();
+                        SettingsData.Save(_settingsDataPath);
                         tabpg.ToolTipText = TabDataToString(frm.TabData);
 
                         tssLabel.SetText(STR_WAITING_RENEWTABCONFIG);
@@ -1347,7 +1350,7 @@ namespace StarlitTwit
                     lock (SettingsData.TabDataDic) { SettingsData.TabDataDic.Remove((string)tabpg.Tag); }
                     tabpg.Dispose();
 
-                    SettingsData.Save();
+                    SettingsData.Save(_settingsDataPath);
                 }));
             }
         }
@@ -1469,7 +1472,7 @@ namespace StarlitTwit
                 lock (SettingsData.TabDataDic) { SettingsData.TabDataDic.Add(tabdata.TabName, tabdata); }
                 MakeTab(tabdata, true);
 
-                SettingsData.Save();
+                SettingsData.Save(_settingsDataPath);
             }));
         }
         //-------------------------------------------------------------------------------

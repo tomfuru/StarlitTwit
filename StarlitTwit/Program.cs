@@ -14,11 +14,23 @@ namespace StarlitTwit
         [STAThread]
         static void Main()
         {
-            Config.UnhandleExceptionConfiguration();
+            string settingPath = Utilization.GetDefaultSettingsDataFilePath();
+            Mutex mutex = new Mutex(false, settingPath.Replace('\\','_'));
+            if (!mutex.WaitOne(0, false)) {
+                // 同じ設定ファイルを使って起動しているプロセスがある
+                Message.ShowWarningMessage("既に同じ設定ファイルで起動しています。");
+                return;
+            }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain());
+            try {
+                Config.UnhandleExceptionConfiguration();
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new FrmMain());
+            }
+            catch (Exception) { throw; }
+            finally { mutex.ReleaseMutex(); }
         }
     }
 }

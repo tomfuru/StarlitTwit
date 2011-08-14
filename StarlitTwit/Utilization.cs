@@ -24,6 +24,18 @@ namespace StarlitTwit
         public const string STR_DATETIMEFORMAT = "yyyy/MM/dd HH:mm:ss";
         public const string URL_REGEX_PATTERN = @"h?(ttp|ttps)://[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]+";
 
+        private const string SAVEFILE_NAME = @"Settings.dat";
+
+        //-------------------------------------------------------------------------------
+        #region +[static]GetDefaultSettingsDataFilePath デフォルト設定ファイルパス取得
+        //-------------------------------------------------------------------------------
+        //
+        public static string GetDefaultSettingsDataFilePath()
+        {
+            return  Path.Combine(Application.StartupPath, SAVEFILE_NAME);
+        }
+        #endregion (GetDefaultSettingsDataFilePath)
+
         //-------------------------------------------------------------------------------
         #region +[static]UrlEncode
         //-------------------------------------------------------------------------------

@@ -245,7 +245,7 @@ namespace StarlitTwit
     /// </summary>
     public static class Message
     {
-        private const string CONFIRM = "確認";
+        private const string TITLE = "StarlitTwit";
         #region +ShowInfoMessage 通知メッセージを表示
         //-------------------------------------------------------------------------------
         /// <summary>
@@ -254,7 +254,7 @@ namespace StarlitTwit
         /// <param name="message">表示メッセージ</param>
         public static void ShowInfoMessage(params string[] message)
         {
-            MessageBox.Show(CombineStrings(message), CONFIRM, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(CombineStrings(message), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion (ShowInfoMessage)
         #region +ShowWarningMessage 警告メッセージ表示
@@ -265,7 +265,7 @@ namespace StarlitTwit
         /// <param name="message">表示メッセージ</param>
         public static void ShowWarningMessage(params string[] message)
         {
-            MessageBox.Show(CombineStrings(message), CONFIRM, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(CombineStrings(message), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         #endregion (ShowWarningMessage)
         #region +ShowQuestionMessage 質問メッセージ表示
@@ -277,7 +277,7 @@ namespace StarlitTwit
         /// <returns>DialogResultのYesかNo</returns>
         public static DialogResult ShowQuestionMessage(params string[] message)
         {
-            return MessageBox.Show(CombineStrings(message), CONFIRM, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            return MessageBox.Show(CombineStrings(message), TITLE, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         }
         #endregion (ShowQuestionMessage)
         #region +ShowErrorMessage エラーメッセージ表示
@@ -288,7 +288,7 @@ namespace StarlitTwit
         /// <param name="message">表示メッセージ</param>
         public static void ShowErrorMessage(params string[] message)
         {
-            MessageBox.Show(CombineStrings(message), CONFIRM, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(CombineStrings(message), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         #endregion (ShowErrorMessage)
         //-------------------------------------------------------------------------------

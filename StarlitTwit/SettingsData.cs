@@ -18,8 +18,6 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region 定数
         //-------------------------------------------------------------------------------
-        /// <summary>保存ファイル名</summary>
-        public const string SAVEFILE_NAME = @"Settings.dat";
         /// <summary>名前のデフォルトフォーマット</summary>
         public const string DEFAULT_NAMEFORMAT = @"$Locked$$ScreenName$/$Name$ [$DateTime(MM/dd HH:mm:ss)$] (from $Source$)$Favorited$";
         /// <summary>名前のリツイート時デフォルトフォーマット</summary>
@@ -276,9 +274,8 @@ namespace StarlitTwit
         /// <summary>
         /// このインスタンスをファイルに保存します。
         /// </summary>
-        public void Save()
+        public void Save(string filePath)
         {
-            string filePath = Path.Combine(Application.StartupPath, SAVEFILE_NAME);
             XmlSerializer serializer = new XmlSerializer(typeof(SettingsData));
             try {
                 using (StreamWriter writer = new StreamWriter(filePath)) {
@@ -298,10 +295,8 @@ namespace StarlitTwit
         /// ファイルから設定を復元します。復元できなかった時は新しい設定データが返ります。
         /// </summary>
         /// <returns></returns>
-        public static SettingsData Restore()
+        public static SettingsData Restore(string filePath)
         {
-            string filePath = Path.Combine(Application.StartupPath, SAVEFILE_NAME);
-
             if (File.Exists(filePath)) {
                 XmlSerializer serializer = new XmlSerializer(typeof(SettingsData));
                 try {
