@@ -688,17 +688,18 @@ namespace StarlitTwit
                     break;
                 case Keys.PageUp:
                     lock (_lockObj) {
-                        if (vscrbar.Enabled) {
-                            SelectedIndex = Math.Max(SelectedIndex - vscrbar.LargeChange, 0);
-                            int nextValue = Math.Max(vscrbar.Value - vscrbar.LargeChange, 0);
-                            if (nextValue == 0 && vscrbar.Value == 0) {
-                                AdjustControl(0, true); // value=nextValue=0の時は更新してやらないといけない
-                            }
-                            else { vscrbar.Value = nextValue; }
+                        if (vscrbar.Enabled && vscrbar.Value > 0) {
+                            int nowBar = vscrbar.Value;
+                            int standard = vscrbar.Value - 1;
+                            AdjustControl(standard, false);
+                            int diff = nowBar - vscrbar.Value;
+                            ChangeSelectRow(Math.Max(SelectedIndex - diff, 0));
                         }
                         else {
                             vscrbar.Value = SelectedIndex = 0;
+                            AdjustControl(0, true);
                         }
+                        pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
                     }
                     break;
                 case Keys.PageDown:
@@ -710,6 +711,7 @@ namespace StarlitTwit
                         else {
                             vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
                         }
+                        pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
                     }
                     break;
                 case Keys.Home:
@@ -812,6 +814,11 @@ namespace StarlitTwit
         private void vscrbar_Scroll(object sender, ScrollEventArgs e)
         {
             lock (_lockObj) {
+                if (e.Type == ScrollEventType.LargeDecrement) {
+                    AdjustControl(vscrbar.Value - 1, false);
+                    pnlTweets.Refresh();
+                    return;
+                }
                 if (e.NewValue == e.OldValue) { return; }
                 vscrbar.Value = e.NewValue;
             }
@@ -1190,21 +1197,38 @@ namespace StarlitTwit
                 }
             }
 
+            bool isFirstForward = isForward;
             while ((isForward && height < maxHeight) || (!isForward && height > 0)) {
-                if (_rowDataList.Count <= rowdataindex) {// isForward=trueのみ．一番下までいった
-                    if (startIndex == 0) { needScrollbar = false; break; } // 数が少なくてスクロールバーもいらないような時
-                    isForward = false;
-                    rowdataindex = startIndex - 1;
-                    // 下詰めに
-                    int dif = maxHeight - height;
-                    for (int i = 0; i < rowindex; i++) {
-                        _rowList[i].Location = new Point(0, _rowList[i].Location.Y + dif);
+                if (isFirstForward) {
+                    if (_rowDataList.Count == rowdataindex) {// isForward=trueのみ．一番下までいった
+                        if (startIndex == 0) { needScrollbar = false; break; } // 数が少なくてスクロールバーもいらないような時
+                        isForward = false;
+                        rowdataindex = startIndex - 1;
+                        // 下詰めに
+                        int dif = maxHeight - height;
+                        for (int i = 0; i < rowindex; i++) {
+                            _rowList[i].Location = new Point(0, _rowList[i].Location.Y + dif);
+                        }
+                        height = dif;
+                        continue;
                     }
-                    height = dif;
-                    continue;
+                    else if (rowdataindex == -1) { break; } // isForward=falseのみ．全て見終わった
                 }
-                else if (rowdataindex == -1) { break; } // isForward=falseのみ．全て見終わった
+                else {
+                    if (rowdataindex == -1) {
+                        if (startIndex == _rowDataList.Count - 1) { needScrollbar = false; break; } // 数が少なくてスクロールバーもいらないような時
+                        isForward = true;
+                        rowdataindex = startIndex + 1;
+                        // 上詰めに
+                        for (int i = 0; i < rowindex; i++) {
+                            _rowList[i].Location = new Point(0, _rowList[i].Location.Y - height);
+                        }
+                        height = maxHeight - height;
+                        continue;
 
+                    }
+                    else if (_rowDataList.Count == rowdataindex) { break;  }
+                }
                 RowData rowdata = _rowDataList.Values[rowdataindex];
                 UctlDispTwitRow row;
                 if (_rowList.Count <= rowindex) {
@@ -1265,8 +1289,14 @@ namespace StarlitTwit
                 vscrbar.LargeChange = Math.Max(0, _iAllVisibleRowNum);
                 vscrbar.Maximum = _rowDataList.Count - 1;
 
-                if (isForward) { vscrbar.Value = startIndex; }
-                else { vscrbar.Value = rowdataindex + 2; }
+                if (isFirstForward) {
+                    if (isForward) { vscrbar.Value = startIndex; }
+                    else { vscrbar.Value = rowdataindex + 2; }
+                }
+                else {
+                    if (isForward) { vscrbar.Value = 0; }
+                    else { vscrbar.Value = rowdataindex + 2; }
+                }
             }
             _suspend_vscrbar_ValueChangeEvent = false;
 
