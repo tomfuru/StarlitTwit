@@ -709,7 +709,9 @@ namespace StarlitTwit
                             vscrbar.Value = Math.Min(vscrbar.Value + vscrbar.LargeChange, _rowDataList.Count - 1);
                         }
                         else {
-                            vscrbar.Value = SelectedIndex = _rowDataList.Count - 1;
+                            SelectedIndex = _rowDataList.Count - 1;
+                            vscrbar.Value = 0;
+                            AdjustControl(0, true);
                         }
                         pnlTweets.Refresh(); // 押しっぱなしで描画が追いつかないため
                     }
@@ -1212,7 +1214,13 @@ namespace StarlitTwit
                         height = dif;
                         continue;
                     }
-                    else if (rowdataindex == -1) { break; } // isForward=falseのみ．全て見終わった
+                    else if (rowdataindex == -1) {  // isForward=falseのみ．全て見終わった
+                        needScrollbar = false;
+                        for (int i = 0; i < rowindex; i++) {
+                            _rowList[i].Location = new Point(0, _rowList[i].Location.Y - height);
+                        }
+                        break; 
+                    }
                 }
                 else {
                     if (rowdataindex == -1) {

@@ -50,6 +50,8 @@ namespace StarlitTwit
                 txtDescription.Text = ListData.Description;
                 rdbUnPublic.Checked = !ListData.Public;
             }
+            // 何故かCenterParentにならないので一応
+            Utilization.SetModelessDialogCenter(this);
         }
         #endregion (OnLoad)
 

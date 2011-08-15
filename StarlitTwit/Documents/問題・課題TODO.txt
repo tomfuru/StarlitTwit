@@ -25,11 +25,7 @@
 ・System.Webを参照したら'.'含むものを検索できる？
 
 ■要修正・確認
-・ユーザー一覧で無駄に列がある？
-・リストメンバー画面でフォロー有無が出てない？（他は？
-・SearchでReplyがおかしい
 ＋ユーザーのkeyを暗号化
-#NewtonsoftのdllをLibファイルに入れる
 
 ・設定の保存と取得？
 ・バグったら再起動する？
@@ -185,6 +181,8 @@
 
 ★DONE
 11/08/15
+・SearchでReplyがおかしい->Replyはわからない
+・EditListフォームが何故かCenterParentにならないのでManuallyに設定
 ・QuoteReplyで発言ができないのを修正
 ・ヘッダ/フッタはQuote,Reply,QuoteReply,DMでは入れない
 ・LargeChangeスクロールでPageUpと似た挙動に

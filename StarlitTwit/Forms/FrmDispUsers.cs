@@ -167,9 +167,6 @@ namespace StarlitTwit
                     break;
             }
 
-            if (FormType != EFormType.MyFriend) {
-                lstvList.Columns.Add(new ColumnHeader() { Text = "", Width = 90 });
-            }
             lblCount.Text = "";
             if (FormType != EFormType.UserSearch) {
                 tsslabel.Text = "取得中...";

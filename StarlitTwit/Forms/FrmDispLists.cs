@@ -300,7 +300,7 @@ namespace StarlitTwit
         private void btnAddNewList_Click(object sender, EventArgs e)
         {
             using (FrmEditList frm = new FrmEditList(true, EnumerateExistingList())) {
-                if (frm.ShowDialog() == DialogResult.OK) {
+                if (frm.ShowDialog(this) == DialogResult.OK) {
                     AddList(frm.ListData.AsEnumerable());
                 }
             }
