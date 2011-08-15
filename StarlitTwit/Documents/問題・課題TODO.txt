@@ -25,9 +25,6 @@
 ・System.Webを参照したら'.'含むものを検索できる？
 
 ■要修正・確認
-・PageUp,DownはいろいろまずいことがあったがScrollBarのLargeChangeは大丈夫？
- -> 問題
-・ヘッダ/フッタはQuote,Reply,DMでは入れない
 ・ユーザー一覧で無駄に列がある？
 ・リストメンバー画面でフォロー有無が出てない？（他は？
 ・SearchでReplyがおかしい
@@ -188,6 +185,8 @@
 
 ★DONE
 11/08/15
+・QuoteReplyで発言ができないのを修正
+・ヘッダ/フッタはQuote,Reply,QuoteReply,DMでは入れない
 ・LargeChangeスクロールでPageUpと似た挙動に
 ・PageUpで上部のまだ完全に見えてないもの順に表示するように
 ・Tabのデフォルト更新は300秒くらいに

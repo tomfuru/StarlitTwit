@@ -228,6 +228,8 @@ namespace StarlitTwit
         {
             /// <summary>通常</summary>
             Normal,
+            /// <summary>引用状態</summary>
+            Quote,
             /// <summary>リプライ状態</summary>
             Reply,
             /// <summary>引用リプライ状態</summary>
@@ -302,7 +304,7 @@ namespace StarlitTwit
         //
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (e.CloseReason != CloseReason.ApplicationExitCall 
+            if (e.CloseReason != CloseReason.ApplicationExitCall
              && Message.ShowQuestionMessage("終了します。") == System.Windows.Forms.DialogResult.No) {
                 e.Cancel = true;
                 return;
@@ -344,9 +346,9 @@ namespace StarlitTwit
         private void btnTwit_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(SettingsData.Header);
+            if (_stateStatusState == StatusState.Normal) { sb.Append(SettingsData.Header); }
             sb.Append(rtxtTwit.Text);
-            sb.Append(SettingsData.Footer);
+            if (_stateStatusState == StatusState.Normal) { sb.Append(SettingsData.Footer); }
             string text = sb.ToString();
             if (text.Length == 0 || text.Length > MAX_LENGTH) { return; }
             Utilization.InvokeTransaction(() => Update(text));
@@ -364,7 +366,12 @@ namespace StarlitTwit
             try {
                 RichTextBox txtbox = (RichTextBox)sender;
 
-                int combinedlength = SettingsData.Header.Length + txtbox.Text.Length + SettingsData.Footer.Length;
+                int combinedlength = rtxtTwit.Text.Length;
+                if (_stateStatusState == StatusState.Normal) {
+                    combinedlength += SettingsData.Header.Length;
+                    combinedlength += SettingsData.Footer.Length;
+                }
+
                 // 残り文字数
                 int restLen = MAX_LENGTH - combinedlength;
 
@@ -386,6 +393,7 @@ namespace StarlitTwit
                     case StatusState.QuoteReply:
                         if (!txtbox.Text.Contains(_RecipiantName)) { ReSetStatusState(); }
                         break;
+                    case StatusState.Quote:
                     case StatusState.MultiReply:
                         if (txtbox.Text.Length == 0) { ReSetStatusState(); }
                         break;
@@ -648,7 +656,7 @@ namespace StarlitTwit
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
 
-            ReSetStatusState();
+            SetStatusState(StatusState.Quote, string.Format("{0}の発言の引用", e.TwitData.UserScreenName));
         }
         #endregion (TwitMenu_Quote_Click)
         //-------------------------------------------------------------------------------
@@ -662,6 +670,7 @@ namespace StarlitTwit
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
 
+            _statlID = e.TwitData.StatusID;
             _RecipiantName = '@' + e.TwitData.UserScreenName;
             SetStatusState(StatusState.QuoteReply, e.TwitData.UserScreenName + "宛の引用リプライ");
         }
@@ -2510,10 +2519,12 @@ namespace StarlitTwit
 
                 switch (_stateStatusState) {
                     case StatusState.Normal:
+                    case StatusState.Quote:
                     case StatusState.MultiReply:
                         Twitter.statuses_update(text);
                         renewUctlDisp = uctlDispHome;
                         break;
+                    case StatusState.QuoteReply:
                     case StatusState.Reply:
                         Twitter.statuses_update(text, _statlID);
                         renewUctlDisp = uctlDispHome;
