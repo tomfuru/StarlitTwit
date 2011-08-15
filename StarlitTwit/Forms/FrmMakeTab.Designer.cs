@@ -271,6 +271,11 @@
             this.numTimeline_Interval.Name = "numTimeline_Interval";
             this.numTimeline_Interval.Size = new System.Drawing.Size(56, 19);
             this.numTimeline_Interval.TabIndex = 7;
+            this.numTimeline_Interval.Value = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
             // 
             // numTimeline_Add
             // 

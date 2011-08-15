@@ -45,9 +45,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\StarlitTwit\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -320,7 +320,6 @@
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\UctlLine.cs">
       <Link>UserControls\UctlLine.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\UctlLine.designer.cs">
       <Link>UserControls\UctlLine.designer.cs</Link>
