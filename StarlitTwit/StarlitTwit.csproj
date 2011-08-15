@@ -327,6 +327,7 @@
     <None Include="StarlitTwit.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Documents\ReadMe.txt" />
     <Content Include="Documents\SampleCode.txt" />
     <Content Include="Documents\URLShortenerAPI.txt" />
     <Content Include="Documents\問題・課題TODO.txt" />
