@@ -35,10 +35,11 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.Location = new System.Drawing.Point(284, 254);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 1;
+            this.btnClose.TabIndex = 2;
             this.btnClose.Text = "閉じる";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -53,7 +54,7 @@
             this.listBox.Location = new System.Drawing.Point(0, 0);
             this.listBox.Name = "listBox";
             this.listBox.Size = new System.Drawing.Size(375, 232);
-            this.listBox.TabIndex = 2;
+            this.listBox.TabIndex = 0;
             // 
             // chbAutoScroll
             // 
@@ -64,7 +65,7 @@
             this.chbAutoScroll.Location = new System.Drawing.Point(12, 254);
             this.chbAutoScroll.Name = "chbAutoScroll";
             this.chbAutoScroll.Size = new System.Drawing.Size(94, 16);
-            this.chbAutoScroll.TabIndex = 3;
+            this.chbAutoScroll.TabIndex = 1;
             this.chbAutoScroll.Text = "自動スクロール";
             this.chbAutoScroll.UseVisualStyleBackColor = true;
             // 
@@ -72,6 +73,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(375, 284);
             this.Controls.Add(this.chbAutoScroll);
             this.Controls.Add(this.listBox);

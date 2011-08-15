@@ -40,10 +40,10 @@ namespace StarlitTwit
         #endregion (Constructor)
 
         //-------------------------------------------------------------------------------
-        #region FrmEditList_Load ロード時
+        #region #[override]OnLoad ロード時
         //-------------------------------------------------------------------------------
         //
-        private void FrmEditList_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             if (!_isNew) {
                 txtListName.Text = ListData.Name;
@@ -51,7 +51,7 @@ namespace StarlitTwit
                 rdbUnPublic.Checked = !ListData.Public;
             }
         }
-        #endregion (FrmEditList_Load)
+        #endregion (OnLoad)
 
         //-------------------------------------------------------------------------------
         #region btnOK_Click OKボタン

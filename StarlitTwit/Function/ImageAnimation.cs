@@ -145,7 +145,10 @@ namespace StarlitTwit
         //
         private void Timer_Elapsed(object o)
         {
-            NextFrame();
+            try {
+                NextFrame();
+            }
+            catch (InvalidOperationException) {}
         }
         #endregion (Timer_Elapsed)
 

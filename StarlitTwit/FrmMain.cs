@@ -56,6 +56,8 @@ namespace StarlitTwit
         public static Twitter Twitter { get; private set; }
         /// <summary>設定データ</summary>
         public static SettingsData SettingsData { get; private set; }
+        /// <summary>設定データファイルパス</summary>
+        private string _settingsDataPath;
 
         /// <summary>タブと表示コントロールの辞書</summary>
         private Dictionary<TabPageEx, UctlDispTwit> _dispTwitDic = new Dictionary<TabPageEx, UctlDispTwit>();
@@ -250,8 +252,9 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
             //tabTwitDisp.SelectedIndex = 0;
+            _settingsDataPath = Utilization.GetDefaultSettingsDataFilePath();
 
-            SettingsData = SettingsData.Restore();
+            SettingsData = SettingsData.Restore(_settingsDataPath);
 
             // ↓設定を復元↓
 
@@ -299,6 +302,12 @@ namespace StarlitTwit
         //
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if (e.CloseReason != CloseReason.ApplicationExitCall 
+             && Message.ShowQuestionMessage("終了します。") == System.Windows.Forms.DialogResult.No) {
+                e.Cancel = true;
+                return;
+            }
+
             // UserStream終了を待つ
             if (_usingUserStream && _userStreamCancellationTS != null) {
                 _userStreamCancellationTS.Cancel();
@@ -321,7 +330,7 @@ namespace StarlitTwit
             SettingsData.WindowSize = this.Size;
             SettingsData.WindowMaximized = (this.WindowState == FormWindowState.Maximized);
 
-            SettingsData.Save();
+            SettingsData.Save(_settingsDataPath);
 
             tasktray.Visible = false;
         }
@@ -449,7 +458,7 @@ namespace StarlitTwit
                 foreach (var kvp in list) {
                     SettingsData.TabDataDic.Add(kvp.Key, kvp.Value);
                 }
-                SettingsData.Save();
+                SettingsData.Save(_settingsDataPath);
             }
         }
         #endregion (tabTwitDisp_TabMoved)
@@ -464,14 +473,14 @@ namespace StarlitTwit
         }
         #endregion (DispTwit_TweetItemClick)
         //-------------------------------------------------------------------------------
-        #region llblFollowing_LinkClicked フォロー数ラベルクリック時
+        #region llblFriend_LinkClicked フォロー数ラベルクリック時
         //-------------------------------------------------------------------------------
         //
-        private void llblFollowing_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void llblFriend_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFollowing);
+            Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.MyFriend);
         }
-        #endregion (llblFollowing_LinkClicked)
+        #endregion (llblFriend_LinkClicked)
         //-------------------------------------------------------------------------------
         #region llblFollower_LinkClicked フォロワー数ラベルクリック時
         //-------------------------------------------------------------------------------
@@ -870,7 +879,7 @@ namespace StarlitTwit
                     frmconf.SettingsData = SettingsData;
                     if (frmconf.ShowDialog() == DialogResult.OK) {
                         //SettingsData = frmconf.SettingsData; // classなので不要
-                        SettingsData.Save();
+                        SettingsData.Save(_settingsDataPath);
 
                         // 設定の適用
                         foreach (var tabpage in DEFAULT_TABPAGES) {
@@ -897,6 +906,17 @@ namespace StarlitTwit
             });
         }
         #endregion (tsmiファイル_設定_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiファイル_再起動_Click 再起動
+        //-------------------------------------------------------------------------------
+        private void tsmiファイル_再起動_Click(object sender, EventArgs e)
+        {
+            if (Message.ShowQuestionMessage("再起動します。") == System.Windows.Forms.DialogResult.No) { return; }
+
+            RestartProcess();
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (tsmiファイル_再起動_Click)
         //-------------------------------------------------------------------------------
         #region tsmiファイル_終了_Click 終了
         //-------------------------------------------------------------------------------
@@ -961,7 +981,7 @@ namespace StarlitTwit
                     if (index >= 0) { SettingsData.UserInfoList.RemoveAt(index); }
 
                     SettingsData.UserInfoList.Insert(0, userdata);
-                    SettingsData.Save();
+                    SettingsData.Save(_settingsDataPath);
 
                     Message.ShowInfoMessage("認証に成功しました");
 
@@ -1287,7 +1307,7 @@ namespace StarlitTwit
                             _dispTwitDic[tabpg].Tag = tabpg.Tag = tabpg.Text = frm.TabData.TabName;
                             SettingsData.TabDataDic.Add((string)tabpg.Tag, frm.TabData);
                         }
-                        SettingsData.Save();
+                        SettingsData.Save(_settingsDataPath);
                         tabpg.ToolTipText = TabDataToString(frm.TabData);
 
                         tssLabel.SetText(STR_WAITING_RENEWTABCONFIG);
@@ -1330,7 +1350,7 @@ namespace StarlitTwit
                     lock (SettingsData.TabDataDic) { SettingsData.TabDataDic.Remove((string)tabpg.Tag); }
                     tabpg.Dispose();
 
-                    SettingsData.Save();
+                    SettingsData.Save(_settingsDataPath);
                 }));
             }
         }
@@ -1452,7 +1472,7 @@ namespace StarlitTwit
                 lock (SettingsData.TabDataDic) { SettingsData.TabDataDic.Add(tabdata.TabName, tabdata); }
                 MakeTab(tabdata, true);
 
-                SettingsData.Save();
+                SettingsData.Save(_settingsDataPath);
             }));
         }
         //-------------------------------------------------------------------------------
@@ -1665,7 +1685,7 @@ namespace StarlitTwit
         {
             if (!lblUserName.Font.Bold) {
                 lblUserName.Font = new Font(lblUserName.Font, FontStyle.Bold);
-                llblFollower.Enabled = llblFollowing.Enabled = llblList.Enabled = true;
+                llblFollower.Enabled = llblFriend.Enabled = llblList.Enabled = true;
             }
             StringBuilder namesb = new StringBuilder();
             if (profile.Protected) { namesb.Append(Utilization.CHR_LOCKED); }
@@ -1674,7 +1694,7 @@ namespace StarlitTwit
             namesb.Append(profile.UserName);
             lblUserName.Text = namesb.ToString();
             llblFollower.Text = profile.FollowerNum.ToString();
-            llblFollowing.Text = profile.FollowingNum.ToString();
+            llblFriend.Text = profile.FriendNum.ToString();
             llblList.Text = profile.ListedNum.ToString();
             lblStatuses.Text = profile.StatusNum.ToString();
         }
@@ -2460,15 +2480,15 @@ namespace StarlitTwit
         #endregion (GetFriendIDs)
 
         //-------------------------------------------------------------------------------
-		#region +IsOneWayFollowing 自分はフォローしているが相手からフォローされていないかどうか判断
-		//-------------------------------------------------------------------------------
-		//
-		public bool IsOneWayFollowing(long id)
-		{
-			if (_followerIDSet == null || _friendIDSet == null) { return false; }
+        #region +IsOneWayFollowing 自分はフォローしているが相手からフォローされていないかどうか判断
+        //-------------------------------------------------------------------------------
+        //
+        public bool IsOneWayFollowing(long id)
+        {
+            if (_followerIDSet == null || _friendIDSet == null) { return false; }
             return _friendIDSet.Contains(id) && !_followerIDSet.Contains(id);
-		}
-		#endregion (IsOneWayFollowing)
+        }
+        #endregion (IsOneWayFollowing)
 
         //===============================================================================
         #region -Update 投稿を行います using TwitterAPI
@@ -2856,6 +2876,22 @@ namespace StarlitTwit
         #endregion (OAuth)
 
         //-------------------------------------------------------------------------------
+        #region -RestartProcess プロセス再起動
+        //-------------------------------------------------------------------------------
+        //
+        private void RestartProcess()
+        {
+            // パラメータ取得
+            string[] args = Environment.GetCommandLineArgs();
+            string arguments = string.Join(" ", args, 1, args.Length - 1);
+
+            // 再起動
+            Application.Exit();
+            System.Diagnostics.Process.Start(Application.ExecutablePath, arguments);
+        }
+        #endregion (RestartProcess)
+
+        //-------------------------------------------------------------------------------
         #region -LockAndProcess ロックを行って処理を行います。
         //-------------------------------------------------------------------------------
         #region (ManualResetEventSlim, ManualResetEventSlim, Action)
@@ -3001,7 +3037,7 @@ namespace StarlitTwit
                     _mreThreadTabRun.Wait();
                     _mreThreadTabConfirm.Reset();
 
-                    // friend,followingID配列取得
+                    // friend,followerID配列取得
                     if (_followersRenew_IsForce) {
                         string labelText = string.Format(STR_FMT_GETTING, STR_FOLLOWER_IDS);
                         tssLabel.SetText(labelText);

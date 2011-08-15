@@ -31,7 +31,6 @@
             this.lblName = new System.Windows.Forms.Label();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
             this.lblTweet = new System.Windows.Forms.Label();
-            this.uctlline = new StarlitTwit.UctlLine();
             this.rtxtGet = new StarlitTwit.RichTextBoxHash();
             this.myToolTipReply = new StarlitTwit.MyToolTip(this.components);
             this.myToolTipImage = new StarlitTwit.MyToolTipImage(this.components);
@@ -77,15 +76,6 @@
             this.lblTweet.UseMnemonic = false;
             this.lblTweet.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Label_DoubleClick);
             // 
-            // uctlline
-            // 
-            this.uctlline.BackColor = System.Drawing.Color.Black;
-            this.uctlline.Length = 359;
-            this.uctlline.Location = new System.Drawing.Point(0, 51);
-            this.uctlline.Name = "uctlline";
-            this.uctlline.Size = new System.Drawing.Size(359, 1);
-            this.uctlline.TabIndex = 4;
-            // 
             // rtxtGet
             // 
             this.rtxtGet.BackColor = System.Drawing.SystemColors.Control;
@@ -95,12 +85,14 @@
             this.rtxtGet.Location = new System.Drawing.Point(54, 17);
             this.rtxtGet.Name = "rtxtGet";
             this.rtxtGet.ReadOnly = true;
+            this.rtxtGet.RedoMenu = null;
             this.rtxtGet.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.rtxtGet.Size = new System.Drawing.Size(100, 19);
             this.rtxtGet.SurpressDefaultMenuStateChange = true;
             this.rtxtGet.TabIndex = 3;
             this.rtxtGet.TabStop = false;
             this.rtxtGet.Text = "";
+            this.rtxtGet.UndoMenu = null;
             this.rtxtGet.Visible = false;
             this.rtxtGet.TweetItemClick += new System.EventHandler<StarlitTwit.TweetItemClickEventArgs>(this.rtxtGet_TweetItemClick);
             this.rtxtGet.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtGet_LinkClicked);
@@ -129,7 +121,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.uctlline);
             this.Controls.Add(this.rtxtGet);
             this.Controls.Add(this.lblTweet);
             this.Controls.Add(this.picbIcon);
@@ -138,7 +129,6 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "UctlDispTwitRow";
             this.Size = new System.Drawing.Size(359, 53);
-            this.Load += new System.EventHandler(this.UctlDispTwitRow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -151,7 +141,6 @@
         private PictureBoxEx picbIcon;
         private System.Windows.Forms.Label lblTweet;
         private StarlitTwit.RichTextBoxHash rtxtGet;
-        private UctlLine uctlline;
         private MyToolTip myToolTipReply;
         private MyToolTipImage myToolTipImage;
     }

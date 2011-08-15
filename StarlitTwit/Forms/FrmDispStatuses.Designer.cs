@@ -42,7 +42,7 @@
             this.statusStrip.Location = new System.Drawing.Point(0, 251);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(392, 23);
-            this.statusStrip.TabIndex = 1;
+            this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip1";
             // 
             // tsslabel
@@ -63,16 +63,18 @@
             this.uctlDispTwit.Location = new System.Drawing.Point(0, 0);
             this.uctlDispTwit.Margin = new System.Windows.Forms.Padding(0);
             this.uctlDispTwit.Name = "uctlDispTwit";
+            this.uctlDispTwit.PopupAction = null;
             this.uctlDispTwit.Size = new System.Drawing.Size(392, 224);
             this.uctlDispTwit.TabIndex = 0;
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.Location = new System.Drawing.Point(305, 225);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 9;
+            this.btnClose.TabIndex = 2;
             this.btnClose.Text = "閉じる";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -84,7 +86,7 @@
             this.btnAppend.Location = new System.Drawing.Point(12, 225);
             this.btnAppend.Name = "btnAppend";
             this.btnAppend.Size = new System.Drawing.Size(75, 23);
-            this.btnAppend.TabIndex = 8;
+            this.btnAppend.TabIndex = 1;
             this.btnAppend.Text = "追加取得";
             this.btnAppend.UseVisualStyleBackColor = true;
             this.btnAppend.Click += new System.EventHandler(this.btnAppend_Click);
@@ -93,6 +95,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(392, 274);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnAppend);

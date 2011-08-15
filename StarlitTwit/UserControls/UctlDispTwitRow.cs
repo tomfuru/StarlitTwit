@@ -57,6 +57,8 @@ namespace StarlitTwit
         public new bool Focused { get; private set; }
         /// <summary>画像辞書(KeyはURL)</summary>
         public ImageListWrapper ImageListWrapper { get; set; }
+        /// <summary>下線描画のためのペン</summary>
+        private Pen _pen = Pens.Black;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -72,10 +74,10 @@ namespace StarlitTwit
         public TwitData TwitData
         {
             get { return _twitData; }
-            set 
+            set
             {
                 picbIcon.CanselSetImage();
-                _twitData = value; 
+                _twitData = value;
             }
         }
         #endregion (TwitData)
@@ -217,11 +219,13 @@ namespace StarlitTwit
         }
         #endregion (rtxtGet_TweetItemClick)
         //-------------------------------------------------------------------------------
-        #region UctlDispTwitRow_Load ロード時
+        #region #[override]OnLoad ロード時
         //-------------------------------------------------------------------------------
         //
-        private void UctlDispTwitRow_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             foreach (Control c in this.Controls) {
                 c.MouseDown += Controls_MouseDown;
                 c.MouseUp += Controls_MouseUp;
@@ -229,7 +233,23 @@ namespace StarlitTwit
                 c.MouseClick += Controls_MouseClick;
             }
         }
-        #endregion (UctlDispTwitRow_Load)
+        #endregion (OnLoad)
+        //-------------------------------------------------------------------------------
+        #region #[override]OnPaintBackGround 背景描画
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            base.OnPaintBackground(e);
+
+            Rectangle r = e.ClipRectangle;
+            if (r.Bottom < this.Height) { return; }
+
+            Graphics g = e.Graphics;
+
+            g.DrawLine(_pen, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
+        }
+        #endregion (#[override]OnPaintBackGround)
         //-------------------------------------------------------------------------------
         #region Controls_MouseDown コントロールマウスダウン時
         //-------------------------------------------------------------------------------
@@ -316,11 +336,11 @@ namespace StarlitTwit
 
                 _suspend_rtxtGet_Leave = true;
                 rtxtGet.Visible = false;
-                _suspend_rtxtGet_Leave = false; 
-                
+                _suspend_rtxtGet_Leave = false;
+
                 // ラベル→ラベルとクリックしても両方消えないように
                 lblName.Visible = lblTweet.Visible = true;
-                
+
                 rtxtGet.ForeColor = lbl.ForeColor;
                 rtxtGet.BackColor = GetColor(true);
                 rtxtGet.Location = new Point(lbl.Location.X + REVISION_TEXTBOX_LEFT, lbl.Location.Y);
@@ -597,7 +617,7 @@ namespace StarlitTwit
             // 残り項目設定
             bool isHigherIcon = (_iconVisible && picbSize > lblName.Height + lblTweet.Height);
             this.Height = ((!isHigherIcon) ? (lblName.Height + lblTweet.Height) : picbSize)
-                          + uctlline.Height + PADDING_TOP + PADDING_BOTTOM;
+                          + PADDING_TOP + PADDING_BOTTOM + 1; // 1は下線の分
             // 横に伸ばせるなら伸ばす
             if (lblTweet.Width < lblTweet.MaximumSize.Width) {
                 int height = lblTweet.Height;
@@ -622,8 +642,6 @@ namespace StarlitTwit
             lblTweet.Location = new Point(lblName.Location.X, lblName.Height + PADDING_TOP);
             picbIcon.Location = new Point(PADDING_BETWEEN_LEFT_AND_ICON,
                                           (this.Height - picbSize) / 2);
-            uctlline.Location = new Point(0, this.Height - 1);
-            uctlline.Length = this.Width;
         }
         //-------------------------------------------------------------------------------
         #endregion (SetControlLocation)
@@ -636,7 +654,7 @@ namespace StarlitTwit
         /// <param name="isBlack">黒色true,その他の色false</param>
         public void SetLineColor(bool isBlack)
         {
-            uctlline.BackColor = (isBlack) ? Color.Black : Color.Red;
+            _pen = (isBlack) ? Pens.Black : Pens.Red;
         }
         #endregion (SetLineColor)
         //-------------------------------------------------------------------------------
