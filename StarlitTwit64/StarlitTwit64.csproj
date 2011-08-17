@@ -318,13 +318,6 @@
       <Link>UserControls\UctlDispTwitRow.designer.cs</Link>
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\StarlitTwit\UserControls\UctlLine.cs">
-      <Link>UserControls\UctlLine.cs</Link>
-    </Compile>
-    <Compile Include="..\StarlitTwit\UserControls\UctlLine.designer.cs">
-      <Link>UserControls\UctlLine.designer.cs</Link>
-      <DependentUpon>UctlLine.cs</DependentUpon>
-    </Compile>
     <Compile Include="..\StarlitTwit\Utilization.cs">
       <Link>Utilization.cs</Link>
     </Compile>
@@ -413,10 +406,6 @@
     <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlDispTwitRow.resx">
       <Link>UserControls\UctlDispTwitRow.resx</Link>
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlLine.resx">
-      <Link>UserControls\UctlLine.resx</Link>
-      <DependentUpon>UctlLine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

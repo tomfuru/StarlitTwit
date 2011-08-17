@@ -21,7 +21,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, HashSet<long> friends_ids)
         {
-            Debug.Assert(twitdata != null && filters != null && friends_ids != null);
+            Debug.Assert(twitdata != null && friends_ids != null);
+            if (filters == null) { return true; }
             return filters.Where(sfi => sfi.Enabled)
                           .All(sfi => ThroughFilter(twitdata, sfi, friends_ids));
         }
