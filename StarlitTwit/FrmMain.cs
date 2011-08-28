@@ -652,7 +652,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_Quote_Click(object sender, TwitRowMenuEventArgs e)
         {
-            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.TextWithShortenURL());
 
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
@@ -666,7 +666,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_QuoteReply_Click(object sender, TwitRowMenuEventArgs e)
         {
-            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.TextWithShortenURL());
 
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
