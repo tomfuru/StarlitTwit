@@ -247,7 +247,7 @@ namespace StarlitTwit
         //===============================================================================
         #region イベント
         //-------------------------------------------------------------------------------
-        #region OnLoad フォームロード時
+        #region #[override]OnLoad フォームロード時
         //-------------------------------------------------------------------------------
         //
         protected override void OnLoad(EventArgs e)
@@ -257,6 +257,7 @@ namespace StarlitTwit
             _settingsDataPath = Utilization.GetDefaultSettingsDataFilePath();
 
             SettingsData = SettingsData.Restore(_settingsDataPath);
+            if (SettingsData == null) { SettingsData = new SettingsData(); }
 
             // ↓設定を復元↓
 
@@ -299,7 +300,7 @@ namespace StarlitTwit
         }
         #endregion (FrmMain_Load)
         //-------------------------------------------------------------------------------
-        #region OnFormClosing フォームクローズ前
+        #region #[override]OnFormClosing フォームクローズ前
         //-------------------------------------------------------------------------------
         //
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -321,7 +322,7 @@ namespace StarlitTwit
         }
         #endregion (OnFormClosing)
         //-------------------------------------------------------------------------------
-        #region OnClosed フォームクローズ後
+        #region #[override]OnClosed フォームクローズ後
         //-------------------------------------------------------------------------------
         //
         protected override void OnClosed(EventArgs e)
@@ -651,7 +652,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_Quote_Click(object sender, TwitRowMenuEventArgs e)
         {
-            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.TextWithShortenURL());
 
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);
@@ -665,7 +666,7 @@ namespace StarlitTwit
         //
         private void TwitMenu_QuoteReply_Click(object sender, TwitRowMenuEventArgs e)
         {
-            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.Text);
+            rtxtTwit.Text += GetQuoteString(e.TwitData.UserScreenName, e.TwitData.TextWithShortenURL());
 
             rtxtTwit.Focus();
             rtxtTwit.Select(0, 0);

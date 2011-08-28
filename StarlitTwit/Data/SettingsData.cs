@@ -13,7 +13,7 @@ namespace StarlitTwit
     /// <summary>
     /// 設定データ
     /// </summary>
-    public class SettingsData
+    public class SettingsData : SaveDataClassBase<SettingsData>
     {
         //-------------------------------------------------------------------------------
         #region 定数
@@ -269,53 +269,38 @@ namespace StarlitTwit
         #endregion (メンバー変数)
 
         //-------------------------------------------------------------------------------
-        #region +Save 保存
+        #region +[override]Save 保存
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// このインスタンスをファイルに保存します。
+        /// このインスタンスをファイルに保存します。失敗した時は別の場所にファイルを保存するかどうか尋ねます。
         /// </summary>
-        public void Save(string filePath)
+        public override void Save(string filePath)
         {
+            const string MESSAGE_1 = "設定の保存ができませんでした。\n設定を別の名前で保存しますか？";
+            const string MESSAGE_2 = "設定を別の名前で保存しますか？";
             XmlSerializer serializer = new XmlSerializer(typeof(SettingsData));
-            try {
-                using (StreamWriter writer = new StreamWriter(filePath)) {
-                    serializer.Serialize(writer, this);
-                }
-            }
-            catch (Exception ex) {
-                Message.ShowErrorMessage(ex.ToString(), "設定の保存ができませんでした。");
+            if (!this.SaveBase(filePath)) {
+                string dispMessage = MESSAGE_1;
+                do {
+                    if (Message.ShowQuestionMessage(dispMessage) == DialogResult.Yes) {
+                        using (SaveFileDialog sfd = new SaveFileDialog()) {
+                            sfd.FileName = string.Format("{0}_tmp.dat" ,Path.GetFileNameWithoutExtension(filePath));
+                            sfd.Filter = "StarlitTwit設定ファイル(*.dat)|*.dat";
+                            if (sfd.ShowDialog() == DialogResult.OK) {
+                                if (!this.SaveBase(sfd.FileName)) {
+                                    dispMessage = MESSAGE_1;
+                                    continue; 
+                                }
+                                break;
+                            }
+                            else { dispMessage = MESSAGE_2; }
+                        }
+                    }
+                    else { break; }
+                } while (true);
             }
         }
         #endregion (Save)
-
-        //-------------------------------------------------------------------------------
-        #region +[static]Restore 復元
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// ファイルから設定を復元します。復元できなかった時は新しい設定データが返ります。
-        /// </summary>
-        /// <returns></returns>
-        public static SettingsData Restore(string filePath)
-        {
-            if (File.Exists(filePath)) {
-                XmlSerializer serializer = new XmlSerializer(typeof(SettingsData));
-                try {
-                    using (FileStream fs = File.OpenRead(filePath)) {
-                        using (XmlReader reader = XmlReader.Create(fs)) {
-                            if (serializer.CanDeserialize(reader)) {
-                                fs.Seek(0, SeekOrigin.Begin);
-                                return (SettingsData)serializer.Deserialize(fs);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    Message.ShowErrorMessage(ex.ToString(), "設定が取得できませんでした。");
-                }
-            }
-            return new SettingsData();
-        }
-        #endregion (Restore)
     }
     //-----------------------------------------------------------------------------------
     #region +QuoteType 列挙体：引用の種類
@@ -334,7 +319,7 @@ namespace StarlitTwit
     }
     //-----------------------------------------------------------------------------------
     #endregion (QuoteType)
-    //-------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     #region +TabSearchType 列挙体：作成タブの検索タイプです。
     //-------------------------------------------------------------------------------
     /// <summary>
@@ -353,7 +338,7 @@ namespace StarlitTwit
     //-------------------------------------------------------------------------------
     #endregion (TabSearchType)
 
-    //-------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     #region +TabData 構造体：タブの情報
     //-------------------------------------------------------------------------------
     /// <summary>

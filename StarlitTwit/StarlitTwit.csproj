@@ -35,12 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>StarlitTwit.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
@@ -157,10 +154,11 @@
     <Compile Include="Function\ImageAnimation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Data\SaveDataClassBase.cs" />
     <Compile Include="SerializableClass\SerializableColor.cs" />
     <Compile Include="SerializableClass\SerializableFont.cs" />
     <Compile Include="SerializableClass\SerializableDictionary.cs" />
-    <Compile Include="SettingsData.cs" />
+    <Compile Include="Data\SettingsData.cs" />
     <Compile Include="UserControls\ImageListWrapper.cs">
       <SubType>Component</SubType>
     </Compile>

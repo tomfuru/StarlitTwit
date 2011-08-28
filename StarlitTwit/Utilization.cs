@@ -743,5 +743,18 @@ namespace StarlitTwit
             val2 = val1;
         }
         #endregion (Swap)
+        //-------------------------------------------------------------------------------
+        #region +[static]EmptyIEnumerable 空の要素を列挙します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 任意の型の空の要素をIEnumerableジェネリックとして列挙します。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<T> EmptyIEnumerable<T>() 
+        {
+            yield break;
+        }
+        #endregion (EmptyIEnumerable)
     }
 }

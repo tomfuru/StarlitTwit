@@ -63,7 +63,7 @@ namespace StarlitTwit
         public static readonly string URLapiSSLnoVer;
         public static readonly string URLsearch;
 
-        public const bool DEFAULT_INCLUDE_ENTITIES = false;
+        public const bool DEFAULT_INCLUDE_ENTITIES = true;
 
         public const string MENTION_REGEX_PATTERN = @"(@|＠)(?<entity>[a-zA-Z0-9_]+?)($|[^a-zA-Z0-9_])";
         //public const string HASHTAG_REGEX_PATTERN = @"(?<entity>#(?!\d+($|\s))\w+)($|\s)";
@@ -741,7 +741,7 @@ namespace StarlitTwit
         /// <remarks>APIによるとAuth必要らしい？stringify_idsは不要？</remarks>
         public SequentData<long> followers_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (!withAuthParam && user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
@@ -775,7 +775,7 @@ namespace StarlitTwit
         /// <remarks>stringify_idsは不要？</remarks>
         public SequentData<long> friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (!withAuthParam && user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
@@ -2757,10 +2757,16 @@ namespace StarlitTwit
                             UserScreenName = RTel.Element("user").Element("screen_name").Value,
                             UserProtected = bool.Parse(RTel.Element("user").Element("protected").Value)
                         },
-                    //Entities = ConvertToEntityData(el.Element("entities")).ToArray()
                 };
-
+                if (el.Element("entities") != null) {
+                    IEnumerable<URLData> urldata = ConvertToURLData(el.Element("entities").Element("urls"));
+                    foreach (var u in urldata) {
+                        data.Text = data.Text.Replace(u.shorten_url, u.expand_url);
+                    }
+                    data.UrlData = urldata.ToArray();
+                }
                 data.Entities = GetEntitiesByRegex(data.MainTwitData.Text).ToArray();
+                
                 if (!notRT) { data.RTTwitData.Entities = GetEntitiesByRegex(data.RTTwitData.Text).ToArray(); }
 
                 return data;
@@ -3054,36 +3060,56 @@ namespace StarlitTwit
         #region -ConvertToEntityData XElementからEntityData型に変換します
         //-------------------------------------------------------------------------------
         //
-        private IEnumerable<EntityData> ConvertToEntityData(XElement el)
+        private IEnumerable<EntityData> ConvertToEntityData(XElement el, bool convertMention = true, bool convertHashTag = true, bool convertUrl = true)
         {
             if (el == null) { yield break; }
 
             // mention
-            var mentions = from m in el.Element("user_mentions").Elements("user_mention")
-                           select new EntityData(ItemType.User,
-                                                 Range.Make(int.Parse(m.Attribute("start").Value),
-                                                            int.Parse(m.Attribute("end").Value)),
-                                                 m.Element("screen_name").Value);
+            if (convertMention) {
+                var mentions = from m in el.Element("user_mentions").Elements("user_mention")
+                               select new EntityData(ItemType.User,
+                                                     Range.Make(int.Parse(m.Attribute("start").Value),
+                                                                int.Parse(m.Attribute("end").Value)),
+                                                     m.Element("screen_name").Value);
+                foreach (var item in mentions) { yield return item; }
+            }
+
             // hashtags
-            var hashtags = from h in el.Element("hashtags").Elements("hashtag")
-                           select new EntityData(ItemType.HashTag,
-                                                 Range.Make(int.Parse(h.Attribute("start").Value),
-                                                            int.Parse(h.Attribute("end").Value)),
-                                                 h.Element("text").Value);
+            if (convertHashTag) {
+                var hashtags = from h in el.Element("hashtags").Elements("hashtag")
+                               select new EntityData(ItemType.HashTag,
+                                                     Range.Make(int.Parse(h.Attribute("start").Value),
+                                                                int.Parse(h.Attribute("end").Value)),
+                                                     h.Element("text").Value);
+                foreach (var item in hashtags) { yield return item; }
+            }
 
             // url
-            var urls = from u in el.Element("urls").Elements("url")
-                       select new EntityData(null,
-                                             Range.Make(int.Parse(u.Attribute("start").Value),
-                                                        int.Parse(u.Attribute("end").Value)),
-                                             u.Element("url").Value);
-
-
-            foreach (var item in mentions) { yield return item; }
-            foreach (var item in hashtags) { yield return item; }
-            foreach (var item in urls) { yield return item; }
+            if (convertUrl) {
+                var urls = from u in el.Element("urls").Elements("url")
+                           select new EntityData(null,
+                                                 Range.Make(int.Parse(u.Attribute("start").Value),
+                                                            int.Parse(u.Attribute("end").Value)),
+                                                 u.Element("url").Value,
+                                                 u.Element("expanded_url").Value);
+                foreach (var item in urls) { yield return item; }
+            }
         }
         #endregion (ConvertToEntityData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToURLData XElementからURLData型に変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private IEnumerable<URLData> ConvertToURLData(XElement el)
+        {
+            return from u in el.Elements("url")
+                   select new URLData() {
+                       shorten_url = u.Element("url").Value,
+                       expand_url = u.Element("expanded_url").Value
+                   };
+
+        }
+        #endregion (ConvertToURLData)
         //===============================================================================
         #region -ConvertToStreamItem XElementをUserStreamのアイテムに変換します。
         //-------------------------------------------------------------------------------
@@ -3400,6 +3426,8 @@ namespace StarlitTwit
         public TwitData RTTwitData;
         /// <summary>エンティティ</summary>
         public EntityData[] Entities;
+        /// <summary>URLデータ</summary>
+        public URLData[] UrlData;
 
         // 発言ユーザー情報
         /// <summary>ユーザーID</summary>
@@ -3461,6 +3489,22 @@ namespace StarlitTwit
             return Text.ToLower().Contains('@' + screen_name.ToLower());
         }
         #endregion (TextIncludeUserMention)
+        //-------------------------------------------------------------------------------
+        #region +TextWithShortenURL 短縮URLでの文字列を取得します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 短縮URLでの文字列を取得します。
+        /// </summary>
+        /// <returns></returns>
+        public string TextWithShortenURL()
+        {
+            string text = this.Text;
+            foreach (var u in this.UrlData) {
+                text = text.Replace(u.expand_url, u.shorten_url);
+            }
+            return text;
+        }
+        #endregion (TextWithShortenURL)
         //-------------------------------------------------------------------------------
         #region +[override]ToString 文字列へ
         //-------------------------------------------------------------------------------
@@ -3687,16 +3731,19 @@ namespace StarlitTwit
         public Range range;
         /// <summary>アイテムの情報を表す文字列</summary>
         public string str;
+        /// <summary>アイテムの情報を表す文字列2</summary>
+        public string str2;
 
         //-------------------------------------------------------------------------------
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public EntityData(ItemType? type, Range range, string str)
+        public EntityData(ItemType? type, Range range, string str, string str2 = null)
         {
             this.type = type;
             this.range = range;
             this.str = str;
+            this.str2 = str2;
         }
         #endregion (コンストラクタ)
 
@@ -3720,6 +3767,21 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (EntityData)
+    //-------------------------------------------------------------------------------
+    #region URLData 構造体
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// URLの短縮情報
+    /// </summary>
+    public struct URLData
+    {
+        /// <summary>短縮URL</summary>
+        public string shorten_url;
+        /// <summary>元URL</summary>
+        public string expand_url;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (URLData)
     //-------------------------------------------------------------------------------
     #region +ItemType 列挙体：種類
     //-------------------------------------------------------------------------------
