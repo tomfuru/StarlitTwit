@@ -31,6 +31,11 @@ namespace StarlitTwit
         private List<UserProfile> _profileList = new List<UserProfile>();
         private long _next_cursor = -1;
         private int _page = 1;
+
+        // users/lookupを使う時のユーザーIDデータ
+        private long[] _userIDs = null;
+
+        /// <summary>画像リストのラッパ</summary>
         private ImageListWrapper _imageListWrapper = null;
         /// <summary>ロード中画像</summary>
         private Bitmap _loadingimg;
@@ -229,7 +234,7 @@ namespace StarlitTwit
         //
         private void txtSearchWord_TextChanged(object sender, EventArgs e)
         {
-            btnSearch.Enabled = (txtSearchWord.Text.Length > 0) ;
+            btnSearch.Enabled = (txtSearchWord.Text.Length > 0);
         }
         #endregion (txtSearchWord_TextChanged)
         //-------------------------------------------------------------------------------
@@ -560,32 +565,78 @@ namespace StarlitTwit
                         this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                     }
                     else {
-                        SequentData<UserProfile> proftpl = null;
+                        bool appendEnable = false;
                         switch (FormType) {
-                            case EFormType.MyFollower:
-                                proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
+                            case EFormType.MyFollower: {
+                                    if (_userIDs == null || _page == _userIDs.Length) {
+                                        var data = FrmMain.Twitter.followers_ids(true, cursor: _next_cursor);
+                                        _next_cursor = data.NextCursor;
+                                        _userIDs = data.Data.ToArray();
+                                        _page = 0;
+                                    }
+                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
+                                    //proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
+                                }
                                 break;
-                            case EFormType.MyFriend:
-                                proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
+                            case EFormType.MyFriend: {
+                                    if (_userIDs == null || _page == _userIDs.Length) {
+                                        var data = FrmMain.Twitter.friends_ids(true, cursor: _next_cursor);
+                                        _next_cursor = data.NextCursor;
+                                        _userIDs = data.Data.ToArray();
+                                        _page = 0;
+                                    }
+                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
+                                    //proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
+                                }
                                 break;
-                            case EFormType.UserFollower:
-                                proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
+                            case EFormType.UserFollower: {
+                                    if (_userIDs == null || _page == _userIDs.Length) {
+                                        var data = FrmMain.Twitter.followers_ids(false, screen_name: UserScreenName, cursor: _next_cursor);
+                                        _next_cursor = data.NextCursor;
+                                        _userIDs = data.Data.ToArray();
+                                        _page = 0;
+                                    }
+                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
+                                    //proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
+                                }
                                 break;
-                            case EFormType.UserFriend:
-                                proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
+                            case EFormType.UserFriend: {
+                                    if (_userIDs == null || _page == _userIDs.Length) {
+                                        var data = FrmMain.Twitter.friends_ids(false, screen_name: UserScreenName, cursor: _next_cursor);
+                                        _next_cursor = data.NextCursor;
+                                        _userIDs = data.Data.ToArray();
+                                        _page = 0;
+                                    }
+                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
+                                    //proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
+                                }
                                 break;
-                            case EFormType.ListMember:
-                                proftpl = FrmMain.Twitter.list_members(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                            case EFormType.ListMember: {
+                                    SequentData<UserProfile> proftpl;
+                                    proftpl = FrmMain.Twitter.list_members(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                                    profiles = proftpl.Data;
+                                    _next_cursor = proftpl.NextCursor;
+                                    appendEnable = (_next_cursor != 0);
+                                }
                                 break;
-                            case EFormType.ListSubscriber:
-                                proftpl = FrmMain.Twitter.list_subscribers(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                            case EFormType.ListSubscriber: {
+                                    SequentData<UserProfile> proftpl;
+                                    proftpl = FrmMain.Twitter.list_subscribers(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                                    profiles = proftpl.Data;
+                                    _next_cursor = proftpl.NextCursor;
+                                    appendEnable = (_next_cursor != 0);
+                                }
                                 break;
                         }
-                        if (proftpl != null) {
-                            profiles = proftpl.Data;
-                            _next_cursor = proftpl.NextCursor;
-                        }
-                        this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
+                        this.Invoke(new Action(() => btnAppend.Enabled = appendEnable));
                     }
 
                     if (profiles != null) {
@@ -605,8 +656,9 @@ namespace StarlitTwit
                     }));
                 }
                 finally {
-                    this.Invoke(new Action(() => {
-                        if (btnSearch != null) { 
+                    this.Invoke(new Action(() =>
+                    {
+                        if (btnSearch != null) {
                             btnSearch.Enabled = true;
                             txtSearchWord.Enabled = true;
                         }
@@ -616,6 +668,33 @@ namespace StarlitTwit
             catch (InvalidOperationException) { }
         }
         #endregion (GetUsers)
+        //-------------------------------------------------------------------------------
+        #region -SliceUserID ユーザーIDを必要な部分だけスライスします
+        //-------------------------------------------------------------------------------
+        //
+        private long[] SliceUserID(long[] userIDs, ref int index)
+        {
+            int firstIndex = index;
+            index = Math.Min(userIDs.Length, index + 100); // 次の開始index
+
+            long[] ids = new long[index - firstIndex];
+            Array.Copy(userIDs, firstIndex, ids, 0, index - firstIndex);
+            return ids;
+        }
+        #endregion (SliceUserID)
+        //-------------------------------------------------------------------------------
+        #region -SortProfiles users/lookupで返ってきたデータをuserIDsの並びのとおりに返します。
+        //-------------------------------------------------------------------------------
+        //
+        private IEnumerable<UserProfile> SortProfiles(IEnumerable<UserProfile> profiles, long[] ids)
+        {
+            UserProfile[] profs = profiles.ToArray();
+            foreach (long id in ids) {
+                UserProfile prof = profs.FirstOrDefault(p => p.UserID == id);
+                if (prof != null) { yield return prof; }
+            }
+        }
+        #endregion (SortProfiles)
         //-------------------------------------------------------------------------------
         #region -GetImages 画像取得と追加 (別スレッド処理)
         //-------------------------------------------------------------------------------

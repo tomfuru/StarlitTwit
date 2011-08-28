@@ -741,7 +741,7 @@ namespace StarlitTwit
         /// <remarks>APIによるとAuth必要らしい？stringify_idsは不要？</remarks>
         public SequentData<long> followers_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (!withAuthParam && user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
@@ -775,7 +775,7 @@ namespace StarlitTwit
         /// <remarks>stringify_idsは不要？</remarks>
         public SequentData<long> friends_ids(bool withAuthParam, long user_id = -1, string screen_name = null, long cursor = -1)
         {
-            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (!withAuthParam && user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }

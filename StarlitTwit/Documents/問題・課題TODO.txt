@@ -39,10 +39,8 @@
 ・FavイベントがきたらそれにFavつける？(解除も)
 ・FollowイベントがきたらFollowerID,FriendIDを更新
 
-・リストタブ右クリックでリスト情報？
-・何かしらの状況でInvalidOperationExceptionが無限に出る
+
 ・画像読み込み中時々止まる(Exception出てる？)
-・エラー出力時何に対するエラーかも出す？
 ・メニュー出した時・ReplyTooltip表示時に行追加待機止めれる？
 ・画像取得一部失敗時にわかるようにする？(インデックスはURLの数が分母になるように？）
 
@@ -51,7 +49,10 @@
  ->1.ドラッグ中は移動せずドロップした時に位置かえる
  ・TabControlの二行目以降の項目をドラッグすると色々ずれたままになる
  ->2.フォームを開いて操作
-
+ 
+・リストタブ右クリックでリスト情報？
+・何かしらの状況でInvalidOperationExceptionが無限に出る
+・エラー出力時何に対するエラーかも出す？
 ・検索タブで検索内容を変更した時に表示がバグる　->　再現されない？(7/15)
 
 ・profileフォーム：RelationshipDataの取得？
@@ -179,6 +180,9 @@
 
 
 ★DONE
+11/08/28
+・保存ファイルのベースクラス作成
+・statuses/followers&friendsの古いAPIをfollower&friend/ids+users/lookupに変更
 11/08/15
 ・SearchでReplyがおかしい->Replyはわからない
 ・EditListフォームが何故かCenterParentにならないのでManuallyに設定
