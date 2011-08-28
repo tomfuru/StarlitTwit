@@ -574,8 +574,10 @@ namespace StarlitTwit
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
                                     }
-                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    int index = _page;
+                                    long[] ids = SliceUserID(_userIDs, ref index);
                                     profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
                                 }
@@ -587,8 +589,10 @@ namespace StarlitTwit
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
                                     }
-                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    int index = _page;
+                                    long[] ids = SliceUserID(_userIDs, ref index);
                                     profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
                                 }
@@ -600,8 +604,10 @@ namespace StarlitTwit
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
                                     }
-                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    int index = _page;
+                                    long[] ids = SliceUserID(_userIDs, ref index);
                                     profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
                                 }
@@ -613,8 +619,10 @@ namespace StarlitTwit
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
                                     }
-                                    long[] ids = SliceUserID(_userIDs, ref _page);
+                                    int index = _page;
+                                    long[] ids = SliceUserID(_userIDs, ref index);
                                     profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
                                 }
