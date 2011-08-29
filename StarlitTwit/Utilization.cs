@@ -22,7 +22,7 @@ namespace StarlitTwit
         public const char CHR_LOCKED = '◆';
         public const char CHR_FAVORITED = '★';
         public const string STR_DATETIMEFORMAT = "yyyy/MM/dd HH:mm:ss";
-        public const string URL_REGEX_PATTERN = @"h?(ttp|ttps)://[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]+";
+        public const string URL_REGEX_PATTERN = @"h?(ttp|ttps)://[-_!~*'()0-9a-zA-Z;@&=+$,%]+\.[a-zA-Z]+[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]*";
 
         private const string SAVEFILE_NAME = @"Settings.dat";
 
@@ -32,7 +32,7 @@ namespace StarlitTwit
         //
         public static string GetDefaultSettingsDataFilePath()
         {
-            return  Path.Combine(Application.StartupPath, SAVEFILE_NAME);
+            return Path.Combine(Application.StartupPath, SAVEFILE_NAME);
         }
         #endregion (GetDefaultSettingsDataFilePath)
 
@@ -56,6 +56,24 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (UrlEncode)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]CountTextLength 投稿時の文字列長を計算します。
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 投稿時の文字列長を計算します。長いURLはhttp://t.co/*******に変換されたとして計算します。
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static int CountTextLength(string str)
+        {
+            int len = str.Length;
+            foreach (Match m in Regex.Matches(str, URL_REGEX_PATTERN)) {
+                len -= Math.Max(m.Length - 19, 0);
+            }
+            return len;
+        }
+        #endregion (CountTextLength)
 
         //-------------------------------------------------------------------------------
         #region +[static]Follow フォローを行います using TwitterAPI
@@ -573,7 +591,7 @@ namespace StarlitTwit
         {
             Func<FrmDispLists, bool> judgeFunc = f =>
                 f.FormType == type
-                && !((type == FrmDispLists.EFormType.UserList 
+                && !((type == FrmDispLists.EFormType.UserList
                    || type == FrmDispLists.EFormType.UserBelongedList
                    || type == FrmDispLists.EFormType.UserSubscribingList)
                   && f.UserScreenName != screen_name);
@@ -616,7 +634,7 @@ namespace StarlitTwit
                 && !((type == FrmDispUsers.EFormType.UserFollower || type == FrmDispUsers.EFormType.UserFriend) && f.UserScreenName != screen_name)
                 && !(type == FrmDispUsers.EFormType.Retweeter && f.RetweetStatusID != retweet_id)
                 && !((type == FrmDispUsers.EFormType.ListMember || type == FrmDispUsers.EFormType.ListSubscriber) && f.UserScreenName != screen_name && f.ListID != listID);
-            
+
             return ExistForm<FrmDispUsers>(judgeFunc);
         }
         #endregion (ExistFrmFollower)
@@ -751,7 +769,7 @@ namespace StarlitTwit
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IEnumerable<T> EmptyIEnumerable<T>() 
+        public static IEnumerable<T> EmptyIEnumerable<T>()
         {
             yield break;
         }

@@ -346,12 +346,19 @@ namespace StarlitTwit
         //
         private void btnTwit_Click(object sender, EventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-            if (_stateStatusState == StatusState.Normal) { sb.Append(SettingsData.Header); }
-            sb.Append(rtxtTwit.Text);
-            if (_stateStatusState == StatusState.Normal) { sb.Append(SettingsData.Footer); }
-            string text = sb.ToString();
-            if (text.Length == 0 || text.Length > MAX_LENGTH) { return; }
+            StringBuilder sbText = new StringBuilder();
+            if (_stateStatusState == StatusState.Normal) {
+                sbText.Append(SettingsData.Header);
+                sbText.Append(rtxtTwit.Text);
+                sbText.Append(SettingsData.Footer);
+            }
+            else {
+                sbText.Append(rtxtTwit.Text);
+            }
+            string text = sbText.ToString();
+            int len = Utilization.CountTextLength(sbText.ToString());
+
+            if (len == 0 || len > MAX_LENGTH) { return; }
             Utilization.InvokeTransaction(() => Update(text));
         }
         #endregion (btnTwit_Click)
@@ -367,11 +374,16 @@ namespace StarlitTwit
             try {
                 RichTextBox txtbox = (RichTextBox)sender;
 
-                int combinedlength = rtxtTwit.Text.Length;
+                StringBuilder sbText = new StringBuilder();
                 if (_stateStatusState == StatusState.Normal) {
-                    combinedlength += SettingsData.Header.Length;
-                    combinedlength += SettingsData.Footer.Length;
+                    sbText.Append(SettingsData.Header);
+                    sbText.Append(rtxtTwit.Text);
+                    sbText.Append(SettingsData.Footer);
                 }
+                else {
+                    sbText.Append(rtxtTwit.Text);
+                }
+                int combinedlength = Utilization.CountTextLength(sbText.ToString());
 
                 // 残り文字数
                 int restLen = MAX_LENGTH - combinedlength;

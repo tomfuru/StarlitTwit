@@ -145,8 +145,14 @@ namespace StarlitTwit
 
                 string requestUrl = sburl.ToString();
                 XElement el = GetXmlFromWeb(requestUrl);
+                int statuscode = int.Parse(el.Element("status_code").Value);
 
-                return el.Element("data").Element("url").Value;
+                if (statuscode == 200) {
+                    return el.Element("data").Element("url").Value;
+                }
+                else {
+                    return url;
+                }
             }
             #endregion (-Shorten)
             //-------------------------------------------------------------------------------
