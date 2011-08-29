@@ -67,6 +67,12 @@
     <Compile Include="..\StarlitTwit\BaseTools.cs">
       <Link>BaseTools.cs</Link>
     </Compile>
+    <Compile Include="..\StarlitTwit\Data\SaveDataClassBase.cs">
+      <Link>Data\SaveDataClassBase.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Data\SettingsData.cs">
+      <Link>Data\SettingsData.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
@@ -205,9 +211,6 @@
     </Compile>
     <Compile Include="..\StarlitTwit\SerializableClass\SerializableFont.cs">
       <Link>SerializableClass\SerializableFont.cs</Link>
-    </Compile>
-    <Compile Include="..\StarlitTwit\SettingsData.cs">
-      <Link>SettingsData.cs</Link>
     </Compile>
     <Compile Include="..\StarlitTwit\Twitter.cs">
       <Link>Twitter.cs</Link>

@@ -181,6 +181,9 @@
 
 
 ★DONE
+11/08/29
+・UserStreamでEntitiesのurlデータの構成が違っているのに対応
+・Retweetにt.coのexpandが適用されていなかったことを修正
 11/08/28
 ・t.coはexpandして表示するように
 ・statuses/followers&friendsの古いAPIをfollower&friend/ids+users/lookupに変更

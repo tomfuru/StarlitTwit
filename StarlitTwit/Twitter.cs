@@ -2758,15 +2758,16 @@ namespace StarlitTwit
                             UserProtected = bool.Parse(RTel.Element("user").Element("protected").Value)
                         },
                 };
-                if (el.Element("entities") != null) {
-                    IEnumerable<URLData> urldata = ConvertToURLData(el.Element("entities").Element("urls"));
+                XElement mainel = (notRT) ? el : RTel;
+                if (mainel.Element("entities") != null && mainel.Element("entities").Element("urls") != null) {
+                    IEnumerable<URLData> urldata = ConvertToURLData(mainel.Element("entities").Element("urls"), false);
                     foreach (var u in urldata) {
-                        data.Text = data.Text.Replace(u.shorten_url, u.expand_url);
+                        data.MainTwitData.Text = data.MainTwitData.Text.Replace(u.shorten_url, u.expand_url);
                     }
                     data.UrlData = urldata.ToArray();
                 }
                 data.Entities = GetEntitiesByRegex(data.MainTwitData.Text).ToArray();
-                
+
                 if (!notRT) { data.RTTwitData.Entities = GetEntitiesByRegex(data.RTTwitData.Text).ToArray(); }
 
                 return data;
@@ -2792,6 +2793,72 @@ namespace StarlitTwit
                    select ConvertToTwitData(stat);
         }
         #endregion (GetTwitData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToTwitDataUserStream UserStreamから来るデータを変換したXElementをTwitDataに変換します。
+        //-------------------------------------------------------------------------------
+        //
+        private TwitData ConvertToTwitDataUserStream(XElement el)
+        {
+            try {
+                XElement RTel = el.Element("retweeted_status");
+                bool notRT = (RTel == null);
+
+                var data = new TwitData() {
+                    TwitType = (notRT) ? TwitType.Normal : TwitType.Retweet,
+                    DMScreenName = "",
+                    StatusID = long.Parse(el.Element("id").Value),
+                    Time = StringToDateTime(el.Element("created_at").Value),
+                    Favorited = bool.Parse(el.Element("favorited").Value),
+                    Mention_StatusID = TryParseLong(el.Element("in_reply_to_status_id").Value),
+                    Mention_UserID = TryParseLong(el.Element("in_reply_to_user_id").Value),
+                    Mention_ScreenName = el.Element("in_reply_to_screen_name").Value,
+                    Text = ConvertSpecialChar(el.Element("text").Value),
+                    Source = CutSourceString(el.Element("source").Value),
+                    UserID = long.Parse(el.Element("user").Element("id").Value),
+                    UserName = el.Element("user").Element("name").Value,
+                    IconURL = el.Element("user").Element("profile_image_url").Value,
+                    UserScreenName = el.Element("user").Element("screen_name").Value,
+                    UserProtected = bool.Parse(el.Element("user").Element("protected").Value),
+                    RTTwitData = (notRT) ? null
+                        : new TwitData() {
+                            TwitType = StarlitTwit.TwitType.Normal,
+                            DMScreenName = "",
+                            StatusID = long.Parse(RTel.Element("id").Value),
+                            Time = StringToDateTime(RTel.Element("created_at").Value),
+                            Favorited = bool.Parse(RTel.Element("favorited").Value),
+                            Mention_StatusID = TryParseLong(RTel.Element("in_reply_to_status_id").Value),
+                            Mention_UserID = TryParseLong(RTel.Element("in_reply_to_user_id").Value),
+                            Mention_ScreenName = RTel.Element("in_reply_to_screen_name").Value,
+                            Text = ConvertSpecialChar(RTel.Element("text").Value),
+                            Source = CutSourceString(RTel.Element("source").Value),
+                            UserID = long.Parse(RTel.Element("user").Element("id").Value),
+                            UserName = RTel.Element("user").Element("name").Value,
+                            IconURL = RTel.Element("user").Element("profile_image_url").Value,
+                            UserScreenName = RTel.Element("user").Element("screen_name").Value,
+                            UserProtected = bool.Parse(RTel.Element("user").Element("protected").Value)
+                        },
+                };
+                XElement mainel = (notRT) ? el : RTel;
+                if (mainel.Element("entities") != null && mainel.Element("entities").Element("urls") != null) {
+                    IEnumerable<URLData> urldata = ConvertToURLData(mainel.Element("entities"), true);
+                    foreach (var u in urldata) {
+                        data.MainTwitData.Text = data.MainTwitData.Text.Replace(u.shorten_url, u.expand_url);
+                    }
+                    data.UrlData = urldata.ToArray();
+                }
+                data.Entities = GetEntitiesByRegex(data.MainTwitData.Text).ToArray();
+
+                if (!notRT) { data.RTTwitData.Entities = GetEntitiesByRegex(data.RTTwitData.Text).ToArray(); }
+
+                return data;
+            }
+            catch (NullReferenceException ex) {
+                Log.DebugLog(ex);
+                Log.DebugLog(el.ToString());
+                throw new TwitterAPIException(1001, "予期しないXmlです。");
+            }
+        }
+        #endregion (ConvertToTwitDataUserStream)
         //-------------------------------------------------------------------------------
         #region -ConvertToTwitDataDM XElementからTwitDataに変換します。(DM用)
         //-------------------------------------------------------------------------------
@@ -3100,14 +3167,13 @@ namespace StarlitTwit
         #region -ConvertToURLData XElementからURLData型に変換します。
         //-------------------------------------------------------------------------------
         //
-        private IEnumerable<URLData> ConvertToURLData(XElement el)
+        private IEnumerable<URLData> ConvertToURLData(XElement el, bool isUserStreamData)
         {
-            return from u in el.Elements("url")
+            return from u in el.Elements((isUserStreamData) ? "urls" : "url")
                    select new URLData() {
                        shorten_url = u.Element("url").Value,
                        expand_url = u.Element("expanded_url").Value
                    };
-
         }
         #endregion (ConvertToURLData)
         //===============================================================================
@@ -3181,7 +3247,7 @@ namespace StarlitTwit
                 }
                 else {
                     // status
-                    var twitdata = ConvertToTwitData(el);
+                    var twitdata = ConvertToTwitDataUserStream(el);
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.status, twitdata);
                 }
             }
