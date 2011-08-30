@@ -366,21 +366,4 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (TabData)
-    //-----------------------------------------------------------------------------------
-    #region +UserAuthInfo 構造体：ユーザー認証情報
-    //-------------------------------------------------------------------------------
-    /// <summary>
-    /// ユーザー名やOAuth認証のためのユーザートークンを格納する構造体です。
-    /// </summary>
-    [Serializable]
-    public struct UserAuthInfo
-    {
-        public string ScreenName;
-        public long ID;
-
-        public string AccessToken;
-        public string AccessTokenSecret;
-    }
-    //-------------------------------------------------------------------------------
-    #endregion (UserData)
 }

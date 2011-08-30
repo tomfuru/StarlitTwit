@@ -758,7 +758,7 @@ namespace StarlitTwit
         {
             T tmp = val1;
             val1 = val2;
-            val2 = val1;
+            val2 = tmp;
         }
         #endregion (Swap)
         //-------------------------------------------------------------------------------

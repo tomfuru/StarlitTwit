@@ -501,7 +501,7 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="id">[required]リツイート対象の発言ID</param>
         /// <remarks>403:update limit</remarks>
-        public void statuses_retweet(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        public TwitData statuses_retweet(long id, bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -510,7 +510,7 @@ namespace StarlitTwit
             }
 
             string url = GetUrlWithOAuthParameters(URLapi + @"statuses/retweet/" + id.ToString() + ".xml", POST, paramdic);
-            TwitData d = ConvertToTwitData(PostToAPI(url));
+            return ConvertToTwitData(PostToAPI(url));
         }
         #endregion (statuses_retweet)
         //-------------------------------------------------------------------------------
@@ -3436,6 +3436,23 @@ namespace StarlitTwit
         #endregion (Private Util Methods)
     }
 
+    //-----------------------------------------------------------------------------------
+    #region +UserAuthInfo 構造体：ユーザー認証情報
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// ユーザー名やOAuth認証のためのユーザートークンを格納する構造体です。
+    /// </summary>
+    [Serializable]
+    public struct UserAuthInfo
+    {
+        public string ScreenName;
+        public long ID;
+
+        public string AccessToken;
+        public string AccessTokenSecret;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (UserData)
     //-------------------------------------------------------------------------------
     #region (class)SequentData
     //-------------------------------------------------------------------------------
