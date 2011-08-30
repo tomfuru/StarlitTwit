@@ -21,7 +21,7 @@ using Newtonsoft.Json;
  * Tweets
  * Search
  * Direct Message
- % Friends&Tweets
+ * Friends&Tweets
  % Users
  - Suggested Users
  * Favorites
@@ -33,7 +33,7 @@ using Newtonsoft.Json;
  - Place&Geo
  - Trends
  % Block
- - Spam Reporting
+ * Spam Reporting
  * OAuth
  - Help
  - Legal
@@ -832,8 +832,54 @@ namespace StarlitTwit
             return bool.Parse(el.Value);
         }
         #endregion (friendships_exists)
-        //*friendships/incoming
-        //*frinedships/outgoing
+        //-------------------------------------------------------------------------------
+        #region +friendships_incoming
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friendships/incoming メソッド</para>
+        /// <para>Returns an array of numeric IDs for every user who has a pending request to follow the authenticating user.</para>
+        /// </summary>
+        public SequentData<long> friendships_incoming(long cursor = -1)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}friendships/incoming.xml", URLapi), GET, paramdic);
+            XElement el = GetByAPI(url);
+
+            var ids = from id in el.Element("ids").Elements("id")
+                      select long.Parse(id.Value);
+
+            return new SequentData<long>(ids,
+               long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (friendships_incoming)
+        //-------------------------------------------------------------------------------
+        #region +friendships_outgoing
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>frinedships/outgoing メソッド</para>
+        /// <para>Returns an array of numeric IDs for every protected user for whom the authenticating user has a pending follow request.</para>
+        /// </summary>
+        public SequentData<long> friendships_outgoing(long cursor = -1)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("cursor", cursor.ToString());
+            }
+
+            string url = GetUrlWithOAuthParameters(string.Format("{0}friendships/outgoing.xml", URLapi), GET, paramdic);
+            XElement el = GetByAPI(url);
+
+            var ids = from id in el.Element("ids").Elements("id")
+                      select long.Parse(id.Value);
+
+            return new SequentData<long>(ids,
+               long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+        #endregion (friendships_outgoing)
         //-------------------------------------------------------------------------------
         #region +friendships_show 2ユーザー間の情報確認
         //-------------------------------------------------------------------------------
@@ -845,7 +891,6 @@ namespace StarlitTwit
         /// <param name="source_screen_name">[option:1] subject user</param>
         /// <param name="target_id">[option:2] target user</param>
         /// <param name="target_screen_name">[option:2] target user</param>
-        /// <returns></returns>
         public RelationshipData friendships_show(long source_id = -1, string source_screen_name = null,
                                        long target_id = -1, string target_screen_name = null)
         {
@@ -922,9 +967,79 @@ namespace StarlitTwit
             return ConvertToUserProfile(el);
         }
         #endregion (friendships_destroy)
-        //*friendships/lookup
-        // friendships/update
-        // friendships/no_retweet_ids
+        //-------------------------------------------------------------------------------
+        #region +friendships_lookup
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friendships_lookup メソッド</para>
+        /// <para>Returns the relationship of the authenticating user to the comma separated list of up to 100 screen_names or user_ids provided.</para>
+        /// </summary>
+        public IEnumerable<FriendshipData> friendships_lookup(long[] user_ids = null, string[] screen_names = null)
+        {
+            if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
+                throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
+            }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if ((user_ids != null && user_ids.Length > 0)) { paramdic.Add("user_id", ConcatWithComma(user_ids, false)); }
+                if ((screen_names != null && screen_names.Length > 0)) { paramdic.Add("screen_name", ConcatWithComma(screen_names, false)); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/lookup.xml", GET, paramdic);
+            XElement el = GetByAPI(url);
+
+            return ConvertToFriendShipDataArray(el);
+        }
+        #endregion (friendships_lookup)
+        //-------------------------------------------------------------------------------
+        #region +friendships_update
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friendships/update メソッド</para>
+        /// <para>Allows one to enable or disable retweets and device notifications from the specified user.</para>
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <param name="device">[option]Enable/disable device notifications from the target user.</param>
+        /// <param name="retweets">[option]Enable/disable device notifications from the target user.</param>
+        /// <returns></returns>
+        public RelationshipData friendships_update(long user_id = -1, string screen_name = "", bool? device = null, bool? retweets = null)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            if (!device.HasValue && !retweets.HasValue) { throw new ArgumentException("deviceかretweetsの少なくとも1つは必要です。"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (device.HasValue) { paramdic.Add("device", device.Value.ToString().ToLower()); }
+                if (retweets.HasValue) { paramdic.Add("retweets", retweets.Value.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"friendships/update.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToRelationshipData(el);
+        }
+        #endregion (friendships_update)
+        //-------------------------------------------------------------------------------
+        #region +friendships_no_retweet_ids
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>friendships/no_retweet_ids メソッド</para>
+        /// <para>Returns an array of user_ids that the currently authenticated user does not want to see retweets from.</para>
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<long> friendships_no_retweet_ids()
+        {
+            string url = GetUrlWithOAuthParameters(string.Format("{0}friendships/no_retweet_ids.xml", URLapi), GET);
+            XElement el = GetByAPI(url);
+
+            var enumid = el.Elements("id");
+            return from id in enumid
+                   select long.Parse(id.Value);
+        }
+        #endregion (friendships_no_retweet_ids)
         //-------------------------------------------------------------------------------
         #endregion (Friends & Followers)
 
@@ -1941,7 +2056,36 @@ namespace StarlitTwit
         }
         #endregion (blocks_destroy)
         //-------------------------------------------------------------------------------
-        #endregion (Block)
+        #endregion (Block)]
+
+        //-------------------------------------------------------------------------------
+        #region Spam Reporting Resources
+        //-------------------------------------------------------------------------------
+        #region +report_spam
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>report_spam メソッド</para>
+        /// <para>The user specified in the id is blocked by the authenticated user and reported as a spammer.</para>
+        /// </summary>
+        /// <param name="user_id">[select]</param>
+        /// <param name="screen_name">[select]</param>
+        /// <returns></returns>
+        public UserProfile report_spam(long user_id = -1, string screen_name = null)
+        {
+            if (user_id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id != -1) { paramdic.Add("user_id", user_id.ToString()); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapi + @"report_spam.xml", POST, paramdic);
+            XElement el = PostToAPI(url);
+            return ConvertToUserProfile(el);
+        }
+        #endregion (report_spam)
+        //-------------------------------------------------------------------------------
+        #endregion (Spam Reporting Resources)
 
         //-------------------------------------------------------------------------------
         #region OAuth Resources
@@ -2136,7 +2280,7 @@ namespace StarlitTwit
                 using (StreamReader sr = new StreamReader(stream)) {
                     while (!sr.EndOfStream) {
                         if (token.IsCancellationRequested) {
-                            string str = sr.ReadToEnd();
+                            sr.ReadToEnd();
                             res.Close();
                             break;
                         }
@@ -2780,10 +2924,10 @@ namespace StarlitTwit
         }
         #endregion (ConvertToTwitData)
         //-------------------------------------------------------------------------------
-        #region -ConvertToTwitDataArray XElementからTwitDataの配列型に変換します。
+        #region -ConvertToTwitDataArray XElementからTwitDataの列挙型に変換します。
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// XElementからTwitDataの配列型に変換します。
+        /// XElementからTwitDataの列挙型に変換します。
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
@@ -2901,10 +3045,10 @@ namespace StarlitTwit
         }
         #endregion (ConvertToTwitDataDM)
         //-------------------------------------------------------------------------------
-        #region -ConvertToTwitDataArrayDM XElementからTwitDataの配列型に変換します。(DM用)
+        #region -ConvertToTwitDataArrayDM XElementからTwitDataの列挙型に変換します。(DM用)
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// <para>XElementからTwitDataの配列型に変換します。</para>
+        /// <para>XElementからTwitDataの列挙型に変換します。</para>
         /// <para>DirectMessageデータ用です。</para>
         /// </summary>
         /// <returns></returns>
@@ -2943,10 +3087,10 @@ namespace StarlitTwit
         }
         #endregion (ConvertToListData)
         //-------------------------------------------------------------------------------
-        #region -ConvertToListDataArray XElementからListDataの配列型に変換します。
+        #region -ConvertToListDataArray XElementからListDataの列挙型に変換します。
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// XElementからListDataの配列型に変換します。
+        /// XElementからListDataの列挙型に変換します。
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
@@ -3050,10 +3194,10 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #endregion (ConvertToUserProfile)
         //-------------------------------------------------------------------------------
-        #region -ConvertToUserProfileArray XElementからUserProfileの配列型に変換します。
+        #region -ConvertToUserProfileArray XElementからUserProfileの列挙型に変換します。
         //-------------------------------------------------------------------------------
         /// <summary>
-        /// XElementからUserProfileの配列型に変換します。
+        /// XElementからUserProfileの列挙型に変換します。
         /// </summary>
         /// <param name="xElement"></param>
         /// <returns></returns>
@@ -3123,6 +3267,55 @@ namespace StarlitTwit
             }
         }
         #endregion (ConvertToRelationshipData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToFriendShipData XElementからFriendShipData型に変換します
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// XElementからFriendShipData型に変換します
+        /// </summary>
+        /// <returns></returns>
+        private FriendshipData ConvertToFriendShipData(XElement el)
+        {
+            try {
+                var fsd = new FriendshipData() {
+                    UserID = long.Parse(el.Element("id").Value),
+                    UserName = el.Element("name").Value,
+                    UserScreenName = el.Element("screen_name").Value,
+                    Followed = false,
+                    Following = false
+                };
+                foreach (var c in el.Elements("connecton")) {
+                    switch (c.Value) {
+                        case "following":
+                            fsd.Following = true;
+                            break;
+                        case "followed_by":
+                            fsd.Followed = true;
+                            break;
+                    }
+                }
+                return fsd;
+            }
+            catch (NullReferenceException ex) {
+                Log.DebugLog(ex);
+                Log.DebugLog(el.ToString());
+                throw new TwitterAPIException(1001, "予期しないXmlです。");
+            }
+        }
+        #endregion (ConvertToFriendShipData)
+        //-------------------------------------------------------------------------------
+        #region -ConvertToFriendShipDataArray XElementからFriendShipDataの列挙型に変換します
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// XElementからFriendShipDataの列挙型に変換します
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<FriendshipData> ConvertToFriendShipDataArray(XElement el)
+        {
+            return from stat in el.Elements("relationship")
+                   select ConvertToFriendShipData(stat);
+        }
+        #endregion (ConvertToFriendShipDataArray)
         //-------------------------------------------------------------------------------
         #region -ConvertToEntityData XElementからEntityData型に変換します
         //-------------------------------------------------------------------------------
@@ -3582,8 +3775,10 @@ namespace StarlitTwit
         public string TextWithShortenURL()
         {
             string text = this.Text;
-            foreach (var u in this.UrlData) {
-                text = text.Replace(u.expand_url, u.shorten_url);
+            if (this.UrlData != null) {
+                foreach (var u in this.UrlData) {
+                    text = text.Replace(u.expand_url, u.shorten_url);
+                }
             }
             return text;
         }
@@ -3780,6 +3975,27 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (RelationShipData)
+    //-------------------------------------------------------------------------------
+    #region FriendshipData 構造体：指定ユーザーのフォロー情報
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// 自分とあるユーザーのフォロー情報を表します。
+    /// </summary>
+    public struct FriendshipData
+    {
+        /// <summary>ユーザーID</summary>
+        public long UserID;
+        /// <summary>ユーザー名</summary>
+        public string UserName;
+        /// <summary>ユーザー表示名</summary>
+        public string UserScreenName;
+        /// <summary>フォローしているか</summary>
+        public bool Following;
+        /// <summary>フォローされているか</summary>
+        public bool Followed;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (FriendShipData)
     //-----------------------------------------------------------------------------------
     #region TwitType 列挙体：発言タイプ
     //-------------------------------------------------------------------------------

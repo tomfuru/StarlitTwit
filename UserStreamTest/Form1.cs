@@ -27,7 +27,7 @@ namespace UserStreamTest
         {
             InitializeComponent();
 
-            data = SettingsData.Restore();
+            data = SettingsData.Restore("Settings.dat");
             twitter = new Twitter();
             if (data.UserInfoList.Count > 0) {
                 twitter.AccessToken = data.UserInfoList[0].AccessToken;
