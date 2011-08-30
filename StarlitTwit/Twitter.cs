@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using Newtonsoft.Json;
 
 /* Twitter API Resources(Most Recent)
  * Timelines
@@ -3362,7 +3361,7 @@ namespace StarlitTwit
         //
         private IEnumerable<URLData> ConvertToURLData(XElement el, bool isUserStreamData)
         {
-            return from u in el.Elements((isUserStreamData) ? "urls" : "url")
+            return from u in (isUserStreamData) ? el.Element("urls").Elements("item") : el.Elements("url")
                    select new URLData() {
                        shorten_url = u.Element("url").Value,
                        expand_url = u.Element("expanded_url").Value
@@ -3415,7 +3414,7 @@ namespace StarlitTwit
                 }
                 else if (el.Element("friends") != null) {
                     // friend list
-                    IEnumerable<long> friend_ids = from id in el.Elements("friends")
+                    IEnumerable<long> friend_ids = from id in el.Element("friends").Elements("item")
                                                    select long.Parse(id.Value);
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.friendlist, friend_ids);
                 }
@@ -3456,8 +3455,9 @@ namespace StarlitTwit
         //
         private XElement JsonToXElement(string jsonStr)
         {
-            XmlNode node = JsonConvert.DeserializeXmlNode(jsonStr, "item");
-            return XmlNodeToXElement(node);
+            using (XmlDictionaryReader xmldreader = JsonReaderWriterFactory.CreateJsonReader(Encoding.UTF8.GetBytes(jsonStr), XmlDictionaryReaderQuotas.Max)) {
+                return XElement.Load(xmldreader);
+            }
         }
         #endregion (JsonToXElement)
         //-------------------------------------------------------------------------------

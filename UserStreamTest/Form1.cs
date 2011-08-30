@@ -9,8 +9,6 @@ using System.Windows.Forms;
 using StarlitTwit;
 using System.Threading;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -65,25 +63,25 @@ namespace UserStreamTest
 
         private void Action(string str)
         {
-            XmlNode node = JsonConvert.DeserializeXmlNode(str, "status");
+            //XmlNode node = JsonConvert.DeserializeXmlNode(str, "status");
 
-            XElement el = XmlNodeToXElement(node);
+            //XElement el = XmlNodeToXElement(node);
 
-            string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
-            using (StreamWriter writer = new StreamWriter(filename)) {
-                writer.Write(el.ToString());
-            }
+            //string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
+            //using (StreamWriter writer = new StreamWriter(filename)) {
+            //    writer.Write(el.ToString());
+            //}
 
-            this.Invoke(new Action(() =>
-            {
-                bool scr = richTextBox1.SelectionStart == richTextBox1.TextLength;
-                richTextBox1.AppendText(str);
-                richTextBox1.AppendText("\n");
-                if (scr) {
-                    richTextBox1.Select(richTextBox1.TextLength, 0);
-                    richTextBox1.ScrollToCaret();
-                }
-            }));
+            //this.Invoke(new Action(() =>
+            //{
+            //    bool scr = richTextBox1.SelectionStart == richTextBox1.TextLength;
+            //    richTextBox1.AppendText(str);
+            //    richTextBox1.AppendText("\n");
+            //    if (scr) {
+            //        richTextBox1.Select(richTextBox1.TextLength, 0);
+            //        richTextBox1.ScrollToCaret();
+            //    }
+            //}));
         }
 
         private void ActionU(UserStreamItemType type, object data)

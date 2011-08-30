@@ -183,6 +183,7 @@
 
 ★DONE
 11/08/30
+・NewtonsoftのJsonDLL無しでjson->xmlのConvertをするように
 ・URLがない時に引用エラーが出るのを修正
 ・細かいミス修正
 11/08/29
