@@ -19,12 +19,12 @@ namespace StarlitTwit
         /// <param name="filters">フィルター配列</param>
         /// <param name="friends_ids">フォローしている人のID</param>
         /// <returns></returns>
-        public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, HashSet<long> friends_ids)
+        public static bool ThroughFilters(TwitData twitdata, IEnumerable<StatusFilterInfo> filters, Func<long, bool> checkIncludeFriendFunc)
         {
-            Debug.Assert(twitdata != null && friends_ids != null);
+            Debug.Assert(twitdata != null && checkIncludeFriendFunc != null);
             if (filters == null) { return true; }
             return filters.Where(sfi => sfi.Enabled)
-                          .All(sfi => ThroughFilter(twitdata, sfi, friends_ids));
+                          .All(sfi => ThroughFilter(twitdata, sfi, checkIncludeFriendFunc));
         }
         #endregion (ThroughFilters)
 
@@ -39,19 +39,19 @@ namespace StarlitTwit
         /// <param name="friends_ids">フォローしている人のID</param>
         /// <returns></returns>
         /// <remarks>通ると判断したらすぐにtrueを返していくようにする</remarks>
-        public static bool ThroughFilter(TwitData twitdata, StatusFilterInfo filter, HashSet<long> friends_ids)
+        public static bool ThroughFilter(TwitData twitdata, StatusFilterInfo filter, Func<long,bool> checkIncludeFriendFunc)
         {
-            Debug.Assert(twitdata != null && filter != null && friends_ids != null);
+            Debug.Assert(twitdata != null && filter != null && checkIncludeFriendFunc != null);
 
             // ユーザー抽出
             switch (filter.User_FilterType) {
                 case StatusFilterUserType.All:
                     break;
                 case StatusFilterUserType.Following:
-                    if (!friends_ids.Contains(twitdata.UserID)) { return true; }
+                    if (!checkIncludeFriendFunc(twitdata.UserID)) { return true; }
                     break;
                 case StatusFilterUserType.Unfollowing:
-                    if (friends_ids.Contains(twitdata.UserID)) { return true; }
+                    if (checkIncludeFriendFunc(twitdata.UserID)) { return true; }
                     break;
                 case StatusFilterUserType.UserList: // 通る：パターンが存在，そのいずれかに当てはまっていない
                     if (filter.User_Patterns != null

@@ -1576,6 +1576,7 @@ namespace StarlitTwit
         private void ConfigTabAndUserDispControl(TabPageEx tabpage, UctlDispTwit uctlDisp)
         {
             uctlDisp.ImageListWrapper = imageListWrapper;
+            uctlDisp.CheckIncludeFollowerFunc = CheckIncludeFollowerIDs;
             _dispTwitDic.Add(tabpage, uctlDisp);
             RegisterUctlDispTwitEvent(uctlDisp);
             SetAutoRenewData(uctlDisp);
@@ -1835,7 +1836,7 @@ namespace StarlitTwit
                             TwitData twitdata = (TwitData)data;
                             while (_friendIDSet == null) { Thread.Sleep(10); } // 待機
                             // Home
-                            if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet)) {
+                            if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs)) {
                                 this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
                                 // RTの時のPopup
                                 if (twitdata.IsRT() && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
@@ -2141,7 +2142,7 @@ namespace StarlitTwit
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Home : SettingsData.RenewGetNum_Home;
                     d = Twitter.statuses_home_timeline(count: iCount);
                     if (_friendIDSet != null) {
-                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs));
                     }
                 }
                 else if (uctldisp == uctlDispReply) {
@@ -2217,7 +2218,7 @@ namespace StarlitTwit
                 if (uctldisp == uctlDispHome) {
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, since_id: since_id);
                     if (_friendIDSet != null) {
-                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs));
                     }
                 }
                 else if (uctldisp == uctlDispReply) {
@@ -2280,7 +2281,7 @@ namespace StarlitTwit
                 if (uctldisp == uctlDispHome) {
                     d = Twitter.statuses_home_timeline(count: SettingsData.RenewGetNum_Home, max_id: max_id);
                     if (_friendIDSet != null) {
-                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                        d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs));
                     }
                 }
                 else if (uctldisp == uctlDispReply) {
@@ -2364,7 +2365,7 @@ namespace StarlitTwit
                         if (i == MAX_HOME / 200 + 1) { break; } // 800まで
                         d = Twitter.statuses_home_timeline(count: 200, page: i);
                         if (_friendIDSet != null) {
-                            d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, _friendIDSet));
+                            d = d.Where(twitdata => StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs));
                         }
                     }
                     else if (uctldisp == uctlDispReply) {
@@ -2500,6 +2501,24 @@ namespace StarlitTwit
             return true;
         }
         #endregion (GetFriendIDs)
+        //-------------------------------------------------------------------------------
+        #region -CheckIncludeFollowerIDs 指定IDがフォロワーかどうかチェックします。
+        //-------------------------------------------------------------------------------
+        //
+        private bool CheckIncludeFollowerIDs(long id)
+        {
+            return _followerIDSet.Contains(id);
+        }
+        #endregion (CheckIncludeFollowerIDs)
+        //-------------------------------------------------------------------------------
+        #region -CheckIncludeFriendIDs 指定IDがフレンドかどうかチェックします。
+        //-------------------------------------------------------------------------------
+        //
+        private bool CheckIncludeFriendIDs(long id)
+        {
+            return _friendIDSet.Contains(id);
+        }
+        #endregion (CheckIncludeFriendIDs)
 
         //-------------------------------------------------------------------------------
         #region +IsOneWayFollowing 自分はフォローしているが相手からフォローされていないかどうか判断

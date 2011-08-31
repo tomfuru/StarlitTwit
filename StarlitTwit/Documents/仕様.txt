@@ -7,6 +7,8 @@
 ・cursorは0が終わり
 ・On～でoverrideしてできるイベントはそちらで統一
 
+・SearchAPIはStatusIDは正しく，UserIDは正しくない
+
 ■未実装設定
 
 ■発言履歴

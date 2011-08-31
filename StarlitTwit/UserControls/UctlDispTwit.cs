@@ -68,6 +68,8 @@ namespace StarlitTwit
 
         /// <summary>Popupを起こすためのアクション</summary>
         public Action<string> PopupAction { get; set; }
+        /// <summary>指定IDがフォロワーに含まれているかどうかチェックする関数</summary>
+        public Func<long, bool> CheckIncludeFollowerFunc { get; set; }
         /// <summary>データ追加抑制フラグ，専用メソッドで操作</summary>
         private bool _suspendDataAdd = false;
         /// <summary>追加予定データリスト</summary>
@@ -194,6 +196,7 @@ namespace StarlitTwit
         {
             MaxTweetID = MinTweetID = -1;
             PopupAction = null;
+            CheckIncludeFollowerFunc = null;
 
             InitializeComponent();
 
@@ -257,6 +260,7 @@ namespace StarlitTwit
             tsmiReply.Enabled = !isDirect;
             tsmiQuote.Enabled = tsmiRetweet.Enabled = !isDirect && !isProtected;
             tsmiRetweet.Enabled = isRT || !(isMine || isProtected || isDirect);
+            tsmiDirectMessage.Enabled = isMine || ((CheckIncludeFollowerFunc != null) ? CheckIncludeFollowerFunc(SelectedTwitData.UserID) : true);
 
             tsmiDispConversation.Enabled = isReply;
 
@@ -266,7 +270,7 @@ namespace StarlitTwit
 
             tsmiOpenBrowser_ReplyTweet.Enabled = isReply;
 
-            tsmiDelete.Enabled = isMine;
+            tsmiDelete.Enabled = isMine || isDirect;
 
             tsmiDispRetweeter.Enabled = !isDirect;
 
