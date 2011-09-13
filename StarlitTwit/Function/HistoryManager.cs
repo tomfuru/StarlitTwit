@@ -114,6 +114,15 @@ namespace StarlitTwit
             }
         }
         #endregion (AddHistory)
+        //-------------------------------------------------------------------------------
+        #region +GetHistories 履歴一覧取得
+        //-------------------------------------------------------------------------------
+        //
+        public T[] GetHistories()
+        {
+            return _historyList.ToArray();
+        }
+        #endregion (GetHistories)
 
         //-------------------------------------------------------------------------------
         #region +Undo Undo処理

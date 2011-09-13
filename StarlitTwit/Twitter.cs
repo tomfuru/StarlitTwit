@@ -3362,6 +3362,7 @@ namespace StarlitTwit
         private IEnumerable<URLData> ConvertToURLData(XElement el, bool isUserStreamData)
         {
             return from u in (isUserStreamData) ? el.Element("urls").Elements("item") : el.Elements("url")
+                   where !string.IsNullOrEmpty(u.Element("expanded_url").Value)
                    select new URLData() {
                        shorten_url = u.Element("url").Value,
                        expand_url = u.Element("expanded_url").Value

@@ -252,7 +252,7 @@ namespace StarlitTwit
         #region その他
         //-------------------------------------------------------------------------------
         /// <summary>フィルターデータ</summary>
-        public StatusFilterInfo[] Filters;
+        public StatusFilterInfo[] Filters = new StatusFilterInfo[0];
         /// <summary>フォロー・フォロー解除時に確認ダイアログを表示する</summary>
         public bool ConfirmDialogFollow = true;
         /// <summary>お気に入り追加・削除時に確認ダイアログを表示する</summary>
@@ -260,9 +260,9 @@ namespace StarlitTwit
         /// <summary>ブロック・ブロック解除時に確認ダイアログを表示する</summary>
         public bool ConfirmDialogBlock = true;
         /// <summary>タブデータ</summary>
-        public SerializableDictionary<string, TabData> TabDataDic;
+        public SerializableDictionary<string, TabData> TabDataDic = new SerializableDictionary<string,TabData>();
         /// <summary>キー</summary>
-        public List<UserAuthInfo> UserInfoList;
+        public List<UserAuthInfo> UserInfoList = new List<UserAuthInfo>();
         //-------------------------------------------------------------------------------
         #endregion (その他)
         //-------------------------------------------------------------------------------

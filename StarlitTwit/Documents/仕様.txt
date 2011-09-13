@@ -6,6 +6,7 @@
 ・Retweeterはページ制(カーソル制じゃない)のでページを見て0件だったらそれ以上とれないように
 ・cursorは0が終わり
 ・On～でoverrideしてできるイベントはそちらで統一
+・SettingsDataの初期化は正しく，nullは許さない
 
 ・SearchAPIはStatusIDは正しく，UserIDは正しくない
 

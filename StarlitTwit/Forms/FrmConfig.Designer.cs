@@ -193,9 +193,7 @@
             this.chbUseInternalWebBrowser = new System.Windows.Forms.CheckBox();
             this.label33 = new System.Windows.Forms.Label();
             this.txtWebBrowserPath = new System.Windows.Forms.TextBox();
-            this.txtFooter = new System.Windows.Forms.TextBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.txtHeader = new System.Windows.Forms.TextBox();
             this.label31 = new System.Windows.Forms.Label();
             this.numReplyTooltipDepth = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
@@ -204,6 +202,8 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
+            this.cboHeader = new System.Windows.Forms.ComboBox();
+            this.cboFooter = new System.Windows.Forms.ComboBox();
             this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
             this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
             this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
@@ -277,10 +277,10 @@
             this.tabpgGet.Controls.Add(this.label39);
             this.tabpgGet.Controls.Add(this.label10);
             this.tabpgGet.Controls.Add(this.tableLayoutPanel1);
-            this.tabpgGet.Location = new System.Drawing.Point(4, 22);
+            this.tabpgGet.Location = new System.Drawing.Point(4, 21);
             this.tabpgGet.Name = "tabpgGet";
             this.tabpgGet.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgGet.Size = new System.Drawing.Size(386, 324);
+            this.tabpgGet.Size = new System.Drawing.Size(386, 325);
             this.tabpgGet.TabIndex = 0;
             this.tabpgGet.Text = "取得";
             this.tabpgGet.UseVisualStyleBackColor = true;
@@ -435,10 +435,10 @@
             this.tabpgDisp.Controls.Add(this.txtNameFormat);
             this.tabpgDisp.Controls.Add(this.label9);
             this.tabpgDisp.Controls.Add(this.label8);
-            this.tabpgDisp.Location = new System.Drawing.Point(4, 22);
+            this.tabpgDisp.Location = new System.Drawing.Point(4, 21);
             this.tabpgDisp.Name = "tabpgDisp";
             this.tabpgDisp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgDisp.Size = new System.Drawing.Size(386, 324);
+            this.tabpgDisp.Size = new System.Drawing.Size(386, 325);
             this.tabpgDisp.TabIndex = 1;
             this.tabpgDisp.Text = "表示";
             this.tabpgDisp.UseVisualStyleBackColor = true;
@@ -781,10 +781,10 @@
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalText);
             this.tabpgFontAndColor.Controls.Add(this.txtExNormalTitle);
             this.tabpgFontAndColor.Controls.Add(this.btnFontNormalTitle);
-            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 22);
+            this.tabpgFontAndColor.Location = new System.Drawing.Point(4, 21);
             this.tabpgFontAndColor.Name = "tabpgFontAndColor";
             this.tabpgFontAndColor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 324);
+            this.tabpgFontAndColor.Size = new System.Drawing.Size(386, 325);
             this.tabpgFontAndColor.TabIndex = 2;
             this.tabpgFontAndColor.Text = "フォント・色";
             this.tabpgFontAndColor.UseVisualStyleBackColor = true;
@@ -1344,10 +1344,10 @@
             this.tabpgThumbnail.Controls.Add(this.cmbThumbPhotozou);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbTwitpic);
             this.tabpgThumbnail.Controls.Add(this.label45);
-            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 22);
+            this.tabpgThumbnail.Location = new System.Drawing.Point(4, 21);
             this.tabpgThumbnail.Name = "tabpgThumbnail";
             this.tabpgThumbnail.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 324);
+            this.tabpgThumbnail.Size = new System.Drawing.Size(386, 325);
             this.tabpgThumbnail.TabIndex = 4;
             this.tabpgThumbnail.Text = "サムネイル";
             this.tabpgThumbnail.UseVisualStyleBackColor = true;
@@ -1566,10 +1566,10 @@
             this.tabpgUserStream.Controls.Add(this.chbUStAutoOpenLog);
             this.tabpgUserStream.Controls.Add(this.chbUStEnableAllReplies);
             this.tabpgUserStream.Controls.Add(this.chbUStStartUp);
-            this.tabpgUserStream.Location = new System.Drawing.Point(4, 22);
+            this.tabpgUserStream.Location = new System.Drawing.Point(4, 21);
             this.tabpgUserStream.Name = "tabpgUserStream";
             this.tabpgUserStream.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgUserStream.Size = new System.Drawing.Size(386, 324);
+            this.tabpgUserStream.Size = new System.Drawing.Size(386, 325);
             this.tabpgUserStream.TabIndex = 5;
             this.tabpgUserStream.Text = "UserStream";
             this.tabpgUserStream.UseVisualStyleBackColor = true;
@@ -1773,10 +1773,10 @@
             this.tabpgFilter.Controls.Add(this.btnFilterRemove);
             this.tabpgFilter.Controls.Add(this.btnFilterAdd);
             this.tabpgFilter.Controls.Add(this.lstFilters);
-            this.tabpgFilter.Location = new System.Drawing.Point(4, 22);
+            this.tabpgFilter.Location = new System.Drawing.Point(4, 21);
             this.tabpgFilter.Name = "tabpgFilter";
             this.tabpgFilter.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgFilter.Size = new System.Drawing.Size(386, 324);
+            this.tabpgFilter.Size = new System.Drawing.Size(386, 325);
             this.tabpgFilter.TabIndex = 6;
             this.tabpgFilter.Text = "フィルタ";
             this.tabpgFilter.UseVisualStyleBackColor = true;
@@ -2000,6 +2000,8 @@
             // 
             // tabpgElse
             // 
+            this.tabpgElse.Controls.Add(this.cboFooter);
+            this.tabpgElse.Controls.Add(this.cboHeader);
             this.tabpgElse.Controls.Add(this.chbConfirmDialogBlock);
             this.tabpgElse.Controls.Add(this.chbConfirmDialogFollow);
             this.tabpgElse.Controls.Add(this.chbConfirmDialogFav);
@@ -2009,19 +2011,17 @@
             this.tabpgElse.Controls.Add(this.chbUseInternalWebBrowser);
             this.tabpgElse.Controls.Add(this.label33);
             this.tabpgElse.Controls.Add(this.txtWebBrowserPath);
-            this.tabpgElse.Controls.Add(this.txtFooter);
             this.tabpgElse.Controls.Add(this.label32);
-            this.tabpgElse.Controls.Add(this.txtHeader);
             this.tabpgElse.Controls.Add(this.label31);
             this.tabpgElse.Controls.Add(this.numReplyTooltipDepth);
             this.tabpgElse.Controls.Add(this.label30);
             this.tabpgElse.Controls.Add(this.chbDispDMBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyBaloon);
             this.tabpgElse.Controls.Add(this.chbDispReplyTooltip);
-            this.tabpgElse.Location = new System.Drawing.Point(4, 22);
+            this.tabpgElse.Location = new System.Drawing.Point(4, 21);
             this.tabpgElse.Name = "tabpgElse";
             this.tabpgElse.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpgElse.Size = new System.Drawing.Size(386, 324);
+            this.tabpgElse.Size = new System.Drawing.Size(386, 325);
             this.tabpgElse.TabIndex = 3;
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
@@ -2111,13 +2111,6 @@
             this.txtWebBrowserPath.Size = new System.Drawing.Size(314, 19);
             this.txtWebBrowserPath.TabIndex = 11;
             // 
-            // txtFooter
-            // 
-            this.txtFooter.Location = new System.Drawing.Point(22, 59);
-            this.txtFooter.Name = "txtFooter";
-            this.txtFooter.Size = new System.Drawing.Size(314, 19);
-            this.txtFooter.TabIndex = 1;
-            // 
             // label32
             // 
             this.label32.AutoSize = true;
@@ -2126,13 +2119,6 @@
             this.label32.Size = new System.Drawing.Size(38, 12);
             this.label32.TabIndex = 10;
             this.label32.Text = "フッター";
-            // 
-            // txtHeader
-            // 
-            this.txtHeader.Location = new System.Drawing.Point(22, 20);
-            this.txtHeader.Name = "txtHeader";
-            this.txtHeader.Size = new System.Drawing.Size(314, 19);
-            this.txtHeader.TabIndex = 0;
             // 
             // label31
             // 
@@ -2217,6 +2203,22 @@
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
+            // 
+            // cboHeader
+            // 
+            this.cboHeader.FormattingEnabled = true;
+            this.cboHeader.Location = new System.Drawing.Point(20, 19);
+            this.cboHeader.Name = "cboHeader";
+            this.cboHeader.Size = new System.Drawing.Size(303, 20);
+            this.cboHeader.TabIndex = 15;
+            // 
+            // cboFooter
+            // 
+            this.cboFooter.FormattingEnabled = true;
+            this.cboFooter.Location = new System.Drawing.Point(22, 59);
+            this.cboFooter.Name = "cboFooter";
+            this.cboFooter.Size = new System.Drawing.Size(301, 20);
+            this.cboFooter.TabIndex = 16;
             // 
             // numProfile_Interval
             // 
@@ -2740,9 +2742,7 @@
         private System.Windows.Forms.CheckBox chbDispReplyTooltip;
         private System.Windows.Forms.NumericUpDown numReplyTooltipDepth;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.TextBox txtFooter;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.TextBox txtHeader;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox txtWebBrowserPath;
@@ -2842,5 +2842,7 @@
         private System.Windows.Forms.CheckBox chbUStPopup_Retweet;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.ComboBox cmbThumbinstagram;
+        private System.Windows.Forms.ComboBox cboFooter;
+        private System.Windows.Forms.ComboBox cboHeader;
     }
 }

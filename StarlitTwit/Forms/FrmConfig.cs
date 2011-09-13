@@ -15,14 +15,21 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------
         #region 変数
         //-------------------------------------------------------------------------------
-        /// <summary>設定データを取得します。</summary>
+        /// <summary>設定データを設定・取得します。</summary>
         public SettingsData SettingsData { get; set; }
+        /// <summary>履歴データを設定・取得します。</summary>
+        public HistoryData HistoryData { get; set; }
         /// <summary>デフォルト設定データ</summary>
         public readonly SettingsData DefaultSettings = new SettingsData();
         /// <summary>フィルター情報変更中</summary>
         private bool _filterChanging = false;
         /// <summary>フィルター情報保存中</summary>
         private bool _filterSaving = false;
+        // 履歴管理用
+        /// <summary>ヘッダ履歴リスト</summary>
+        private HistoryListManager<string> _headerHistoryList = new HistoryListManager<string>();
+        /// <summary>フッタ履歴リスト</summary>
+        private HistoryListManager<string> _footerHistoryList = new HistoryListManager<string>();
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -34,6 +41,7 @@ namespace StarlitTwit
         {
             InitializeComponent();
             SettingsData = null;
+            HistoryData = null;
             InitializeControl();
             SetAssociateData();
         }
@@ -54,6 +62,7 @@ namespace StarlitTwit
                 throw new ArgumentException("無効な設定データです。");
             }
 
+            SetHistoryData();
             SetSettingsData();
         }
         #endregion (OnLoad)
@@ -65,6 +74,7 @@ namespace StarlitTwit
         {
             // 設定
             GetSettingsData();
+            RenewHistoryData();
             this.DialogResult = DialogResult.OK;
         }
         #endregion (btnOK_Click)
@@ -621,8 +631,8 @@ namespace StarlitTwit
 
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------
-            txtHeader.Text = SettingsData.Header;
-            txtFooter.Text = SettingsData.Footer;
+            cboHeader.Text = SettingsData.Header;
+            cboFooter.Text = SettingsData.Footer;
 
             chbConfirmDialogFollow.Checked = SettingsData.ConfirmDialogFollow;
             chbConfirmDialogFav.Checked = SettingsData.ConfirmDialogFavorite;
@@ -770,8 +780,8 @@ namespace StarlitTwit
 
             #region ■■その他設定■■
             //-------------------------------------------------------------------------------
-            SettingsData.Header = txtHeader.Text;
-            SettingsData.Footer = txtFooter.Text;
+            SettingsData.Header = cboHeader.Text;
+            SettingsData.Footer = cboFooter.Text;
 
             SettingsData.ConfirmDialogFollow = chbConfirmDialogFollow.Checked;
             SettingsData.ConfirmDialogFavorite = chbConfirmDialogFav.Checked;
@@ -789,6 +799,37 @@ namespace StarlitTwit
             #endregion ■■その他設定■■
         }
         #endregion (GetSettingsData)
+
+        //-------------------------------------------------------------------------------
+        #region -SetHistoryData 履歴データセット
+        //-------------------------------------------------------------------------------
+        //
+        private void SetHistoryData()
+        {
+            if (HistoryData == null) { return; }
+
+            // Header
+            cboHeader.Items.AddRange(HistoryData.Header);
+
+            // Footer
+            cboFooter.Items.AddRange(HistoryData.Footer);
+        }
+        #endregion (SetHistoryData)
+        //-------------------------------------------------------------------------------
+        #region -RenewHistoryData 履歴データ更新
+        //-------------------------------------------------------------------------------
+        //
+        private void RenewHistoryData()
+        {
+            if (HistoryData == null) { return; }
+
+            // Header
+
+
+            // Footer
+            
+        }
+        #endregion (RenewHistoryData)
 
         //-------------------------------------------------------------------------------
         #region -SetComboBoxEnumValue コンボボックスにEnumの値を設定します。

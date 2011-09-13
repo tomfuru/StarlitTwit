@@ -271,12 +271,9 @@ namespace StarlitTwit
                 tabpage.ToolTipText = DefaultTabToString(tabpage);
             }
 
-            if (SettingsData.TabDataDic != null) {
-                foreach (TabData tabdata in SettingsData.TabDataDic.Values) { MakeTab(tabdata, false); }
-            }
-            else { SettingsData.TabDataDic = new SerializableDictionary<string, TabData>(); }
+            foreach (TabData tabdata in SettingsData.TabDataDic.Values) { MakeTab(tabdata, false); }
 
-            if (SettingsData.UserInfoList != null && SettingsData.UserInfoList.Count > 0) {
+            if (SettingsData.UserInfoList.Count > 0) {
                 Twitter.AccessToken = SettingsData.UserInfoList[0].AccessToken;
                 Twitter.AccessTokenSecret = SettingsData.UserInfoList[0].AccessTokenSecret;
                 Twitter.ScreenName = SettingsData.UserInfoList[0].ScreenName;
@@ -284,10 +281,7 @@ namespace StarlitTwit
 
                 TransitToAuthenticatedMode();
             }
-            else {
-                SettingsData.UserInfoList = new List<UserAuthInfo>();
-                _isAuthenticated = false;
-            }
+            else { _isAuthenticated = false; }
 
             InitializeControls();
 

@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\HistoryData.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Forms\FrmConfig.cs">
       <SubType>Form</SubType>
@@ -143,6 +144,7 @@
       <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
     </Compile>
     <Compile Include="BaseTools.cs" />
+    <Compile Include="Function\HistoryListManager.cs" />
     <Compile Include="Function\HistoryManager.cs" />
     <Compile Include="Function\PictureGetter.cs" />
     <Compile Include="Function\StatusFilter.cs" />

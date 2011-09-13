@@ -63,6 +63,9 @@
     <Compile Include="..\StarlitTwit\BaseTools.cs">
       <Link>BaseTools.cs</Link>
     </Compile>
+    <Compile Include="..\StarlitTwit\Data\HistoryData.cs">
+      <Link>Data\HistoryData.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\Data\SaveDataClassBase.cs">
       <Link>Data\SaveDataClassBase.cs</Link>
     </Compile>
@@ -183,6 +186,9 @@
     <Compile Include="..\StarlitTwit\FrmMain.designer.cs">
       <Link>FrmMain.designer.cs</Link>
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Function\HistoryListManager.cs">
+      <Link>Function\HistoryListManager.cs</Link>
     </Compile>
     <Compile Include="..\StarlitTwit\Function\HistoryManager.cs">
       <Link>Function\HistoryManager.cs</Link>
