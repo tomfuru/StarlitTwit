@@ -594,9 +594,11 @@ namespace StarlitTwit
             {
                 get
                 {
+                    const int WS_EX_TOOLWINDOW = 0x80;
                     const int WS_EX_DLGMODALFRAME = 0x00000001;
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle = cp.ExStyle | WS_EX_DLGMODALFRAME;
+                    cp.ExStyle |= WS_EX_DLGMODALFRAME;
+                    cp.ExStyle |= WS_EX_TOOLWINDOW;
                     return cp;
                 }
             }

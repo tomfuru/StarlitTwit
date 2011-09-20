@@ -192,7 +192,7 @@ namespace StarlitTwit
                     string changedStatusText = null;
                     switch (FormType) {
                         case EFormType.UserStatus:
-                            d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM);
+                            d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM, include_rts: true);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;

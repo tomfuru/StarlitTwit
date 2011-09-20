@@ -2162,7 +2162,7 @@ namespace StarlitTwit
                             d = Twitter.search(q: tabdata.SearchWord, rpp: iCount);
                             break;
                         case TabSearchType.User:
-                            d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: iCount);
+                            d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: iCount, include_rts: true);
                             break;
                         case TabSearchType.List:
                             d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: iCount);
@@ -2234,7 +2234,7 @@ namespace StarlitTwit
                             d = Twitter.search(q: tabdata.SearchWord, rpp: tabdata.RenewGetNum, since_id: since_id);
                             break;
                         case TabSearchType.User:
-                            d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, since_id: since_id);
+                            d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, since_id: since_id, include_rts: true);
                             break;
                         case TabSearchType.List:
                             d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: tabdata.RenewGetNum, since_id: since_id);
@@ -2297,7 +2297,7 @@ namespace StarlitTwit
                             d = Twitter.search(q: tabdata.SearchWord, rpp: tabdata.RenewGetNum, max_id: max_id);
                             break;
                         case TabSearchType.User:
-                            d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, max_id: max_id);
+                            d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, max_id: max_id, include_rts: true);
                             break;
                         case TabSearchType.List:
                             d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: tabdata.RenewGetNum, max_id: max_id);
@@ -2388,7 +2388,7 @@ namespace StarlitTwit
                                 break;
                             case TabSearchType.User:
                                 if (i == MAX_USER / 200 + 1) { isBreak = true; break; }// 3200まで
-                                d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: 200, page: i);
+                                d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: 200, page: i, include_rts: true);
                                 break;
                             case TabSearchType.List:
                                 if (i == MAX_LIST / 200 + 1) { isBreak = true; break; }// 800まで
