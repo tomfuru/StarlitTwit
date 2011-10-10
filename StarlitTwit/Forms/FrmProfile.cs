@@ -189,6 +189,17 @@ namespace StarlitTwit
         }
         #endregion (tsmiOperation_MakeUserTab_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiOperation_List_Click リストに追加・削除
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOperation_List_Click(object sender, EventArgs e)
+        {
+            using (FrmListOfUser frm = new FrmListOfUser(_mainForm, _profile.ScreenName)) {
+                frm.ShowDialog(this);
+            }
+        }
+        #endregion (tsmiOperation_List_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiOperation_Block_Click ブロック
         //-------------------------------------------------------------------------------
         //
@@ -361,8 +372,11 @@ namespace StarlitTwit
             }
 
             // メニュー設定
-            tsmiOperation.Visible = !CanEdit;
-            tsmiOperation_Follow.Visible = !(tsmiOperation_UnFollow.Visible = profile.Following);
+            tsmiOperation_Follow.Visible = tsmiOperation_UnFollow.Visible = 
+            tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible =
+            tsmiOperation_MakeUserTab.Visible = tsmSep_Op1.Visible = tsmSep_Op2.Visible = !CanEdit;
+
+            tsmiOperation_Follow.Visible = !CanEdit && !(tsmiOperation_UnFollow.Visible = profile.Following);
         }
         #endregion (SetProfile)
 
