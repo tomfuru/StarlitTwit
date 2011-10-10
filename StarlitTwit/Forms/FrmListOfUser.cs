@@ -193,8 +193,7 @@ namespace StarlitTwit
             this.Invoke(new Action(() =>
             {
                 foreach (var list in lists) {
-                    if (list.OwnerID == FrmMain.Twitter.ID) { continue; }
-                    if (!_checkboxdic.Keys.Contains(list.Slug)) { continue; }
+                    if (!_checkboxdic.Keys.Contains(list.Slug)) { Debug.Assert(false); continue; }
                     _checkboxdic[list.Slug].Checked = true;
                 }
 
