@@ -11,9 +11,25 @@ namespace StarlitTwit
         private List<T> _historyList = new List<T>();
 
         //-------------------------------------------------------------------------------
+        #region Constrcutor 
+        //-------------------------------------------------------------------------------
+        //
+        public HistoryListManager()
+        {
+
+        }
+        //
+        public HistoryListManager(int keephistorynum) : this()
+        {
+            _keepHistoryNum = keephistorynum;
+        }
+        #endregion (Constrcutor)
+
+
+        //-------------------------------------------------------------------------------
         #region KeepHistoryNum プロパティ：履歴保持数
         //-------------------------------------------------------------------------------
-        private int _keepHistoryNum;
+        private int _keepHistoryNum = 1;
         /// <summary>
         /// 履歴保持数
         /// </summary>

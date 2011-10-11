@@ -27,9 +27,11 @@ namespace StarlitTwit
         private bool _filterSaving = false;
         // 履歴管理用
         /// <summary>ヘッダ履歴リスト</summary>
-        private HistoryListManager<string> _headerHistoryList = new HistoryListManager<string>();
+        private HistoryListManager<string> _headerHistoryList = new HistoryListManager<string>(HISTORY_NUM);
         /// <summary>フッタ履歴リスト</summary>
-        private HistoryListManager<string> _footerHistoryList = new HistoryListManager<string>();
+        private HistoryListManager<string> _footerHistoryList = new HistoryListManager<string>(HISTORY_NUM);
+
+        private const int HISTORY_NUM = 5;
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -808,6 +810,8 @@ namespace StarlitTwit
         {
             if (HistoryData == null) { return; }
 
+            for (int i = 0; i < HistoryData.Header.Length; i++) { _headerHistoryList.AddHistory(HistoryData.Header[i]); }
+            for (int i = 0; i < HistoryData.Footer.Length; i++) { _footerHistoryList.AddHistory(HistoryData.Footer[i]); }
             // Header
             cboHeader.Items.AddRange(HistoryData.Header);
 
@@ -824,10 +828,16 @@ namespace StarlitTwit
             if (HistoryData == null) { return; }
 
             // Header
-
+            if (cboHeader.Text.Length > 0) {
+                _headerHistoryList.AddHistory(cboHeader.Text);
+                HistoryData.Header = _headerHistoryList.GetHistories();
+            }
 
             // Footer
-            
+            if (cboFooter.Text.Length > 0) {
+                _footerHistoryList.AddHistory(cboFooter.Text);
+                HistoryData.Footer = _footerHistoryList.GetHistories();
+            }
         }
         #endregion (RenewHistoryData)
 

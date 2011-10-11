@@ -56,6 +56,8 @@ namespace StarlitTwit
         public static Twitter Twitter { get; private set; }
         /// <summary>設定データ</summary>
         public static SettingsData SettingsData { get; private set; }
+        /// <summary>履歴データ</summary>
+        public static HistoryData HistoryData { get; private set; }
         /// <summary>設定データファイルパス</summary>
         private string _settingsDataPath;
 
@@ -258,6 +260,9 @@ namespace StarlitTwit
 
             SettingsData = SettingsData.Restore(_settingsDataPath);
             if (SettingsData == null) { SettingsData = new SettingsData(); }
+
+            HistoryData = HistoryData.Restore("history.xml");
+            if (HistoryData == null) { HistoryData = new HistoryData(); }
 
             // ↓設定を復元↓
 
@@ -893,6 +898,7 @@ namespace StarlitTwit
                 tssLabel.RemoveText(STR_WAITING_CONFIGFORM);
                 using (FrmConfig frmconf = new FrmConfig()) {
                     frmconf.SettingsData = SettingsData;
+                    frmconf.HistoryData = HistoryData;
                     if (frmconf.ShowDialog() == DialogResult.OK) {
                         //SettingsData = frmconf.SettingsData; // classなので不要
                         SettingsData.Save(_settingsDataPath);
