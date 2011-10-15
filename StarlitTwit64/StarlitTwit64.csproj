@@ -139,6 +139,14 @@
       <Link>Forms\FrmInputRegex.designer.cs</Link>
       <DependentUpon>FrmInputRegex.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmListOfUser.cs">
+      <Link>Forms\FrmListOfUser.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmListOfUser.designer.cs">
+      <Link>Forms\FrmListOfUser.designer.cs</Link>
+      <DependentUpon>FrmListOfUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmMakeTab.cs">
       <Link>Forms\FrmMakeTab.cs</Link>
       <SubType>Form</SubType>
@@ -359,6 +367,10 @@
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmInputRegex.resx">
       <Link>Forms\FrmInputRegex.resx</Link>
       <DependentUpon>FrmInputRegex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmListOfUser.resx">
+      <Link>Forms\FrmListOfUser.resx</Link>
+      <DependentUpon>FrmListOfUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmMakeTab.resx">
       <Link>Forms\FrmMakeTab.resx</Link>

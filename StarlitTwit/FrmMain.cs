@@ -2507,7 +2507,7 @@ namespace StarlitTwit
         //
         private bool CheckIncludeFollowerIDs(long id)
         {
-            return _followerIDSet.Contains(id);
+            return (_followerIDSet == null) ? false : _followerIDSet.Contains(id);
         }
         #endregion (CheckIncludeFollowerIDs)
         //-------------------------------------------------------------------------------
@@ -2516,7 +2516,7 @@ namespace StarlitTwit
         //
         private bool CheckIncludeFriendIDs(long id)
         {
-            return _friendIDSet.Contains(id);
+            return (_friendIDSet == null) ? false : _friendIDSet.Contains(id);
         }
         #endregion (CheckIncludeFriendIDs)
 
@@ -3084,16 +3084,20 @@ namespace StarlitTwit
                     if (_followersRenew_IsForce) {
                         string labelText = string.Format(STR_FMT_GETTING, STR_FOLLOWER_IDS);
                         tssLabel.SetText(labelText);
-                        if (GetFollowerIDs()) {
-                            _followersRenew_IsForce = false;
+                        _followersRenew_IsForce = false;
+                        if (!GetFollowerIDs()) {
+                            // 失敗した時は1分待つ
+                            Utilization.InvokeTransaction(() => { Thread.Sleep(60000); _followersRenew_IsForce = true; });
                         }
                         tssLabel.RemoveText(labelText);
                     }
                     if (_friendsRenew_IsForce) {
                         string labelText = string.Format(STR_FMT_GETTING, STR_FRIEND_IDS);
                         tssLabel.SetText(labelText);
-                        if (GetFriendIDs()) {
-                            _friendsRenew_IsForce = false;
+                        _friendsRenew_IsForce = false;
+                        if (!GetFriendIDs()) {
+                            // 失敗した時は1分待つ
+                            Utilization.InvokeTransaction(() => { Thread.Sleep(60000); _friendsRenew_IsForce = true; });
                         }
                         tssLabel.RemoveText(labelText);
                     }
