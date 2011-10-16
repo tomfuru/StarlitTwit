@@ -169,6 +169,7 @@ namespace StarlitTwit
                     btnSearch.Click += btnSearch_Click;
                     this.Controls.Add(txtSearchWord);
                     this.Controls.Add(btnSearch);
+                    txtSearchWord.Focus();
                     break;
             }
 
@@ -357,7 +358,7 @@ namespace StarlitTwit
         private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
         {
             UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
-            Utilization.ShowStatusesForm((FrmMain)this.Owner, FrmDispStatuses.EFormType.UserStatus, prof.ScreenName);
+            Utilization.ShowStatusesForm(_mainForm, FrmDispStatuses.EFormType.UserStatus, prof.ScreenName);
         }
         #endregion (tsmiDisplayUserTweet_Click)
         //-------------------------------------------------------------------------------
