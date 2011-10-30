@@ -1872,7 +1872,12 @@ namespace StarlitTwit
                                     : urlbase;
 
             XElement el = GetByAPI(url);
-            return ConvertToAPILimitData(el);
+            APILimitData data = ConvertToAPILimitData(el);
+
+            API_Max = data.HourlyLimit;
+            API_Rest = data.Remaining;
+
+            return data;
         }
         #endregion (account_rate_limit_status)
         // account/verify_credentials

@@ -968,6 +968,7 @@ namespace StarlitTwit
             APILimitData? data = GetAPILimitData();
             if (data.HasValue) {
                 APILimitData d = data.Value;
+                tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
                 Message.ShowInfoMessage(string.Format("API使用回数情報\n{0}/{1}\n{2}に更新", d.Remaining, d.HourlyLimit, d.ResetTime.ToString(Utilization.STR_DATETIMEFORMAT)));
             }
             else {
@@ -1024,9 +1025,6 @@ namespace StarlitTwit
         private void tsmi更新_Click(object sender, EventArgs e)
         {
             UctlDispTwit uctldisp = SelectedUctlDispTwit();
-
-            // UserStream中はHome,Reply,History,Directは更新されない
-            if (_usingUserStream && DEFAULT_TABPAGES.Select(tabpg => _dispTwitDic[tabpg]).Contains(uctldisp)) { return; }
 
             tssLabel.SetText(STR_WAITING_RENEW);
             LockAndProcess(_autoRenewDic, () =>
@@ -3121,18 +3119,16 @@ namespace StarlitTwit
                         _mreThreadRun.Wait();
                         _mreThreadConfirm.Reset();
 
-                        // UserStream中はHome,Reply,History,Directは更新しない
-                        if (_usingUserStream && DEFAULT_TABPAGES.Contains(tabpage)) { continue; }
-
                         now = DateTime.Now;
                         UctlDispTwit uctlDisp = _dispTwitDic[tabpage];
                         AutoRenewData renewData;
                         lock (_autoRenewDic) {
                             renewData = _autoRenewDic[uctlDisp];
                             if (!renewData.IsForce) {
-                                if (renewData.Interval.Ticks == 0) { continue; }
+                                if (_usingUserStream && DEFAULT_TABPAGES.Contains(tabpage)) { continue; } // UserStream中はHome,Reply,History,Directは自動更新しない
+                                if (renewData.Interval.Ticks == 0) { continue; } // 更新しない設定の時
                                 TimeSpan ts = now.Subtract(renewData.Standard);
-                                if (ts.CompareTo(renewData.Interval) < 0) { continue; }
+                                if (ts.CompareTo(renewData.Interval) < 0) { continue; } // まだ更新時間まで経っていない
                             }
                         }
                         // 更新
