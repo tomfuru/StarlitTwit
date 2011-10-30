@@ -82,7 +82,7 @@ namespace StarlitTwit
         private void RichTextBoxHash_MouseMove(object sender, MouseEventArgs e)
         {
             if (!EnableEntity || _entities == null || _entities.Length == 0) { return; }
-
+            
             Range past = new Range(this.SelectionStart, this.SelectionLength);
 
             int index = this.GetCharIndexFromPosition(e.Location);
@@ -131,7 +131,7 @@ namespace StarlitTwit
         private void RichTextBoxHash_MouseDown(object sender, MouseEventArgs e)
         {
             if (EnableEntity && e.Button == MouseButtons.Left) {
-                _mouseDownRange = _onRange;
+                _mouseDownRange = _onRange; // 今マウスカーソル上にあるエンティティ記録
             }
         }
         #endregion (RichTextBoxHash_MouseDown)
@@ -142,7 +142,9 @@ namespace StarlitTwit
         private void RichTextBoxHash_MouseUp(object sender, MouseEventArgs e)
         {
             if (EnableEntity && e.Button == MouseButtons.Left) {
-                if (!_onRange.IsEmpty && !_mouseDownRange.IsEmpty && _onRange.Start == _mouseDownRange.Start && _onRange.Length == _mouseDownRange.Length) {
+                if (!_onRange.IsEmpty && !_mouseDownRange.IsEmpty
+                 && _onRange.Start == _mouseDownRange.Start && _onRange.Length == _mouseDownRange.Length // マウスダウンした時と同じものの上か
+                 && this.SelectionLength == 0) { // テキスト選択しようとしてるときはクリックイベントを起こさない
                     var entity = Array.Find(_entities, info => info.range.Equals(_onRange));
                     if (entity.type.HasValue) {
                         if (TweetItemClick != null) {
