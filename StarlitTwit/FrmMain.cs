@@ -304,6 +304,13 @@ namespace StarlitTwit
         //
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.WindowsShutDown
+             || e.CloseReason == CloseReason.TaskManagerClosing) {
+                base.OnFormClosing(e);
+                Application.Exit();
+                return;
+            }
+
             if (e.CloseReason != CloseReason.ApplicationExitCall
              && Message.ShowQuestionMessage("終了します。") == System.Windows.Forms.DialogResult.No) {
                 e.Cancel = true;
@@ -1688,14 +1695,12 @@ namespace StarlitTwit
         #endregion (AddAndResetStatusHistory)
 
         //-------------------------------------------------------------------------------
-        #region -ShowProfileForm プロフィール表示(失敗時の処理含)
+        #region -ShowProfileForm プロフィール表示
         //-------------------------------------------------------------------------------
         //
         private void ShowProfileForm(bool canEdit, string screen_name)
         {
-            if (!Utilization.ShowProfileForm(this, canEdit, screen_name)) {
-                tssLabel.SetText(STR_FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES);
-            }
+            Utilization.ShowProfileForm(this, canEdit, screen_name);
         }
         #endregion (ShowProfileForm)
         //-------------------------------------------------------------------------------

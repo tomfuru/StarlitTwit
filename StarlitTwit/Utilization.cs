@@ -540,14 +540,12 @@ namespace StarlitTwit
         /// <param name="canEdit">自分かどうか</param>
         /// <param name="screen_name">ユーザー名</param>
         /// <returns>プロフィール取得に成功したかどうか</returns>
-        public static bool ShowProfileForm(FrmMain parent, bool canEdit, string screen_name)
+        public static void ShowProfileForm(FrmMain parent, bool canEdit, string screen_name)
         {
-            UserProfile profile = GetProfile(screen_name);
-            if (profile != null) {
-                ShowProfileForm(parent, canEdit, profile);
-                return true;
+            if (!Utilization.ExistFrmProfile(canEdit, screen_name)) {
+                FrmProfile frm = new FrmProfile(parent, canEdit, screen_name, parent.ImageListWrapper);
+                frm.Show(parent);
             }
-            return false;
         }
         /// <summary>
         /// ユーザープロフィールフォームを表示します。

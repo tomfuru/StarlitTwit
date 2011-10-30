@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -18,10 +19,14 @@ namespace StarlitTwit
         public FrmMain _mainForm;
         /// <summary>表示プロフィール</summary>
         private UserProfile _profile;
+        /// <summary>関係データ</summary>
+        private RelationshipData _relation;
         /// <summary>編集可能かどうか</summary>
         public bool CanEdit { get; private set; }
         /// <summary>プロフィールのユーザー名</summary>
-        public string ScreenName { get { return (_profile != null) ? _profile.ScreenName : null; } }
+        public string ScreenName { get; private set; }
+        /// <summary>プロフィールデータを取得済みか</summary>
+        bool _gotProfile = false;
         // 変更確認用
         string _bakName, _bakLoc, _bakUrl, _bakDesc;
         //-------------------------------------------------------------------------------
@@ -32,10 +37,26 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         //
         public FrmProfile(FrmMain mainForm, bool canEdit, UserProfile profile, ImageListWrapper imagelistwrapper)
+            : this(mainForm, canEdit, imagelistwrapper)
+        {
+            ScreenName = profile.ScreenName;
+            _profile = profile;
+            SetProfile(_profile);
+            _gotProfile = true;
+        }
+        public FrmProfile(FrmMain mainForm, bool canEdit, string screen_name, ImageListWrapper imagelistwrapper)
+            : this(mainForm, canEdit, imagelistwrapper)
+        {
+            ScreenName = screen_name;
+            _profile = null;
+            _gotProfile = false;
+        }
+        private FrmProfile(FrmMain mainForm, bool canEdit, ImageListWrapper imagelistwrapper)
         {
             InitializeComponent();
             _mainForm = mainForm;
             CanEdit = canEdit;
+            tsslabel.Text = "";
             if (!canEdit) {
                 rtxtDescription.ReadOnly = txtLocation.ReadOnly = txtName.ReadOnly = txtUrl.ReadOnly = true;
                 btnImageChange.Visible = lblDescriptionRest.Visible = btnRenew.Visible = false;
@@ -43,9 +64,16 @@ namespace StarlitTwit
             }
             else {
                 llblWeb.Visible = false;
+                lblFollowing_title.Visible = lblFollowed_title.Visible =
+                lblFollowing.Visible = lblFollowed.Visible = false;
+                tsmiOperation_Follow.Visible = tsmiOperation_UnFollow.Visible =
+                tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible =
+                tsmiOperation_MakeUserTab.Visible = tsmSep_Op1.Visible = tsmSep_Op2.Visible = false;
             }
-            _profile = profile;
+
             picbIcon.ImageListWrapper = imagelistwrapper;
+
+            ScreenName = null;
         }
         #endregion (コンストラクタ)
 
@@ -58,8 +86,12 @@ namespace StarlitTwit
             base.OnLoad(e);
 
             Utilization.SetModelessDialogCenter(this);
-            SetProfile(_profile);
-            if (CanEdit) { SaveProfileTemporary(); }
+
+            Debug.Assert(!string.IsNullOrEmpty(ScreenName));
+            this.Text = string.Format("{0}のプロフィール", ScreenName);
+
+            Utilization.InvokeTransaction(GetData);
+
             txtName.Select(0, 0);
         }
         #endregion (OnLoad)
@@ -215,9 +247,9 @@ namespace StarlitTwit
         }
         #endregion (tsmiOperation_Block_Click)
         //-------------------------------------------------------------------------------
-		#region smiOperation_UnBlock_Click ブロック解除
-		//-------------------------------------------------------------------------------
-		//
+        #region smiOperation_UnBlock_Click ブロック解除
+        //-------------------------------------------------------------------------------
+        //
         private void tsmiOperation_UnBlock_Click(object sender, EventArgs e)
         {
             if (!FrmMain.SettingsData.ConfirmDialogBlock
@@ -228,7 +260,7 @@ namespace StarlitTwit
                 catch (TwitterAPIException) { return; }
             }
         }
-		#endregion (smiOperation_UnBlock_Click)
+        #endregion (smiOperation_UnBlock_Click)
         //-------------------------------------------------------------------------------
         #region tsmiDisplay_Friends_Click フレンド一覧表示
         //-------------------------------------------------------------------------------
@@ -316,19 +348,50 @@ namespace StarlitTwit
         //
         private void tsmiRenew_Click(object sender, EventArgs e)
         {
-            UserProfile profile;
-            try {
-                profile = Utilization.GetProfile(_profile.ScreenName);
-                _profile = profile;
-                SetProfile(profile);
-            }
-            catch (TwitterAPIException ex) {
-                Message.ShowWarningMessage("更新に失敗しました。", Utilization.SubTwitterAPIExceptionStr(ex));
-            }
+            _gotProfile = false;
+            btnImageChange.Enabled = btnRenew.Enabled = false;
+            Utilization.InvokeTransaction(GetData);
         }
         #endregion (tsmiRenew_Click)
         //-------------------------------------------------------------------------------
         #endregion (メニュー)
+
+
+        //-------------------------------------------------------------------------------
+        #region -GetData 必要データ取得 using TwitterAPI
+        //-------------------------------------------------------------------------------
+        //
+        private void GetData()
+        {
+            try {
+                if (!_gotProfile) {
+                    this.Invoke(new Action(() => tsslabel.Text = "プロフィール取得中..."));
+                    _profile = FrmMain.Twitter.users_show(screen_name: ScreenName);
+                    this.Invoke(new Action(() => SetProfile(_profile)));
+                    _gotProfile = true;
+                }
+
+                if (!FrmMain.Twitter.ScreenName.Equals(ScreenName)) {
+                    this.Invoke(new Action(() => tsslabel.Text = "関係データ取得中..."));
+                    _relation = FrmMain.Twitter.friendships_show(FrmMain.Twitter.ID, target_screen_name: ScreenName);
+                    this.Invoke(new Action(() => SetRelationshipData(_relation)));
+                }
+                this.Invoke(new Action(() =>
+                    {
+                        btnRetry.Enabled = false;
+                        btnImageChange.Enabled = btnRenew.Enabled = true;
+                        tsslabel.Text = "取得完了しました。";
+                    }));
+            }
+            catch (TwitterAPIException ex) {
+                this.Invoke(new Action(() =>
+                {
+                    tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                    btnRenew.Enabled = true;
+                }));
+            }
+        }
+        #endregion (-GetData)
 
         //-------------------------------------------------------------------------------
         #region -SetProfile プロフィールセット
@@ -336,15 +399,13 @@ namespace StarlitTwit
         //
         private void SetProfile(UserProfile profile)
         {
-            this.Text = string.Format("{0}のプロフィール", profile.ScreenName);
-
             if (!picbIcon.ImageListWrapper.ImageContainsKey(profile.IconURL)) {
                 picbIcon.ImageListWrapper.RequestAddImages(new string[] { profile.IconURL });
             }
             picbIcon.SetFromImageListWrapper(profile.IconURL);
 
             lblProtected.Visible = profile.Protected;
-            lblFollow.Visible = profile.Following;
+            lblFollowing.Text = GetFollowingOrNotText(profile.Following);
 
             lblFollowerNum.Text = profile.FollowerNum.ToString();
             lblFriendNum.Text = profile.FriendNum.ToString();
@@ -372,13 +433,33 @@ namespace StarlitTwit
             }
 
             // メニュー設定
-            tsmiOperation_Follow.Visible = tsmiOperation_UnFollow.Visible = 
-            tsmiOperation_Block.Visible = tsmiOperation_UnBlock.Visible =
-            tsmiOperation_MakeUserTab.Visible = tsmSep_Op1.Visible = tsmSep_Op2.Visible = !CanEdit;
-
             tsmiOperation_Follow.Visible = !CanEdit && !(tsmiOperation_UnFollow.Visible = profile.Following);
+
+            // データ一時保存
+            if (CanEdit) { SaveProfileTemporary(); }
         }
         #endregion (SetProfile)
+        //-------------------------------------------------------------------------------
+        #region -SetRelationshipData 関係データセット
+        //-------------------------------------------------------------------------------
+        //
+        private void SetRelationshipData(RelationshipData relation)
+        {
+            //lblBlocking.Visible = relation.Blocking; // friendships_showのblockingが正しい値を返したら有効に
+            lblFollowing.Text = GetFollowingOrNotText(relation.Following);
+            lblFollowed.Text = GetFollowingOrNotText(relation.Followed);
+        }
+        #endregion (SetRelationshipData)
+
+        //-------------------------------------------------------------------------------
+        #region -GetFollowingOrNotText 有無を表すテキスト取得
+        //-------------------------------------------------------------------------------
+        //
+        private string GetFollowingOrNotText(bool following)
+        {
+            return (following) ? "○" : "×";
+        }
+        #endregion (GetFollowingOrNotText)
 
         //-------------------------------------------------------------------------------
         #region -SaveProfileTemporary 一時的なプロフィール保存

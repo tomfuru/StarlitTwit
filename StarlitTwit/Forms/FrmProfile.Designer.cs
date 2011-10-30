@@ -57,7 +57,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.lblTimeZone = new System.Windows.Forms.Label();
             this.lblProtected = new System.Windows.Forms.Label();
-            this.lblFollow = new System.Windows.Forms.Label();
+            this.lblFollowing_title = new System.Windows.Forms.Label();
             this.llblWeb = new System.Windows.Forms.LinkLabel();
             this.lblListedNum = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -68,6 +68,7 @@
             this.tsmiOperation_UnFollow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSep_Op1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOperation_MakeUserTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOperation_List = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSep_Op2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOperation_Block = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOperation_UnBlock = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,21 +82,29 @@
             this.tsmiDisplay_BelongList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisplay_SubscriptList = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRenew = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiOperation_List = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnRetry = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tsslabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblFollowed_title = new System.Windows.Forms.Label();
+            this.lblBlocking = new System.Windows.Forms.Label();
+            this.lblFollowing = new System.Windows.Forms.Label();
+            this.lblFollowed = new System.Windows.Forms.Label();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // btnRenew
             // 
             this.btnRenew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRenew.Location = new System.Drawing.Point(94, 456);
+            this.btnRenew.Enabled = false;
+            this.btnRenew.Location = new System.Drawing.Point(94, 476);
             this.btnRenew.Name = "btnRenew";
             this.btnRenew.Size = new System.Drawing.Size(75, 23);
             this.btnRenew.TabIndex = 7;
-            this.btnRenew.Text = "更新";
+            this.btnRenew.Text = "プロフ更新";
             this.btnRenew.UseVisualStyleBackColor = true;
             this.btnRenew.Click += new System.EventHandler(this.btnRenew_Click);
             // 
@@ -103,7 +112,7 @@
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(175, 456);
+            this.btnClose.Location = new System.Drawing.Point(175, 476);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 8;
@@ -115,7 +124,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(74, 54);
+            this.label1.Location = new System.Drawing.Point(74, 74);
             this.label1.Name = "label1";
             this.label1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label1.Size = new System.Drawing.Size(62, 12);
@@ -126,7 +135,7 @@
             // 
             this.lblUserID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblUserID.AutoSize = true;
-            this.lblUserID.Location = new System.Drawing.Point(136, 55);
+            this.lblUserID.Location = new System.Drawing.Point(136, 75);
             this.lblUserID.Name = "lblUserID";
             this.lblUserID.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblUserID.Size = new System.Drawing.Size(11, 12);
@@ -137,7 +146,7 @@
             // 
             this.lblRegisterTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblRegisterTime.AutoSize = true;
-            this.lblRegisterTime.Location = new System.Drawing.Point(136, 76);
+            this.lblRegisterTime.Location = new System.Drawing.Point(136, 96);
             this.lblRegisterTime.Name = "lblRegisterTime";
             this.lblRegisterTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblRegisterTime.Size = new System.Drawing.Size(11, 12);
@@ -148,7 +157,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(75, 76);
+            this.label3.Location = new System.Drawing.Point(75, 96);
             this.label3.Name = "label3";
             this.label3.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label3.Size = new System.Drawing.Size(59, 12);
@@ -159,7 +168,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 188);
+            this.label2.Location = new System.Drawing.Point(12, 208);
             this.label2.Name = "label2";
             this.label2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label2.Size = new System.Drawing.Size(63, 12);
@@ -170,7 +179,7 @@
             // 
             this.lblScreenName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblScreenName.AutoSize = true;
-            this.lblScreenName.Location = new System.Drawing.Point(92, 188);
+            this.lblScreenName.Location = new System.Drawing.Point(92, 208);
             this.lblScreenName.Name = "lblScreenName";
             this.lblScreenName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblScreenName.Size = new System.Drawing.Size(11, 12);
@@ -181,7 +190,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 210);
+            this.label5.Location = new System.Drawing.Point(12, 230);
             this.label5.Name = "label5";
             this.label5.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label5.Size = new System.Drawing.Size(35, 12);
@@ -192,7 +201,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 232);
+            this.label6.Location = new System.Drawing.Point(12, 252);
             this.label6.Name = "label6";
             this.label6.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label6.Size = new System.Drawing.Size(59, 12);
@@ -203,7 +212,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 254);
+            this.label7.Location = new System.Drawing.Point(12, 274);
             this.label7.Name = "label7";
             this.label7.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label7.Size = new System.Drawing.Size(32, 12);
@@ -214,7 +223,7 @@
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 276);
+            this.label8.Location = new System.Drawing.Point(12, 296);
             this.label8.Name = "label8";
             this.label8.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label8.Size = new System.Drawing.Size(53, 12);
@@ -224,7 +233,7 @@
             // txtName
             // 
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtName.Location = new System.Drawing.Point(77, 207);
+            this.txtName.Location = new System.Drawing.Point(77, 227);
             this.txtName.MaxLength = 20;
             this.txtName.Name = "txtName";
             this.txtName.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -234,7 +243,7 @@
             // txtLocation
             // 
             this.txtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLocation.Location = new System.Drawing.Point(77, 230);
+            this.txtLocation.Location = new System.Drawing.Point(77, 250);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtLocation.Size = new System.Drawing.Size(169, 19);
@@ -243,7 +252,7 @@
             // txtUrl
             // 
             this.txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUrl.Location = new System.Drawing.Point(76, 253);
+            this.txtUrl.Location = new System.Drawing.Point(76, 273);
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtUrl.Size = new System.Drawing.Size(169, 19);
@@ -253,7 +262,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 386);
+            this.label4.Location = new System.Drawing.Point(12, 406);
             this.label4.Name = "label4";
             this.label4.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label4.Size = new System.Drawing.Size(63, 12);
@@ -265,7 +274,7 @@
             this.lblLastStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLastStatus.AutoEllipsis = true;
             this.lblLastStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblLastStatus.Location = new System.Drawing.Point(12, 400);
+            this.lblLastStatus.Location = new System.Drawing.Point(12, 420);
             this.lblLastStatus.Name = "lblLastStatus";
             this.lblLastStatus.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblLastStatus.Size = new System.Drawing.Size(233, 48);
@@ -276,7 +285,7 @@
             // 
             this.lblDescriptionRest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescriptionRest.AutoSize = true;
-            this.lblDescriptionRest.Location = new System.Drawing.Point(71, 280);
+            this.lblDescriptionRest.Location = new System.Drawing.Point(71, 300);
             this.lblDescriptionRest.Name = "lblDescriptionRest";
             this.lblDescriptionRest.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblDescriptionRest.Size = new System.Drawing.Size(11, 12);
@@ -287,7 +296,7 @@
             // 
             this.lblLastStatusTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLastStatusTime.AutoSize = true;
-            this.lblLastStatusTime.Location = new System.Drawing.Point(75, 386);
+            this.lblLastStatusTime.Location = new System.Drawing.Point(75, 406);
             this.lblLastStatusTime.Name = "lblLastStatusTime";
             this.lblLastStatusTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblLastStatusTime.Size = new System.Drawing.Size(11, 12);
@@ -298,7 +307,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(136, 100);
+            this.label9.Location = new System.Drawing.Point(136, 120);
             this.label9.Name = "label9";
             this.label9.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label9.Size = new System.Drawing.Size(67, 12);
@@ -309,7 +318,7 @@
             // 
             this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(12, 100);
+            this.label10.Location = new System.Drawing.Point(12, 120);
             this.label10.Name = "label10";
             this.label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label10.Size = new System.Drawing.Size(58, 12);
@@ -320,7 +329,7 @@
             // 
             this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(136, 122);
+            this.label11.Location = new System.Drawing.Point(136, 142);
             this.label11.Name = "label11";
             this.label11.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label11.Size = new System.Drawing.Size(74, 12);
@@ -331,7 +340,7 @@
             // 
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 122);
+            this.label13.Location = new System.Drawing.Point(12, 142);
             this.label13.Name = "label13";
             this.label13.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label13.Size = new System.Drawing.Size(47, 12);
@@ -342,7 +351,7 @@
             // 
             this.lblFollowerNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblFollowerNum.AutoSize = true;
-            this.lblFollowerNum.Location = new System.Drawing.Point(216, 100);
+            this.lblFollowerNum.Location = new System.Drawing.Point(216, 120);
             this.lblFollowerNum.Name = "lblFollowerNum";
             this.lblFollowerNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblFollowerNum.Size = new System.Drawing.Size(11, 12);
@@ -353,7 +362,7 @@
             // 
             this.lblFavoriteNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblFavoriteNum.AutoSize = true;
-            this.lblFavoriteNum.Location = new System.Drawing.Point(216, 122);
+            this.lblFavoriteNum.Location = new System.Drawing.Point(216, 142);
             this.lblFavoriteNum.Name = "lblFavoriteNum";
             this.lblFavoriteNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblFavoriteNum.Size = new System.Drawing.Size(11, 12);
@@ -364,7 +373,7 @@
             // 
             this.lblFriendNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblFriendNum.AutoSize = true;
-            this.lblFriendNum.Location = new System.Drawing.Point(92, 100);
+            this.lblFriendNum.Location = new System.Drawing.Point(92, 120);
             this.lblFriendNum.Name = "lblFriendNum";
             this.lblFriendNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblFriendNum.Size = new System.Drawing.Size(11, 12);
@@ -375,7 +384,7 @@
             // 
             this.lblStatusNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatusNum.AutoSize = true;
-            this.lblStatusNum.Location = new System.Drawing.Point(92, 122);
+            this.lblStatusNum.Location = new System.Drawing.Point(92, 142);
             this.lblStatusNum.Name = "lblStatusNum";
             this.lblStatusNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblStatusNum.Size = new System.Drawing.Size(11, 12);
@@ -386,7 +395,7 @@
             // 
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 166);
+            this.label12.Location = new System.Drawing.Point(12, 186);
             this.label12.Name = "label12";
             this.label12.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label12.Size = new System.Drawing.Size(67, 12);
@@ -397,7 +406,7 @@
             // 
             this.lblTimeZone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTimeZone.AutoSize = true;
-            this.lblTimeZone.Location = new System.Drawing.Point(92, 166);
+            this.lblTimeZone.Location = new System.Drawing.Point(92, 186);
             this.lblTimeZone.Name = "lblTimeZone";
             this.lblTimeZone.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblTimeZone.Size = new System.Drawing.Size(11, 12);
@@ -409,30 +418,31 @@
             this.lblProtected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblProtected.AutoSize = true;
             this.lblProtected.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblProtected.Location = new System.Drawing.Point(75, 30);
+            this.lblProtected.Location = new System.Drawing.Point(13, 32);
             this.lblProtected.Name = "lblProtected";
             this.lblProtected.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblProtected.Size = new System.Drawing.Size(101, 12);
             this.lblProtected.TabIndex = 32;
             this.lblProtected.Text = "◆非公開ユーザー";
+            this.lblProtected.Visible = false;
             // 
-            // lblFollow
+            // lblFollowing_title
             // 
-            this.lblFollow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblFollow.AutoSize = true;
-            this.lblFollow.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblFollow.Location = new System.Drawing.Point(193, 30);
-            this.lblFollow.Name = "lblFollow";
-            this.lblFollow.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblFollow.Size = new System.Drawing.Size(57, 12);
-            this.lblFollow.TabIndex = 33;
-            this.lblFollow.Text = "フォロー中";
+            this.lblFollowing_title.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFollowing_title.AutoSize = true;
+            this.lblFollowing_title.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblFollowing_title.Location = new System.Drawing.Point(142, 32);
+            this.lblFollowing_title.Name = "lblFollowing_title";
+            this.lblFollowing_title.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblFollowing_title.Size = new System.Drawing.Size(79, 12);
+            this.lblFollowing_title.TabIndex = 33;
+            this.lblFollowing_title.Text = "フォローしている:";
             // 
             // llblWeb
             // 
             this.llblWeb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.llblWeb.AutoEllipsis = true;
-            this.llblWeb.Location = new System.Drawing.Point(75, 254);
+            this.llblWeb.Location = new System.Drawing.Point(75, 274);
             this.llblWeb.Name = "llblWeb";
             this.llblWeb.Size = new System.Drawing.Size(171, 16);
             this.llblWeb.TabIndex = 5;
@@ -444,7 +454,7 @@
             // 
             this.lblListedNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblListedNum.AutoSize = true;
-            this.lblListedNum.Location = new System.Drawing.Point(92, 144);
+            this.lblListedNum.Location = new System.Drawing.Point(92, 164);
             this.lblListedNum.Name = "lblListedNum";
             this.lblListedNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblListedNum.Size = new System.Drawing.Size(11, 12);
@@ -455,7 +465,7 @@
             // 
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(12, 144);
+            this.label15.Location = new System.Drawing.Point(12, 164);
             this.label15.Name = "label15";
             this.label15.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label15.Size = new System.Drawing.Size(35, 12);
@@ -465,8 +475,9 @@
             // btnImageChange
             // 
             this.btnImageChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnImageChange.Enabled = false;
             this.btnImageChange.Font = new System.Drawing.Font("MS UI Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnImageChange.Location = new System.Drawing.Point(14, 79);
+            this.btnImageChange.Location = new System.Drawing.Point(14, 99);
             this.btnImageChange.Name = "btnImageChange";
             this.btnImageChange.Size = new System.Drawing.Size(48, 18);
             this.btnImageChange.TabIndex = 0;
@@ -526,6 +537,13 @@
             this.tsmiOperation_MakeUserTab.Size = new System.Drawing.Size(204, 22);
             this.tsmiOperation_MakeUserTab.Text = "ユーザーのタブを作成する(&T)";
             this.tsmiOperation_MakeUserTab.Click += new System.EventHandler(this.tsmiOperation_MakeUserTab_Click);
+            // 
+            // tsmiOperation_List
+            // 
+            this.tsmiOperation_List.Name = "tsmiOperation_List";
+            this.tsmiOperation_List.Size = new System.Drawing.Size(204, 22);
+            this.tsmiOperation_List.Text = "リストに追加・削除する(&L)";
+            this.tsmiOperation_List.Click += new System.EventHandler(this.tsmiOperation_List_Click);
             // 
             // tsmSep_Op2
             // 
@@ -621,18 +639,88 @@
             this.tsmiRenew.Text = "更新(F5)";
             this.tsmiRenew.Click += new System.EventHandler(this.tsmiRenew_Click);
             // 
-            // tsmiOperation_List
+            // btnRetry
             // 
-            this.tsmiOperation_List.Name = "tsmiOperation_List";
-            this.tsmiOperation_List.Size = new System.Drawing.Size(204, 22);
-            this.tsmiOperation_List.Text = "リストに追加・削除する(&L)";
-            this.tsmiOperation_List.Click += new System.EventHandler(this.tsmiOperation_List_Click);
+            this.btnRetry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRetry.Enabled = false;
+            this.btnRetry.Location = new System.Drawing.Point(11, 476);
+            this.btnRetry.Name = "btnRetry";
+            this.btnRetry.Size = new System.Drawing.Size(75, 23);
+            this.btnRetry.TabIndex = 40;
+            this.btnRetry.Text = "取得再試行";
+            this.btnRetry.UseVisualStyleBackColor = true;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 506);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(257, 22);
+            this.statusStrip1.TabIndex = 41;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tsslabel
+            // 
+            this.tsslabel.Name = "tsslabel";
+            this.tsslabel.Size = new System.Drawing.Size(242, 17);
+            this.tsslabel.Spring = true;
+            this.tsslabel.Text = "...";
+            this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblFollowed_title
+            // 
+            this.lblFollowed_title.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFollowed_title.AutoSize = true;
+            this.lblFollowed_title.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblFollowed_title.Location = new System.Drawing.Point(142, 53);
+            this.lblFollowed_title.Name = "lblFollowed_title";
+            this.lblFollowed_title.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblFollowed_title.Size = new System.Drawing.Size(89, 12);
+            this.lblFollowed_title.TabIndex = 42;
+            this.lblFollowed_title.Text = "フォローされている:";
+            // 
+            // lblBlocking
+            // 
+            this.lblBlocking.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBlocking.AutoSize = true;
+            this.lblBlocking.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblBlocking.ForeColor = System.Drawing.Color.Red;
+            this.lblBlocking.Location = new System.Drawing.Point(74, 53);
+            this.lblBlocking.Name = "lblBlocking";
+            this.lblBlocking.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblBlocking.Size = new System.Drawing.Size(55, 12);
+            this.lblBlocking.TabIndex = 43;
+            this.lblBlocking.Text = "ブロック中";
+            this.lblBlocking.Visible = false;
+            // 
+            // lblFollowing
+            // 
+            this.lblFollowing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFollowing.AutoSize = true;
+            this.lblFollowing.Location = new System.Drawing.Point(235, 32);
+            this.lblFollowing.Name = "lblFollowing";
+            this.lblFollowing.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblFollowing.Size = new System.Drawing.Size(10, 12);
+            this.lblFollowing.TabIndex = 44;
+            this.lblFollowing.Text = "?";
+            // 
+            // lblFollowed
+            // 
+            this.lblFollowed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFollowed.AutoSize = true;
+            this.lblFollowed.Location = new System.Drawing.Point(235, 53);
+            this.lblFollowed.Name = "lblFollowed";
+            this.lblFollowed.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblFollowed.Size = new System.Drawing.Size(10, 12);
+            this.lblFollowed.TabIndex = 45;
+            this.lblFollowed.Text = "?";
             // 
             // rtxtDescription
             // 
             this.rtxtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.rtxtDescription.DetectUrls = false;
-            this.rtxtDescription.Location = new System.Drawing.Point(14, 295);
+            this.rtxtDescription.Location = new System.Drawing.Point(14, 315);
             this.rtxtDescription.Name = "rtxtDescription";
             this.rtxtDescription.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.rtxtDescription.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
@@ -645,7 +733,7 @@
             // 
             this.picbIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.picbIcon.ImageListWrapper = null;
-            this.picbIcon.Location = new System.Drawing.Point(14, 33);
+            this.picbIcon.Location = new System.Drawing.Point(14, 53);
             this.picbIcon.Name = "picbIcon";
             this.picbIcon.Size = new System.Drawing.Size(48, 48);
             this.picbIcon.TabIndex = 12;
@@ -656,13 +744,19 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(257, 486);
+            this.ClientSize = new System.Drawing.Size(257, 528);
+            this.Controls.Add(this.lblFollowed);
+            this.Controls.Add(this.lblFollowing);
+            this.Controls.Add(this.lblBlocking);
+            this.Controls.Add(this.lblFollowed_title);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.btnRetry);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.btnImageChange);
             this.Controls.Add(this.lblListedNum);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.llblWeb);
-            this.Controls.Add(this.lblFollow);
+            this.Controls.Add(this.lblFollowing_title);
             this.Controls.Add(this.lblProtected);
             this.Controls.Add(this.lblTimeZone);
             this.Controls.Add(this.label12);
@@ -705,6 +799,8 @@
             this.Text = "...";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -745,7 +841,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lblTimeZone;
         private System.Windows.Forms.Label lblProtected;
-        private System.Windows.Forms.Label lblFollow;
+        private System.Windows.Forms.Label lblFollowing_title;
         private System.Windows.Forms.LinkLabel llblWeb;
         private System.Windows.Forms.Label lblListedNum;
         private System.Windows.Forms.Label label15;
@@ -770,5 +866,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisplay_SubscriptList;
         private System.Windows.Forms.ToolStripMenuItem tsmiOperation_List;
+        private System.Windows.Forms.Button btnRetry;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel tsslabel;
+        private System.Windows.Forms.Label lblFollowed_title;
+        private System.Windows.Forms.Label lblBlocking;
+        private System.Windows.Forms.Label lblFollowing;
+        private System.Windows.Forms.Label lblFollowed;
     }
 }
