@@ -228,6 +228,10 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region 画像サムネイル関係
         //-------------------------------------------------------------------------------
+        /// <summary>Youtubeサムネイル</summary>
+        public YoutubeThumbnailType ThumbType_youtube;
+        /// <summary>ニコニコ動画サムネイル</summary>
+        public NicovideoThumbnailType ThumbType_nicovideo;
         /// <summary>TwitPicサムネイル</summary>
         public TwitPicThumbnailType ThumbType_twitpic;
         /// <summary>movapicサムネイル</summary>

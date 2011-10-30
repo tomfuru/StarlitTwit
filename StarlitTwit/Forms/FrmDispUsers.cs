@@ -574,6 +574,7 @@ namespace StarlitTwit
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
+                                        Thread.Sleep(100);
                                     }
                                     int index = _page;
                                     long[] ids = SliceUserID(_userIDs, ref index);
@@ -589,6 +590,7 @@ namespace StarlitTwit
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
+                                        Thread.Sleep(100);
                                     }
                                     int index = _page;
                                     long[] ids = SliceUserID(_userIDs, ref index);
@@ -604,6 +606,7 @@ namespace StarlitTwit
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
+                                        Thread.Sleep(100);
                                     }
                                     int index = _page;
                                     long[] ids = SliceUserID(_userIDs, ref index);
@@ -619,6 +622,7 @@ namespace StarlitTwit
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
+                                        Thread.Sleep(100);
                                     }
                                     int index = _page;
                                     long[] ids = SliceUserID(_userIDs, ref index);

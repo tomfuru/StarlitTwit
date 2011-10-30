@@ -50,6 +50,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private const string THUMB = "thumb";
         private const string MINI = "mini";
+        private const string DEFAULT = "default";
         private const char S = 's';
         private const char T = 't';
         private const char M = 'm';
@@ -61,6 +62,64 @@ namespace StarlitTwit
         private const string ORIG = "orig";
         //-------------------------------------------------------------------------------
         #endregion (サムネイルタイプ文字列)
+        //-------------------------------------------------------------------------------
+        #region (class)Youtube Converter
+        //-------------------------------------------------------------------------------
+        private class YoutubeConverter : IThumbnailConverter
+        {
+            const string CHECKPATTERN = @"^http://(www.youtube.com/watch\?v\=|youtu.be/)([\w-]+)";
+            const string THUMBFORMAT = @"http://i.ytimg.com/vi/{0}/{1}.jpg";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return Regex.IsMatch(url, CHECKPATTERN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                Match m = Regex.Match(url, CHECKPATTERN);
+
+                string size;
+                switch (FrmMain.SettingsData.ThumbType_youtube) {
+                    case YoutubeThumbnailType.デフォルト:
+                        size = DEFAULT;
+                        break;
+                    case YoutubeThumbnailType.大きいサイズ:
+                        size = "0";
+                        break;
+                    default:
+                        return null;
+                }
+
+                return string.Format(THUMBFORMAT, m.Groups[2].Value, size);
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)Youtube Converter)
+        //-------------------------------------------------------------------------------
+        #region (class)Nicovideo Converter
+        //-------------------------------------------------------------------------------
+        private class NicovideoConverter : IThumbnailConverter
+        {
+            const string CHECKPATTERN = @"^http://(www.nicovideo.jp/watch|nico.ms)/[a-z][a-z](\d+)";
+            const string THUMBFORMAT = @"http://tn-skr{0}.smilevideo.jp/smile?i={1}";
+
+            bool IThumbnailConverter.IsEffectiveURL(string url)
+            {
+                return Regex.IsMatch(url, CHECKPATTERN);
+            }
+
+            string IThumbnailConverter.ConvertToThumbnailURL(string url)
+            {
+                if (FrmMain.SettingsData.ThumbType_nicovideo != NicovideoThumbnailType.表示する) { return null; }
+
+                Match m = Regex.Match(url, CHECKPATTERN);
+                int no = int.Parse(m.Groups[2].Value);
+                return string.Format(THUMBFORMAT, (no % 4) + 1, no);
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)Nicovideo Converter)
         //-------------------------------------------------------------------------------
         #region (class)Twitpic Converter
         //-------------------------------------------------------------------------------
@@ -225,7 +284,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class plixiConverter : IThumbnailConverter
         {
-            private const string PATTERN = @"^http://(plixi|tweetphoto).com/p/[0-9]+$";
+            private const string PATTERN = @"^http://(tweetphoto.com|plixi.com/p|lockerz.com/s)/[0-9]+$";
             private const string THUMBURLFORMAT = @"http://api.plixi.com/api/TPAPI.svc/imagefromurl?size={0}&url={1}";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
@@ -359,6 +418,8 @@ namespace StarlitTwit
         {
             IMAGE_EXTENSIONS = GetImageCodecInfo();
             CONVERTERS = new IThumbnailConverter[] { 
+                            new YoutubeConverter(),
+                            new NicovideoConverter(),
                             new TwitpicConverter(),
                             new PhotozouConverter(),
                             new yFrogConverter(),
@@ -445,6 +506,27 @@ namespace StarlitTwit
         #endregion (GetImageCodecInfo)
     }
 
+    //-------------------------------------------------------------------------------
+    #region YoutubeThumbnailType 列挙体：
+    //-------------------------------------------------------------------------------
+    public enum YoutubeThumbnailType
+    {
+        デフォルト,
+        大きいサイズ,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (YoutubeThumbnailType)
+    //-------------------------------------------------------------------------------
+    #region NicovideoThumbnailType 列挙体：
+    //-------------------------------------------------------------------------------
+    public enum NicovideoThumbnailType
+    {
+        表示する,
+        表示しない
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (NicovideoThumbnailType)
     //-------------------------------------------------------------------------------
     #region TwitPicThumbnailType 列挙体
     //-------------------------------------------------------------------------------

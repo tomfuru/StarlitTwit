@@ -184,6 +184,8 @@
             this.btnFilterAdd = new System.Windows.Forms.Button();
             this.lstFilters = new System.Windows.Forms.ListBox();
             this.tabpgElse = new System.Windows.Forms.TabPage();
+            this.cboFooter = new System.Windows.Forms.ComboBox();
+            this.cboHeader = new System.Windows.Forms.ComboBox();
             this.chbConfirmDialogBlock = new System.Windows.Forms.CheckBox();
             this.chbConfirmDialogFollow = new System.Windows.Forms.CheckBox();
             this.chbConfirmDialogFav = new System.Windows.Forms.CheckBox();
@@ -202,8 +204,6 @@
             this.chbDispReplyTooltip = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
-            this.cboHeader = new System.Windows.Forms.ComboBox();
-            this.cboFooter = new System.Windows.Forms.ComboBox();
             this.numProfile_Interval = new StarlitTwit.NumericUpDownExtended();
             this.numTimeline_Interval = new StarlitTwit.NumericUpDownExtended();
             this.numReply_Interval = new StarlitTwit.NumericUpDownExtended();
@@ -220,6 +220,10 @@
             this.txtObjUserPatterns = new StarlitTwit.TextBoxRegex();
             this.txtObjStatusClientPatterns = new StarlitTwit.TextBoxRegex();
             this.txtObjStatusTextPatterns = new StarlitTwit.TextBoxRegex();
+            this.cmbThumbYoutube = new System.Windows.Forms.ComboBox();
+            this.label55 = new System.Windows.Forms.Label();
+            this.cmbThumbNicovideo = new System.Windows.Forms.ComboBox();
+            this.label56 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabpgGet.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1323,6 +1327,10 @@
             // 
             // tabpgThumbnail
             // 
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbNicovideo);
+            this.tabpgThumbnail.Controls.Add(this.label56);
+            this.tabpgThumbnail.Controls.Add(this.cmbThumbYoutube);
+            this.tabpgThumbnail.Controls.Add(this.label55);
             this.tabpgThumbnail.Controls.Add(this.label54);
             this.tabpgThumbnail.Controls.Add(this.cmbThumbinstagram);
             this.tabpgThumbnail.Controls.Add(this.numThumbnailInterval);
@@ -1355,7 +1363,7 @@
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(18, 298);
+            this.label54.Location = new System.Drawing.Point(191, 175);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(55, 12);
             this.label54.TabIndex = 19;
@@ -1365,9 +1373,9 @@
             // 
             this.cmbThumbinstagram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbinstagram.FormattingEnabled = true;
-            this.cmbThumbinstagram.Location = new System.Drawing.Point(107, 295);
+            this.cmbThumbinstagram.Location = new System.Drawing.Point(272, 172);
             this.cmbThumbinstagram.Name = "cmbThumbinstagram";
-            this.cmbThumbinstagram.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbinstagram.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbinstagram.TabIndex = 20;
             // 
             // numThumbnailInterval
@@ -1419,7 +1427,7 @@
             // label52
             // 
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(18, 270);
+            this.label52.Location = new System.Drawing.Point(191, 201);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(75, 12);
             this.label52.TabIndex = 17;
@@ -1429,15 +1437,15 @@
             // 
             this.cmbThumbTwipplePhoto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbTwipplePhoto.FormattingEnabled = true;
-            this.cmbThumbTwipplePhoto.Location = new System.Drawing.Point(107, 267);
+            this.cmbThumbTwipplePhoto.Location = new System.Drawing.Point(272, 198);
             this.cmbThumbTwipplePhoto.Name = "cmbThumbTwipplePhoto";
-            this.cmbThumbTwipplePhoto.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbTwipplePhoto.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbTwipplePhoto.TabIndex = 18;
             // 
             // label51
             // 
             this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(18, 242);
+            this.label51.Location = new System.Drawing.Point(11, 201);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(30, 12);
             this.label51.TabIndex = 15;
@@ -1446,16 +1454,16 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(18, 214);
+            this.label50.Location = new System.Drawing.Point(136, 227);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(88, 12);
+            this.label50.Size = new System.Drawing.Size(130, 12);
             this.label50.TabIndex = 13;
-            this.label50.Text = "plixi/tweetphoto";
+            this.label50.Text = "lockerz/plixi/tweetphoto";
             // 
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(18, 186);
+            this.label49.Location = new System.Drawing.Point(11, 175);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(47, 12);
             this.label49.TabIndex = 11;
@@ -1464,7 +1472,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(18, 158);
+            this.label48.Location = new System.Drawing.Point(192, 149);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(34, 12);
             this.label48.TabIndex = 9;
@@ -1473,7 +1481,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(18, 130);
+            this.label47.Location = new System.Drawing.Point(11, 149);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(34, 12);
             this.label47.TabIndex = 7;
@@ -1482,7 +1490,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(18, 102);
+            this.label46.Location = new System.Drawing.Point(192, 123);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(50, 12);
             this.label46.TabIndex = 5;
@@ -1492,69 +1500,69 @@
             // 
             this.cmbThumbowly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbowly.FormattingEnabled = true;
-            this.cmbThumbowly.Location = new System.Drawing.Point(107, 239);
+            this.cmbThumbowly.Location = new System.Drawing.Point(68, 198);
             this.cmbThumbowly.Name = "cmbThumbowly";
-            this.cmbThumbowly.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbowly.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbowly.TabIndex = 16;
             // 
             // cmbThumbplixi
             // 
             this.cmbThumbplixi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbplixi.FormattingEnabled = true;
-            this.cmbThumbplixi.Location = new System.Drawing.Point(107, 211);
+            this.cmbThumbplixi.Location = new System.Drawing.Point(272, 224);
             this.cmbThumbplixi.Name = "cmbThumbplixi";
-            this.cmbThumbplixi.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbplixi.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbplixi.TabIndex = 14;
             // 
             // cmbThumbmovapic
             // 
             this.cmbThumbmovapic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbmovapic.FormattingEnabled = true;
-            this.cmbThumbmovapic.Location = new System.Drawing.Point(107, 183);
+            this.cmbThumbmovapic.Location = new System.Drawing.Point(68, 172);
             this.cmbThumbmovapic.Name = "cmbThumbmovapic";
-            this.cmbThumbmovapic.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbmovapic.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbmovapic.TabIndex = 12;
             // 
             // cmbThumbimgly
             // 
             this.cmbThumbimgly.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbimgly.FormattingEnabled = true;
-            this.cmbThumbimgly.Location = new System.Drawing.Point(107, 155);
+            this.cmbThumbimgly.Location = new System.Drawing.Point(272, 146);
             this.cmbThumbimgly.Name = "cmbThumbimgly";
-            this.cmbThumbimgly.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbimgly.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbimgly.TabIndex = 10;
             // 
             // cmbThumbyFrog
             // 
             this.cmbThumbyFrog.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbyFrog.FormattingEnabled = true;
-            this.cmbThumbyFrog.Location = new System.Drawing.Point(107, 127);
+            this.cmbThumbyFrog.Location = new System.Drawing.Point(68, 146);
             this.cmbThumbyFrog.Name = "cmbThumbyFrog";
-            this.cmbThumbyFrog.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbyFrog.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbyFrog.TabIndex = 8;
             // 
             // cmbThumbPhotozou
             // 
             this.cmbThumbPhotozou.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbPhotozou.FormattingEnabled = true;
-            this.cmbThumbPhotozou.Location = new System.Drawing.Point(107, 99);
+            this.cmbThumbPhotozou.Location = new System.Drawing.Point(272, 120);
             this.cmbThumbPhotozou.Name = "cmbThumbPhotozou";
-            this.cmbThumbPhotozou.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbPhotozou.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbPhotozou.TabIndex = 6;
             // 
             // cmbThumbTwitpic
             // 
             this.cmbThumbTwitpic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbThumbTwitpic.FormattingEnabled = true;
-            this.cmbThumbTwitpic.Location = new System.Drawing.Point(107, 71);
+            this.cmbThumbTwitpic.Location = new System.Drawing.Point(68, 120);
             this.cmbThumbTwitpic.Name = "cmbThumbTwitpic";
-            this.cmbThumbTwitpic.Size = new System.Drawing.Size(121, 20);
+            this.cmbThumbTwitpic.Size = new System.Drawing.Size(100, 20);
             this.cmbThumbTwitpic.TabIndex = 4;
             // 
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(18, 74);
+            this.label45.Location = new System.Drawing.Point(11, 123);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(39, 12);
             this.label45.TabIndex = 3;
@@ -2026,6 +2034,22 @@
             this.tabpgElse.Text = "その他";
             this.tabpgElse.UseVisualStyleBackColor = true;
             // 
+            // cboFooter
+            // 
+            this.cboFooter.FormattingEnabled = true;
+            this.cboFooter.Location = new System.Drawing.Point(22, 59);
+            this.cboFooter.Name = "cboFooter";
+            this.cboFooter.Size = new System.Drawing.Size(301, 20);
+            this.cboFooter.TabIndex = 16;
+            // 
+            // cboHeader
+            // 
+            this.cboHeader.FormattingEnabled = true;
+            this.cboHeader.Location = new System.Drawing.Point(20, 19);
+            this.cboHeader.Name = "cboHeader";
+            this.cboHeader.Size = new System.Drawing.Size(303, 20);
+            this.cboHeader.TabIndex = 15;
+            // 
             // chbConfirmDialogBlock
             // 
             this.chbConfirmDialogBlock.AutoSize = true;
@@ -2203,22 +2227,6 @@
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
-            // 
-            // cboHeader
-            // 
-            this.cboHeader.FormattingEnabled = true;
-            this.cboHeader.Location = new System.Drawing.Point(20, 19);
-            this.cboHeader.Name = "cboHeader";
-            this.cboHeader.Size = new System.Drawing.Size(303, 20);
-            this.cboHeader.TabIndex = 15;
-            // 
-            // cboFooter
-            // 
-            this.cboFooter.FormattingEnabled = true;
-            this.cboFooter.Location = new System.Drawing.Point(22, 59);
-            this.cboFooter.Name = "cboFooter";
-            this.cboFooter.Size = new System.Drawing.Size(301, 20);
-            this.cboFooter.TabIndex = 16;
             // 
             // numProfile_Interval
             // 
@@ -2585,6 +2593,42 @@
             this.txtObjStatusTextPatterns.TabIndex = 5;
             this.txtObjStatusTextPatterns.Leave += new System.EventHandler(this.txtFilter_Leave);
             // 
+            // cmbThumbYoutube
+            // 
+            this.cmbThumbYoutube.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbYoutube.FormattingEnabled = true;
+            this.cmbThumbYoutube.Location = new System.Drawing.Point(68, 94);
+            this.cmbThumbYoutube.Name = "cmbThumbYoutube";
+            this.cmbThumbYoutube.Size = new System.Drawing.Size(100, 20);
+            this.cmbThumbYoutube.TabIndex = 22;
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(11, 97);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(46, 12);
+            this.label55.TabIndex = 21;
+            this.label55.Text = "Youtube";
+            // 
+            // cmbThumbNicovideo
+            // 
+            this.cmbThumbNicovideo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbThumbNicovideo.FormattingEnabled = true;
+            this.cmbThumbNicovideo.Location = new System.Drawing.Point(272, 94);
+            this.cmbThumbNicovideo.Name = "cmbThumbNicovideo";
+            this.cmbThumbNicovideo.Size = new System.Drawing.Size(100, 20);
+            this.cmbThumbNicovideo.TabIndex = 24;
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(191, 97);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(63, 12);
+            this.label56.TabIndex = 23;
+            this.label56.Text = "ニコニコ動画";
+            // 
             // FrmConfig
             // 
             this.AcceptButton = this.btnOK;
@@ -2844,5 +2888,9 @@
         private System.Windows.Forms.ComboBox cmbThumbinstagram;
         private System.Windows.Forms.ComboBox cboFooter;
         private System.Windows.Forms.ComboBox cboHeader;
+        private System.Windows.Forms.ComboBox cmbThumbNicovideo;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.ComboBox cmbThumbYoutube;
+        private System.Windows.Forms.Label label55;
     }
 }

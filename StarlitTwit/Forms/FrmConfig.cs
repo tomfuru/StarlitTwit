@@ -406,6 +406,8 @@ namespace StarlitTwit
         private void InitializeControl()
         {
             // サムネイル設定
+            SetComboBoxEnumValue(cmbThumbYoutube, typeof(YoutubeThumbnailType));
+            SetComboBoxEnumValue(cmbThumbNicovideo, typeof(NicovideoThumbnailType));
             SetComboBoxEnumValue(cmbThumbimgly, typeof(imglyThumbnailType));
             SetComboBoxEnumValue(cmbThumbmovapic, typeof(movapicThumbnailType));
             SetComboBoxEnumValue(cmbThumbowly, typeof(owlyThumbnailType));
@@ -587,6 +589,8 @@ namespace StarlitTwit
             chbDispThumbnail.Checked = SettingsData.DisplayThumbnail;
             numThumbnailInterval.Value = SettingsData.DisplayThumbnailInterval;
 
+            cmbThumbYoutube.SelectedItem = SettingsData.ThumbType_youtube;
+            cmbThumbNicovideo.SelectedItem = SettingsData.ThumbType_nicovideo;
             cmbThumbimgly.SelectedItem = SettingsData.ThumbType_img_ly;
             cmbThumbmovapic.SelectedItem = SettingsData.ThumbType_movapic;
             cmbThumbowly.SelectedItem = SettingsData.ThumbType_ow_ly;
@@ -733,6 +737,8 @@ namespace StarlitTwit
             SettingsData.DisplayThumbnail = chbDispThumbnail.Checked;
             SettingsData.DisplayThumbnailInterval = (int)numThumbnailInterval.Value;
 
+            SettingsData.ThumbType_youtube = (YoutubeThumbnailType)cmbThumbYoutube.SelectedItem;
+            SettingsData.ThumbType_nicovideo = (NicovideoThumbnailType)cmbThumbNicovideo.SelectedItem;
             SettingsData.ThumbType_img_ly = (imglyThumbnailType)cmbThumbimgly.SelectedItem;
             SettingsData.ThumbType_movapic = (movapicThumbnailType)cmbThumbmovapic.SelectedItem;
             SettingsData.ThumbType_ow_ly = (owlyThumbnailType)cmbThumbowly.SelectedItem;
