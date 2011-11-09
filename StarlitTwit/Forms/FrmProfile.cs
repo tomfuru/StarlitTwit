@@ -396,7 +396,7 @@ namespace StarlitTwit
                 this.Invoke(new Action(() =>
                 {
                     tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
-                    btnRenew.Enabled = true;
+                    btnRetry.Enabled = true;
                 }));
             }
         }
