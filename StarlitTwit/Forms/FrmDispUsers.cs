@@ -166,6 +166,7 @@ namespace StarlitTwit
                         Text = "検索"
                     };
                     txtSearchWord.TextChanged += txtSearchWord_TextChanged;
+                    txtSearchWord.KeyDown += txtSearchWord_KeyDown;
                     btnSearch.Click += btnSearch_Click;
                     this.Controls.Add(txtSearchWord);
                     this.Controls.Add(btnSearch);
@@ -238,6 +239,18 @@ namespace StarlitTwit
             btnSearch.Enabled = (txtSearchWord.Text.Length > 0);
         }
         #endregion (txtSearchWord_TextChanged)
+        //-------------------------------------------------------------------------------
+        #region txtSearchWord_KeyDown
+        //-------------------------------------------------------------------------------
+        //
+        private void txtSearchWord_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode & Keys.Enter) == Keys.Enter) {
+                btnSearch.PerformClick();
+                e.SuppressKeyPress = true;
+            }
+        }
+        #endregion (txtSearchWord_KeyDown)
         //-------------------------------------------------------------------------------
         #region btnSearch_Click 検索クリック時
         //-------------------------------------------------------------------------------

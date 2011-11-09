@@ -91,6 +91,7 @@
             this.lblFollowed = new System.Windows.Forms.Label();
             this.rtxtDescription = new StarlitTwit.RichTextBoxEx();
             this.picbIcon = new StarlitTwit.PictureBoxEx();
+            this.tsmiDisplay_Favorites = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).BeginInit();
@@ -571,6 +572,7 @@
             this.tsmiDisplay_Follower,
             this.toolStripSeparator1,
             this.tsmiDisplay_Statuses,
+            this.tsmiDisplay_Favorites,
             this.toolStripMenuItem1,
             this.tsmiDisplay_OwnList,
             this.tsmiDisplay_BelongList,
@@ -739,6 +741,13 @@
             this.picbIcon.TabIndex = 12;
             this.picbIcon.TabStop = false;
             // 
+            // tsmiDisplay_Favorites
+            // 
+            this.tsmiDisplay_Favorites.Name = "tsmiDisplay_Favorites";
+            this.tsmiDisplay_Favorites.Size = new System.Drawing.Size(168, 22);
+            this.tsmiDisplay_Favorites.Text = "お気に入り表示(&F)";
+            this.tsmiDisplay_Favorites.Click += new System.EventHandler(this.tsmiDisplay_Favorites_Click);
+            // 
             // FrmProfile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -873,5 +882,6 @@
         private System.Windows.Forms.Label lblBlocking;
         private System.Windows.Forms.Label lblFollowing;
         private System.Windows.Forms.Label lblFollowed;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDisplay_Favorites;
     }
 }

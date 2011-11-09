@@ -101,7 +101,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private class NicovideoConverter : IThumbnailConverter
         {
-            const string CHECKPATTERN = @"^http://(www.nicovideo.jp/watch|nico.ms)/[a-z][a-z](\d+)";
+            const string CHECKPATTERN = @"^http://(www.nicovideo.jp/watch|nico.ms)/(sm|nm|so)(\d+)"; // スレッドIDは未対応
             const string THUMBFORMAT = @"http://tn-skr{0}.smilevideo.jp/smile?i={1}";
 
             bool IThumbnailConverter.IsEffectiveURL(string url)
@@ -114,7 +114,7 @@ namespace StarlitTwit
                 if (FrmMain.SettingsData.ThumbType_nicovideo != NicovideoThumbnailType.表示する) { return null; }
 
                 Match m = Regex.Match(url, CHECKPATTERN);
-                int no = int.Parse(m.Groups[2].Value);
+                int no = int.Parse(m.Groups[3].Value);
                 return string.Format(THUMBFORMAT, (no % 4) + 1, no);
             }
         }

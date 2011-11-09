@@ -309,6 +309,15 @@ namespace StarlitTwit
         }
         #endregion (tsmiDisplay_Statuses_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiDisplay_Favorites_Click お気に入り表示
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplay_Favorites_Click(object sender, EventArgs e)
+        {
+            Utilization.ShowStatusesForm(_mainForm, FrmDispStatuses.EFormType.UserFavorite, _profile.ScreenName);
+        }
+        #endregion (tsmiDisplay_Favorites_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiDisplay_OwnList_Click 所有リスト表示
         //-------------------------------------------------------------------------------
         //

@@ -462,7 +462,18 @@ namespace StarlitTwit
             }
         }
         #endregion (tsmiUser_DisplayTweets_Click)
-        #region tsmiUser_MakeUserTab_Click ユーザー：タブ作成クリック
+        //-------------------------------------------------------------------------------
+        #region tsmiUser_MakeUserSearchTab_Click ユーザー：検索タブ作成クリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUser_MakeUserSearchTab_Click(object sender, EventArgs e)
+        {
+            if (EntityEvent != null) {
+                EntityEvent(this, new EntityEventArgs(EntityEventType.User_MakeUserSearchTab, (string)tsComboUser.SelectedItem));
+            }
+        }
+        #endregion (tsmiUser_MakeUserSearchTab_Click)
+        #region tsmiUser_MakeUserTab_Click ユーザー：ユーザータブ作成クリック
         //-------------------------------------------------------------------------------
         //
         private void tsmiUser_MakeUserTab_Click(object sender, EventArgs e)
@@ -1859,6 +1870,8 @@ namespace StarlitTwit
         User_DisplayProfile,
         /// <summary>ユーザー：発言表示</summary>
         User_DisplayTweets,
+        /// <summary>ユーザー：ユーザー検索タブ作成</summary>
+        User_MakeUserSearchTab,
         /// <summary>ユーザー：ユーザータブ作成</summary>
         User_MakeUserTab,
         /// <summary>ユーザー：リストタブ作成</summary>

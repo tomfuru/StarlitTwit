@@ -1317,9 +1317,10 @@ namespace StarlitTwit
         {
             if (((user_id <= 0 && string.IsNullOrEmpty(screen_name)) || filter_to_owner_lists) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", user); }
                 if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
                 paramdic.Add("cursor", cursor.ToString());
                 if (filter_to_owner_lists) { paramdic.Add("filter_to_owned_lists", filter_to_owner_lists.ToString().ToLower()); }
@@ -1332,25 +1333,27 @@ namespace StarlitTwit
         }
         #endregion (lists_memberships)
         //-------------------------------------------------------------------------------
-        #region +lists_subscriptions?
+        #region +lists_subscriptions
         //-------------------------------------------------------------------------------
         /// <summary>
         /// <para>lists_subscriptionsメソッド</para>
-        /// <para>List the lists the specified user follows</para>
+        /// <para>Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default.</para>
         /// </summary>
         /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
-        /// <remarks>APIでは非推奨だが重複しているわけではないと思われるのでObsoleteにはしていない</remarks>
-        public SequentData<ListData> lists_subscriptions(string screen_name = "", long cursor = -1)
+        public SequentData<ListData> lists_subscriptions(long user_id = -1, string screen_name = "", int count = -1, long cursor = -1)
         {
-            if (string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (user_id <= 0 && string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
+            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", user); }
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (count > 0) { paramdic.Add("count", count.ToString()); }
                 paramdic.Add("cursor", cursor.ToString());
             }
 
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
-            string url = GetUrlWithOAuthParameters(string.Format(@"{0}{1}/lists/subscriptions.xml", URLapi, user), GET, paramdic);
+            string url = GetUrlWithOAuthParameters(string.Format(@"{0}/lists/subscriptions.xml", URLapi), GET, paramdic);
             XElement el = GetByAPI(url);
             return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")),
                 long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));

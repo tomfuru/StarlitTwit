@@ -832,6 +832,9 @@ namespace StarlitTwit
                 case EntityEventType.User_DisplayTweets:
                     TwitMenu_EntityEvent_DisplayUserTweet(sender, e);
                     break;
+                case EntityEventType.User_MakeUserSearchTab:
+                    TwitMenu_EntityEvent_MakeUserSearchTab(sender, e);
+                    break;
                 case EntityEventType.User_MakeUserTab:
                     TwitMenu_EntityEvent_MakeUserTab(sender, e);
                     break;
@@ -862,6 +865,15 @@ namespace StarlitTwit
             Utilization.ShowStatusesForm(this, FrmDispStatuses.EFormType.UserStatus, e.Data);
         }
         #endregion (TwitMenu_EntityEvent_DisplayUserTweet)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_EntityEvent_MakeUserSearchTab ユーザー検索タブ追加
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_EntityEvent_MakeUserSearchTab(object sender, EntityEventArgs e)
+        {
+            MakeNewTab(TabSearchType.Keyword, e.Data);
+        }
+        #endregion (TwitMenu_EntityEvent_MakeUserSearchTab)
         //-------------------------------------------------------------------------------
         #region TwitMenu_EntityEvent_MakeUserTab ユーザータブ追加
         //-------------------------------------------------------------------------------
