@@ -952,7 +952,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private void tsmiファイル_再起動_Click(object sender, EventArgs e)
         {
-            if (Message.ShowQuestionMessage("再起動します。") == System.Windows.Forms.DialogResult.No) { return; }
+            if (Message.ShowQuestionMessage("再起動します。よろしいですか？") == System.Windows.Forms.DialogResult.No) { return; }
 
             RestartProcess();
         }
