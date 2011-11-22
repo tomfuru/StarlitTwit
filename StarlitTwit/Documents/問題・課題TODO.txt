@@ -17,7 +17,10 @@
 
 ■要修正・確認
 ●TODOを確認
-・suggestion	
+・Utilization,GetImageFromURLの例外処理
+・MyToolTipImage.GetImagesで例外(20111115)
+・suggestion
+ -> FrmDispUsersに追加
 ・trends
 ・spam reporting(プロフィールから？)
 ・プロフィールからMention,DirectMessageを送れるように

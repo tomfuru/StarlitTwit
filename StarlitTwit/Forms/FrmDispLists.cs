@@ -164,7 +164,7 @@ namespace StarlitTwit
             using (FrmEditList frm = new FrmEditList(false, EnumerateExistingList(), listdata.Name)) {
                 frm.ListData = listdata;
                 if (frm.ShowDialog() == DialogResult.OK) {
-                    // TODO:SelectedItems[0]の変更？全更新？
+                    // TODO:SelectedItems[0]の変更
                 }
             }
         }
@@ -182,7 +182,7 @@ namespace StarlitTwit
                     return;
                 }
                 Message.ShowInfoMessage("リストを削除しました。");
-                // TODO:項目削除？全更新？
+                // TODO:項目削除
             }
         }
         #endregion (tsmiDeleteList_Click)
@@ -240,7 +240,7 @@ namespace StarlitTwit
                     return;
                 }
                 Message.ShowInfoMessage("リストをフォローしました。");
-                // TODO:フォロー表記更新？
+                // TODO:フォロー表記更新
             }
         }
         #endregion (tsmiListSubscribe_Click)
@@ -257,7 +257,7 @@ namespace StarlitTwit
                     return;
                 }
                 Message.ShowInfoMessage("リストをフォロー解除しました。");
-                // TODO:フォロー表記更新？
+                // TODO:フォロー表記更新
             }
         }
         #endregion (tsmiListUnSubscribe_Click)

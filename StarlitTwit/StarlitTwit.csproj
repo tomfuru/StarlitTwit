@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\HistoryData.cs" />
+    <Compile Include="Data\ShortcutKeyData.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Forms\FrmConfig.cs">
       <SubType>Form</SubType>
@@ -112,6 +113,12 @@
     </Compile>
     <Compile Include="Forms\FrmRenewProfileImage.Designer.cs">
       <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDiagMaker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmDiagMaker.Designer.cs">
+      <DependentUpon>FrmDiagMaker.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FrmUserStreamWatch.cs">
       <SubType>Form</SubType>
@@ -268,6 +275,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmRenewProfileImage.resx">
       <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmDiagMaker.resx">
+      <DependentUpon>FrmDiagMaker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmUserStreamWatch.resx">
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
