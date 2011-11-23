@@ -8,6 +8,7 @@ using System.Threading;
 using System.Xml.Linq;
 using System.IO;
 using System.Reflection;
+using StarlitTwit;
 
 namespace Test
 {
@@ -25,7 +26,8 @@ namespace Test
             //Application.Run(new FormFlowTest());
             //test.t();
             //Application.Run(new Form1());
-            Application.Run(new Form2());
+            //Application.Run(new Form2());
+            Application.Run(new FrmShortcutKeyEdit());
 
             //new TestClass().testMain();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace StarlitTwit
 {
@@ -11,11 +12,10 @@ namespace StarlitTwit
     [Serializable]
     public class ShortcutKeyData
     {
-        // TODO: KeyData
         /// <summary>メインフォーム上のショートカット</summary>
-        public SerializableDictionary<int, ShortcutType_MainForm> MainFormShortcutDic = new SerializableDictionary<int,ShortcutType_MainForm>();
+        public SerializableDictionary<KeyData, ShortcutType_MainForm> MainFormShortcutDic = new SerializableDictionary<KeyData,ShortcutType_MainForm>();
         /// <summary>発言上のショートカット</summary>
-        public SerializableDictionary<int, ShortcutType_Status> StatusShortcutDic = new SerializableDictionary<int,ShortcutType_Status>();
+        public SerializableDictionary<KeyData, ShortcutType_Status> StatusShortcutDic = new SerializableDictionary<KeyData,ShortcutType_Status>();
 
         //-------------------------------------------------------------------------------
 		#region DefaultData デフォルトのデータを返します
@@ -101,4 +101,125 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (ShortcutType_Status 列挙体)
+
+    //-------------------------------------------------------------------------------
+    #region (class)KeyData
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// キー入力データを表す構造体です。
+    /// </summary>
+    [Serializable]
+    public class KeyData
+    {
+        // TODO:Oemなキーを文字列変換時に置換
+        //-------------------------------------------------------------------------------
+        #region 定数
+        //-------------------------------------------------------------------------------
+        public const string NOT_CONFIGED = "設定なし";
+        private const string CTRL = "Ctrl";
+        private const string SHIFT = "Shift";
+        private const string ALT = "Alt";
+        private const char PLUS = '+';
+        //-------------------------------------------------------------------------------
+        #endregion (定数)
+
+        //-------------------------------------------------------------------------------
+        #region Alt プロパティ：Alt修飾があるかどうか
+        //-------------------------------------------------------------------------------
+        private bool _alt;
+        /// <summary>Alt修飾があるかどうか</summary>
+        public bool Alt
+        {
+            get { return _alt; }
+            set { _alt = value; }
+        }
+        #endregion (Alt)
+        //-------------------------------------------------------------------------------
+        #region Shift プロパティ：Shift修飾があるかどうか
+        //-------------------------------------------------------------------------------
+        private bool _shift;
+        /// <summary>
+        /// Shift修飾があるかどうか
+        /// </summary>
+        public bool Shift
+        {
+            get { return _shift; }
+            set { _shift = value; }
+        }
+        #endregion (Shift)
+        //-------------------------------------------------------------------------------
+        #region Ctrl プロパティ：Crtl修飾があるかどうか
+        //-------------------------------------------------------------------------------
+        private bool _ctrl;
+        /// <summary>
+        /// Crtl修飾があるかどうか
+        /// </summary>
+        public bool Ctrl
+        {
+            get { return _ctrl; }
+            set { _ctrl = value; }
+        }
+        #endregion (Ctrl)
+        /// <summary>メインキー</summary>
+        public Keys Key;
+
+        //-------------------------------------------------------------------------------
+        #region +[override]ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (this.Ctrl) {
+                if (sb.Length != 0) { sb.Append(PLUS); }
+                sb.Append(CTRL);
+            }
+            if (this.Alt) {
+                if (sb.Length != 0) { sb.Append(PLUS); }
+                sb.Append(ALT);
+            }
+            if (this.Shift) {
+                if (sb.Length != 0) { sb.Append(PLUS); }
+                sb.Append(SHIFT);
+            }
+            if (sb.Length != 0) { sb.Append(PLUS); }
+            sb.Append(this.Key.ToString());
+            return sb.ToString();
+        }
+        #endregion (+[override]ToString)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]FromString 文字列から
+        //-------------------------------------------------------------------------------
+        //
+        public static KeyData FromString(string text)
+        {
+            string[] sKeyElements = text.Split(PLUS);        // +で区切る
+            KeyData keyData = new KeyData();
+
+            foreach (string str in sKeyElements) {
+                if (str.Equals(CTRL)) {
+                    keyData.Ctrl = true;
+                }
+                else if (str.Equals(ALT)) {
+                    keyData.Alt = true;
+                }
+                else if (str.Equals(SHIFT)) {
+                    keyData.Shift = true;
+                }
+                else if (str.Equals(NOT_CONFIGED)) {
+                    return null;
+                }
+                else {
+                    keyData.Key = (Keys)MyConvert.EnumParse<Keys>(str);
+                }
+
+            }
+
+            return keyData;
+        }
+        #endregion (FromString)
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (KeyData)
 }

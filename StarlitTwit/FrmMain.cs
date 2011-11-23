@@ -948,6 +948,19 @@ namespace StarlitTwit
         }
         #endregion (tsmiファイル_設定_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiファイル_キーボードショートカット設定_Click
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiファイル_キーボードショートカット設定_Click(object sender, EventArgs e)
+        {
+            using (FrmShortcutKeyEdit frm = new FrmShortcutKeyEdit()) {
+                if (frm.ShowDialog() == DialogResult.OK) {
+
+                }
+            }
+        }
+        #endregion (tsmiファイル_キーボードショートカット設定_Click)
+        //-------------------------------------------------------------------------------
         #region tsmiファイル_再起動_Click 再起動
         //-------------------------------------------------------------------------------
         private void tsmiファイル_再起動_Click(object sender, EventArgs e)

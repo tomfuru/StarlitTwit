@@ -120,6 +120,12 @@
     <Compile Include="Forms\FrmDiagMaker.Designer.cs">
       <DependentUpon>FrmDiagMaker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmShortcutKeyEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmShortcutKeyEdit.Designer.cs">
+      <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmUserStreamWatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +165,12 @@
     <Compile Include="BaseTools.cs" />
     <Compile Include="Function\HistoryListManager.cs" />
     <Compile Include="Function\HistoryManager.cs" />
+    <Compile Include="Function\KeyEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Function\KeyEditForm.designer.cs">
+      <DependentUpon>KeyEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Function\PictureGetter.cs" />
     <Compile Include="Function\StatusFilter.cs" />
     <Compile Include="Function\URLShortener.cs" />
@@ -172,6 +184,12 @@
     <Compile Include="Data\SettingsData.cs" />
     <Compile Include="UserControls\ImageListWrapper.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\KeyInputGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\KeyInputGrid.Designer.cs">
+      <DependentUpon>KeyInputGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListViewEx.cs">
       <SubType>Component</SubType>
@@ -202,6 +220,12 @@
     </Compile>
     <Compile Include="UserControls\RichTextBoxHash.Designer.cs">
       <DependentUpon>RichTextBoxHash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\KeyInputRight.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\KeyInputRight.Designer.cs">
+      <DependentUpon>KeyInputRight.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\TabControlEx.cs">
       <SubType>Component</SubType>
@@ -279,6 +303,9 @@
     <EmbeddedResource Include="Forms\FrmDiagMaker.resx">
       <DependentUpon>FrmDiagMaker.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmShortcutKeyEdit.resx">
+      <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmUserStreamWatch.resx">
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
     </EmbeddedResource>
@@ -297,6 +324,9 @@
     <EmbeddedResource Include="Forms\FrmAuthWebBrowser.resx">
       <DependentUpon>FrmAuthWebBrowser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Function\KeyEditForm.resx">
+      <DependentUpon>KeyEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -307,6 +337,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UserControls\KeyInputGrid.resx">
+      <DependentUpon>KeyInputGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\KeyInputRight.resx">
+      <DependentUpon>KeyInputRight.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\NumericUpDownExtended.resx">
       <DependentUpon>NumericUpDownExtended.cs</DependentUpon>
     </EmbeddedResource>
