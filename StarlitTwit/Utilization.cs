@@ -674,8 +674,20 @@ namespace StarlitTwit
         /// </summary>
         /// <param name="url">URL</param>
         /// <param name="useInternalBrowser">内部ブラウザを使用するかどうか</param>
-        public static void OpenBrowser(string url, bool useInternalBrowser)
+        public static void OpenBrowser(string url, bool useInternalBrowser, bool thinkShindanMaker = true)
         {
+            const string URL_FORMAT = @"http://shindanmaker.com/";
+
+            if (thinkShindanMaker && url.StartsWith(URL_FORMAT)) {
+                int no;
+                if (int.TryParse(url.Remove(0, URL_FORMAT.Length), out no)) {
+                    var diagFrm = new FrmDiagMaker(no, FrmMain.Twitter.ScreenName);
+                    diagFrm.Show();
+                    diagFrm.Activate();
+                    return;
+                }
+            }
+
             if (useInternalBrowser) {
                 var browserFrm = new FrmWebBrowser();
                 browserFrm.SetURL(url);
