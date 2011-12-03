@@ -1280,7 +1280,7 @@ namespace StarlitTwit
         /// <param name="owner_id">[select option]slugを指定する場合にscreen_nameかどちらかが必要．リストの作成者のUserID</param>
         /// <returns></returns>
         public IEnumerable<TwitData> lists_statuses(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
-            long since_id = -1, long max_id = -1, int per_page = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+            long since_id = -1, long max_id = -1, int per_page = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool include_rts = false)
         {
             if (string.IsNullOrEmpty(owner_screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
 
@@ -1295,6 +1295,7 @@ namespace StarlitTwit
                 if (per_page > 0) { paramdic.Add("per_page", per_page.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+                if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
             }
 
             string url = GetUrlWithOAuthParameters(string.Format(@"{0}lists/statuses.xml", URLapi), GET, paramdic);
