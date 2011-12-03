@@ -22,7 +22,7 @@ namespace StarlitTwit
         public const char CHR_LOCKED = '◆';
         public const char CHR_FAVORITED = '★';
         public const string STR_DATETIMEFORMAT = "yyyy/MM/dd HH:mm:ss";
-        public const string URL_REGEX_PATTERN = @"h?(ttp|ttps)://[-_!~*'()0-9a-zA-Z;@&=+$,%]+\.[a-zA-Z]+[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]*";
+        public const string URL_REGEX_PATTERN = @"h?(ttp|ttps)://[-_!~*'()0-9a-zA-Z;@&=+$,%.]+\.[a-zA-Z]+[-_.!~*'()0-9a-zA-Z;?:@&=+$,%#/]*";
 
         private const string SAVEFILE_NAME = @"Settings.dat";
 

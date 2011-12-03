@@ -72,6 +72,9 @@
     <Compile Include="..\StarlitTwit\Data\SettingsData.cs">
       <Link>Data\SettingsData.cs</Link>
     </Compile>
+    <Compile Include="..\StarlitTwit\Data\ShortcutKeyData.cs">
+      <Link>Data\ShortcutKeyData.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
@@ -90,6 +93,14 @@
     <Compile Include="..\StarlitTwit\Forms\FrmConfig.designer.cs">
       <Link>Forms\FrmConfig.designer.cs</Link>
       <DependentUpon>FrmConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDiagMaker.cs">
+      <Link>Forms\FrmDiagMaker.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDiagMaker.designer.cs">
+      <Link>Forms\FrmDiagMaker.designer.cs</Link>
+      <DependentUpon>FrmDiagMaker.cs</DependentUpon>
     </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmDispLists.cs">
       <Link>Forms\FrmDispLists.cs</Link>
@@ -171,6 +182,14 @@
       <Link>Forms\FrmRenewProfileImage.designer.cs</Link>
       <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmShortcutKeyEdit.cs">
+      <Link>Forms\FrmShortcutKeyEdit.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmShortcutKeyEdit.designer.cs">
+      <Link>Forms\FrmShortcutKeyEdit.designer.cs</Link>
+      <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmUserStreamWatch.cs">
       <Link>Forms\FrmUserStreamWatch.cs</Link>
       <SubType>Form</SubType>
@@ -204,6 +223,14 @@
     <Compile Include="..\StarlitTwit\Function\ImageAnimation.cs">
       <Link>Function\ImageAnimation.cs</Link>
     </Compile>
+    <Compile Include="..\StarlitTwit\Function\KeyEditForm.cs">
+      <Link>Function\KeyEditForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Function\KeyEditForm.designer.cs">
+      <Link>Function\KeyEditForm.designer.cs</Link>
+      <DependentUpon>KeyEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Function\PictureGetter.cs">
       <Link>Function\PictureGetter.cs</Link>
     </Compile>
@@ -228,6 +255,22 @@
     <Compile Include="..\StarlitTwit\UserControls\ImageListWrapper.cs">
       <Link>UserControls\ImageListWrapper.cs</Link>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\KeyInputGrid.cs">
+      <Link>UserControls\KeyInputGrid.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\KeyInputGrid.designer.cs">
+      <Link>UserControls\KeyInputGrid.designer.cs</Link>
+      <DependentUpon>KeyInputGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\KeyInputRight.cs">
+      <Link>UserControls\KeyInputRight.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\KeyInputRight.designer.cs">
+      <Link>UserControls\KeyInputRight.designer.cs</Link>
+      <DependentUpon>KeyInputRight.cs</DependentUpon>
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\ListViewEx.cs">
       <Link>UserControls\ListViewEx.cs</Link>
@@ -344,6 +387,10 @@
       <Link>Forms\FrmConfig.resx</Link>
       <DependentUpon>FrmConfig.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDiagMaker.resx">
+      <Link>Forms\FrmDiagMaker.resx</Link>
+      <DependentUpon>FrmDiagMaker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispLists.resx">
       <Link>Forms\FrmDispLists.resx</Link>
       <DependentUpon>FrmDispLists.cs</DependentUpon>
@@ -384,6 +431,10 @@
       <Link>Forms\FrmRenewProfileImage.resx</Link>
       <DependentUpon>FrmRenewProfileImage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmShortcutKeyEdit.resx">
+      <Link>Forms\FrmShortcutKeyEdit.resx</Link>
+      <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmUserStreamWatch.resx">
       <Link>Forms\FrmUserStreamWatch.resx</Link>
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
@@ -395,6 +446,18 @@
     <EmbeddedResource Include="..\StarlitTwit\FrmMain.resx">
       <Link>FrmMain.resx</Link>
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Function\KeyEditForm.resx">
+      <Link>Function\KeyEditForm.resx</Link>
+      <DependentUpon>KeyEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\KeyInputGrid.resx">
+      <Link>UserControls\KeyInputGrid.resx</Link>
+      <DependentUpon>KeyInputGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\KeyInputRight.resx">
+      <Link>UserControls\KeyInputRight.resx</Link>
+      <DependentUpon>KeyInputRight.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\UserControls\NumericUpDownExtended.resx">
       <Link>UserControls\NumericUpDownExtended.resx</Link>

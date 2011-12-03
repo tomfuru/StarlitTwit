@@ -98,6 +98,7 @@ Global
 		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Debug|x86.Build.0 = Debug|x64
 		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Release|Any CPU.ActiveCfg = Release|x64
 		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Release|Mixed Platforms.Build.0 = Release|x64
 		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Release|Win32.ActiveCfg = Release|x64
 		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Release|x64.ActiveCfg = Release|x64
 		{FC4D9C38-8347-49A6-832F-8768784C3AAE}.Release|x64.Build.0 = Release|x64
