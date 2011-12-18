@@ -571,7 +571,7 @@ namespace StarlitTwit
         /// <remarks>API Documentationにはsince,max_id無</remarks>
         public IEnumerable<TwitData> search(string q, string lang = "", string locale = "ja",
             int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
-            string until = "", object geocode = null, bool show_user = false, string result_type = "")
+            string until = "", object geocode = null, bool show_user = false, string result_type = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (string.IsNullOrEmpty(q)) { throw new ArgumentException("qかphraseのどちらかの引数は必須です。"); }
 
@@ -589,6 +589,7 @@ namespace StarlitTwit
                 // geocode
                 if (show_user) { paramdic.Add("show_user", show_user.ToString().ToLower()); }
                 if (!string.IsNullOrEmpty(result_type)) { paramdic.Add("result_type", result_type); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
 
             string url = GetUrlWithOAuthParameters(URLsearch + "search.json", GET, paramdic);
@@ -3134,6 +3135,15 @@ namespace StarlitTwit
                         UserProtected = false,
                         RTTwitData = null
                     };
+
+                    if (xel.Element("entities") != null) {
+                        IEnumerable<URLData> urldata = ConvertToURLData(xel.Element("entities"), true);
+                        foreach (var u in urldata) {
+                            data.MainTwitData.Text = data.MainTwitData.Text.Replace(u.shorten_url, u.expand_url);
+                        }
+                        data.UrlData = urldata.ToArray();
+                    }
+
                     data.Entities = GetEntitiesByRegex(data.Text).ToArray();
                     return data;
                 };
@@ -3368,11 +3378,11 @@ namespace StarlitTwit
         #region -ConvertToURLData XElementからURLData型に変換します。
         //-------------------------------------------------------------------------------
         //
-        private IEnumerable<URLData> ConvertToURLData(XElement entityEl, bool isUserStreamData)
+        private IEnumerable<URLData> ConvertToURLData(XElement entityEl, bool isJsonConvertData)
         {
             // urls
-            var urls = (isUserStreamData) ? entityEl.Element("urls").Elements("item") : entityEl.Element("urls").Elements("url");
-            if (urls != null) {
+            if (entityEl.Element("urls") != null) {
+                var urls = (isJsonConvertData) ? entityEl.Element("urls").Elements("item") : entityEl.Element("urls").Elements("url");
                 var urldata = from u in urls
                               where !string.IsNullOrEmpty(u.Element("expanded_url").Value)
                               select new URLData() {
@@ -3384,7 +3394,7 @@ namespace StarlitTwit
 
             // media
             if (entityEl.Element("media") != null) {
-                var medias = (isUserStreamData) ? entityEl.Element("media").Elements("item") : entityEl.Element("media").Elements("creative");
+                var medias = (isJsonConvertData) ? entityEl.Element("media").Elements("item") : entityEl.Element("media").Elements("creative");
                 var mediadata = from m in medias
                                 select new URLData() {
                                     shorten_url = m.Element("url").Value,
