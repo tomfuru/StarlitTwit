@@ -596,7 +596,7 @@ namespace StarlitTwit
 
             XElement el = GetByAPIJson(url);
 
-            IEnumerable<TwitData> data = ConvertToTwitDataJson(el);
+            IEnumerable<TwitData> data = ConvertToTwitDataSearch(el);
             //string[] user_names = data
             //    .Where((tdata) => !tdata.UserProtected)
             //    .Select((tdata) => tdata.UserScreenName)
@@ -3110,10 +3110,10 @@ namespace StarlitTwit
         }
         #endregion (ConvertToListData)
         //-------------------------------------------------------------------------------
-        #region -ConvertToTwitDataJson XElementからTwitDataの配列型に変換します。
+        #region -ConvertToTwitDataSearch XElementからTwitDataの配列型に変換します。
         //-------------------------------------------------------------------------------
         //
-        private IEnumerable<TwitData> ConvertToTwitDataJson(XElement el)
+        private IEnumerable<TwitData> ConvertToTwitDataSearch(XElement el)
         {
             try {
                 Func<XElement, TwitData> makeTwitData = xel =>
@@ -3156,7 +3156,7 @@ namespace StarlitTwit
                 throw new TwitterAPIException(1001, "予期しないXmlです。");
             }
         }
-        #endregion (ConvertToTwitDataJson)
+        #endregion (ConvertToTwitDataSearch)
         //-------------------------------------------------------------------------------
         #region -ConvertToUserProfile XElementからUserProfile型に変換します。
         //-------------------------------------------------------------------------------
