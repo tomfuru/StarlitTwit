@@ -331,3 +331,123 @@ Deprecated
     <is_translator>false</is_translator>
   </user>
 </list>
+
+●entity
+<entities>
+ <user_mentions />
+ <media>
+  <creative end="60" start="40">
+   <media_url_https>https://p.twimg.com/Ag7lq8xCQAAmBeb.jpg</media_url_https>
+   <type>photo</type>
+   <display_url>pic.twitter.com/mY2Yc8Bf</display_url>
+   <sizes>
+    <small>
+     <w>340</w>
+     <h>255</h>
+     <resize>fit</resize>
+    </small>
+    <large>
+     <w>1024</w>
+     <h>768</h>
+     <resize>fit</resize>
+    </large>
+    <thumb>
+     <w>150</w>
+     <h>150</h>
+     <resize>crop</resize>
+    </thumb>
+    <medium>
+     <w>600</w>
+     <h>450</h>
+     <resize>fit</resize>
+    </medium>
+   </sizes>
+   <url>http://t.co/mY2Yc8Bf</url>
+   <media_url>http://p.twimg.com/Ag7lq8xCQAAmBeb.jpg</media_url>
+   <expanded_url>http://twitter.com/pinokio7kayo/status/148308363774672896/photo/1</expanded_url>
+   <id_str>148308363778867200</id_str>
+   <id>148308363778867200</id>
+  </creative>
+ </media>
+ <urls />
+ <hashtags />
+</entities>
+
+●suggestion--
+<suggestions type="array">
+  <category>
+    <name>芸能・文化</name>
+    <slug>lisu-0</slug>
+    <size>60</size>
+  </category>
+  <category>
+    <name>音楽</name>
+    <slug>list-11</slug>
+    <size>31</size>
+  </category>
+  <category>
+    <name>お笑い</name>
+    <slug>お笑い</slug>
+    <size>29</size>
+  </category>
+  <category>
+    <name>ニュース</name>
+    <slug>ニュース</slug>
+    <size>27</size>
+  </category>
+  <category>
+    <name>スポーツ</name>
+    <slug>list-15</slug>
+    <size>16</size>
+  </category>
+  <category>
+    <name>ツイッター</name>
+    <slug>jalist-8</slug>
+    <size>12</size>
+  </category>
+  <category>
+    <name>ビジネス・ジャーナリスト</name>
+    <slug>list-16</slug>
+    <size>12</size>
+  </category>
+  <category>
+    <name>地震</name>
+    <slug>地震</slug>
+    <size>33</size>
+  </category>
+  <category>
+    <name>社会貢献</name>
+    <slug>list</slug>
+    <size>8</size>
+  </category>
+  <category>
+    <name>政治家/政党</name>
+    <slug>政治家-政党</slug>
+    <size>23</size>
+  </category>
+  <category>
+    <name>政府</name>
+    <slug>政府</slug>
+    <size>11</size>
+  </category>
+  <category>
+    <name>電力</name>
+    <slug>電力</slug>
+    <size>14</size>
+  </category>
+  <category>
+    <name>作家/漫画家</name>
+    <slug>作家-漫画家</slug>
+    <size>5</size>
+  </category>
+  <category>
+    <name>海外アーティスト</name>
+    <slug>海外アーティスト</slug>
+    <size>34</size>
+  </category>
+  <category>
+    <name>声優</name>
+    <slug>声優</slug>
+    <size>7</size>
+  </category>
+</suggestions>

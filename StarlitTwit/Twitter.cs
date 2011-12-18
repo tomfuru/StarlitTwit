@@ -22,7 +22,7 @@ using System.Xml.Linq;
  * Direct Message
  * Friends&Tweets
  % Users
- - Suggested Users
+ * Suggested Users
  * Favorites
  % Lists
  % Accounts
@@ -1167,6 +1167,58 @@ namespace StarlitTwit
         #endregion (Users)
 
         //-------------------------------------------------------------------------------
+        #region Suggested Users
+        //-------------------------------------------------------------------------------
+        #region users_suggestions
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// Access to Twitter's suggested user list. This returns the list of suggested user categories.
+        /// </summary>
+        /// <param name="lang"></param>
+        public IEnumerable<SuggestionCategoryData> users_suggestions(string lang = "ja")
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(lang)) { paramdic.Add("lang", lang); }
+            }
+
+            string tail = (paramdic.Count != 0) ? '?' + JoinParameters(paramdic) : "";
+
+            string url = URLapi + @"users/suggestions.xml" + tail;
+            return ConvertToSuggestionCategoryDataArray(GetByAPI(url));
+        }
+        #endregion (users_suggestions)
+        //-------------------------------------------------------------------------------
+        #region users_suggestions_slug
+        //-------------------------------------------------------------------------------
+        //
+        public IEnumerable<UserProfile> users_suggestions_slug(string slug, string lang = "ja")
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (!string.IsNullOrEmpty(lang)) { paramdic.Add("lang", lang); }
+            }
+            string tail = (paramdic.Count != 0) ? '?' + JoinParameters(paramdic) : "";
+
+            string url = string.Format(@"{0}users/suggestions/{1}.xml{2}", URLapi, Utilization.UrlEncode(slug), tail);
+            XElement el = GetByAPI(url);
+            return ConvertToUserProfileArray(el.Element("users"));
+        }
+        #endregion (users_suggestions_slug)
+        //-------------------------------------------------------------------------------
+        #region users_suggestions_slug_members
+        //-------------------------------------------------------------------------------
+        //
+        public IEnumerable<UserProfile> users_suggestions_slug_members(string slug)
+        {
+            string url = string.Format(@"{0}users/suggestions/{1}/members.xml", URLapi, Utilization.UrlEncode(slug));
+            return ConvertToUserProfileArray(GetByAPI(url));
+        }
+        #endregion (users_suggestions_slug_members)
+        //-------------------------------------------------------------------------------
+        #endregion (Suggested Users)
+
+        //-------------------------------------------------------------------------------
         #region Favorites Resources
         //-------------------------------------------------------------------------------
         #region +favorites
@@ -1253,9 +1305,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public IEnumerable<ListData> list_all(string screen_name = "", long user_id = -1)
         {
-            if (string.IsNullOrEmpty(screen_name) && user_id <= 0 && string.IsNullOrEmpty(ScreenName)) {
-                throw new InvalidOperationException("認証されていません。");
-            }
+            if (user_id <= 0 && string.IsNullOrEmpty(screen_name)) { AssertAuthenticated(); } // 認証確認
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1283,7 +1333,7 @@ namespace StarlitTwit
         public IEnumerable<TwitData> lists_statuses(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1,
             long since_id = -1, long max_id = -1, int per_page = -1, int page = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES, bool include_rts = false)
         {
-            if (string.IsNullOrEmpty(owner_screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (string.IsNullOrEmpty(owner_screen_name) && owner_id < 0) { AssertAuthenticated(); } // 認証確認
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1317,12 +1367,12 @@ namespace StarlitTwit
         /// <param name="filter_to_owner_lists">[option]trueに設定すると認証ユーザーの所有するリストのみ</param>
         public SequentData<ListData> lists_memberships(long user_id = -1, string screen_name = "", long cursor = -1, bool filter_to_owner_lists = false)
         {
-            if (((user_id <= 0 && string.IsNullOrEmpty(screen_name)) || filter_to_owner_lists) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (((user_id <= 0 && string.IsNullOrEmpty(screen_name)) || filter_to_owner_lists)) { AssertAuthenticated(); } // 認証確認
 
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string user = (user_id <= 0 && string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", user); }
+                if (!string.IsNullOrEmpty(user)) { paramdic.Add("screen_name", user); }
                 if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
                 paramdic.Add("cursor", cursor.ToString());
                 if (filter_to_owner_lists) { paramdic.Add("filter_to_owned_lists", filter_to_owner_lists.ToString().ToLower()); }
@@ -1344,12 +1394,12 @@ namespace StarlitTwit
         /// <param name="screen_name">フォローしているリストを調べるユーザー名</param>
         public SequentData<ListData> lists_subscriptions(long user_id = -1, string screen_name = "", int count = -1, long cursor = -1)
         {
-            if (user_id <= 0 && string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (user_id <= 0 && string.IsNullOrEmpty(screen_name)) { AssertAuthenticated(); } // 認証確認
 
-            string user = (string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
+            string user = (user_id <= 0 && string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", user); }
+                if (!string.IsNullOrEmpty(user)) { paramdic.Add("screen_name", user); }
                 if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 paramdic.Add("cursor", cursor.ToString());
@@ -1415,7 +1465,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public ListData list_subscribers_create(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 &&
                 (string.IsNullOrEmpty(slug) ||
                  (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
@@ -1492,7 +1543,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public ListData list_subscribers_destroy(long list_id = -1, string slug = "", string owner_screen_name = "", long owner_id = -1)
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 &&
                 (string.IsNullOrEmpty(slug) ||
                  (!string.IsNullOrEmpty(slug) && owner_id <= 0 && string.IsNullOrEmpty(owner_screen_name)))) {
@@ -1529,7 +1581,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public object list_create_all(long list_id = -1, string slug = "", long[] user_ids = null, string[] screen_names = null)
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストの特定に必要な情報が足りません。"); }
             if ((user_ids == null || user_ids.Length == 0) && (screen_names == null || screen_names.Length == 0)) {
                 throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。");
@@ -1649,7 +1702,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public ListData list_members_create(long list_id = -1, string slug = "", long user_id = -1, string screen_name = "")
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストの特定に必要な情報が足りません。"); }
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1683,7 +1737,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public ListData list_members_destroy(long list_id = -1, string slug = "", long user_id = -1, string screen_name = "")
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストの特定に必要な情報が足りません。"); }
 
             if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
@@ -1717,7 +1772,8 @@ namespace StarlitTwit
         /// <remarks>owner_screen_name or owner_idは必要?</remarks>
         public ListData lists_destroy(long list_id = -1, string slug = "")
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストIDかslugのどちらか1つは必要です。"); }
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1750,7 +1806,8 @@ namespace StarlitTwit
         public ListData lists_update(long list_id = -1, string slug = "",
                                      string name = null, bool isPrivate = false, string description = null)
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
+
             if (list_id <= 0 && string.IsNullOrEmpty(slug)) { throw new ArgumentException("リストIDかslugのどちらか1つは必要です。"); }
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1782,7 +1839,7 @@ namespace StarlitTwit
         /// <returns></returns>
         public ListData lists_create(string name, bool isPrivate = false, string description = null)
         {
-            if (string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            AssertAuthenticated(); // 認証確認
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
@@ -1808,12 +1865,13 @@ namespace StarlitTwit
         /// <returns></returns>
         public SequentData<ListData> lists(long user_id = -1, string screen_name = "", long cursor = -1)
         {
-            if (user_id < 0 && string.IsNullOrEmpty(screen_name) && string.IsNullOrEmpty(ScreenName)) { throw new InvalidOperationException("認証されていません。"); }
+            if (user_id <= 0 && string.IsNullOrEmpty(screen_name)) { AssertAuthenticated(); } // 認証確認 
 
+            string user = (user_id <= 0 && string.IsNullOrEmpty(screen_name)) ? ScreenName : screen_name;
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
-                if (!string.IsNullOrEmpty(screen_name)) { paramdic.Add("screen_name", screen_name); }
+                if (!string.IsNullOrEmpty(user)) { paramdic.Add("screen_name", user); }
                 paramdic.Add("cursor", cursor.ToString());
             }
 
@@ -3335,6 +3393,36 @@ namespace StarlitTwit
         }
         #endregion (ConvertToFriendShipDataArray)
         //-------------------------------------------------------------------------------
+        #region -ConvertToSuggestionCategoryData XElementからSuggestionCategoryData型へ変換します
+        //-------------------------------------------------------------------------------
+        //
+        private SuggestionCategoryData ConvertToSuggestionCategoryData(XElement el)
+        {
+            try {
+                return new SuggestionCategoryData() {
+                    name = el.Element("name").Value,
+                    slug = el.Element("slug").Value,
+                    size = int.Parse(el.Element("size").Value)
+                };
+            }
+            catch (NullReferenceException ex) {
+                Log.DebugLog(ex);
+                Log.DebugLog(el.ToString());
+                throw new TwitterAPIException(1001, "予期しないXmlです。");
+            }
+        }
+        #endregion (ConvertToSuggestionCategoryData)
+        //-------------------------------------------------------------------------------
+        #region ConvertToSuggestionCategoryDataArray XElementからSuggetsionCategoryData型の列挙型へ変換します
+        //-------------------------------------------------------------------------------
+        //
+        private IEnumerable<SuggestionCategoryData> ConvertToSuggestionCategoryDataArray(XElement el)
+        {
+            return from stat in el.Elements("category")
+                   select ConvertToSuggestionCategoryData(stat);
+        }
+        #endregion (ConvertToSuggestionCategoryDataArray)
+        //-------------------------------------------------------------------------------
         #region -ConvertToEntityData XElementからEntityData型に変換します
         //-------------------------------------------------------------------------------
         //
@@ -3661,6 +3749,19 @@ namespace StarlitTwit
             }
         }
         #endregion (GetEntitiesByRegex)
+        //===============================================================================
+        #region -AssertAuthenticated 認証済みを確認
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 認証済みを確認します。認証済みでない場合は例外を発します。
+        /// </summary>
+        private void AssertAuthenticated()
+        {
+            if (string.IsNullOrEmpty(ScreenName)) {
+                throw new InvalidOperationException("認証されていません。");
+            }
+        }
+        #endregion (AssertAuthenticated)
         //-------------------------------------------------------------------------------
         #endregion (Private Util Methods)
     }
@@ -4051,6 +4152,23 @@ namespace StarlitTwit
     }
     //-------------------------------------------------------------------------------
     #endregion (TwitType)
+    //-------------------------------------------------------------------------------
+    #region SuggestionCategoryData 構造体：
+    //-------------------------------------------------------------------------------
+    /// <summary>
+    /// Suggestionのカテゴリごとのデータ
+    /// </summary>
+    public struct SuggestionCategoryData
+    {
+        /// <summary>名前</summary>
+        public string name;
+        /// <summary>slug</summary>
+        public string slug;
+        /// <summary>数</summary>
+        public int size;
+    }
+    //-------------------------------------------------------------------------------
+    #endregion (SuggestionCategoryData)
 
     //-------------------------------------------------------------------------------
     #region EntityData 構造体

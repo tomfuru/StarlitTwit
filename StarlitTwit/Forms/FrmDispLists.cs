@@ -448,7 +448,7 @@ namespace StarlitTwit
 
                     this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
                 }
-                catch (TwitterAPIException) {
+                catch (TwitterAPIException/* e*/) {
                     this.Invoke(new Action(() =>
                     {
                         tsslLabel.Text = "取得に失敗しました。";
@@ -511,9 +511,11 @@ namespace StarlitTwit
                         d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;
                     }
                 }
-                _imageAnimation.StopAnimation();
             }
             catch (InvalidOperationException) { }
+            finally {
+                _imageAnimation.StopAnimation();
+            }
         }
         #endregion (GetImages)
         //-------------------------------------------------------------------------------

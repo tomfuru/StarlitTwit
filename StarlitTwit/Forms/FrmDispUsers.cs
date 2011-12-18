@@ -96,7 +96,9 @@ namespace StarlitTwit
             /// <summary>ブロック中のユーザー</summary>
             MyBlocking,
             /// <summary>ユーザー検索用</summary>
-            UserSearch
+            UserSearch,
+            ///// <summary>おすすめユーザー</summary>
+            //Suggestion
         }
         //-------------------------------------------------------------------------------
         #endregion (EFormType)
@@ -172,6 +174,9 @@ namespace StarlitTwit
                     this.Controls.Add(btnSearch);
                     txtSearchWord.Focus();
                     break;
+                //case EFormType.Suggestion:
+                //    Text = "おすすめユーザー";
+                //    break;
             }
 
             lblCount.Text = "";
@@ -739,9 +744,11 @@ namespace StarlitTwit
                         d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;
                     }
                 }
-                _imageAnimation.StopAnimation();
             }
             catch (InvalidOperationException) { }
+            finally {
+                _imageAnimation.StopAnimation();
+            }
         }
         #endregion (GetImages)
         //-------------------------------------------------------------------------------

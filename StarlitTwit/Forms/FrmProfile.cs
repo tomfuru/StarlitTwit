@@ -454,7 +454,11 @@ namespace StarlitTwit
         //
         private void SetRelationshipData(RelationshipData relation)
         {
-            //lblBlocking.Visible = relation.Blocking; // friendships_showのblockingが正しい値を返したら有効に
+            // TODO:friendships_showのblockingが正しい値を返したら有効に
+            //lblBlocking.Visible = relation.Blocking; 
+            //tsmiOperation_Block.Visible = !relation.Blocking;
+            //tsmiOperation_UnBlock.Visible = relation.Blocking;
+
             lblFollowing.Text = GetFollowingOrNotText(relation.Following);
             lblFollowed.Text = GetFollowingOrNotText(relation.Followed);
         }

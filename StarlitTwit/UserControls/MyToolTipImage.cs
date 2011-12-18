@@ -332,42 +332,45 @@ namespace StarlitTwit
         {
             _imageAnimation.StartAnimation();
 
-            _pictureNum = urls.Length;
-            _loadIndex = 0;
-            List<Image> list = new List<Image>();
-            foreach (var url in urls) {
-                _loadIndex++;
-                Image img = Utilization.GetImageFromURL(url);
-                if (img != null) { list.Add(img); }
-            }
-            _loadIndex = 1;
+            try {
+                _pictureNum = urls.Length;
+                _loadIndex = 0;
+                List<Image> list = new List<Image>();
+                foreach (var url in urls) {
+                    _loadIndex++;
+                    Image img = Utilization.GetImageFromURL(url);
+                    if (img != null) { list.Add(img); }
+                }
+                _loadIndex = 1;
 
-            if (list.Count > 0) {
-                lock (_lockimg) { _img = list.ToArray(); }
-                if (DisplayForm != null) {
-                    CancelEventArgs e = new CancelEventArgs();
-                    OnShowToolTip(e);
-                    if (!e.Cancel) {
-                        try {
-                            DisplayForm.Invoke(new Action(() => ConfigDispForm()));
-                            DisplayForm.Invalidate();
+                if (list.Count > 0) {
+                    lock (_lockimg) { _img = list.ToArray(); }
+                    if (DisplayForm != null) {
+                        CancelEventArgs e = new CancelEventArgs();
+                        OnShowToolTip(e);
+                        if (!e.Cancel) {
+                            try {
+                                DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                                DisplayForm.Invalidate();
+                            }
+                            catch (NullReferenceException) { }
+                            catch (InvalidOperationException) { }
                         }
-                        catch (NullReferenceException) { }
-                        catch (InvalidOperationException) { }
                     }
                 }
-            }
-            else {
-                lock (_lockimg) { _img = null; }
-                if (DisplayForm != null) {
-                    Size = GetPreferSize(Properties.Resources.failed.Size);
-                    DisplayForm.Invoke(new Action(() => ConfigDispForm()));
-                    DisplayForm.Invalidate();
+                else {
+                    lock (_lockimg) { _img = null; }
+                    if (DisplayForm != null) {
+                        Size = GetPreferSize(Properties.Resources.failed.Size);
+                        DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                        DisplayForm.Invalidate();
+                    }
                 }
+                _gettingImage = false;
             }
-
-            _imageAnimation.StopAnimation();
-            _gettingImage = false;
+            finally {
+                _imageAnimation.StopAnimation();
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion (GetImages)

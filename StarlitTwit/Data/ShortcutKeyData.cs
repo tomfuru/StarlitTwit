@@ -24,7 +24,7 @@ namespace StarlitTwit
 		public static ShortcutKeyData DefaultData()
 		{
 			var dic = new ShortcutKeyData();
-            // TODO:
+            // TODO:Shortcut処理
             return dic;
 		}
 		#endregion (DefaultData)   
