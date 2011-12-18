@@ -2911,8 +2911,8 @@ namespace StarlitTwit
                         },
                 };
                 XElement mainel = (notRT) ? el : RTel;
-                if (mainel.Element("entities") != null && mainel.Element("entities").Element("urls") != null) {
-                    IEnumerable<URLData> urldata = ConvertToURLData(mainel.Element("entities").Element("urls"), false);
+                if (mainel.Element("entities") != null) {
+                    IEnumerable<URLData> urldata = ConvertToURLData(mainel.Element("entities"), false);
                     foreach (var u in urldata) {
                         data.MainTwitData.Text = data.MainTwitData.Text.Replace(u.shorten_url, u.expand_url);
                     }
@@ -2991,7 +2991,7 @@ namespace StarlitTwit
                         },
                 };
                 XElement mainel = (notRT) ? el : RTel;
-                if (mainel.Element("entities") != null && mainel.Element("entities").Element("urls") != null) {
+                if (mainel.Element("entities") != null) {
                     IEnumerable<URLData> urldata = ConvertToURLData(mainel.Element("entities"), true);
                     foreach (var u in urldata) {
                         data.MainTwitData.Text = data.MainTwitData.Text.Replace(u.shorten_url, u.expand_url);
@@ -3368,14 +3368,30 @@ namespace StarlitTwit
         #region -ConvertToURLData XElementからURLData型に変換します。
         //-------------------------------------------------------------------------------
         //
-        private IEnumerable<URLData> ConvertToURLData(XElement el, bool isUserStreamData)
+        private IEnumerable<URLData> ConvertToURLData(XElement entityEl, bool isUserStreamData)
         {
-            return from u in (isUserStreamData) ? el.Element("urls").Elements("item") : el.Elements("url")
-                   where !string.IsNullOrEmpty(u.Element("expanded_url").Value)
-                   select new URLData() {
-                       shorten_url = u.Element("url").Value,
-                       expand_url = u.Element("expanded_url").Value
-                   };
+            // urls
+            var urls = (isUserStreamData) ? entityEl.Element("urls").Elements("item") : entityEl.Element("urls").Elements("url");
+            if (urls != null) {
+                var urldata = from u in urls
+                              where !string.IsNullOrEmpty(u.Element("expanded_url").Value)
+                              select new URLData() {
+                                  shorten_url = u.Element("url").Value,
+                                  expand_url = u.Element("expanded_url").Value
+                              };
+                foreach (var d in urldata) { yield return d; }
+            }
+
+            // media
+            if (entityEl.Element("media") != null) {
+                var medias = (isUserStreamData) ? entityEl.Element("media").Elements("item") : entityEl.Element("media").Elements("creative");
+                var mediadata = from m in medias
+                                select new URLData() {
+                                    shorten_url = m.Element("url").Value,
+                                    expand_url = m.Element("media_url_https").Value
+                                };
+                foreach (var d in mediadata) { yield return d; }
+            }
         }
         #endregion (ConvertToURLData)
         //===============================================================================
