@@ -240,6 +240,9 @@
     <Compile Include="..\StarlitTwit\Function\URLShortener.cs">
       <Link>Function\URLShortener.cs</Link>
     </Compile>
+    <Compile Include="..\StarlitTwit\Program.cs">
+      <Link>Program.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\SerializableClass\SerializableColor.cs">
       <Link>SerializableClass\SerializableColor.cs</Link>
     </Compile>
@@ -377,7 +380,6 @@
     <Compile Include="..\StarlitTwit\Utilization.cs">
       <Link>Utilization.cs</Link>
     </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmAuthWebBrowser.resx">
       <Link>Forms\FrmAuthWebBrowser.resx</Link>
