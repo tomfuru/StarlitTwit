@@ -163,7 +163,7 @@ namespace StarlitTwit
             ListData listdata = (ListData)lstvList.SelectedItems[0].Tag;
             using (FrmEditList frm = new FrmEditList(false, EnumerateExistingList(), listdata.Name)) {
                 frm.ListData = listdata;
-                if (frm.ShowDialog() == DialogResult.OK) {
+                if (frm.ShowDialog(this) == DialogResult.OK) {
                     // TODO:SelectedItems[0]の変更
                 }
             }
@@ -321,6 +321,7 @@ namespace StarlitTwit
         //
         private void btnAppend_Click(object sender, EventArgs e)
         {
+            btnAppend.Enabled = false;
             Utilization.InvokeTransaction(() => GetUsers());
         }
         #endregion (btnAppend_Click)

@@ -149,16 +149,17 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 225);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 220);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(374, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(370, 23);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // tsslabel
             // 
             this.tsslabel.Name = "tsslabel";
-            this.tsslabel.Size = new System.Drawing.Size(328, 17);
+            this.tsslabel.Size = new System.Drawing.Size(355, 18);
             this.tsslabel.Spring = true;
             this.tsslabel.Text = "...";
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -168,7 +169,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(374, 247);
+            this.ClientSize = new System.Drawing.Size(370, 243);
             this.ControlBox = false;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lblTitle);

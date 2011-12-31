@@ -583,7 +583,7 @@ namespace StarlitTwit
                 if (rpp > 0) { paramdic.Add("rpp", rpp.ToString()); }
                 if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
-                //if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
+                if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
                 //if (!string.IsNullOrEmpty(since)) { paramdic.Add("since", since); }
                 if (!string.IsNullOrEmpty(until)) { paramdic.Add("until", until); }
                 // geocode
@@ -2469,6 +2469,16 @@ namespace StarlitTwit
         #endregion (userstream_user)
 
         //===============================================================================
+        #region +IsAuthenticated 認証済みかどうか
+        //-------------------------------------------------------------------------------
+        //
+        public bool IsAuthenticated()
+        {
+            return !string.IsNullOrEmpty(ScreenName);
+        }
+        #endregion (IsAuthenticated)
+
+        //===============================================================================
         #region Private Methods
         //-------------------------------------------------------------------------------
         #region -GetByAPI APIから取得
@@ -3757,7 +3767,7 @@ namespace StarlitTwit
         /// </summary>
         private void AssertAuthenticated()
         {
-            if (string.IsNullOrEmpty(ScreenName)) {
+            if (!IsAuthenticated()) {
                 throw new InvalidOperationException("認証されていません。");
             }
         }

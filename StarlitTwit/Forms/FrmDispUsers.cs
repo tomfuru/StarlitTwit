@@ -250,7 +250,7 @@ namespace StarlitTwit
         //
         private void txtSearchWord_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode & Keys.Enter) == Keys.Enter) {
+            if (e.KeyCode == Keys.Enter) {
                 btnSearch.PerformClick();
                 e.SuppressKeyPress = true;
             }
@@ -545,8 +545,11 @@ namespace StarlitTwit
                 ListViewItem.ListViewSubItem si = new ListViewItem.ListViewSubItem();
                 item.SubItems.Add(p.ScreenName);
                 item.SubItems.Add(p.UserName);
-                if (p.FolllowRequestSent) { item.SubItems.Add("リクエスト済"); }
-                else { item.SubItems.Add((p.UserID == FrmMain.Twitter.ID) ? "自分" : (p.Following) ? "フォロー中" : ""); }
+
+                item.SubItems.Add((p.Following) ? "フォロー中" :
+                                  (p.FolllowRequestSent) ? "リクエスト済" :
+                                  (p.UserID == FrmMain.Twitter.ID) ? "自分" : "");
+
                 items.Add(item);
 
                 _profileList.Add(p);

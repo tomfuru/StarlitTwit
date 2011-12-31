@@ -128,6 +128,17 @@ namespace StarlitTwit
         #endregion (btnImageChange_Click)
 
         //-------------------------------------------------------------------------------
+        #region btnRetry_Click 取得再試行ボタンクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void btnRetry_Click(object sender, EventArgs e)
+        {
+            btnRetry.Enabled = false;
+            Utilization.InvokeTransaction(GetData);
+        }
+        #endregion (btnRetry_Click)
+
+        //-------------------------------------------------------------------------------
         #region btnRenew_Click 更新ボタン using Twitter API
         //-------------------------------------------------------------------------------
         //
@@ -364,7 +375,6 @@ namespace StarlitTwit
         #endregion (tsmiRenew_Click)
         //-------------------------------------------------------------------------------
         #endregion (メニュー)
-
 
         //-------------------------------------------------------------------------------
         #region -GetData 必要データ取得 using TwitterAPI

@@ -125,7 +125,7 @@ namespace StarlitTwit
                     Debug.Assert(UserScreenName != null, "UserScreenNameが設定されていません。");
                     Debug.Assert(ListID != null, "ListIDが設定されていません。");
                     uctlDispTwit.ContextMenuType = UctlDispTwit.MenuType.RestrictedUser;
-                    this.Text = string.Format("リスト{0}の発言", UserScreenName);
+                    this.Text = string.Format("{0}のリスト{1}の発言", UserScreenName, ListID);
                     break;
             }
         }

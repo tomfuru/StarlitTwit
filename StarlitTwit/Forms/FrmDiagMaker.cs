@@ -60,7 +60,7 @@ namespace StarlitTwit
         //
         private void txtName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.Enter) {
+            if (e.KeyCode == Keys.Enter) {
                 btnDiag.PerformClick();
                 e.SuppressKeyPress = true;
             }

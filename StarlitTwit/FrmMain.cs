@@ -352,6 +352,8 @@ namespace StarlitTwit
         //
         private void btnTwit_Click(object sender, EventArgs e)
         {
+            if (rtxtTwit.TextLength == 0) { return; }
+
             StringBuilder sbText = new StringBuilder();
             if (_stateStatusState == StatusState.Normal) {
                 sbText.Append(SettingsData.Header);
@@ -380,6 +382,10 @@ namespace StarlitTwit
             try {
                 RichTextBox txtbox = (RichTextBox)sender;
 
+                // つぶやくボタン有効
+                btnTwit.Enabled = (rtxtTwit.TextLength > 0);
+
+                // 残り文字数カウント
                 StringBuilder sbText = new StringBuilder();
                 if (_stateStatusState == StatusState.Normal) {
                     sbText.Append(SettingsData.Header);
@@ -391,7 +397,7 @@ namespace StarlitTwit
                 }
                 int combinedlength = Utilization.CountTextLength(sbText.ToString());
 
-                // 残り文字数
+                // 残り文字数表記変更
                 int restLen = MAX_LENGTH - combinedlength;
 
                 if (restLen < 0) {
@@ -446,7 +452,7 @@ namespace StarlitTwit
                 return;
             }
             // Enter入力時の発言イベント発生
-            else if (e.KeyData == Keys.Enter) {
+            else if (e.KeyCode == Keys.Enter) {
                 if (!e.Shift || !e.Control) {
                     e.SuppressKeyPress = true;
                     btnTwit_Click(sender, e);
@@ -997,7 +1003,7 @@ namespace StarlitTwit
         //
         private void tsmiAPIRestriction_Click(object sender, EventArgs e)
         {
-            APILimitData? data = GetAPILimitData();
+            APILimitData? data = GetAPILimitData(Twitter.IsAuthenticated());
             if (data.HasValue) {
                 APILimitData d = data.Value;
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
@@ -1658,7 +1664,7 @@ namespace StarlitTwit
             }
             tsmiUserStream.Enabled = true;
             tsmiUserStreamEnd.Enabled = tsmiUserStreamStart.Enabled = true;
-            tsmiAPIRestriction.Enabled = tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
+            tsmiSearchUser.Enabled = tsmi更新.Enabled = tsmiSpecifyTime.Enabled = tsmiClearTweets.Enabled = true;
             tsmi_子画面.Enabled = true;
         }
         #endregion (TransitToAuthenticatedMode)
@@ -2723,10 +2729,10 @@ namespace StarlitTwit
         #region -GetAPILimitData API制限に関する情報を取得 using TwitterAPI
         //-------------------------------------------------------------------------------
         //
-        private APILimitData? GetAPILimitData()
+        private APILimitData? GetAPILimitData(bool authenticateddata)
         {
             try {
-                APILimitData data = Twitter.account_rate_limit_status(true);
+                APILimitData data = Twitter.account_rate_limit_status(authenticateddata);
                 return data;
             }
             catch (TwitterAPIException) { return null; }
@@ -2937,7 +2943,8 @@ namespace StarlitTwit
 
                 userdata = Twitter.oauth_access_token(pin, req_token, req_token_secret);
             }
-            catch (TwitterAPIException) {
+            catch (TwitterAPIException ex) {
+                Log.DebugLog(ex);
                 userdata = new UserAuthInfo();
                 return false;
             }

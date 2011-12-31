@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -53,17 +54,30 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
 
-            cmbSearchType.Items.AddRange(new object[] {
+            bool isAuthenticated = FrmMain.Twitter.IsAuthenticated();
+
+            object[] items = (isAuthenticated) ? 
+                new object[] {
                 TabSearchType.Keyword,
                 TabSearchType.User,
                 TabSearchType.List
-            });
+            }
+            : new object[] {
+                TabSearchType.Keyword,
+                TabSearchType.User
+            };
+
+            cmbSearchType.Items.AddRange(items);
 
             if (TabData != null) {
                 InitItems();
             }
             else {
                 cmbSearchType.SelectedIndex = 0;
+            }
+
+            if (isAuthenticated) {
+                _listOwner = (string.IsNullOrEmpty(TabData.ListOwner)) ? FrmMain.Twitter.ScreenName : TabData.ListOwner;
             }
         }
         //-------------------------------------------------------------------------------
@@ -110,7 +124,7 @@ namespace StarlitTwit
                 case TabSearchType.List:
                     pnlList.Visible = true;
                     pnlKeyword.Visible = pnlUser.Visible = false;
-                    ConfigListList(TabData.ListOwner);   // リスト設定
+                    ConfigListList();   // リスト設定
                     if (cmbList.SelectedIndex != -1) {
                         cmbList_SelectedIndexChanged(cmbList, EventArgs.Empty);
                     }
@@ -209,11 +223,12 @@ namespace StarlitTwit
         #region -ConfigListList リストのリストを取得し設定します。 using TwitterAPI
         //-------------------------------------------------------------------------------
         //
-        private void ConfigListList(string listOwner = null)
+        private void ConfigListList()
         {
             if (_listData == null) {
                 try {
-                    _listOwner = (string.IsNullOrEmpty(listOwner)) ? FrmMain.Twitter.ScreenName : listOwner;
+                    Debug.Assert(!string.IsNullOrEmpty(_listOwner));
+
                     lblListOwner.Text = "ユーザー:" + _listOwner;
 
                     long next_cursor = -1;

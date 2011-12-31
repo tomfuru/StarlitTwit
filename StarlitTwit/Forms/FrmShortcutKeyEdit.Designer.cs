@@ -35,7 +35,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(124, 246);
+            this.btnOK.Location = new System.Drawing.Point(217, 246);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1;
@@ -47,7 +47,7 @@
             // 
             this.btnCansel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCansel.Location = new System.Drawing.Point(205, 246);
+            this.btnCansel.Location = new System.Drawing.Point(298, 246);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(75, 23);
             this.btnCansel.TabIndex = 2;
@@ -63,14 +63,14 @@
             this.keyInputGrid1.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.keyInputGrid1.Location = new System.Drawing.Point(0, 0);
             this.keyInputGrid1.Name = "keyInputGrid1";
-            this.keyInputGrid1.Size = new System.Drawing.Size(293, 240);
+            this.keyInputGrid1.Size = new System.Drawing.Size(386, 240);
             this.keyInputGrid1.TabIndex = 3;
             // 
             // FrmShortcutKeyEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 271);
+            this.ClientSize = new System.Drawing.Size(385, 271);
             this.ControlBox = false;
             this.Controls.Add(this.keyInputGrid1);
             this.Controls.Add(this.btnCansel);
