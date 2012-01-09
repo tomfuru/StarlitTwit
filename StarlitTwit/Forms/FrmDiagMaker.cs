@@ -13,7 +13,6 @@ using System.Diagnostics;
 
 namespace StarlitTwit
 {
-    // TODO:"日替わり"かどうかの表示/StatusBarへの情報表示，データがwebから取れなかった時の処理
     public partial class FrmDiagMaker : Form
     {
         private const string URL_FORMAT = @"http://shindanmaker.com/{0}";
@@ -27,6 +26,9 @@ namespace StarlitTwit
             InitializeComponent();
 
             llbllink.Text = string.Format(URL_FORMAT, diagNo);
+            lblTitle.Text = "(未取得)";
+            lblDescription.Text = "";
+            tsslabel.Text = "";
 
             txtName.Text = screen_name;
         }
@@ -78,11 +80,28 @@ namespace StarlitTwit
         #endregion (txtName_TextChanged)
 
         //-------------------------------------------------------------------------------
+        #region btnRetry_Click ホーム取得再試行
+        //-------------------------------------------------------------------------------
+        //
+        private void btnRetry_Click(object sender, EventArgs e)
+        {
+            btnRetry.Visible = false;
+            tsslabel.Text = "データを取得中です...";
+            this.Refresh();
+
+            GetHomeInfo();
+        }
+        #endregion (btnRetry_Click)
+
+        //-------------------------------------------------------------------------------
         #region btnDiag_Click 診断する
         //-------------------------------------------------------------------------------
         //
         private void btnDiag_Click(object sender, EventArgs e)
         {
+            tsslabel.Text = "結果データを取得中です...";
+            this.Refresh();
+
             GetResult();
         }
         #endregion (btnDiag_Click)
@@ -103,6 +122,9 @@ namespace StarlitTwit
         //
         private void btnTweet_Click(object sender, EventArgs e)
         {
+            tsslabel.Text = "投稿中です...";
+            this.Refresh();
+
             Status_update(txtResult.Text);
         }
         #endregion (btnTweet_Click)
@@ -127,30 +149,45 @@ namespace StarlitTwit
             const string TITLE_END = "</title>";
             const string DESCRIPTION_BEGIN = @"<meta name=""description"" content=""";
             const string DESCTIPTION_END = @"- 診断メーカー"" />";
-            const string INFO_REGEXPATTERN = @"<b>(.+?)</b>人が診断 結果パターン <b>(.+?)</b>通り";
+            const string INFO_REGEXPATTERN = "<b>(.+?)</b>人が診断 結果パターン <b>(.+?)</b>通り(.*?)）";
 
             WebRequest req = WebRequest.Create(llbllink.Text);
-            WebResponse res = req.GetResponse();
-            using (Stream stream = res.GetResponseStream())
-            using (StreamReader sr = new StreamReader(stream)) {
-                string str = sr.ReadToEnd();
 
-                Match m_title = Regex.Match(str, string.Format("{0}(.*?){1}", TITLE_BEGIN, TITLE_END));
-                if (m_title == null) { Debug.Assert(false); return; }
-                this.Text = lblTitle.Text = m_title.Groups[1].Value.Trim(); // Title
+            bool successed = true;
 
-                Match m_description = Regex.Match(str, string.Format("{0}(.*?){1}", DESCRIPTION_BEGIN,DESCTIPTION_END));
-                if (m_description == null) { Debug.Assert(false); return; }
-                
-                Match m_info = Regex.Match(str, INFO_REGEXPATTERN);
-                if (m_info == null) { Debug.Assert(false); return; }
+            try {
+                WebResponse res = req.GetResponse();
+                using (Stream stream = res.GetResponseStream())
+                using (StreamReader sr = new StreamReader(stream)) {
+                    string str = sr.ReadToEnd();
 
-                lblDescription.Text = string.Format("{0}\n{1}人が診断, 結果パターン{2}通り", 
-                                                    m_description.Groups[1].Value.Trim(), 
-                                                    m_info.Groups[1].Value.Trim(), 
-                                                    m_info.Groups[2].Value.Trim());
+                    Match m_title = Regex.Match(str, string.Format("{0}(.*?){1}", TITLE_BEGIN, TITLE_END));
+                    if (!m_title.Success) { Debug.Assert(false); successed = false; return; }
+                    this.Text = lblTitle.Text = m_title.Groups[1].Value.Trim(); // Title
+
+                    Match m_description = Regex.Match(str, string.Format("{0}(.*?){1}", DESCRIPTION_BEGIN, DESCTIPTION_END));
+                    if (!m_description.Success) { Debug.Assert(false); successed = false; return; }
+
+                    Match m_info = Regex.Match(str, INFO_REGEXPATTERN);
+                    if (!m_info.Success) { Debug.Assert(false); successed = false; return; }
+
+
+                    lblDescription.Text = m_description.Groups[1].Value.Trim();
+
+                    bool daily_change = (m_info.Groups[3].Value.Length > 0);
+                    lblInfo.Text = string.Format("{0}人が診断、結果パターン{1}通り｡{2}",
+                                                m_info.Groups[1].Value.Trim(),
+                                                m_info.Groups[2].Value.Trim(),
+                                                (daily_change) ? "(診断結果日替わり)" : "");
+                }
+                res.Close();
             }
-            res.Close();
+            catch (Exception) {
+                btnRetry.Visible = true;
+            }
+            finally {
+                if (!successed) { tsslabel.Text = "データの取得に失敗しました。"; }
+            }
         }
         #endregion (GetHomeInfo)
 
@@ -177,29 +214,34 @@ Content-Disposition: form-data; name=""from""
 
 --{0}--"
 , boundary, txtName.Text);
-             //string postData2 = "--" + boundary + "\r\n" +
-             //                   "Content-Disposition: form-data; name=\"u\"\r\n\r\n" +
-             //                   txtName.Text + "\r\n" +
-             //                   "--" + boundary + "\r\n" +
-             //                   "Content-Disposition: form-data; name=\"from\"\r\n\r\n" +
-             //                   "--" + boundary + "--";
+            //string postData2 = "--" + boundary + "\r\n" +
+            //                   "Content-Disposition: form-data; name=\"u\"\r\n\r\n" +
+            //                   txtName.Text + "\r\n" +
+            //                   "--" + boundary + "\r\n" +
+            //                   "Content-Disposition: form-data; name=\"from\"\r\n\r\n" +
+            //                   "--" + boundary + "--";
 
             byte[] data = enc.GetBytes(postData);
 
             req.ContentLength = data.Length;
             Stream reqStream = req.GetRequestStream();
             reqStream.Write(data, 0, data.Length);
+            try {
+                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+                using (Stream stream = res.GetResponseStream())
+                using (StreamReader sr = new StreamReader(stream)) {
+                    const string TEXT_BEGIN = "<textarea .*?>";
+                    const string TEXT_END = "</textarea>";
+                    string str = sr.ReadToEnd();
 
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-            using (Stream stream = res.GetResponseStream())
-            using (StreamReader sr = new StreamReader(stream)) {
-                const string TEXT_BEGIN = "<textarea .*?>";
-                const string TEXT_END = "</textarea>";
-                string str = sr.ReadToEnd();
-
-                Match m_text = Regex.Match(str, string.Format("{0}(.*){1}", TEXT_BEGIN, TEXT_END));
-                if (m_text == null) { Debug.Assert(false); return; }
-                txtResult.Text = m_text.Groups[1].Value.Trim();
+                    Match m_text = Regex.Match(str, string.Format("{0}(.*){1}", TEXT_BEGIN, TEXT_END));
+                    if (m_text == null) { Debug.Assert(false); return; }
+                    txtResult.Text = m_text.Groups[1].Value.Trim();
+                }
+                tsslabel.Text = "結果を取得しました。";
+            }
+            catch (Exception) {
+                tsslabel.Text = "結果の取得に失敗しました";
             }
         }
         #endregion (GetResult)
@@ -212,9 +254,10 @@ Content-Disposition: form-data; name=""from""
         {
             try {
                 FrmMain.Twitter.statuses_update(message);
+                tsslabel.Text = "発言を投稿しました。";
             }
-            catch (TwitterAPIException) {
-
+            catch (TwitterAPIException ex) {
+                tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
             }
         }
         #endregion (Status_update)
