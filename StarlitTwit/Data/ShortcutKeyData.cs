@@ -10,7 +10,7 @@ namespace StarlitTwit
     #region (class)ShortcutKeyData
     //-------------------------------------------------------------------------------
     [Serializable]
-    public class ShortcutKeyData
+    public class ShortcutKeyData : SaveDataClassBase<ShortcutKeyData>
     {
         /// <summary>メインフォーム上のショートカット</summary>
         public SerializableDictionary<KeyData, ShortcutType_MainForm> MainFormShortcutDic = new SerializableDictionary<KeyData,ShortcutType_MainForm>();

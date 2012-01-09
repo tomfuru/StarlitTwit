@@ -38,7 +38,7 @@
             this.btnOK.Location = new System.Drawing.Point(217, 246);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 1;
+            this.btnOK.TabIndex = 2;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -50,7 +50,7 @@
             this.btnCansel.Location = new System.Drawing.Point(298, 246);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(75, 23);
-            this.btnCansel.TabIndex = 2;
+            this.btnCansel.TabIndex = 3;
             this.btnCansel.Text = "キャンセル";
             this.btnCansel.UseVisualStyleBackColor = true;
             this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
@@ -64,7 +64,7 @@
             this.keyInputGrid1.Location = new System.Drawing.Point(0, 0);
             this.keyInputGrid1.Name = "keyInputGrid1";
             this.keyInputGrid1.Size = new System.Drawing.Size(386, 240);
-            this.keyInputGrid1.TabIndex = 3;
+            this.keyInputGrid1.TabIndex = 1;
             // 
             // FrmShortcutKeyEdit
             // 

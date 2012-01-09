@@ -27,7 +27,7 @@ namespace Test
             //test.t();
             //Application.Run(new Form1());
             //Application.Run(new Form2());
-            Application.Run(new FrmShortcutKeyEdit());
+            Application.Run(new FrmShortcutKeyEdit(ShortcutKeyData.DefaultData()));
 
             //new TestClass().testMain();
         }

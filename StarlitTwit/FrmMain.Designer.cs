@@ -162,34 +162,33 @@
             // tsmiファイル_設定
             // 
             this.tsmiファイル_設定.Name = "tsmiファイル_設定";
-            this.tsmiファイル_設定.Size = new System.Drawing.Size(134, 22);
+            this.tsmiファイル_設定.Size = new System.Drawing.Size(152, 22);
             this.tsmiファイル_設定.Text = "設定(&C)";
             this.tsmiファイル_設定.Click += new System.EventHandler(this.tsmiファイル_設定_Click);
             // 
             // tsmiファイル_キーボードショートカット設定
             // 
             this.tsmiファイル_キーボードショートカット設定.Name = "tsmiファイル_キーボードショートカット設定";
-            this.tsmiファイル_キーボードショートカット設定.Size = new System.Drawing.Size(134, 22);
-            this.tsmiファイル_キーボードショートカット設定.Text = "KS設定(&S)";
-            this.tsmiファイル_キーボードショートカット設定.Visible = false;
+            this.tsmiファイル_キーボードショートカット設定.Size = new System.Drawing.Size(262, 22);
+            this.tsmiファイル_キーボードショートカット設定.Text = "キーボードショートカット設定(&S)";
             this.tsmiファイル_キーボードショートカット設定.Click += new System.EventHandler(this.tsmiファイル_キーボードショートカット設定_Click);
             // 
             // tsmiファイル_Sep
             // 
             this.tsmiファイル_Sep.Name = "tsmiファイル_Sep";
-            this.tsmiファイル_Sep.Size = new System.Drawing.Size(131, 6);
+            this.tsmiファイル_Sep.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiファイル_再起動
             // 
             this.tsmiファイル_再起動.Name = "tsmiファイル_再起動";
-            this.tsmiファイル_再起動.Size = new System.Drawing.Size(134, 22);
+            this.tsmiファイル_再起動.Size = new System.Drawing.Size(152, 22);
             this.tsmiファイル_再起動.Text = "再起動(&R)";
             this.tsmiファイル_再起動.Click += new System.EventHandler(this.tsmiファイル_再起動_Click);
             // 
             // tsmiファイル_終了
             // 
             this.tsmiファイル_終了.Name = "tsmiファイル_終了";
-            this.tsmiファイル_終了.Size = new System.Drawing.Size(134, 22);
+            this.tsmiファイル_終了.Size = new System.Drawing.Size(152, 22);
             this.tsmiファイル_終了.Text = "終了(&Q)";
             this.tsmiファイル_終了.Click += new System.EventHandler(this.tsmiファイル_終了_Click);
             // 

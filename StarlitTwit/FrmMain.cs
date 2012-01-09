@@ -959,7 +959,7 @@ namespace StarlitTwit
         //
         private void tsmiファイル_キーボードショートカット設定_Click(object sender, EventArgs e)
         {
-            using (FrmShortcutKeyEdit frm = new FrmShortcutKeyEdit()) {
+            using (FrmShortcutKeyEdit frm = new FrmShortcutKeyEdit(ShortcutKeyData.DefaultData())) {
                 if (frm.ShowDialog() == DialogResult.OK) {
                     // TODO:ショートカットキーデータ実装
                 }

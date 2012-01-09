@@ -35,14 +35,14 @@
             // 
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEdit.Location = new System.Drawing.Point(48, 0);
+            this.btnEdit.Location = new System.Drawing.Point(48, 1);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(19, 18);
+            this.btnEdit.Size = new System.Drawing.Size(19, 14);
             this.btnEdit.TabIndex = 4;
-            this.btnEdit.Text = "...";
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Visible = false;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            this.btnEdit.Paint += new System.Windows.Forms.PaintEventHandler(this.btnEdit_Paint);
             this.btnEdit.MouseEnter += new System.EventHandler(this.btnEdit_MouseEnter);
             this.btnEdit.MouseLeave += new System.EventHandler(this.btnEdit_MouseLeave);
             // 

@@ -23,8 +23,21 @@ namespace StarlitTwit
 
             _keydata = keydata;
             SetLabelText();
+
+            lblKey.MouseClick += new MouseEventHandler(control_MouseClick);
+            btnEdit.MouseClick += new MouseEventHandler(control_MouseClick);
         }
         #endregion (Constructor)
+
+        //-------------------------------------------------------------------------------
+        #region control_MouseClick マウスクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void control_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.OnMouseClick(e);
+        }
+        #endregion (control_MouseClick)
 
         //-------------------------------------------------------------------------------
         #region -SetLabelText ラベルテキスト設定
@@ -93,5 +106,17 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (...ボタンのVisible変更のためのイベント)
+
+        //-------------------------------------------------------------------------------
+        #region btnEdit_Paint ...の描画
+        //-------------------------------------------------------------------------------
+        //
+        private void btnEdit_Paint(object sender, PaintEventArgs e)
+        {
+            string str = "...";
+            //Size s = TextRenderer.MeasureText(str, btnEdit.Font);
+            e.Graphics.DrawString(str, btnEdit.Font, Brushes.Black, 4, 0);
+        }
+        #endregion (btnEdit_Paint)
     }
 }
