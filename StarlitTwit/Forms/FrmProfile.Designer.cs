@@ -674,7 +674,7 @@
             // tsslabel
             // 
             this.tsslabel.Name = "tsslabel";
-            this.tsslabel.Size = new System.Drawing.Size(211, 18);
+            this.tsslabel.Size = new System.Drawing.Size(242, 18);
             this.tsslabel.Spring = true;
             this.tsslabel.Text = "...";
             this.tsslabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

@@ -53,7 +53,15 @@ namespace StarlitTwit
             MinMovableIndex = 0;
             MaxMovableIndex = int.MaxValue;
 
-            this.SetStyle(ControlStyles.UserPaint, true);
+            if (VisualStyleInformation.IsEnabledByUser) {
+                this.SetStyle(ControlStyles.UserPaint, true);
+                this.DrawMode = TabDrawMode.Normal;
+            }
+            else {
+                this.SetStyle(ControlStyles.UserPaint, false);
+                this.DrawMode = TabDrawMode.OwnerDrawFixed;
+            }
+
             this.DoubleBuffered = true;
             this.ResizeRedraw = true;
 
@@ -92,12 +100,74 @@ namespace StarlitTwit
         #endregion (OnControlRemoved)
 
         //-------------------------------------------------------------------------------
-        #region OnPaint 描画
+        #region #[override]OnDrawItem (not use VisualStyle)
+        //-------------------------------------------------------------------------------
+        protected override void OnDrawItem(DrawItemEventArgs e)
+        {
+            base.OnDrawItem(e);
+            if (VisualStyleInformation.IsEnabledByUser) {
+                this.SetStyle(ControlStyles.UserPaint, true);
+                this.DrawMode = TabDrawMode.Normal;
+                return;
+            }
+
+            e.DrawBackground();
+            TabPageEx tabpg = _tabpageCollection[e.Index];
+            Brush b = new SolidBrush(e.ForeColor);
+            string str = tabpg.Text;
+            Rectangle rect = e.Bounds;
+            switch (this.Alignment) {
+                case TabAlignment.Bottom:
+                    rect.X += 3;
+                    rect.Y += (e.State == DrawItemState.Selected) ? 3 : 0;
+                    e.Graphics.DrawString(str, e.Font, b, rect);
+                    break;
+                case TabAlignment.Left:
+                    rect.X += 2;
+                    rect.Y -= (e.State == DrawItemState.Selected) ? 3 : 1;
+                    using (Bitmap bmp = new Bitmap(rect.Height, rect.Width)) {
+                        Graphics g = Graphics.FromImage(bmp);
+                        Rectangle rect_str = new Rectangle(0, 0, rect.Height, rect.Width);
+                        g.DrawString(str, e.Font, b, rect_str);
+                        bmp.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                        e.Graphics.DrawImage(bmp, rect);
+                    }
+                    break;
+                case TabAlignment.Right:
+                    rect.X -= 2;
+                    rect.Y += (e.State == DrawItemState.Selected) ? 3 : 1;
+                    using (Bitmap bmp = new Bitmap(rect.Height, rect.Width)) {
+                        Graphics g = Graphics.FromImage(bmp);
+                        Rectangle rect_str = new Rectangle(0, 0, rect.Height, rect.Width);
+                        g.DrawString(str, e.Font, b, rect_str);
+                        bmp.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        e.Graphics.DrawImage(bmp, rect);
+                    }
+                    break;
+                case TabAlignment.Top:
+                    rect.X += 3;
+                    rect.Y += (e.State == DrawItemState.Selected) ? 3 : 1;
+                    e.Graphics.DrawString(str, e.Font, b, rect);
+                    break;
+            }
+            b.Dispose();
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (OnDrawItem)
+
+        //-------------------------------------------------------------------------------
+        #region OnPaint 描画  (use VisualStyle)
         //-------------------------------------------------------------------------------
         //
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+
+            if (!System.Windows.Forms.VisualStyles.VisualStyleInformation.IsEnabledByUser) {
+                this.SetStyle(ControlStyles.UserPaint, false);
+                this.DrawMode = TabDrawMode.OwnerDrawFixed;
+                return;
+            }
 
             //TabControlの背景を塗る
             e.Graphics.FillRectangle(SystemBrushes.Control, this.ClientRectangle);
@@ -162,7 +232,8 @@ namespace StarlitTwit
                 Graphics g = Graphics.FromImage(bmp);
                 //高さに1足しているのは、下にできる空白部分を消すため
                 TabRenderer.DrawTabItem(g, new Rectangle(0, 0, bmp.Width, bmp.Height + 1),
-                                        tabText, page.Font, false, state);
+                tabText, page.Font, false, state);
+
                 g.Dispose();
 
                 //画像を回転する
@@ -626,6 +697,13 @@ namespace StarlitTwit
             {
                 get { return _syncObj; }
             }
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            this.ResumeLayout(false);
+
         }
         //-------------------------------------------------------------------------------
         #endregion ((class)TabPageExCollection)
