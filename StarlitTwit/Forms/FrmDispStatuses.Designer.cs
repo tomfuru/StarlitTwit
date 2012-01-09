@@ -59,6 +59,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.uctlDispTwit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.uctlDispTwit.CheckIncludeFollowerFunc = null;
             this.uctlDispTwit.ImageListWrapper = null;
             this.uctlDispTwit.Location = new System.Drawing.Point(0, 0);
             this.uctlDispTwit.Margin = new System.Windows.Forms.Padding(0);
@@ -103,6 +104,7 @@
             this.Controls.Add(this.uctlDispTwit);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.KeyPreview = true;
             this.Name = "FrmDispStatuses";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

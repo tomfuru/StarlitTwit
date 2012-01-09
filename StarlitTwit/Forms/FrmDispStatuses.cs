@@ -174,6 +174,17 @@ namespace StarlitTwit
         #endregion (FrmDispTweet_FormClosed)
 
         //-------------------------------------------------------------------------------
+        #region #[override]ProcessCmdKey キー処理
+        //-------------------------------------------------------------------------------
+        //
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
+        {
+            uctlDispTwit.ProcessKey(keyData);
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+        #endregion (#[override]ProcessCmdKey)
+
+        //-------------------------------------------------------------------------------
         #region -GetTweets 発言取得(別スレッド)
         //-------------------------------------------------------------------------------
         //

@@ -2501,12 +2501,11 @@ namespace StarlitTwit
 
             using (Stream resStream = res.GetResponseStream()) {
                 using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
-                    //string s = reader.ReadToEnd();
                     try {
                         return XElement.Load(reader);
                     }
                     catch (XmlException ex) {
-                        //Log.DebugLog(ex);
+                       // Log.DebugLog(ex);
                         throw new TwitterAPIException(1000, ex.Message);
                     }
                     catch (WebException ex) {
