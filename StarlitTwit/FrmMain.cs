@@ -961,7 +961,7 @@ namespace StarlitTwit
         {
             using (FrmShortcutKeyEdit frm = new FrmShortcutKeyEdit(ShortcutKeyData.DefaultData())) {
                 if (frm.ShowDialog() == DialogResult.OK) {
-                    // TODO:ショートカットキーデータ実装
+                    ShortcutKeyData skd = frm.GetShortcutKeyData();
                 }
             }
         }

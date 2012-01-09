@@ -10,9 +10,16 @@ using System.IO;
 
 namespace StarlitTwit
 {
+    // TODO:(KeyInputGrid,Rightも変更する必要有)同一グループで重複したキーを登録した時の処理
     public partial class KeyInputGrid : UserControl
     {
-        private List<Tuple<KeyInputRight, object>> _datalist = new List<Tuple<KeyInputRight, object>>();
+        //-------------------------------------------------------------------------------
+        #region Variables
+        //-------------------------------------------------------------------------------
+        private Dictionary<int, List<Tuple<KeyInputRight, object>>> _datalist = new Dictionary<int, List<Tuple<KeyInputRight, object>>>();
+        private int _index = 0;
+        //-------------------------------------------------------------------------------
+        #endregion (Variables)
 
         //-------------------------------------------------------------------------------
         #region Constructor
@@ -121,14 +128,19 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region +AddItems アイテム追加
         //-------------------------------------------------------------------------------
-        //
+        /// <summary>
+        /// キーを排他的に割り当てるべきグループは1度に登録してください。
+        /// </summary>
+        /// <param name="data"></param>
         public void AddItems(IEnumerable<Tuple<string, KeyData, object>> data)
         {
+            var list = new List<Tuple<KeyInputRight, object>>();
+            _datalist.Add(_index, list);
             foreach (var item in data) {
                 var tpl = GetOneItem(item.Item1, item.Item2);
                 flpnlLeft.Controls.Add(tpl.Item1);
                 flpnlRight.Controls.Add(tpl.Item2);
-                _datalist.Add(new Tuple<KeyInputRight, object>(tpl.Item2, item.Item3));
+                list.Add(new Tuple<KeyInputRight, object>(tpl.Item2, item.Item3));
             }
 
 
@@ -138,6 +150,8 @@ namespace StarlitTwit
                 vScrollBar.Value = 0;
                 vScrollBar.LargeChange = this.Height;
             }
+
+            ++_index;
         }
         #endregion (+AddItems)
 
@@ -147,8 +161,12 @@ namespace StarlitTwit
         //
         public IEnumerable<Tuple<KeyData, object>> GetItems()
         {
-            foreach (var item in _datalist) {
-                yield return new Tuple<KeyData, object>(item.Item1.GetKeyData(), item.Item2);
+            for (int i = 0; i < _index; i++) {
+                foreach (var item in _datalist[i]) {
+                    KeyData kd = item.Item1.GetKeyData();
+                    if (kd == null) { continue; }
+                    yield return new Tuple<KeyData, object>(kd, item.Item2);
+                }
             }
         }
         #endregion (GetItems)

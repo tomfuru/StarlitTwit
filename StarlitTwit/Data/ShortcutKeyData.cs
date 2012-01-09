@@ -37,7 +37,7 @@ namespace StarlitTwit
     //-------------------------------------------------------------------------------
     public enum ShortcutType_MainForm
     {
-        None,
+        //None,
         設定画面,
         再起動,
         終了,
@@ -75,7 +75,7 @@ namespace StarlitTwit
     //-------------------------------------------------------------------------------
     public enum ShortcutType_Status
     {
-        None,
+        //None,
         リプライ,
         引用,
         引用リプライ,

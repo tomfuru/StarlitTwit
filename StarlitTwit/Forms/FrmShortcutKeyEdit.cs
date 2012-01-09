@@ -19,12 +19,6 @@ namespace StarlitTwit
         {
             InitializeComponent();
 
-            //keyInputGrid1.AddLabel("******left", "******right");
-            //keyInputGrid1.AddItems(new Tuple<string, KeyData, object>("aaa", new KeyData() { Key = Keys.B }, null).AsEnumerable());
-            //keyInputGrid1.AddLabel("******left2", "******right2");
-            //keyInputGrid1.AddItems(new Tuple<string, KeyData, object>("bbb", new KeyData() { Key = Keys.S }, null).AsEnumerable());
-
-
             keyInputGrid1.AddLabel("●メインフォームのショートカット");
             var dic1 = ConvertDictionary(keydata.MainFormShortcutDic);
             var list1 = new List<Tuple<string, KeyData, object>>();
@@ -52,6 +46,25 @@ namespace StarlitTwit
             keyInputGrid1.AddItems(list2);
         }
         #endregion (Constructor)
+
+        //-------------------------------------------------------------------------------
+        #region +GetShortcutKeyData ショートカットキーデータ取得
+        //-------------------------------------------------------------------------------
+        //
+        public ShortcutKeyData GetShortcutKeyData()
+        {
+            ShortcutKeyData skd = new ShortcutKeyData();
+            foreach (var item in keyInputGrid1.GetItems()) {
+                if (item.Item2 is ShortcutType_MainForm) {
+                    skd.MainFormShortcutDic.Add(item.Item1, (ShortcutType_MainForm)item.Item2);
+                }
+                else {
+                    skd.StatusShortcutDic.Add(item.Item1, (ShortcutType_Status)item.Item2);
+                }
+            }
+            return skd;
+        }
+        #endregion (GetShortcutKeyData)
 
         //-------------------------------------------------------------------------------
         #region btnOK_Click OKボタン
