@@ -72,6 +72,11 @@ namespace StarlitTwit
         //
         private void btnOK_Click(object sender, EventArgs e)
         {
+            if (keyInputGrid1.ExistDuplication()) {
+                Message.ShowWarningMessage("カテゴリ内に重複している項目(赤字)があります。");
+                return;
+            }
+
             this.DialogResult = DialogResult.OK;
         }
         #endregion (btnOK_Click)

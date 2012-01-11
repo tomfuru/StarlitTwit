@@ -127,4 +127,13 @@ namespace StarlitTwit
         }
         #endregion (object.AsEnumerable)
     }
+
+    public interface IDeepCopyClonable<T>
+    {
+        /// <summary>
+        /// deep copyによりCloneを作成します。
+        /// </summary>
+        /// <returns></returns>
+        T DeepCopyClone();
+    }
 }

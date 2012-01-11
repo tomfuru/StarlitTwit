@@ -11,23 +11,44 @@ namespace StarlitTwit
 {
     public partial class KeyInputRight : UserControl
     {
-        private KeyData _keydata = null;
+        public KeyData Keydata { get; private set; }
+        public int GroupID { get; private set; }
+        public event EventHandler<KeyDataChangingEventArgs> KeyDataChanging;
 
         //-------------------------------------------------------------------------------
         #region Constructor
         //-------------------------------------------------------------------------------
         //
-        public KeyInputRight(KeyData keydata)
+        public KeyInputRight(KeyData keydata, int groupID)
         {
             InitializeComponent();
 
-            _keydata = keydata;
+            Keydata = keydata;
+            GroupID = groupID;
             SetLabelText();
 
             lblKey.MouseClick += new MouseEventHandler(control_MouseClick);
             btnEdit.MouseClick += new MouseEventHandler(control_MouseClick);
         }
         #endregion (Constructor)
+
+        //-------------------------------------------------------------------------------
+        #region IsWarning プロパティ：
+        //-------------------------------------------------------------------------------
+        private bool _isWarning;
+        /// <summary>
+        /// 警告状態かどうか
+        /// </summary>
+        public bool IsWarning
+        {
+            get { return _isWarning; }
+            set
+            {
+                _isWarning = value;
+                lblKey.ForeColor = (_isWarning) ? Color.Red : Color.Black;
+            }
+        }
+        #endregion (IsWarning)
 
         //-------------------------------------------------------------------------------
         #region control_MouseClick マウスクリック時
@@ -45,19 +66,9 @@ namespace StarlitTwit
         //
         private void SetLabelText()
         {
-            lblKey.Text = (_keydata == null) ? "" : _keydata.ToString();
+            lblKey.Text = (Keydata == null) ? "" : Keydata.ToString();
         }
         #endregion (SetLabelText)
-
-        //-------------------------------------------------------------------------------
-        #region +GetKeyData KeyData取得
-        //-------------------------------------------------------------------------------
-        //
-        public KeyData GetKeyData()
-        {
-            return _keydata;
-        }
-        #endregion (GetKeyData)
 
         //-------------------------------------------------------------------------------
         #region btnEdit_Click ...ボタン
@@ -65,10 +76,14 @@ namespace StarlitTwit
         //
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            using (KeyEditForm frm = new KeyEditForm(_keydata)) {
+            using (KeyEditForm frm = new KeyEditForm(Keydata)) {
                 if (frm.ShowDialog() == DialogResult.OK) {
-                    _keydata = frm.KeyData;
-                    SetLabelText();
+                    var ce = new KeyDataChangingEventArgs(frm.KeyData, Keydata);
+                    if (KeyDataChanging != null) { KeyDataChanging(this, ce); }
+                    if (!ce.Cancel) {
+                        Keydata = frm.KeyData;
+                        SetLabelText();
+                    }
                 }
             }
         }
@@ -119,4 +134,22 @@ namespace StarlitTwit
         }
         #endregion (btnEdit_Paint)
     }
+
+    //-------------------------------------------------------------------------------
+    #region (class)KeyDataChangingEventArgs
+    //-------------------------------------------------------------------------------
+    public class KeyDataChangingEventArgs : CancelEventArgs
+    {
+        public KeyData NewKeyData { get; private set; }
+        public KeyData PreviousKeyData { get; private set; }
+
+        public KeyDataChangingEventArgs(KeyData newkeydata, KeyData prevkeydata)
+            : base()
+        {
+            NewKeyData = (newkeydata == null) ? null : newkeydata.DeepCopyClone();
+            PreviousKeyData = (prevkeydata == null) ? null : prevkeydata.DeepCopyClone();
+        }
+    }
+    //-------------------------------------------------------------------------------
+    #endregion ((class)KeyDataChangingEventArgs)
 }

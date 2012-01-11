@@ -13,21 +13,21 @@ namespace StarlitTwit
     public class ShortcutKeyData : SaveDataClassBase<ShortcutKeyData>
     {
         /// <summary>メインフォーム上のショートカット</summary>
-        public SerializableDictionary<KeyData, ShortcutType_MainForm> MainFormShortcutDic = new SerializableDictionary<KeyData,ShortcutType_MainForm>();
+        public SerializableDictionary<KeyData, ShortcutType_MainForm> MainFormShortcutDic = new SerializableDictionary<KeyData, ShortcutType_MainForm>();
         /// <summary>発言上のショートカット</summary>
-        public SerializableDictionary<KeyData, ShortcutType_Status> StatusShortcutDic = new SerializableDictionary<KeyData,ShortcutType_Status>();
+        public SerializableDictionary<KeyData, ShortcutType_Status> StatusShortcutDic = new SerializableDictionary<KeyData, ShortcutType_Status>();
 
         //-------------------------------------------------------------------------------
-		#region DefaultData デフォルトのデータを返します
-		//-------------------------------------------------------------------------------
-		//
-		public static ShortcutKeyData DefaultData()
-		{
-			var dic = new ShortcutKeyData();
+        #region DefaultData デフォルトのデータを返します
+        //-------------------------------------------------------------------------------
+        //
+        public static ShortcutKeyData DefaultData()
+        {
+            var dic = new ShortcutKeyData();
             // TODO:Shortcut処理
             return dic;
-		}
-		#endregion (DefaultData)   
+        }
+        #endregion (DefaultData)
     }
     //-------------------------------------------------------------------------------
     #endregion ((class)ShortcutKeyData)
@@ -92,7 +92,7 @@ namespace StarlitTwit
         発言者のプロフィールを表示,
         発言者の最近の発言を表示,
         発言者のホームをブラウザで開く,
-        返信先ユーザーのプロフィールを表示,		
+        返信先ユーザーのプロフィールを表示,
         返信先ユーザーの最近の発言を表示,
         返信先ユーザーのホームをブラウザで開く,
         リツイーターのプロフィールを表示,
@@ -109,7 +109,7 @@ namespace StarlitTwit
     /// キー入力データを表す構造体です。
     /// </summary>
     [Serializable]
-    public class KeyData
+    public class KeyData : IDeepCopyClonable<KeyData>, IEquatable<KeyData>
     {
         // TODO:Oemなキーを文字列変換時に置換
         //-------------------------------------------------------------------------------
@@ -219,6 +219,72 @@ namespace StarlitTwit
             return keyData;
         }
         #endregion (FromString)
+
+
+
+        //-------------------------------------------------------------------------------
+        #region DeepCopyClone
+        //-------------------------------------------------------------------------------
+        public KeyData DeepCopyClone()
+        {
+            return (KeyData)this.MemberwiseClone();
+        }
+        #endregion (DeepCopyClone)
+
+        //-------------------------------------------------------------------------------
+        #region +Equals 等値
+        //-------------------------------------------------------------------------------
+        //
+        public bool Equals(KeyData other)
+        {
+            return (other != null)
+                && (this._alt == other._alt)
+                && (this._shift == other._shift)
+                && (this._ctrl == other._ctrl)
+                && (this.Key == other.Key);
+        }
+        #endregion (Equals)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]Equals
+        //-------------------------------------------------------------------------------
+        //
+        public override bool Equals(object obj)
+        {
+            if (obj is KeyData) { return this.Equals((KeyData)obj); }
+            return base.Equals(obj);
+        }
+        #endregion (+[override]Equals)
+
+        //-------------------------------------------------------------------------------
+        #region +[override]GetHashCode
+        //-------------------------------------------------------------------------------
+        //
+        public override int GetHashCode()
+        {
+            return _alt.GetHashCode() ^ _ctrl.GetHashCode() ^ _shift.GetHashCode() ^ Key.GetHashCode();
+        }
+        #endregion (+[override]GetHashCode)
+
+        //-------------------------------------------------------------------------------
+        #region operator ==
+        //-------------------------------------------------------------------------------
+        //
+        public static bool operator ==(KeyData lhs, KeyData rhs)
+        {
+            if ((object)lhs == null && (object)rhs == null) { return true; }
+            if ((object)lhs != null) { return lhs.Equals(rhs); }
+            else { return false; }
+        }
+        #endregion (operator ==)
+        #region operator !=
+        //-------------------------------------------------------------------------------
+        //
+        public static bool operator !=(KeyData lhs, KeyData rhs)
+        {
+            return !(lhs == rhs);
+        }
+        #endregion (operator !=)
     }
     //-------------------------------------------------------------------------------
     #endregion (KeyData)

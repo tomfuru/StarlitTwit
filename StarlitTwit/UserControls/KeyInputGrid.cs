@@ -7,16 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
-    // TODO:(KeyInputGrid,Rightも変更する必要有)同一グループで重複したキーを登録した時の処理
     public partial class KeyInputGrid : UserControl
     {
         //-------------------------------------------------------------------------------
+        #region (private class)Counter
+        //-------------------------------------------------------------------------------
+        private class Counter
+        {
+            private uint c;
+            public Counter(uint init) { c = init; }
+            public uint Increment() { return ++c; }
+            public uint Decrement() { Debug.Assert(c > 0); return --c; }
+            public uint Value() { return c; }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((class)Counter)
+
+        //-------------------------------------------------------------------------------
         #region Variables
         //-------------------------------------------------------------------------------
-        private Dictionary<int, List<Tuple<KeyInputRight, object>>> _datalist = new Dictionary<int, List<Tuple<KeyInputRight, object>>>();
+        /// <summary>データのリスト</summary>
+        private Dictionary<int, List<Tuple<KeyInputRight, object>>> _dataListDic = new Dictionary<int, List<Tuple<KeyInputRight, object>>>();
+        private Dictionary<int, List<Tuple<KeyData, Counter>>> _duplicateDic = new Dictionary<int, List<Tuple<KeyData, Counter>>>();
         private int _index = 0;
         //-------------------------------------------------------------------------------
         #endregion (Variables)
@@ -66,7 +82,7 @@ namespace StarlitTwit
         #region -GetOneItem アイテム一つ分のコントロールを取得
         //-------------------------------------------------------------------------------
         //
-        private Tuple<Label, KeyInputRight> GetOneItem(string title, KeyData keydata)
+        private Tuple<Label, KeyInputRight> GetOneItem(string title, KeyData keydata, int groupID)
         {
             var l = new Label() {
                 AutoSize = false,
@@ -79,9 +95,10 @@ namespace StarlitTwit
             };
             l.MouseClick += focus_ByMouse;
             //l.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            var r = new KeyInputRight(keydata) {
+            var r = new KeyInputRight(keydata, groupID) {
                 Width = flpnlRight.Width
             };
+            r.KeyDataChanging += keyinputright_KeyDataChanging;
             r.MouseClick += focus_ByMouse;
             //r.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             return new Tuple<Label, KeyInputRight>(l, r);
@@ -134,10 +151,11 @@ namespace StarlitTwit
         /// <param name="data"></param>
         public void AddItems(IEnumerable<Tuple<string, KeyData, object>> data)
         {
+            _duplicateDic.Add(_index, new List<Tuple<KeyData, Counter>>());
             var list = new List<Tuple<KeyInputRight, object>>();
-            _datalist.Add(_index, list);
+            _dataListDic.Add(_index, list);
             foreach (var item in data) {
-                var tpl = GetOneItem(item.Item1, item.Item2);
+                var tpl = GetOneItem(item.Item1, item.Item2, _index);
                 flpnlLeft.Controls.Add(tpl.Item1);
                 flpnlRight.Controls.Add(tpl.Item2);
                 list.Add(new Tuple<KeyInputRight, object>(tpl.Item2, item.Item3));
@@ -162,14 +180,69 @@ namespace StarlitTwit
         public IEnumerable<Tuple<KeyData, object>> GetItems()
         {
             for (int i = 0; i < _index; i++) {
-                foreach (var item in _datalist[i]) {
-                    KeyData kd = item.Item1.GetKeyData();
+                foreach (var item in _dataListDic[i]) {
+                    KeyData kd = item.Item1.Keydata;
                     if (kd == null) { continue; }
                     yield return new Tuple<KeyData, object>(kd, item.Item2);
                 }
             }
         }
         #endregion (GetItems)
+
+        //-------------------------------------------------------------------------------
+        #region +ExistDuplication 重複の有無
+        //-------------------------------------------------------------------------------
+        //
+        public bool ExistDuplication()
+        {
+            return _duplicateDic.Any(kvp => kvp.Value.Count > 0);
+        }
+        #endregion (ExistDuplication)
+
+        //-------------------------------------------------------------------------------
+        #region keyinputright_KeyDataChanging キーデータ変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void keyinputright_KeyDataChanging(object sender, KeyDataChangingEventArgs e)
+        {
+            var kir = (KeyInputRight)sender;
+
+            if (e.PreviousKeyData == e.NewKeyData) { return; } // 変わってない
+            var list = _dataListDic[kir.GroupID];
+            // 重複解除確認
+            bool prevDupCheck = false;
+            if (kir.IsWarning) {
+                int index = _duplicateDic[kir.GroupID].FindIndex(t => t.Item1 == e.PreviousKeyData);
+                Debug.Assert(index >= 0);
+                var tuple = _duplicateDic[kir.GroupID][index];
+                if (tuple.Item2.Value() == 2) {
+                    _duplicateDic[kir.GroupID].RemoveAt(index);
+                    prevDupCheck = true;
+                }
+                else { tuple.Item2.Decrement(); }
+            }
+
+            // 重複確認
+            uint numDup = 1;
+            bool isThisDuplicated = false;
+            if (e.NewKeyData == null) { return; }
+            foreach (var item in list) {
+                if (item.Item1 == kir) { continue; }
+                if (prevDupCheck && item.Item1.Keydata == e.PreviousKeyData) {
+                    item.Item1.IsWarning = false;
+                }
+                else if (item.Item1.Keydata == e.NewKeyData) {
+                    item.Item1.IsWarning = true;
+                    isThisDuplicated = true;
+                    ++numDup;
+                }
+            }
+
+            if (numDup == 2) { _duplicateDic[kir.GroupID].Add(new Tuple<KeyData, Counter>(e.NewKeyData, new Counter(2))); }
+            else if (numDup > 2) { _duplicateDic[kir.GroupID].Find(t => t.Item1 == e.NewKeyData).Item2.Increment(); }
+            kir.IsWarning = isThisDuplicated;
+        }
+        #endregion (keyinputright_KeyDataChanging)
 
         //-------------------------------------------------------------------------------
         #region pnlLeft_Resize 左パネルサイズ変更時
