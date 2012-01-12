@@ -39,7 +39,7 @@ namespace StarlitTwit
         public KeyEditForm(KeyData data)
         {
             InitializeComponent();
-            txtKey.Text = MakeKeyDataString(data);
+            txtKey.Text = (data == null) ? "" : data.ToString();
             _keyData = data;
         }
         #endregion (コンストラクタ)
@@ -105,46 +105,6 @@ namespace StarlitTwit
             this.DialogResult = DialogResult.OK;
         }
         #endregion (btnOK_Click)
-
-        //-------------------------------------------------------------------------------
-        #region -MakeKeyDataString KeyDataを文字列にします
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// KeyDataを文字列にします
-        /// </summary>
-        /// <param name="data">文字列形式にするKeyData</param>
-        /// <returns>文字列</returns>
-        private string MakeKeyDataString(KeyData data)
-        {
-            if (data == null) {
-                btnOK.Enabled = true;
-                return ""; 
-            }
-
-            Keys k = data.Key;
-            StringBuilder sb = new StringBuilder();
-            if (data.Ctrl) {
-                if (sb.Length != 0) { sb.Append(" + "); }
-                sb.Append(CTRL);
-                if (k == Keys.ControlKey) { k = Keys.None; }
-            }
-            if (data.Shift) {
-                if (sb.Length != 0) { sb.Append(" + "); }
-                sb.Append(SHIFT);
-                if (k == Keys.ShiftKey) { k = Keys.None; }
-            }
-            if (data.Alt) {
-                if (sb.Length != 0) { sb.Append(" + "); }
-                sb.Append(ALT);
-                if (k == Keys.Menu) { k = Keys.None; }
-            }
-
-            if (sb.Length != 0) { sb.Append(" + "); }
-            if (k != Keys.None) { sb.Append(k.ToString()); }
-
-            return sb.ToString();
-        }
-        #endregion (MakeKeyDataString)
 
         //-------------------------------------------------------------------------------
         #region KeyData プロパティ：入力キーデータ取得
