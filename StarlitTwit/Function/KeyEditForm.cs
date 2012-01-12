@@ -72,7 +72,7 @@ namespace StarlitTwit
         {
             txtKey.ImeMode = ImeMode.Off; // 全角入力禁止のため
 
-            Console.WriteLine(e.KeyCode);
+            //Console.WriteLine(e.KeyCode);
             if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.ProcessKey) {
                 _keyData = null;
             }
