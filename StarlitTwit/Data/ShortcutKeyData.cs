@@ -111,7 +111,85 @@ namespace StarlitTwit
     [Serializable]
     public class KeyData : IDeepCopyClonable<KeyData>, IEquatable<KeyData>
     {
-        // TODO:Oemなキーを文字列変換時に置換
+        //-------------------------------------------------------------------------------
+        #region -(static class)KeysConverter
+        //-------------------------------------------------------------------------------
+        private static class KeysConverter
+        {
+            private static Dictionary<string, string> _keys_to_original = new Dictionary<string,string>();
+            private static Dictionary<string, string> _original_to_keys = new Dictionary<string, string>();
+
+            static KeysConverter()
+            {
+                List<Tuple<string, string>> correspondence_list = new List<Tuple<string, string>>();
+                for (int i = 0; i <= 9; ++i) { // D0-D9 -> 0-9
+                    correspondence_list.Add(Tuple.Create(string.Format("D{0}", i), i.ToString()));
+                }
+
+                if (Properties.Settings.Default.KeyboardType.Equals("us")) {
+                     correspondence_list.AddRange(new[] {
+                        // US keyboardで確認
+                        Tuple.Create(Keys.Oemtilde.ToString(),"`"),
+                        Tuple.Create(Keys.OemMinus.ToString(),"-"),
+                        Tuple.Create(Keys.Oemplus.ToString(),"="),
+                        Tuple.Create(Keys.Oem5.ToString(),"\\"),
+
+                        Tuple.Create(Keys.OemOpenBrackets.ToString(),"["),
+                        Tuple.Create(Keys.Oem6.ToString(),"]"),
+
+                        Tuple.Create(Keys.Oem1.ToString(),";"),
+                        Tuple.Create(Keys.Oem7.ToString(),"'"),
+
+                        Tuple.Create(Keys.Oemcomma.ToString(),","),
+                        Tuple.Create(Keys.OemPeriod.ToString(),"."),
+                        Tuple.Create(Keys.OemQuestion.ToString(),"/"),
+
+                        Tuple.Create(Keys.Next.ToString(),"PageDown")
+                    });
+                }
+                else {
+                     correspondence_list.AddRange(new[] {
+                        // JIS keyboardで確認(要確認) 
+                        Tuple.Create(Keys.OemMinus.ToString(),"-"),
+                        Tuple.Create(Keys.Oem7.ToString(),"^"),
+                        Tuple.Create(Keys.Oem5.ToString(),"\\"),
+
+                        Tuple.Create(Keys.Oemtilde.ToString(),"@"),
+                        Tuple.Create(Keys.OemOpenBrackets.ToString(),"["),
+
+                        Tuple.Create(Keys.Oemplus.ToString(),";"),
+                        Tuple.Create(Keys.Oem1.ToString(),":"),
+                        Tuple.Create(Keys.Oem6.ToString(),"]"),
+
+                        Tuple.Create(Keys.Oemcomma.ToString(),","),
+                        Tuple.Create(Keys.OemPeriod.ToString(),"."),
+                        Tuple.Create(Keys.OemQuestion.ToString(),"/"),
+                        Tuple.Create(Keys.OemBackslash.ToString(), "Backslash"),
+
+                        Tuple.Create(Keys.Next.ToString(),"PageDown")
+                    });
+                }
+
+                foreach (var cor in correspondence_list) {
+                    _keys_to_original.Add(cor.Item1, cor.Item2);
+                    _original_to_keys.Add(cor.Item2, cor.Item1);
+                }
+            }
+
+            public static string ConvertKeysToOriginal(string str)
+            {
+                
+                return (_keys_to_original.ContainsKey(str)) ? _keys_to_original[str] : str;
+            }
+
+            public static string ConvertOriginalToKeys(string str)
+            {
+                return (_original_to_keys.ContainsKey(str)) ? _original_to_keys[str] : str;
+            }
+        }
+        //-------------------------------------------------------------------------------
+        #endregion ((static class)KeysConverter)
+
         //-------------------------------------------------------------------------------
         #region 定数
         //-------------------------------------------------------------------------------
@@ -120,6 +198,7 @@ namespace StarlitTwit
         private const string SHIFT = "Shift";
         private const string ALT = "Alt";
         private const char PLUS = '+';
+        private const string PLUS_INTERVAL = " + ";
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -164,29 +243,58 @@ namespace StarlitTwit
         public Keys Key;
 
         //-------------------------------------------------------------------------------
+        #region +IsModifyOnly 修飾キーしかない場合にtrue
+        //-------------------------------------------------------------------------------
+        //
+        public bool IsModifyOnly()
+        {
+            return (this.Key == Keys.None)
+                || (this.Key == Keys.ControlKey)
+                || (this.Key == Keys.ShiftKey)
+                || (this.Key == Keys.Menu);
+        }
+        #endregion (IsModifyOnly)
+
+        //-------------------------------------------------------------------------------
         #region +[override]ToString 文字列へ
         //-------------------------------------------------------------------------------
         //
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            if (this.Ctrl) {
-                if (sb.Length != 0) { sb.Append(PLUS); }
-                sb.Append(CTRL);
-            }
-            if (this.Alt) {
-                if (sb.Length != 0) { sb.Append(PLUS); }
-                sb.Append(ALT);
-            }
-            if (this.Shift) {
-                if (sb.Length != 0) { sb.Append(PLUS); }
-                sb.Append(SHIFT);
-            }
-            if (sb.Length != 0) { sb.Append(PLUS); }
-            sb.Append(this.Key.ToString());
-            return sb.ToString();
+            return ToString(false);
         }
         #endregion (+[override]ToString)
+        //-------------------------------------------------------------------------------
+        #region +ToString 文字列へ
+        //-------------------------------------------------------------------------------
+        //
+        public string ToString(bool permitLastPlus)
+        {
+            StringBuilder sb = new StringBuilder();
+            Keys k = this.Key;
+            if (this.Ctrl) {
+                sb.Append(CTRL);
+                if (k == Keys.ControlKey) { k = Keys.None; }
+            }
+            if (this.Shift) {
+                if (sb.Length != 0) { sb.Append(PLUS_INTERVAL); }
+                sb.Append(SHIFT);
+                if (k == Keys.ShiftKey) { k = Keys.None; }
+            }
+            if (this.Alt) {
+                if (sb.Length != 0) { sb.Append(PLUS_INTERVAL); }
+                sb.Append(ALT);
+                if (k == Keys.Menu) { k = Keys.None; }
+            }
+            if (permitLastPlus && sb.Length != 0) { sb.Append(PLUS_INTERVAL); }
+            if (k != Keys.None) {
+                if (!permitLastPlus && sb.Length != 0) { sb.Append(PLUS_INTERVAL); }
+                sb.Append(KeysConverter.ConvertKeysToOriginal(k.ToString()));
+            }
+
+            return sb.ToString();
+        }
+        #endregion (ToString)
 
         //-------------------------------------------------------------------------------
         #region +[static]FromString 文字列から
@@ -194,27 +302,38 @@ namespace StarlitTwit
         //
         public static KeyData FromString(string text)
         {
+            if (string.IsNullOrEmpty(text)) { return null; }
+
             string[] sKeyElements = text.Split(PLUS);        // +で区切る
             KeyData keyData = new KeyData();
 
-            foreach (string str in sKeyElements) {
+            bool validData = false;
+            foreach (string s in sKeyElements) {
+                string str = s.Trim();
+                if (str.Length == 0) { continue; }
                 if (str.Equals(CTRL)) {
                     keyData.Ctrl = true;
-                }
-                else if (str.Equals(ALT)) {
-                    keyData.Alt = true;
+                    validData = true;
                 }
                 else if (str.Equals(SHIFT)) {
                     keyData.Shift = true;
+                    validData = true;
+                }
+                else if (str.Equals(ALT)) {
+                    keyData.Alt = true;
+                    validData = true;
                 }
                 else if (str.Equals(NOT_CONFIGED)) {
                     return null;
                 }
                 else {
-                    keyData.Key = (Keys)MyConvert.EnumParse<Keys>(str);
+                    keyData.Key = MyConvert.EnumParse<Keys>(KeysConverter.ConvertOriginalToKeys(str));
+                    validData = true;
                 }
 
             }
+
+            if (!validData) { throw new ArgumentException("無効な文字列です"); }
 
             return keyData;
         }

@@ -138,6 +138,7 @@ namespace StarlitTwit
                 vScrollBar.Maximum = flpnlLeft.PreferredSize.Height;
                 vScrollBar.Value = 0;
                 vScrollBar.LargeChange = this.Height;
+                vScrollBar.SmallChange = 20;
             }
         }
         #endregion (AddLabel)
@@ -167,6 +168,7 @@ namespace StarlitTwit
                 vScrollBar.Maximum = flpnlLeft.PreferredSize.Height;
                 vScrollBar.Value = 0;
                 vScrollBar.LargeChange = this.Height;
+                vScrollBar.SmallChange = 20;
             }
 
             ++_index;

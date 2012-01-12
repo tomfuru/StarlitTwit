@@ -128,6 +128,9 @@ namespace StarlitTwit
         #endregion (object.AsEnumerable)
     }
 
+    //-------------------------------------------------------------------------------
+    #region (interface)IDeepCopyClonable
+    //-------------------------------------------------------------------------------
     public interface IDeepCopyClonable<T>
     {
         /// <summary>
@@ -136,4 +139,5 @@ namespace StarlitTwit
         /// <returns></returns>
         T DeepCopyClone();
     }
+    #endregion ((interface)IDeepCopyClonable)
 }

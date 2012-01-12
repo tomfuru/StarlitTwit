@@ -72,6 +72,7 @@ namespace StarlitTwit
         {
             txtKey.ImeMode = ImeMode.Off; // 全角入力禁止のため
 
+            Console.WriteLine(e.KeyCode);
             if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.ProcessKey) {
                 _keyData = null;
             }
@@ -83,7 +84,14 @@ namespace StarlitTwit
                 keyData.Key = e.KeyCode;
                 _keyData = keyData;
             }
-            txtKey.Text = MakeKeyDataString(_keyData);
+            if (_keyData == null) {
+                btnOK.Enabled = true;
+                txtKey.Text = "";
+            }
+            else {
+                btnOK.Enabled = !_keyData.IsModifyOnly();
+                txtKey.Text = _keyData.ToString(true);
+            }
             e.SuppressKeyPress = true;
         }
         #endregion (txtKey_KeyDown)
@@ -132,7 +140,7 @@ namespace StarlitTwit
             }
 
             if (sb.Length != 0) { sb.Append(" + "); }
-            if (btnOK.Enabled = (k != Keys.None)) { sb.Append(k.ToString()); }
+            if (k != Keys.None) { sb.Append(k.ToString()); }
 
             return sb.ToString();
         }

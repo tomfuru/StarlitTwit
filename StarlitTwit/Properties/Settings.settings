@@ -11,5 +11,8 @@
   &lt;string&gt;yyyy-MM-ddTHH:mm:ss+00:00&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
+    <Setting Name="KeyboardType" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">jp</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
