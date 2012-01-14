@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
+using System.IO;
+using System.Xml;
 
 namespace StarlitTwit
 {
@@ -18,13 +21,66 @@ namespace StarlitTwit
         public SerializableDictionary<KeyData, ShortcutType_Status> StatusShortcutDic = new SerializableDictionary<KeyData, ShortcutType_Status>();
 
         //-------------------------------------------------------------------------------
+        #region +[override]Save 保存
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// このインスタンスをファイルに保存します。失敗した時は別の場所にファイルを保存するかどうか尋ねます。
+        /// </summary>
+        public override void Save(string filePath)
+        {
+            const string MESSAGE_1 = "設定の保存ができませんでした。\n設定を別の名前で保存しますか？";
+            const string MESSAGE_2 = "設定を別の名前で保存しますか？";
+            XmlSerializer serializer = new XmlSerializer(typeof(ShortcutKeyData));
+            if (!this.SaveBase(filePath)) {
+                string dispMessage = MESSAGE_1;
+                do {
+                    if (Message.ShowQuestionMessage(dispMessage) == DialogResult.Yes) {
+                        using (SaveFileDialog sfd = new SaveFileDialog()) {
+                            sfd.FileName = string.Format("{0}_tmp.xml", Path.GetFileNameWithoutExtension(filePath));
+                            sfd.Filter = "ショートカット設定ファイル(*.xml)|*.xml";
+                            if (sfd.ShowDialog() == DialogResult.OK) {
+                                if (!this.SaveBase(sfd.FileName)) {
+                                    dispMessage = MESSAGE_1;
+                                    continue;
+                                }
+                                break;
+                            }
+                            else { dispMessage = MESSAGE_2; }
+                        }
+                    }
+                    else { break; }
+                } while (true);
+            }
+        }
+        #endregion (Save)
+
+        //-------------------------------------------------------------------------------
         #region DefaultData デフォルトのデータを返します
         //-------------------------------------------------------------------------------
         //
         public static ShortcutKeyData DefaultData()
         {
             var dic = new ShortcutKeyData();
-            // TODO:Shortcut処理
+            //-------------------------------------------------------------------------------
+            #region MainFormShortcutDic initialization 
+		    //-------------------------------------------------------------------------------
+            dic.MainFormShortcutDic.Add(KeyData.FromString("F5"), ShortcutType_MainForm.選択中タブ更新);
+            //dic.MainFormShortcutDic.Add(KeyData.FromString(""), ShortcutType_MainForm);
+            //-------------------------------------------------------------------------------
+		    #endregion (MainFormShortcutDic initialization)
+            //-------------------------------------------------------------------------------
+            #region StatusShortcutDic initialization
+            //-------------------------------------------------------------------------------
+            dic.StatusShortcutDic.Add(KeyData.FromString("R"), ShortcutType_Status.リプライ);
+            dic.StatusShortcutDic.Add(KeyData.FromString("Q"), ShortcutType_Status.引用);
+            dic.StatusShortcutDic.Add(KeyData.FromString("Shift+Q"), ShortcutType_Status.引用リプライ);
+            dic.StatusShortcutDic.Add(KeyData.FromString("C"), ShortcutType_Status.会話表示);
+            dic.StatusShortcutDic.Add(KeyData.FromString("Shift+R"), ShortcutType_Status.リツイート);
+            dic.StatusShortcutDic.Add(KeyData.FromString("Ctrl+R"), ShortcutType_Status.リツイートしたユーザーを表示);
+            dic.StatusShortcutDic.Add(KeyData.FromString("Delete"), ShortcutType_Status.削除);
+            //dic.StatusShortcutDic.Add(KeyData.FromString(""), ShortcutType_Status);
+            //-------------------------------------------------------------------------------
+            #endregion (StatusShortcutDic initialization)
             return dic;
         }
         #endregion (DefaultData)
@@ -45,7 +101,7 @@ namespace StarlitTwit
         ユーザー検索画面表示,
         API使用制限回数情報表示,
         認証,
-        フォロー数・発言数更新,
+        フォロー数と発言数更新,
         フォロワー表示,
         フレンド表示,
         自分のプロフィール,
@@ -109,7 +165,7 @@ namespace StarlitTwit
     /// キー入力データを表す構造体です。
     /// </summary>
     [Serializable]
-    public class KeyData : IDeepCopyClonable<KeyData>, IEquatable<KeyData>
+    public class KeyData : IDeepCopyClonable<KeyData>, IEquatable<KeyData>, IXmlSerializable
     {
         //-------------------------------------------------------------------------------
         #region -(static class)KeysConverter
@@ -404,6 +460,42 @@ namespace StarlitTwit
             return !(lhs == rhs);
         }
         #endregion (operator !=)
+
+        //-------------------------------------------------------------------------------
+        #region IXmlSerializable.GetSchema
+        //-------------------------------------------------------------------------------
+        //
+        System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+        #endregion (IXmlSerializable.GetSchema)
+        //-------------------------------------------------------------------------------
+        #region IXmlSerializable.ReadXml
+        //-------------------------------------------------------------------------------
+        //
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            string str = reader.ReadString();
+
+            KeyData k = KeyData.FromString(str);
+            this.Alt = k.Alt;
+            this.Shift = k.Shift;
+            this.Ctrl = k.Ctrl;
+            this.Key = k.Key;
+
+            reader.ReadEndElement();
+        }
+        #endregion (IXmlSerializable.ReadXml)
+        //-------------------------------------------------------------------------------
+        #region IXmlSerializable.WriteXml
+        //-------------------------------------------------------------------------------
+        //
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteString(this.ToString());
+        }
+        #endregion (IXmlSerializable.WriteXml)
     }
     //-------------------------------------------------------------------------------
     #endregion (KeyData)

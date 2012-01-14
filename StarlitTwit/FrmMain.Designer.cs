@@ -162,7 +162,7 @@
             // tsmiファイル_設定
             // 
             this.tsmiファイル_設定.Name = "tsmiファイル_設定";
-            this.tsmiファイル_設定.Size = new System.Drawing.Size(152, 22);
+            this.tsmiファイル_設定.Size = new System.Drawing.Size(262, 22);
             this.tsmiファイル_設定.Text = "設定(&C)";
             this.tsmiファイル_設定.Click += new System.EventHandler(this.tsmiファイル_設定_Click);
             // 
@@ -176,19 +176,19 @@
             // tsmiファイル_Sep
             // 
             this.tsmiファイル_Sep.Name = "tsmiファイル_Sep";
-            this.tsmiファイル_Sep.Size = new System.Drawing.Size(149, 6);
+            this.tsmiファイル_Sep.Size = new System.Drawing.Size(259, 6);
             // 
             // tsmiファイル_再起動
             // 
             this.tsmiファイル_再起動.Name = "tsmiファイル_再起動";
-            this.tsmiファイル_再起動.Size = new System.Drawing.Size(152, 22);
+            this.tsmiファイル_再起動.Size = new System.Drawing.Size(262, 22);
             this.tsmiファイル_再起動.Text = "再起動(&R)";
             this.tsmiファイル_再起動.Click += new System.EventHandler(this.tsmiファイル_再起動_Click);
             // 
             // tsmiファイル_終了
             // 
             this.tsmiファイル_終了.Name = "tsmiファイル_終了";
-            this.tsmiファイル_終了.Size = new System.Drawing.Size(152, 22);
+            this.tsmiファイル_終了.Size = new System.Drawing.Size(262, 22);
             this.tsmiファイル_終了.Text = "終了(&Q)";
             this.tsmiファイル_終了.Click += new System.EventHandler(this.tsmiファイル_終了_Click);
             // 
@@ -313,8 +313,8 @@
             // 
             this.tsmiプロフィール更新.Enabled = false;
             this.tsmiプロフィール更新.Name = "tsmiプロフィール更新";
-            this.tsmiプロフィール更新.Size = new System.Drawing.Size(261, 22);
-            this.tsmiプロフィール更新.Text = "フォロー数・発言数を更新する(&P)";
+            this.tsmiプロフィール更新.Size = new System.Drawing.Size(237, 22);
+            this.tsmiプロフィール更新.Text = "フォロー数と発言数を更新(&P)";
             this.tsmiプロフィール更新.Click += new System.EventHandler(this.tsmiプロフィール更新_Click);
             // 
             // tsmi自分のプロフィール
@@ -890,6 +890,7 @@
             this.uctlDispHome.PopupAction = null;
             this.uctlDispHome.Size = new System.Drawing.Size(480, 490);
             this.uctlDispHome.TabIndex = 2;
+            this.uctlDispHome.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DispTwit_MouseDown);
             // 
             // tabpgReply
             // 
@@ -959,6 +960,7 @@
             this.uctlDispDirect.PopupAction = null;
             this.uctlDispDirect.Size = new System.Drawing.Size(480, 490);
             this.uctlDispDirect.TabIndex = 2;
+            this.uctlDispDirect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DispTwit_MouseDown);
             // 
             // imageListWrapper
             // 

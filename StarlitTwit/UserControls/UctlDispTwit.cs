@@ -623,6 +623,12 @@ namespace StarlitTwit
                 if (row != SelectedRow) { ChangeSelectRow(row); }
             }
             _isMouseDowning = true;
+
+            { // Event発生
+                Point p = this.PointToClient(pnlTweets.PointToScreen(e.Location));
+                MouseEventArgs me = new MouseEventArgs(e.Button, e.Clicks, p.X, p.Y, e.Delta);
+                OnMouseDown(me);
+            }
         }
         #endregion (UctlDispTwit_MouseDown)
         #region pnlflow_MouseMove マウスムーブ時
@@ -634,6 +640,12 @@ namespace StarlitTwit
                 //UctlDispTwitRow row = pnlflow.GetChildAtPoint(e.Location,GetChildAtPointSkip.Invisible) as UctlDispTwitRow;
                 //if (row != SelectedRow) { ChangeSelectRow(row); }
             }
+
+            { // Event発生
+                Point p = this.PointToClient(pnlTweets.PointToScreen(e.Location));
+                MouseEventArgs me = new MouseEventArgs(e.Button, e.Clicks, p.X, p.Y, e.Delta);
+                OnMouseMove(me);
+            }
         }
         #endregion (pnlflow_MouseMove)
         #region pnlflow_MouseUp マウスアップ時
@@ -642,6 +654,12 @@ namespace StarlitTwit
         private void pnlflow_MouseUp(object sender, MouseEventArgs e)
         {
             _isMouseDowning = false;
+
+            { // Event発生
+                Point p = this.PointToClient(pnlTweets.PointToScreen(e.Location));
+                MouseEventArgs me = new MouseEventArgs(e.Button, e.Clicks, p.X, p.Y, e.Delta);
+                OnMouseUp(me);
+            }
         }
         #endregion (pnlflow_MouseUp)
         #region pnlflow_MouseClick マウスクリック時
@@ -649,7 +667,11 @@ namespace StarlitTwit
         //
         private void pnlflow_MouseClick(object sender, MouseEventArgs e)
         {
-
+            { // Event発生
+                Point p = this.PointToClient(pnlTweets.PointToScreen(e.Location));
+                MouseEventArgs me = new MouseEventArgs(e.Button, e.Clicks, p.X, p.Y, e.Delta);
+                OnMouseClick(me);
+            }
         }
         #endregion (pnlflow_MouseClick)
         //-------------------------------------------------------------------------------

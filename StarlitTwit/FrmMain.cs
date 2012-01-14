@@ -58,8 +58,14 @@ namespace StarlitTwit
         public static SettingsData SettingsData { get; private set; }
         /// <summary>履歴データ</summary>
         public static HistoryData HistoryData { get; private set; }
+        /// <summary>ショートカットデータ</summary>
+        public static ShortcutKeyData ShortcutKeyData { get; private set; }
         /// <summary>設定データファイルパス</summary>
         private string _settingsDataPath;
+        /// <summary>履歴データファイルパス</summary>
+        private string _historyDataPath;
+        /// <summary>ショートカットデータファイルパス</summary>
+        private string _shortcutDataPath;
 
         /// <summary>タブと表示コントロールの辞書</summary>
         private Dictionary<TabPageEx, UctlDispTwit> _dispTwitDic = new Dictionary<TabPageEx, UctlDispTwit>();
@@ -256,13 +262,18 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
             //tabTwitDisp.SelectedIndex = 0;
-            _settingsDataPath = Utilization.GetDefaultSettingsDataFilePath();
 
+            _settingsDataPath = Utilization.GetDefaultSettingsDataFilePath();
             SettingsData = SettingsData.Restore(_settingsDataPath);
             if (SettingsData == null) { SettingsData = new SettingsData(); }
 
-            HistoryData = HistoryData.Restore("history.xml");
+            _historyDataPath = "history.xml";
+            HistoryData = HistoryData.Restore(_historyDataPath);
             if (HistoryData == null) { HistoryData = new HistoryData(); }
+
+            _shortcutDataPath = "shortcut.xml";
+            ShortcutKeyData = ShortcutKeyData.Restore(_shortcutDataPath);
+            if (ShortcutKeyData == null) { ShortcutKeyData = ShortcutKeyData.DefaultData(); }
 
             // ↓設定を復元↓
 
@@ -495,6 +506,19 @@ namespace StarlitTwit
             }
         }
         #endregion (tabTwitDisp_TabMoved)
+        //-------------------------------------------------------------------------------
+        #region DispTwit_MouseDown マウスダウン時
+        //-------------------------------------------------------------------------------
+        //
+        private void DispTwit_MouseDown(object sender, MouseEventArgs e)
+        {
+            UctlDispTwit uctldisp = sender as UctlDispTwit;
+            if (uctldisp == null) { return; }
+            TabPageEx tabpage = _dispTwitDic.FirstOrDefault(k => k.Value == uctldisp).Key;
+            Debug.Assert(tabpage != null);
+            tabpage.Focus();
+        }
+        #endregion (DispTwit_MouseDown)
         //-------------------------------------------------------------------------------
         #region DispTwit_TweetItemClick 特殊項目クリック時
         //-------------------------------------------------------------------------------
@@ -927,6 +951,7 @@ namespace StarlitTwit
                     if (frmconf.ShowDialog() == DialogResult.OK) {
                         //SettingsData = frmconf.SettingsData; // classなので不要
                         SettingsData.Save(_settingsDataPath);
+                        HistoryData.Save(_historyDataPath);
 
                         // 設定の適用
                         foreach (var tabpage in DEFAULT_TABPAGES) {
@@ -959,9 +984,10 @@ namespace StarlitTwit
         //
         private void tsmiファイル_キーボードショートカット設定_Click(object sender, EventArgs e)
         {
-            using (FrmShortcutKeyEdit frm = new FrmShortcutKeyEdit(ShortcutKeyData.DefaultData())) {
+            using (FrmShortcutKeyEdit frm = new FrmShortcutKeyEdit(ShortcutKeyData)) {
                 if (frm.ShowDialog() == DialogResult.OK) {
-                    ShortcutKeyData skd = frm.GetShortcutKeyData();
+                    ShortcutKeyData = frm.GetShortcutKeyData();
+                    ShortcutKeyData.Save(_shortcutDataPath);
                 }
             }
         }
@@ -3057,13 +3083,25 @@ namespace StarlitTwit
         #endregion (InvokeTweetGet)
 
         //-------------------------------------------------------------------------------
+        #region ProcessKey キー処理
+        //-------------------------------------------------------------------------------
+        //
+        private void ProcessKey(Keys key)
+        {
+            // TODO ShortcutKey処理
+        }
+        #endregion (ProcessKey)
+        //-------------------------------------------------------------------------------
         #region #[override]ProcessCmdKey キー処理
         //-------------------------------------------------------------------------------
         //
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
         {
-            if (!rtxtTwit.Focused) {
+            if (tabTwitDisp.SelectedTab.Focused) {
                 SelectedUctlDispTwit().ProcessKey(keyData);
+            }
+            else if (!rtxtTwit.Focused) {
+                ProcessKey(keyData);
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
