@@ -890,7 +890,6 @@
             this.uctlDispHome.PopupAction = null;
             this.uctlDispHome.Size = new System.Drawing.Size(480, 490);
             this.uctlDispHome.TabIndex = 2;
-            this.uctlDispHome.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DispTwit_MouseDown);
             // 
             // tabpgReply
             // 
@@ -960,7 +959,6 @@
             this.uctlDispDirect.PopupAction = null;
             this.uctlDispDirect.Size = new System.Drawing.Size(480, 490);
             this.uctlDispDirect.TabIndex = 2;
-            this.uctlDispDirect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DispTwit_MouseDown);
             // 
             // imageListWrapper
             // 

@@ -180,7 +180,8 @@ namespace StarlitTwit
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
         {
             if (!btnAppend.Focused && !btnClose.Focused) {
-                uctlDispTwit.ProcessKey(keyData);
+                KeyData key = Utilization.ConvertKeysToKeyData(keyData);
+                uctlDispTwit.ProcessKey(key);
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }

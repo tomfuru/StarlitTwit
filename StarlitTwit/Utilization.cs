@@ -27,6 +27,44 @@ namespace StarlitTwit
         private const string SAVEFILE_NAME = @"Settings.dat";
 
         //-------------------------------------------------------------------------------
+        #region +[static]ConvertKeysToKeyData
+        //-------------------------------------------------------------------------------
+        //
+        public static KeyData ConvertKeysToKeyData(Keys k)
+        {
+            KeyData keydata = new KeyData();
+            if ((k & Keys.Control) == Keys.Control) {
+                k = k & ~Keys.Control;
+                keydata.Ctrl = true;
+            }
+            if ((k & Keys.Shift) == Keys.Shift) {
+                k = k & ~Keys.Shift;
+                keydata.Shift = true;
+            }
+            if ((k & Keys.Alt) == Keys.Alt) {
+                k = k & ~Keys.Alt;
+                keydata.Alt = true;
+            }
+            keydata.Key = k;
+
+            return keydata;
+        }
+        #endregion (ConvertKeysToKeyData)
+        //-------------------------------------------------------------------------------
+        #region +[static]ConvertKeyDataToKeys
+        //-------------------------------------------------------------------------------
+        //
+        public static Keys ConvertKeyDataToKeys(KeyData keydata)
+        {
+            Keys key = keydata.Key;
+            if (keydata.Ctrl) { key |= Keys.Control; }
+            if (keydata.Shift) { key |= Keys.Shift; }
+            if (keydata.Alt) { key |= Keys.Alt; }
+            return key;
+        }
+        #endregion (ConvertKeyDataToKeys)
+
+        //-------------------------------------------------------------------------------
         #region +[static]GetDefaultSettingsDataFilePath デフォルト設定ファイルパス取得
         //-------------------------------------------------------------------------------
         //

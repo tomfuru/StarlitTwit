@@ -507,19 +507,6 @@ namespace StarlitTwit
         }
         #endregion (tabTwitDisp_TabMoved)
         //-------------------------------------------------------------------------------
-        #region DispTwit_MouseDown マウスダウン時
-        //-------------------------------------------------------------------------------
-        //
-        private void DispTwit_MouseDown(object sender, MouseEventArgs e)
-        {
-            UctlDispTwit uctldisp = sender as UctlDispTwit;
-            if (uctldisp == null) { return; }
-            TabPageEx tabpage = _dispTwitDic.FirstOrDefault(k => k.Value == uctldisp).Key;
-            Debug.Assert(tabpage != null);
-            tabpage.Focus();
-        }
-        #endregion (DispTwit_MouseDown)
-        //-------------------------------------------------------------------------------
         #region DispTwit_TweetItemClick 特殊項目クリック時
         //-------------------------------------------------------------------------------
         //
@@ -3086,7 +3073,7 @@ namespace StarlitTwit
         #region ProcessKey キー処理
         //-------------------------------------------------------------------------------
         //
-        private void ProcessKey(Keys key)
+        private void ProcessKey(KeyData key)
         {
             // TODO ShortcutKey処理
         }
@@ -3097,11 +3084,11 @@ namespace StarlitTwit
         //
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
         {
-            if (tabTwitDisp.SelectedTab.Focused) {
-                SelectedUctlDispTwit().ProcessKey(keyData);
-            }
-            else if (!rtxtTwit.Focused) {
-                ProcessKey(keyData);
+            if (!rtxtTwit.Focused) {
+                KeyData key = Utilization.ConvertKeysToKeyData(keyData);
+
+                SelectedUctlDispTwit().ProcessKey(key);
+                ProcessKey(key);
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }

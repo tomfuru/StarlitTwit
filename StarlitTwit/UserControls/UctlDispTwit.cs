@@ -215,18 +215,54 @@ namespace StarlitTwit
         [Category("動作")]
         [Description("特殊項目クリック時")]
         public event EventHandler<TweetItemClickEventArgs> TweetItemClick;
+        //-------------------------------------------------------------------------------
+        #region #[virtual]OnTweetItemClick
+        //-------------------------------------------------------------------------------
+        //
+        protected virtual void OnTweetItemClick(TweetItemClickEventArgs e)
+        {
+            if (TweetItemClick != null) { TweetItemClick(this, e); }
+        }
+        #endregion (OnTweetItemClick)
         /// <summary>選択インデックス変更時</summary>
         [Category("動作")]
         [Description("選択インデックス変更時")]
         public event EventHandler SelectedIndexChanged;
+        //-------------------------------------------------------------------------------
+        #region #[virtual]OnSelectedIndexChanged
+        //-------------------------------------------------------------------------------
+        //
+        protected virtual void OnSelectedIndexChanged(EventArgs e)
+        {
+            if (SelectedIndexChanged != null) { SelectedIndexChanged(this, e); }
+        }
+        #endregion (OnSelectedIndexChanged)
         /// <summary>行右クリックメニュークリック時</summary>
         [Category("ツイート")]
         [Description("行右クリックメニュークリック時")]
         public event EventHandler<TwitRowMenuEventArgs> RowContextMenu_Click;
+        //-------------------------------------------------------------------------------
+        #region #[virtual]OnRowContextMenu_Click
+        //-------------------------------------------------------------------------------
+        //
+        protected virtual void OnRowContextMenu_Click(TwitRowMenuEventArgs e)
+        {
+            if (RowContextMenu_Click != null) { RowContextMenu_Click(this, e); }
+        }
+        #endregion (OnRowContextMenu_Click)
         /// <summary>エンティティ関係メニュークリック時</summary>
         [Category("ツイート")]
         [Description("ツイート内エンティティに関するメニューイベント発生時")]
         public event EventHandler<EntityEventArgs> EntityEvent;
+        //-------------------------------------------------------------------------------
+        #region #[virtual]OnEntityEvent
+        //-------------------------------------------------------------------------------
+        //
+        protected virtual void OnEntityEvent(EntityEventArgs e)
+        {
+            if (EntityEvent != null) { EntityEvent(this, e); }
+        }
+        #endregion (OnEntityEvent)
         //-------------------------------------------------------------------------------
         #endregion (Public イベント)
         //-------------------------------------------------------------------------------
@@ -323,9 +359,7 @@ namespace StarlitTwit
         //
         private void tsmiReply_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Reply, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Reply, SelectedTwitData));
         }
         #endregion (tsmiReply_Click)
         #region tsmiQuote_Click 引用メニュークリック時
@@ -333,9 +367,7 @@ namespace StarlitTwit
         //
         private void tsmiQuote_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Quote, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Quote, SelectedTwitData));
         }
         #endregion (tsmiQuote_Click)
         #region tsmiQuoteReply_Click 引用リプライメニュークリック時
@@ -343,9 +375,7 @@ namespace StarlitTwit
         //
         private void tsmiQuoteReply_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.QuoteReply, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.QuoteReply, SelectedTwitData));
         }
         #endregion (tsmiQuoteReply_Click)
         #region tsmiRetweet_Click リツイートメニュークリック時
@@ -353,9 +383,7 @@ namespace StarlitTwit
         //
         private void tsmiRetweet_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Retweet, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Retweet, SelectedTwitData));
         }
         #endregion (tsmiRetweet_Click)
         #region tsmiDirectMessage_Click ダイレクトメッセージメニュークリック時
@@ -363,9 +391,7 @@ namespace StarlitTwit
         //
         private void tsmiDirectMessage_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.DirectMessage, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.DirectMessage, SelectedTwitData));
         }
         #endregion (tsmiDirectMessage_Click)
         //-------------------------------------------------------------------------------
@@ -374,9 +400,7 @@ namespace StarlitTwit
         //
         private void tsmiDispConversation_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.DisplayConversation, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.DisplayConversation, SelectedTwitData));
         }
         //-------------------------------------------------------------------------------
         #endregion (tsmiDispConversation_Click)
@@ -386,9 +410,7 @@ namespace StarlitTwit
         //
         private void tsmiFavorite_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Favorite, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Favorite, SelectedTwitData));
         }
         #endregion (tsmiFavorite_Click)
         #region tsmiUnfavorite_Click お気に入りから削除メニュークリック時
@@ -396,9 +418,7 @@ namespace StarlitTwit
         //
         private void tsmiUnfavorite_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Unfavorite, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Unfavorite, SelectedTwitData));
         }
         #endregion (tsmiUnfavorite_Click)
         //-------------------------------------------------------------------------------
@@ -407,9 +427,7 @@ namespace StarlitTwit
         //
         private void tsmiDelete_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Delete, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Delete, SelectedTwitData));
         }
         #endregion (tsmiDelete_Click)
         //-------------------------------------------------------------------------------
@@ -447,9 +465,7 @@ namespace StarlitTwit
         //
         private void tsmiUser_DisplayProfile_Click(object sender, EventArgs e)
         {
-            if (EntityEvent != null) {
-                EntityEvent(this, new EntityEventArgs(EntityEventType.User_DisplayProfile, (string)tsComboUser.SelectedItem));
-            }
+            OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayProfile, (string)tsComboUser.SelectedItem));
         }
         #endregion (tsmiUser_DisplayProfile_Click)
         #region tsmiUser_DisplayTweets_Click ユーザー：発言を表示クリック
@@ -457,9 +473,7 @@ namespace StarlitTwit
         //
         private void tsmiUser_DisplayTweets_Click(object sender, EventArgs e)
         {
-            if (EntityEvent != null) {
-                EntityEvent(this, new EntityEventArgs(EntityEventType.User_DisplayTweets, (string)tsComboUser.SelectedItem));
-            }
+            OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayTweets, (string)tsComboUser.SelectedItem));
         }
         #endregion (tsmiUser_DisplayTweets_Click)
         //-------------------------------------------------------------------------------
@@ -468,9 +482,7 @@ namespace StarlitTwit
         //
         private void tsmiUser_MakeUserSearchTab_Click(object sender, EventArgs e)
         {
-            if (EntityEvent != null) {
-                EntityEvent(this, new EntityEventArgs(EntityEventType.User_MakeUserSearchTab, (string)tsComboUser.SelectedItem));
-            }
+            OnEntityEvent(new EntityEventArgs(EntityEventType.User_MakeUserSearchTab, (string)tsComboUser.SelectedItem));
         }
         #endregion (tsmiUser_MakeUserSearchTab_Click)
         #region tsmiUser_MakeUserTab_Click ユーザー：ユーザータブ作成クリック
@@ -478,9 +490,7 @@ namespace StarlitTwit
         //
         private void tsmiUser_MakeUserTab_Click(object sender, EventArgs e)
         {
-            if (EntityEvent != null) {
-                EntityEvent(this, new EntityEventArgs(EntityEventType.User_MakeUserTab, (string)tsComboUser.SelectedItem));
-            }
+            OnEntityEvent(new EntityEventArgs(EntityEventType.User_MakeUserTab, (string)tsComboUser.SelectedItem));
         }
         #endregion (tsmiUser_MakeUserTab_Click)
         #region tsmiUser_MakeListTab_Click ユーザー：リストタブ作成クリック
@@ -488,9 +498,7 @@ namespace StarlitTwit
         //
         private void tsmiUser_MakeListTab_Click(object sender, EventArgs e)
         {
-            if (EntityEvent != null) {
-                EntityEvent(this, new EntityEventArgs(EntityEventType.User_MakeListTab, (string)tsComboUser.SelectedItem));
-            }
+            OnEntityEvent(new EntityEventArgs(EntityEventType.User_MakeListTab, (string)tsComboUser.SelectedItem));
         }
         #endregion (tsmiUser_MakeListTab_Click)
         #region tsmiUser_OpenBrowser_Click ユーザー：ブラウザで開くクリック
@@ -519,9 +527,7 @@ namespace StarlitTwit
         //
         private void tsmiHashtag_MakeTab_Click(object sender, EventArgs e)
         {
-            if (EntityEvent != null) {
-                EntityEvent(this, new EntityEventArgs(EntityEventType.Hashtag_MakeTab, (string)tsComboHashtag.SelectedItem));
-            }
+            OnEntityEvent(new EntityEventArgs(EntityEventType.Hashtag_MakeTab, (string)tsComboHashtag.SelectedItem));
         }
         #endregion (tsmiHashtag_MakeTab_Click)
         #region tsmiHashtag_Clipboard_Click ハッシュタグ：クリップボードにコピークリック
@@ -565,9 +571,7 @@ namespace StarlitTwit
         //
         private void tsmiDispRetweeter_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.Retweeter, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Retweeter, SelectedTwitData));
         }
         #endregion (tsmiDispRetweeter_Click)
         //-------------------------------------------------------------------------------
@@ -576,9 +580,7 @@ namespace StarlitTwit
         //
         private void tsmiOlderData_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.OlderTweetRequest, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.OlderTweetRequest, SelectedTwitData));
         }
         #endregion (tsmiOlderData_Click)
         #region tsmiMoreRecentData_Click より新しいデータメニュークリック時
@@ -586,9 +588,7 @@ namespace StarlitTwit
         //
         private void tsmiMoreRecentData_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.MoreRecentTweetRequest, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.MoreRecentTweetRequest, SelectedTwitData));
         }
         #endregion (tsmiMoreRecentData_Click)
         #region tsmiSpecifyTime_Click 時刻を指定して発言取得
@@ -596,9 +596,7 @@ namespace StarlitTwit
         //
         private void tsmiSpecifyTime_Click(object sender, EventArgs e)
         {
-            if (RowContextMenu_Click != null) {
-                RowContextMenu_Click.Invoke(this, new TwitRowMenuEventArgs(RowEventType.SpecifyTimeTweetRequest, SelectedTwitData));
-            }
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.SpecifyTimeTweetRequest, SelectedTwitData));
         }
         #endregion (tsmiSpecifyTime_Click)
         #endregion (tsmi-)
@@ -679,11 +677,12 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private bool _enableKey = true;
         //
-        public void ProcessKey(Keys key)
+        public void ProcessKey(KeyData key)
         {
             if (_iVisibleRowNum == 0 || !_enableKey) { return; }
 
-            switch (key) {
+            if (key.Alt || key.Ctrl || key.Shift) { return; }
+            switch (key.Key) {
                 case Keys.Down:
                 case Keys.Up:
                     lock (_lockObj) {
@@ -693,7 +692,7 @@ namespace StarlitTwit
                         }
                         else {
                             int iselected = SelectedIndex;
-                            if (key == Keys.Up) {
+                            if (key.Key == Keys.Up) {
                                 // ↑キー
                                 if (iselected == 0) { break; }
                                 SelectedIndex--;
@@ -1256,7 +1255,7 @@ namespace StarlitTwit
                         for (int i = 0; i < rowindex; i++) {
                             _rowList[i].Location = new Point(0, _rowList[i].Location.Y - height);
                         }
-                        break; 
+                        break;
                     }
                 }
                 else {
@@ -1272,7 +1271,7 @@ namespace StarlitTwit
                         continue;
 
                     }
-                    else if (_rowDataList.Count == rowdataindex) { break;  }
+                    else if (_rowDataList.Count == rowdataindex) { break; }
                 }
                 RowData rowdata = _rowDataList.Values[rowdataindex];
                 UctlDispTwitRow row;
