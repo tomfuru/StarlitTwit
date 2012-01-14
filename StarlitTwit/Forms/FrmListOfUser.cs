@@ -88,7 +88,6 @@ namespace StarlitTwit
                 try {
                     this.Invoke(new Action(() => tssLabel.Text = "リストに追加中..."));
                     this.Refresh();
-                    // TODO:リスト追加
                     FrmMain.Twitter.list_members_create(listdata.ID, screen_name: _screen_name);
                     this.Invoke(new Action(() => tssLabel.Text = "追加完了しました。"));
                 }
@@ -101,7 +100,6 @@ namespace StarlitTwit
                 try {
                     this.Invoke(new Action(() => tssLabel.Text = "リストから削除中..."));
                     this.Refresh();
-                    // TODO:リスト削除
                     FrmMain.Twitter.list_members_destroy(listdata.ID, screen_name: _screen_name);
                     this.Invoke(new Action(() => tssLabel.Text = "削除完了しました。"));
                 }
