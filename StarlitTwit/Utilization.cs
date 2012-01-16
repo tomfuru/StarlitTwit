@@ -286,8 +286,8 @@ namespace StarlitTwit
             const string RECIPIENT = "Recipient";
 
             string formatRep = format.Replace(@"\n", "\n");
-            bool bIsRT = twitdata.IsRT(),
-                 bIsDM = twitdata.IsDM(),
+            bool bIsRT = TwitData.IsRT(twitdata),
+                 bIsDM = TwitData.IsDM(twitdata),
                  bIsSt = (twitdata.TwitType == TwitType.Search);
             int iStart, iEnd, iBase = 0;
             StringBuilder sb = new StringBuilder();

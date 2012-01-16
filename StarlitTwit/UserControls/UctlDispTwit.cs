@@ -286,11 +286,11 @@ namespace StarlitTwit
                     break;
             }
 
-            bool isReply = (SelectedTwitData.MainTwitData.Mention_StatusID > 0);
-            bool isDirect = SelectedTwitData.IsDM();
+            bool isReply = TwitData.IsMention(SelectedTwitData);
+            bool isDirect = TwitData.IsDM(SelectedTwitData);
             bool isProtected = SelectedTwitData.UserProtected;
-            bool isRT = SelectedTwitData.IsRT();
-            bool isMine = (SelectedTwitData.UserID == FrmMain.Twitter.ID);
+            bool isRT = TwitData.IsRT(SelectedTwitData);
+            bool isMine = TwitData.IsMine(SelectedTwitData);
             bool isFavorited = SelectedTwitData.Favorited;
 
             tsmiReply.Enabled = !isDirect;
@@ -506,11 +506,7 @@ namespace StarlitTwit
         //
         private void tsmiUser_OpenBrowser_Click(object sender, EventArgs e)
         {
-            StringBuilder sbUrl = new StringBuilder();
-            sbUrl.Append(Twitter.URLtwi);
-            sbUrl.Append((string)tsComboUser.SelectedItem);
-
-            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
+           OpenBrowser_UserPage((string)tsComboUser.SelectedItem);
         }
         #endregion (tsmiUser_OpenBrowser_Click)
         #region tsmiUser_Clipboard_Click ユーザー：クリップボードにコピークリック
@@ -680,6 +676,111 @@ namespace StarlitTwit
         public void ProcessKey(KeyData key)
         {
             if (_iVisibleRowNum == 0 || !_enableKey) { return; }
+
+            //--------------------
+            #region 設定ショートカット
+            //--------------------
+            if (SelectedIndex >= 0 && FrmMain.ShortcutKeyData.StatusShortcutDic.ContainsKey(key)) {
+                switch (FrmMain.ShortcutKeyData.StatusShortcutDic[key]) {
+                    case ShortcutType_Status.リプライ:
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Reply, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.引用:
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Quote, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.引用リプライ:
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.QuoteReply, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.リツイート:
+                        if (!TwitData.IsMine(SelectedTwitData)) {
+                            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Retweet, SelectedTwitData));
+                        }
+                        break;
+                    case ShortcutType_Status.ダイレクトメッセージ:
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.DirectMessage, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.会話表示:
+                        if (TwitData.IsMention(SelectedTwitData)) {
+                            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.DisplayConversation, SelectedTwitData));
+                        }
+                        break;
+                    case ShortcutType_Status.お気に入り追加:
+                        if (!SelectedTwitData.Favorited) {
+                            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Favorite, SelectedTwitData));
+                        }
+                        break;
+                    case ShortcutType_Status.お気に入り削除:
+                        if (SelectedTwitData.Favorited) {
+                            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Unfavorite, SelectedTwitData));
+                        }
+                        break;
+                    case ShortcutType_Status.お気に入り追加とリツイート:
+                        if (!SelectedTwitData.Favorited) {
+                            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Favorite, SelectedTwitData));
+                        }
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Retweet, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.削除:
+                        if (TwitData.IsMine(SelectedTwitData)) {
+                            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Delete, SelectedTwitData));
+                        }
+                        break;
+                    case ShortcutType_Status.リツイートしたユーザーを表示:
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.Retweeter, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.より古い発言を取得:
+                        OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.OlderTweetRequest, SelectedTwitData));
+                        break;
+                    case ShortcutType_Status.発言をブラウザで開く:
+                        tsmiOpenBrowser_ThisTweet_Click(this, EventArgs.Empty);
+                        break;
+                    case ShortcutType_Status.発言者のプロフィールを表示:
+                        OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayProfile, SelectedTwitData.MainTwitData.UserScreenName));
+                        break;
+                    case ShortcutType_Status.発言者の最近の発言を表示:
+                        OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayTweets, SelectedTwitData.MainTwitData.UserScreenName));
+                        break;
+                    case ShortcutType_Status.発言者のホームをブラウザで開く:
+                        OpenBrowser_UserPage(SelectedTwitData.MainTwitData.UserScreenName);
+                        break;
+                    case ShortcutType_Status.返信先ユーザーのプロフィールを表示:
+                        if (TwitData.IsMention(SelectedTwitData)) {
+                            OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayProfile, SelectedTwitData.Mention_ScreenName));
+                        }
+                        break;
+                    case ShortcutType_Status.返信先ユーザーの最近の発言を表示:
+                        if (TwitData.IsMention(SelectedTwitData)) {
+                            OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayTweets, SelectedTwitData.Mention_ScreenName));
+                        }
+                        break;
+                    case ShortcutType_Status.返信先ユーザーのホームをブラウザで開く:
+                        if (TwitData.IsMention(SelectedTwitData)) {
+                            OpenBrowser_UserPage(SelectedTwitData.Mention_ScreenName);
+                        }
+                        break;
+                    case ShortcutType_Status.リツイーターのプロフィールを表示:
+                        if (TwitData.IsRT(SelectedTwitData)) {
+                            OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayProfile, SelectedTwitData.UserScreenName));
+                        }
+                        break;
+                    case ShortcutType_Status.リツイーターの最近の発言を表示:
+                        if (TwitData.IsRT(SelectedTwitData)) {
+                            OnEntityEvent(new EntityEventArgs(EntityEventType.User_DisplayTweets, SelectedTwitData.UserScreenName));
+                        }
+                        break;
+                    case ShortcutType_Status.リツイーターのホームをブラウザで開く:
+                        if (TwitData.IsRT(SelectedTwitData)) {
+                            OpenBrowser_UserPage(SelectedTwitData.UserScreenName);
+                        }
+                        break;
+                    default:
+                        Debug.Assert(false);
+                        break;
+                }
+            }
+            //--------------------
+            #endregion
+            //--------------------
 
             if (key.Alt || key.Ctrl || key.Shift) { return; }
             switch (key.Key) {
@@ -1044,14 +1145,14 @@ namespace StarlitTwit
                             if (string.IsNullOrEmpty(retText)) { retText = Utilization.MakePopupText(t); }
 
                             // 画像URL登録
-                            string iconURL = t.IsRT() ? t.RTTwitData.IconURL : t.IconURL;
+                            string iconURL = TwitData.IsRT(t) ? t.RTTwitData.IconURL : t.IconURL;
                             if (!ImageListWrapper.ImageContainsKey(iconURL) && !imageURLList.Contains(iconURL)) {
                                 imageURLList.Add(iconURL);
                             }
 
                             addrowList.Add(rowdata);
                             _rowDataList.Add(t.StatusID, rowdata);
-                            if (t.IsRT()) { _RTidSet.Add(t.RTTwitData.StatusID); } // RT元データを集合に追加
+                            if (TwitData.IsRT(t)) { _RTidSet.Add(t.RTTwitData.StatusID); } // RT元データを集合に追加
 
                             //Console.WriteLine(t.StatusID);
 
@@ -1423,7 +1524,7 @@ namespace StarlitTwit
         /// <returns></returns>
         private bool CheckRTDup(TwitData twitdata)
         {
-            if (twitdata.IsRT()) {
+            if (TwitData.IsRT(twitdata)) {
                 long id = twitdata.RTTwitData.StatusID;
                 return _rowDataList.ContainsKey(id) || _RTidSet.Contains(id);
             }
@@ -1536,6 +1637,19 @@ namespace StarlitTwit
             if (SelectedIndexChanged != null) { SelectedIndexChanged.Invoke(this, EventArgs.Empty); }
         }
         #endregion (OnSelectedIndexChanged)
+        //-------------------------------------------------------------------------------
+        #region -OpenBrowser_UserPage ユーザーページをブラウザで表示
+        //-------------------------------------------------------------------------------
+        //
+        private void OpenBrowser_UserPage(string screen_name)
+        {
+            StringBuilder sbUrl = new StringBuilder();
+            sbUrl.Append(Twitter.URLtwi);
+            sbUrl.Append(screen_name);
+
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
+        }
+        #endregion (OpenBrowser_UserPage)
         //===============================================================================
         #region -GetRowFromIndex 絶対インデックスから行を取得します。
         //-------------------------------------------------------------------------------

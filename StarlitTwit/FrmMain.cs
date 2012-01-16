@@ -779,7 +779,7 @@ namespace StarlitTwit
         private void TwitMenu_Delete_Click(object sender, TwitRowMenuEventArgs e)
         {
             if (Message.ShowQuestionMessage("削除してよろしいですか？") == DialogResult.Yes) {
-                Delete(e.TwitData.StatusID, e.TwitData.IsDM());
+                Delete(e.TwitData.StatusID, TwitData.IsDM(e.TwitData));
             }
         }
         #endregion (TwitMenu_Delete_Click)
@@ -1886,7 +1886,7 @@ namespace StarlitTwit
                             if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs)) {
                                 this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
                                 // RTの時のPopup
-                                if (twitdata.IsRT() && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
+                                if (TwitData.IsRT(twitdata) && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
                                     string title = tasktray.Text + ":リツイート";
                                     string text = string.Format("{0} にリツイートされました\n{1}\n{2}", twitdata.UserScreenName,
                                                                 twitdata.RTTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT), twitdata.RTTwitData.Text);
@@ -1894,7 +1894,7 @@ namespace StarlitTwit
                                 }
                             }
                             // Reply
-                            if (!twitdata.IsRT()
+                            if (!TwitData.IsRT(twitdata)
                              && (twitdata.MainTwitData.Mention_UserID == Twitter.ID
                               || twitdata.MainTwitData.TextIncludeUserMention(Twitter.ScreenName))) {
                                 this.Invoke(new Action(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true, true)));
@@ -2070,7 +2070,7 @@ namespace StarlitTwit
                     break;
                 case UserStreamItemType.status:
                     TwitData t = (TwitData)data;
-                    if (t.IsRT()) {
+                    if (TwitData.IsRT(t)) {
                         sb.Append(string.Format("{0} Retweet Status of {2} by {1}", t.Time.ToString(Utilization.STR_DATETIMEFORMAT)
                                                                    , t.UserScreenName, t.RTTwitData.UserScreenName));
                     }

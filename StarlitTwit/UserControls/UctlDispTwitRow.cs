@@ -663,7 +663,7 @@ namespace StarlitTwit
         //
         private Color GetColor(bool selected)
         {
-            if (TwitData.IsRT()) {
+            if (TwitData.IsRT(TwitData)) {
                 return (selected)
                 ? FrmMain.SettingsData.ColorRTTweetBackSelected
                 : FrmMain.SettingsData.ColorRTTweetBackUnselected;

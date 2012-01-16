@@ -69,7 +69,7 @@ namespace StarlitTwit
                 else if ((filter.Status_FilterType & StatusFilterStatusType.ReplyTweet) != StatusFilterStatusType.ReplyTweet
                  && twitdata.TwitType == TwitType.Normal && twitdata.Mention_UserID >= 0) { return true; }
                 else if ((filter.Status_FilterType & StatusFilterStatusType.Retweet) != StatusFilterStatusType.Retweet
-                 && twitdata.IsRT()) { return true; }
+                 && TwitData.IsRT(twitdata)) { return true; }
             }
 
             // Text抽出

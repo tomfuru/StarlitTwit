@@ -3871,33 +3871,9 @@ namespace StarlitTwit
         /// </summary>
         public TwitData MainTwitData
         {
-            get { return IsRT() ? RTTwitData : this; }
+            get { return TwitData.IsRT(this) ? RTTwitData : this; }
         }
         #endregion (MainTwitData)
-        //-------------------------------------------------------------------------------
-        #region +IsRT Retweetかどうか
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// この発言がRetweetかどうかを返します。
-        /// </summary>
-        /// <returns></returns>
-        public bool IsRT()
-        {
-            return (this.TwitType == TwitType.Retweet);
-        }
-        #endregion (IsRT)
-        //-------------------------------------------------------------------------------
-        #region +IsDM DirectMessageかどうか
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// この発言がDirectMessageかどうかを返します。
-        /// </summary>
-        /// <returns></returns>
-        public bool IsDM()
-        {
-            return (this.TwitType == TwitType.DirectMessage);
-        }
-        #endregion (IsDM)
         //-------------------------------------------------------------------------------
         #region +TextIncludeUserMention TextにUserへの言及が含まれているかどうかを取得します。
         //-------------------------------------------------------------------------------
@@ -3941,6 +3917,46 @@ namespace StarlitTwit
             return StatusID.ToString() + " by " + UserScreenName;
         }
         #endregion (ToString)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]IsMention Mentionかどうか
+        //-------------------------------------------------------------------------------
+        //
+        public static bool IsMention(TwitData twitdata)
+        {
+            return (twitdata.Mention_StatusID >= 0);
+        }
+        #endregion (IsMention)
+        //-------------------------------------------------------------------------------
+        #region +[static]IsRT Retweetかどうか
+        //-------------------------------------------------------------------------------
+        //
+        public static bool IsRT(TwitData twitdata)
+        {
+            return (twitdata.TwitType == TwitType.Retweet);
+        }
+        #endregion (IsRT)
+        //-------------------------------------------------------------------------------
+        #region +[static]IsDM DirectMessageかどうか
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// この発言がDirectMessageかどうかを返します。
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsDM(TwitData twitdata)
+        {
+            return (twitdata.TwitType == TwitType.DirectMessage);
+        }
+        #endregion (IsDM)
+        //-------------------------------------------------------------------------------
+        #region +[static]IsMine 自分のものかどうか
+        //-------------------------------------------------------------------------------
+        //
+        public static bool IsMine(TwitData twitdata)
+        {
+            return (twitdata.UserID == FrmMain.Twitter.ID);
+        }
+        #endregion (+[static]IsMine)
     }
     //-------------------------------------------------------------------------------
     #endregion (TwitData)
