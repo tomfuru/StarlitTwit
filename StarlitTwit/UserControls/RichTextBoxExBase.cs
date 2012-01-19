@@ -265,6 +265,17 @@ namespace StarlitTwit
             }
         }
         #endregion (#[override]OnTextChanged)
+        //-------------------------------------------------------------------------------
+        #region +SetTextWithoutHistoryAdd 履歴追加無しでテキスト設定
+        //-------------------------------------------------------------------------------
+        //
+        public void SetTextWithoutHistoryAdd(string str)
+        {
+            _suspendHistoryAdd = true;
+            this.Text = str;
+            _suspendHistoryAdd = false;
+        }
+        #endregion (+SetTextWithoutHistoryAdd)
 
         //-------------------------------------------------------------------------------
         #region #DefaultMenuStateChange デフォルトメニュー状態変更
@@ -272,14 +283,16 @@ namespace StarlitTwit
         //
         protected void DefaultMenuStateChange()
         {
+            if (_surpressDefaultMenuChange) { return; }
+
             if (_undoMenu != null) {
+                _cutmenu.Visible = !this.ReadOnly;
                 _undoMenu.Enabled = _strHistory.CanUndo();
             }
             if (_redoMenu != null) {
+                _cutmenu.Visible = !this.ReadOnly;
                 _redoMenu.Enabled = _strHistory.CanRedo();
             }
-
-            if (_surpressDefaultMenuChange) { return; }
 
             bool existSelection = (SelectionLength > 0);
             if (_copyMenu != null) {
