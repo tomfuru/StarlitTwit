@@ -623,7 +623,7 @@ namespace StarlitTwit
                                 break;
                             case EFormType.UserFollower: {
                                     if (_userIDs == null || _page == _userIDs.Length) {
-                                        var data = FrmMain.Twitter.followers_ids(false, screen_name: UserScreenName, cursor: _next_cursor);
+                                        var data = FrmMain.Twitter.followers_ids(true, screen_name: UserScreenName, cursor: _next_cursor);
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
@@ -639,7 +639,7 @@ namespace StarlitTwit
                                 break;
                             case EFormType.UserFriend: {
                                     if (_userIDs == null || _page == _userIDs.Length) {
-                                        var data = FrmMain.Twitter.friends_ids(false, screen_name: UserScreenName, cursor: _next_cursor);
+                                        var data = FrmMain.Twitter.friends_ids(true, screen_name: UserScreenName, cursor: _next_cursor);
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
@@ -750,7 +750,10 @@ namespace StarlitTwit
             }
             catch (InvalidOperationException) { }
             finally {
-                _imageAnimation.StopAnimation();
+                try {
+                    _imageAnimation.StopAnimation();
+                }
+                catch (InvalidOperationException) { }
             }
         }
         #endregion (GetImages)
