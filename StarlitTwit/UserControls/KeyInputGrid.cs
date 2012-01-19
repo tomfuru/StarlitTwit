@@ -152,9 +152,16 @@ namespace StarlitTwit
         /// <param name="data"></param>
         public void AddItems(IEnumerable<Tuple<string, KeyData, object>> data)
         {
-            _duplicateDic.Add(_index, new List<Tuple<KeyData, Counter>>());
-            var list = new List<Tuple<KeyInputRight, object>>();
-            _dataListDic.Add(_index, list);
+            List<Tuple<KeyInputRight, object>> list;
+            if (!_duplicateDic.ContainsKey(_index)) {
+                _duplicateDic.Add(_index, new List<Tuple<KeyData, Counter>>());
+                list = new List<Tuple<KeyInputRight, object>>();
+                _dataListDic.Add(_index, list);
+            }
+            else {
+                list = _dataListDic[_index];
+            }
+
             foreach (var item in data) {
                 var tpl = GetOneItem(item.Item1, item.Item2, _index);
                 flpnlLeft.Controls.Add(tpl.Item1);
@@ -171,7 +178,7 @@ namespace StarlitTwit
                 vScrollBar.SmallChange = 20;
             }
 
-            ++_index;
+            //++_index;
         }
         #endregion (+AddItems)
 
