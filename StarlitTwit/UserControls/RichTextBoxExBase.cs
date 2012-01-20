@@ -286,11 +286,11 @@ namespace StarlitTwit
             if (_surpressDefaultMenuChange) { return; }
 
             if (_undoMenu != null) {
-                _cutmenu.Visible = !this.ReadOnly;
+                _undoMenu.Visible = !this.ReadOnly;
                 _undoMenu.Enabled = _strHistory.CanUndo();
             }
             if (_redoMenu != null) {
-                _cutmenu.Visible = !this.ReadOnly;
+                _redoMenu.Visible = !this.ReadOnly;
                 _redoMenu.Enabled = _strHistory.CanRedo();
             }
 
