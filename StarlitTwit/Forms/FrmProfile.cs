@@ -440,7 +440,7 @@ namespace StarlitTwit
             txtName.Text = profile.UserName;
             txtLocation.Text = profile.Location;
             txtUrl.Text = llblWeb.Text = profile.URL;
-            rtxtDescription.Text = profile.Description;
+            rtxtDescription.SetTextWithoutHistoryAdd(profile.Description);
 
             if (profile.LastTwitData != null) {
                 lblLastStatusTime.Text = string.Format("({0})", profile.LastTwitData.Time.ToString(Utilization.STR_DATETIMEFORMAT));

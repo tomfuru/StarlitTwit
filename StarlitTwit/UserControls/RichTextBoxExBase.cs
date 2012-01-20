@@ -273,6 +273,7 @@ namespace StarlitTwit
         public void SetTextWithoutHistoryAdd(string str)
         {
             _suspendHistoryAdd = true;
+            _strHistory.ClearWithFirstValue(new Tuple<string, int>(str, str.Length));
             this.Text = str;
             _suspendHistoryAdd = false;
         }

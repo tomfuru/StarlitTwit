@@ -66,6 +66,18 @@ namespace StarlitTwit
             }
         }
         #endregion (OnKeepHistoryNumChanged)
+        //-------------------------------------------------------------------------------
+        #region +ClearWithFirstValue 履歴を新しく入れる初期値のみにします
+        //-------------------------------------------------------------------------------
+        //
+        public void ClearWithFirstValue(T value)
+        {
+            _historyList.Clear();
+            _currentNode = null;
+
+            AddHistory(value);
+        }
+        #endregion (ClearWithFirstValue)
 
         //-------------------------------------------------------------------------------
         #region +CanUndo Undo可能かどうか
