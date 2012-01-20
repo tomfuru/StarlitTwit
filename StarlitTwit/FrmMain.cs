@@ -484,6 +484,18 @@ namespace StarlitTwit
         }
         #endregion (btnStateReset_Click)
         //-------------------------------------------------------------------------------
+        #region tabTwitDisp_SelectedIndexChanged タブ変更時
+        //-------------------------------------------------------------------------------
+        //
+        private void tabTwitDisp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UctlDispTwit uctlDisp = _dispTwitDic[tabTwitDisp.SelectedTab];
+            if (uctlDisp.SelectedRow != null) {
+                uctlDisp.SelectedRow.Focus();
+            }
+        }
+        #endregion (tabTwitDisp_SelectedIndexChanged)
+        //-------------------------------------------------------------------------------
         #region tabTwitDisp_TabMoved タブ移動時
         //-------------------------------------------------------------------------------
         //
@@ -3084,10 +3096,13 @@ namespace StarlitTwit
         //
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
         {
-            if (!rtxtTwit.Focused) {
-                KeyData key = Utilization.ConvertKeysToKeyData(keyData);
-
-                SelectedUctlDispTwit().ProcessKey(key);
+            KeyData key = Utilization.ConvertKeysToKeyData(keyData);
+            UctlDispTwit uctlDisp = SelectedUctlDispTwit();
+            if (uctlDisp.SelectedRow != null && uctlDisp.SelectedRow.Focused) {
+                uctlDisp.ProcessKey(key);
+                return true;
+            }
+            else if (!rtxtTwit.Focused) {
                 ProcessKey(key);
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -3216,6 +3231,9 @@ namespace StarlitTwit
         private void splContainer_Panel1_MouseMove(object sender, MouseEventArgs e)
         {
 
+        }
+        public void test() 
+        {
         }
     }
 }

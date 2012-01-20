@@ -789,7 +789,7 @@ namespace StarlitTwit
                     lock (_lockObj) {
                         if (SelectedIndex < 0) {
                             // 一番上選択
-                            SelectedIndex = GetAbsoluteRowIntex(0);
+                            ChangeSelectRow(0);
                         }
                         else {
                             int iselected = SelectedIndex;
@@ -825,12 +825,9 @@ namespace StarlitTwit
                     break;
                 case Keys.PageUp:
                     lock (_lockObj) {
-                        if (vscrbar.Enabled && vscrbar.Value > 0) {
-                            int nowBar = vscrbar.Value;
-                            int standard = vscrbar.Value - 1;
-                            AdjustControl(standard, false);
-                            int diff = nowBar - vscrbar.Value;
-                            ChangeSelectRow(Math.Max(SelectedIndex - diff, 0));
+                        if (vscrbar.Enabled && SelectedIndex > vscrbar.LargeChange) {
+                            SelectedIndex = Math.Max(SelectedIndex - vscrbar.LargeChange, 0);
+                            vscrbar.Value = Math.Max(vscrbar.Value - vscrbar.LargeChange, 0);
                         }
                         else {
                             vscrbar.Value = SelectedIndex = 0;
@@ -1487,13 +1484,12 @@ namespace StarlitTwit
         private void ConfigRow(UctlDispTwitRow row, string tooltipStr, bool isBoundary, long selectedStatusID)
         {
             // 選択中か判別
-            if (selectedStatusID >= 0) {
-                if (selectedStatusID == row.TwitData.StatusID) {
-                    row.SelectControl();
-                    SelectedRow = row;
-                }
-                else { row.UnSelectControl(); }
+            if (selectedStatusID >= 0 && selectedStatusID == row.TwitData.StatusID) {
+                row.SelectControl();
+                SelectedRow = row;
             }
+            else { row.UnSelectControl(); }
+            
 
             row.SetBackColor();
             row.Invalidate();
@@ -1634,7 +1630,7 @@ namespace StarlitTwit
         //
         private void OnSelectedIndexChanged()
         {
-            if (SelectedIndexChanged != null) { SelectedIndexChanged.Invoke(this, EventArgs.Empty); }
+            if (SelectedIndexChanged != null) { SelectedIndexChanged(this, EventArgs.Empty); }
         }
         #endregion (OnSelectedIndexChanged)
         //-------------------------------------------------------------------------------
