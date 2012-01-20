@@ -207,6 +207,7 @@ namespace StarlitTwit
         //
         private void ContextMenu_Opening(object sender, CancelEventArgs e)
         {
+            if (_surpressDefaultMenuChange) { return; }
             DefaultMenuStateChange();
         }
         #endregion (ContextMenu_Opening)
@@ -283,8 +284,6 @@ namespace StarlitTwit
         //
         protected void DefaultMenuStateChange()
         {
-            if (_surpressDefaultMenuChange) { return; }
-
             if (_undoMenu != null) {
                 _undoMenu.Visible = !this.ReadOnly;
                 _undoMenu.Enabled = _strHistory.CanUndo();

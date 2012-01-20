@@ -34,7 +34,7 @@
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiRedo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,12 +64,13 @@
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiUndo,
             this.tsmiRedo,
-            this.toolStripSeparator1,
+            this.tsSeparator,
             this.tsmiCopy,
             this.tsmiCut,
             this.tsmiPaste});
             this.contextMenu.Name = "contextMenuStrip1";
             this.contextMenu.Size = new System.Drawing.Size(190, 120);
+            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // tsmiUndo
             // 
@@ -83,10 +84,10 @@
             this.tsmiRedo.Size = new System.Drawing.Size(189, 22);
             this.tsmiRedo.Text = "やり直し(&R)";
             // 
-            // toolStripSeparator1
+            // tsSeparator
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
+            this.tsSeparator.Name = "tsSeparator";
+            this.tsSeparator.Size = new System.Drawing.Size(186, 6);
             // 
             // RichTextBoxEx
             // 
@@ -111,7 +112,7 @@
         protected System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem tsmiUndo;
         private System.Windows.Forms.ToolStripMenuItem tsmiRedo;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator tsSeparator;
 
 
 

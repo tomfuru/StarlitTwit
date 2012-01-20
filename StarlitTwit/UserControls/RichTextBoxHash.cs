@@ -170,7 +170,7 @@ namespace StarlitTwit
             }
             else {
                 var entity = Array.Find(_entities, info => info.range.Equals(_onRange));
-
+                // TODO Entityごとのメニュー？
             }
         }
         #endregion (contextMenu_Opening)

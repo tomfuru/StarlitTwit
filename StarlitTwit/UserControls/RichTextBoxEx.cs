@@ -20,5 +20,15 @@ namespace StarlitTwit
         }
         //-------------------------------------------------------------------------------
         #endregion (Constructor)
+
+        //-------------------------------------------------------------------------------
+        #region contextMenu_Opening
+        //-------------------------------------------------------------------------------
+        //
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            tsSeparator.Visible = !this.ReadOnly;
+        }
+        #endregion (contextMenu_Opening)
     }
 }
