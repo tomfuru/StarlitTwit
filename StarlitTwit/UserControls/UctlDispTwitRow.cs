@@ -54,7 +54,7 @@ namespace StarlitTwit
         #region 変数
         //-------------------------------------------------------------------------------
         /// <summary>選択されているかどうか。</summary>
-        public new bool Focused { get; private set; }
+        //public new bool Focused { get; private set; }
         /// <summary>画像辞書(KeyはURL)</summary>
         public ImageListWrapper ImageListWrapper { get; set; }
         /// <summary>下線描画のためのペン</summary>
@@ -231,6 +231,7 @@ namespace StarlitTwit
                 c.MouseUp += Controls_MouseUp;
                 c.MouseMove += Controls_MouseMove;
                 c.MouseClick += Controls_MouseClick;
+                c.MouseEnter += Controls_MouseEnter;
             }
         }
         #endregion (OnLoad)
@@ -259,7 +260,7 @@ namespace StarlitTwit
             this.OnMouseDown(e);
         }
         #endregion (Controls_MouseDown)
-        #region #[override]OnMouseDown マウスダウン時
+        #region #[override]OnMouseDown マウスダウンイベント発生
         //-------------------------------------------------------------------------------
         //
         protected override void OnMouseDown(MouseEventArgs e)
@@ -278,7 +279,7 @@ namespace StarlitTwit
             this.OnMouseMove(new MouseEventArgs(e.Button, e.Clicks, e.X + ctl.Location.X, e.Y + ctl.Location.Y, e.Delta));
         }
         #endregion (Controls_MouseMove)
-        #region #[override]OnMouseMove コントロールマウスムーブ時
+        #region #[override]OnMouseMove コントロールマウスムーブイベント発生
         //-------------------------------------------------------------------------------
         //
         protected override void OnMouseMove(MouseEventArgs e)
@@ -296,7 +297,7 @@ namespace StarlitTwit
             this.OnMouseUp(e);
         }
         #endregion (Controls_MouseUp)
-        #region #[override]OnMouseUp コントロールマウスアップ時
+        #region #[override]OnMouseUp コントロールマウスアップイベント発生
         //-------------------------------------------------------------------------------
         //
         protected override void OnMouseUp(MouseEventArgs e)
@@ -314,7 +315,7 @@ namespace StarlitTwit
             this.OnMouseClick(e);
         }
         #endregion (Controls_MouseClick)
-        #region #[override]OnMouseClick コントロールマウスクリック時
+        #region #[override]OnMouseClick コントロールマウスクリックイベント発生
         //-------------------------------------------------------------------------------
         //
         protected override void OnMouseClick(MouseEventArgs e)
@@ -323,6 +324,27 @@ namespace StarlitTwit
             base.OnMouseClick(e2);
         }
         #endregion (#[override]OnMouseClick)
+        //-------------------------------------------------------------------------------
+        #region Controls_MouseEnter コントロールマウスEnter時
+        //-------------------------------------------------------------------------------
+        //
+        private void Controls_MouseEnter(object sender, EventArgs e)
+        {
+            this.OnMouseEnter(e);
+        }
+        #endregion (Controls_MouseEnter)
+        #region #[override]OnMouseEnter コントロールマウスエンターイベント発生
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            base.OnMouseEnter(e);
+
+            if (this.Focused) {
+                SetPicturePopup();
+            }
+        }
+        #endregion (#[override])
         //-------------------------------------------------------------------------------
         #region Label_DoubleClick ラベルダブルクリック時
         //-------------------------------------------------------------------------------
@@ -440,16 +462,11 @@ namespace StarlitTwit
         public void SelectControl()
         {
             this.BackColor = GetColor(true);
-            this.Focused = true;
+            this.Focus();
+            //this.Focused = true;
 
-            if (FrmMain.SettingsData.DisplayThumbnail) {
-                if (myToolTipImage.ImageURLs == null) {
-                    IEnumerable<string> urls = Utilization.ExtractURL(TwitData.MainTwitData.Text);
-                    myToolTipImage.SetImageURLs(urls);
-                }
-                myToolTipImage.SwitchInterval = FrmMain.SettingsData.DisplayThumbnailInterval;
-                myToolTipImage.Active = true;
-            }
+            myToolTipReply.Active = false;
+            SetPicturePopup();
         }
         #endregion (SelectControl)
         //-------------------------------------------------------------------------------
@@ -462,8 +479,9 @@ namespace StarlitTwit
         {
             this.ActiveControl = null;
             this.BackColor = GetColor(false);
-            this.Focused = false;
+            //this.Focused = false;
 
+            myToolTipReply.Active = true;
             myToolTipImage.Active = false;
         }
         #endregion (UnSelectControl)
@@ -657,6 +675,25 @@ namespace StarlitTwit
             _pen = (isBlack) ? Pens.Black : Pens.Red;
         }
         #endregion (SetLineColor)
+        //-------------------------------------------------------------------------------
+        #region -SetPicturePopup 画像ポップアップセット
+        //-------------------------------------------------------------------------------
+        //
+        private void SetPicturePopup()
+        {
+            if (FrmMain.SettingsData.DisplayThumbnail) {
+                if (myToolTipImage.ImageURLs == null) {
+                    IEnumerable<string> urls = Utilization.ExtractURL(TwitData.MainTwitData.Text);
+                    myToolTipImage.SetImageURLs(urls);
+                }
+                if (myToolTipImage.ImageURLs != null && myToolTipImage.ImageURLs.Length > 0) {
+                    myToolTipImage.SwitchInterval = FrmMain.SettingsData.DisplayThumbnailInterval;
+                    myToolTipImage.Active = true;
+                }
+                else { myToolTipImage.Active = false; }
+            }
+        }
+        #endregion (SetPicturePopup)
         //-------------------------------------------------------------------------------
         #region -GetColor 色取得
         //-------------------------------------------------------------------------------
