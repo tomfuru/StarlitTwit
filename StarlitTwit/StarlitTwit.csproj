@@ -378,6 +378,7 @@
     <None Include="StarlitTwit.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Documents\next.txt" />
     <Content Include="Documents\ReadMe.txt" />
     <Content Include="Documents\SampleCode.txt" />
     <Content Include="Documents\URLShortenerAPI.txt" />

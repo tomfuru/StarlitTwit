@@ -462,7 +462,7 @@ namespace StarlitTwit
         public void SelectControl()
         {
             this.BackColor = GetColor(true);
-            this.Focus();
+            //this.Focus();
             this.Selected = true;
 
             myToolTipReply.Active = false;

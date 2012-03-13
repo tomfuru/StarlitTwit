@@ -464,7 +464,7 @@ namespace StarlitTwit
             }
             // Enter入力時の発言イベント発生
             else if (e.KeyCode == Keys.Enter) {
-                if (!e.Shift || !e.Control) {
+                if (!e.Shift && !e.Control) {
                     e.SuppressKeyPress = true;
                     btnTwit_Click(sender, e);
                 }
@@ -491,7 +491,7 @@ namespace StarlitTwit
         {
             UctlDispTwit uctlDisp = _dispTwitDic[tabTwitDisp.SelectedTab];
             if (uctlDisp.SelectedRow != null) {
-                uctlDisp.SelectedRow.Focus();
+                //uctlDisp.SelectedRow.Focus();
             }
         }
         #endregion (tabTwitDisp_SelectedIndexChanged)
@@ -3232,6 +3232,7 @@ namespace StarlitTwit
         {
 
         }
+        [Conditional("DEBUG")]
         public void test() 
         {
         }
