@@ -440,17 +440,9 @@ namespace StarlitTwit
         public void SelectControl()
         {
             this.BackColor = GetColor(true);
-<<<<<<< HEAD
-<<<<<<< HEAD
-            //this.Focus();
-            this.Selected = true;
-=======
-            this.Focus();
+            //this.Selected = true;
             //this.Focused = true;
->>>>>>> parent of 0941d2f... フォーカス関係を仕様変更
-=======
             this.Focused = true;
->>>>>>> parent of c7a750a... マウスオーバー時は選択中は画像，非選択時はreplyのTooltipを出すように統一
 
             if (FrmMain.SettingsData.DisplayThumbnail) {
                 if (myToolTipImage.ImageURLs == null) {

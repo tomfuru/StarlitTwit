@@ -484,7 +484,6 @@ namespace StarlitTwit
         }
         #endregion (btnStateReset_Click)
         //-------------------------------------------------------------------------------
-<<<<<<< HEAD
         #region tabTwitDisp_SelectedIndexChanged タブ変更時
         //-------------------------------------------------------------------------------
         //
@@ -497,8 +496,6 @@ namespace StarlitTwit
         }
         #endregion (tabTwitDisp_SelectedIndexChanged)
         //-------------------------------------------------------------------------------
-=======
->>>>>>> parent of 0941d2f... フォーカス関係を仕様変更
         #region tabTwitDisp_TabMoved タブ移動時
         //-------------------------------------------------------------------------------
         //
@@ -3232,12 +3229,9 @@ namespace StarlitTwit
         {
 
         }
-<<<<<<< HEAD
         [Conditional("DEBUG")]
         public void test() 
         {
         }
-=======
->>>>>>> parent of 0941d2f... フォーカス関係を仕様変更
     }
 }
