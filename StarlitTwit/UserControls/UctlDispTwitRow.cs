@@ -54,7 +54,7 @@ namespace StarlitTwit
         #region 変数
         //-------------------------------------------------------------------------------
         /// <summary>選択されているかどうか。</summary>
-        public bool Selected { get; private set; }
+        //public new bool Focused { get; private set; }
         /// <summary>画像辞書(KeyはURL)</summary>
         public ImageListWrapper ImageListWrapper { get; set; }
         /// <summary>下線描画のためのペン</summary>
@@ -462,8 +462,13 @@ namespace StarlitTwit
         public void SelectControl()
         {
             this.BackColor = GetColor(true);
+<<<<<<< HEAD
             //this.Focus();
             this.Selected = true;
+=======
+            this.Focus();
+            //this.Focused = true;
+>>>>>>> parent of 0941d2f... フォーカス関係を仕様変更
 
             myToolTipReply.Active = false;
             SetPicturePopup();
@@ -479,7 +484,7 @@ namespace StarlitTwit
         {
             this.ActiveControl = null;
             this.BackColor = GetColor(false);
-            this.Selected = false;
+            //this.Focused = false;
 
             myToolTipReply.Active = true;
             myToolTipImage.Active = false;
@@ -600,7 +605,7 @@ namespace StarlitTwit
         //
         public void SetBackColor()
         {
-            this.BackColor = GetColor(this.Selected);
+            this.BackColor = GetColor(this.Focused);
         }
         #endregion (SetBackColor)
         //-------------------------------------------------------------------------------
@@ -784,16 +789,6 @@ namespace StarlitTwit
             }
         }
         #endregion (GetForeColor)
-
-        private void UctlDispTwitRow_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void UctlDispTwitRow_Leave(object sender, EventArgs e)
-        {
-
-        }
         //===============================================================================
 
         //-------------------------------------------------------------------------------

@@ -129,8 +129,6 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "UctlDispTwitRow";
             this.Size = new System.Drawing.Size(359, 53);
-            this.Enter += new System.EventHandler(this.UctlDispTwitRow_Enter);
-            this.Leave += new System.EventHandler(this.UctlDispTwitRow_Leave);
             ((System.ComponentModel.ISupportInitialize)(this.picbIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

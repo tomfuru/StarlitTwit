@@ -484,6 +484,7 @@ namespace StarlitTwit
         }
         #endregion (btnStateReset_Click)
         //-------------------------------------------------------------------------------
+<<<<<<< HEAD
         #region tabTwitDisp_SelectedIndexChanged タブ変更時
         //-------------------------------------------------------------------------------
         //
@@ -496,6 +497,8 @@ namespace StarlitTwit
         }
         #endregion (tabTwitDisp_SelectedIndexChanged)
         //-------------------------------------------------------------------------------
+=======
+>>>>>>> parent of 0941d2f... フォーカス関係を仕様変更
         #region tabTwitDisp_TabMoved タブ移動時
         //-------------------------------------------------------------------------------
         //
@@ -3096,13 +3099,10 @@ namespace StarlitTwit
         //
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
         {
-            KeyData key = Utilization.ConvertKeysToKeyData(keyData);
-            UctlDispTwit uctlDisp = SelectedUctlDispTwit();
-            if (uctlDisp.SelectedRow != null && uctlDisp.SelectedRow.Focused) {
-                uctlDisp.ProcessKey(key);
-                return true;
-            }
-            else if (!rtxtTwit.Focused) {
+            if (!rtxtTwit.Focused) {
+                KeyData key = Utilization.ConvertKeysToKeyData(keyData);
+
+                SelectedUctlDispTwit().ProcessKey(key);
                 ProcessKey(key);
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -3232,9 +3232,12 @@ namespace StarlitTwit
         {
 
         }
+<<<<<<< HEAD
         [Conditional("DEBUG")]
         public void test() 
         {
         }
+=======
+>>>>>>> parent of 0941d2f... フォーカス関係を仕様変更
     }
 }
