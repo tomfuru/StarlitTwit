@@ -180,6 +180,7 @@ namespace StarlitTwit
         private const string STR_USERSTREAM_STARTING = "UserStream開始中...";
         private const string STR_USERSTREAM = "UserStream利用中";
         private const string STR_USERSTREAM_ENDING = "UserStream終了中...";
+        private const string STR_USERSTERAM_RECONNECT_WAITING_FORMAT = "{0}秒後に再接続します";
 
         private const string STR_FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
 
@@ -1046,7 +1047,7 @@ namespace StarlitTwit
         private void tsmi認証_Click(object sender, EventArgs e)
         {
             tssLabel.SetText(STR_WAITING_AUTHFORM);
-            LockAndProcess(_mreThreadConfirm, _mreThreadRun, new Action(() =>
+            LockAndProcess(_mreThreadConfirm, _mreThreadRun, (Action)(() =>
             {
                 tssLabel.RemoveText(STR_WAITING_AUTHFORM);
                 UserAuthInfo userdata;
@@ -1313,6 +1314,9 @@ namespace StarlitTwit
         //
         private void tsmiUserStreamEnd_Click(object sender, EventArgs e)
         {
+            CancellationTokenSource cts = _cts_reconnect;
+            if (cts != null) { cts.Cancel(); }
+
             EndUserStream();
         }
         #endregion (tsmiUserStreamEnd_Click)
@@ -1419,7 +1423,7 @@ namespace StarlitTwit
             TabPageEx tabpg = tabTwitDisp.SelectedTab;
             if (Message.ShowQuestionMessage("本当に削除してよろしいですか？") == System.Windows.Forms.DialogResult.Yes) {
                 tssLabel.SetText(STR_WAITING_DELETETAB);
-                LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
+                LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, (Action)(() =>
                 {
                     tabTwitDisp.TabPages.Remove(tabpg);
 
@@ -1533,7 +1537,7 @@ namespace StarlitTwit
         public void MakeNewTab(TabSearchType type, string data, string listowner = null)
         {
             tssLabel.SetText(STR_WAITING_MAKETAB);
-            LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, new Action(() =>
+            LockAndProcess(_mreThreadTabConfirm, _mreThreadTabRun, (Action)(() =>
             {
                 tssLabel.RemoveText(STR_WAITING_MAKETAB);
                 TabData tabdata = new TabData() {
@@ -1792,7 +1796,7 @@ namespace StarlitTwit
         /// <param name="type">短縮タイプ</param>
         private void TextURLShorten(URLShortenType type)
         {
-            this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = false));
+            this.Invoke((Action)(() => rtxtTwit.Enabled = btnTwit.Enabled = false));
 
             try {
                 btnURLShorten.Enabled = false;
@@ -1820,7 +1824,7 @@ namespace StarlitTwit
 
             }
             finally {
-                this.Invoke(new Action(() => rtxtTwit.Enabled = btnTwit.Enabled = true));
+                this.Invoke((Action)(() => rtxtTwit.Enabled = btnTwit.Enabled = true));
             }
         }
         #endregion (TextURLShorten)
@@ -1831,23 +1835,23 @@ namespace StarlitTwit
         //
         private void StartUserStream(bool all_replies)
         {
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 lblUserStreamInfo.Text = STR_USERSTREAM_STARTING;
                 tsmiUserStreamEnd.Enabled = false;
             }));
             _usingUserStream = true;
             try {
-                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent);
-
-                _frmUserStreamWatch = new FrmUserStreamWatch();
-                if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
-
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                 {
                     lblUserStreamInfo.Text = STR_USERSTREAM;
                     tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
                 }));
+                
+                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent, UserStreamErrorFinishEvent, 0);
+
+                _frmUserStreamWatch = new FrmUserStreamWatch();
+                if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
 
                 // RESTによるデータ取り込み
                 Utilization.InvokeTransactionDoingEvents(() =>
@@ -1881,6 +1885,73 @@ namespace StarlitTwit
         }
         #endregion (EndUserStream)
         //-------------------------------------------------------------------------------
+        #region -UserStreamEndEvent UserStreamの接続が終了した時に実行される
+        //-------------------------------------------------------------------------------
+        //
+        private void UserStreamEndEvent()
+        {
+            try {
+                _usingUserStream = false;
+                this.Invoke((Action)(() =>
+                {
+                    lblUserStreamInfo.Text = "";
+                    tsmiUserStreamStart.Enabled = true;
+                }));
+            }
+            catch (InvalidOperationException) { }
+        }
+        #endregion (UserStreamEndEvent)
+        //-------------------------------------------------------------------------------
+        #region -UserStreamWaitRecoonectEvent UserStreamの接続が切れて再接続待機中に実行される
+        //-------------------------------------------------------------------------------
+        //
+        CancellationTokenSource _cts_reconnect = null;
+        private void UserStreamErrorFinishEvent(bool all_replies, int reconnect_time)
+        {
+            const int MAX_RECONNECTION = 256;
+            if (reconnect_time > MAX_RECONNECTION) {
+                _frmUserStreamWatch.Hide();
+                _frmUserStreamWatch.Dispose();
+
+                EndUserStream();
+                UserStreamEndEvent();
+                return;
+            }
+
+            // 再接続待機
+            Utilization.InvokeTransaction(() =>
+            {
+                try {
+                    _cts_reconnect = new CancellationTokenSource();
+                    CancellationToken token = _cts_reconnect.Token;
+                    int standard = Environment.TickCount;
+                    int elapsed_already = 0;
+
+                    do {
+                        if (token.IsCancellationRequested) {
+                            _frmUserStreamWatch.Hide();
+                            _frmUserStreamWatch.Dispose();
+
+                            UserStreamEndEvent();
+                            return;
+                        }
+
+                        int elapsed = (Environment.TickCount - standard) / 1000;
+                        if (elapsed > elapsed_already) {
+                            elapsed_already = elapsed;
+                            if (reconnect_time > elapsed) {
+                                this.Invoke((Action)(() => lblUserStreamInfo.Text = string.Format(STR_USERSTERAM_RECONNECT_WAITING_FORMAT, reconnect_time - elapsed)));
+                            }
+                        }
+                    } while (reconnect_time - elapsed_already > 0);
+
+                    _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent, UserStreamErrorFinishEvent, reconnect_time);
+                }
+                finally { _cts_reconnect = null; }
+            });
+        }
+        #endregion (UserStreamWaitRecoonectEvent)
+        //-------------------------------------------------------------------------------
         #region -UserStreamTransaction UserStreamのメイン処理
         //-------------------------------------------------------------------------------
         //
@@ -1896,7 +1967,7 @@ namespace StarlitTwit
                             while (_friendIDSet == null) { Thread.Sleep(10); } // 待機
                             // Home
                             if (SettingsData.Filters == null || StatusFilter.ThroughFilters(twitdata, SettingsData.Filters, CheckIncludeFriendIDs)) {
-                                this.Invoke(new Action(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
+                                this.Invoke((Action)(() => uctlDispHome.AddData(twitdata.AsEnumerable(), true, true)));
                                 // RTの時のPopup
                                 if (TwitData.IsRT(twitdata) && SettingsData.UserStream_ShowPopup_Retweet && twitdata.RTTwitData.UserID == Twitter.ID) {
                                     string title = tasktray.Text + ":リツイート";
@@ -1909,20 +1980,20 @@ namespace StarlitTwit
                             if (!TwitData.IsRT(twitdata)
                              && (twitdata.MainTwitData.Mention_UserID == Twitter.ID
                               || twitdata.MainTwitData.TextIncludeUserMention(Twitter.ScreenName))) {
-                                this.Invoke(new Action(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true, true)));
+                                this.Invoke((Action)(() => uctlDispReply.AddData(twitdata.AsEnumerable(), true, true)));
                                 if (SettingsData.DisplayReplyBaloon) {
                                     PopupTasktray(tasktray.Text + "：Reply 新着有り", Utilization.MakePopupText(twitdata));
                                 }
                             }
                             // History
                             if (twitdata.UserID == Twitter.ID) {
-                                this.Invoke(new Action(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
+                                this.Invoke((Action)(() => uctlDispHistory.AddData(twitdata.AsEnumerable(), true)));
                             }
                         }
                         break;
                     case UserStreamItemType.directmessage: {
                             TwitData twitdata = (TwitData)data;
-                            this.Invoke(new Action(() => uctlDispDirect.AddData(twitdata.AsEnumerable(), true)));
+                            this.Invoke((Action)(() => uctlDispDirect.AddData(twitdata.AsEnumerable(), true)));
                             if (SettingsData.DisplayDMBaloon) {
                                 PopupTasktray(tasktray.Text + "：DirectMessage 新着有り", Utilization.MakePopupText(twitdata));
                             }
@@ -1930,7 +2001,7 @@ namespace StarlitTwit
                         break;
                     case UserStreamItemType.status_delete: {
                             long id = (long)data;
-                            this.Invoke(new Action(() =>
+                            this.Invoke((Action)(() =>
                             {
                                 uctlDispHome.RemoveTweet(id);
                                 uctlDispReply.RemoveTweet(id);
@@ -1940,7 +2011,7 @@ namespace StarlitTwit
                         break;
                     case UserStreamItemType.directmessage_delete: {
                             long id = (long)data;
-                            this.Invoke(new Action(() => uctlDispDirect.RemoveTweet(id)));
+                            this.Invoke((Action)(() => uctlDispDirect.RemoveTweet(id)));
                         }
                         break;
                     case UserStreamItemType.eventdata: {
@@ -2049,23 +2120,6 @@ namespace StarlitTwit
             }
         }
         #endregion (UserStreamTransaction)
-        //-------------------------------------------------------------------------------
-        #region -UserStreamEndEvent UserStreamの接続が終了した時に実行される
-        //-------------------------------------------------------------------------------
-        //
-        private void UserStreamEndEvent()
-        {
-            try {
-                _usingUserStream = false;
-                this.Invoke(new Action(() =>
-                {
-                    lblUserStreamInfo.Text = "";
-                    tsmiUserStreamStart.Enabled = true;
-                }));
-            }
-            catch (InvalidOperationException) { }
-        }
-        #endregion (UserStreamEndEvent)
         //-------------------------------------------------------------------------------
         #region -MakeUserStreamItemLogText UserStreamのメッセージのログテキストを作成します。
         //-------------------------------------------------------------------------------
@@ -2244,7 +2298,7 @@ namespace StarlitTwit
                 SYSTEMSOUND.Play();
                 return false;
             }
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 string baloontext = uctldisp.AddData(d);
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
@@ -2316,7 +2370,7 @@ namespace StarlitTwit
                 SYSTEMSOUND.Play();
                 return false;
             }
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 uctldisp.AddData(d);
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
@@ -2379,7 +2433,7 @@ namespace StarlitTwit
                 SYSTEMSOUND.Play();
                 return false;
             }
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 uctldisp.AddData(d);
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
@@ -2471,7 +2525,7 @@ namespace StarlitTwit
                     datalist.AddRange(d);
                     if (findStart && useFromDateTime && dtbetween(dtFrom, d.Last().Time, d.First().Time)) { break; }
                     i++;
-                    this.Invoke(new Action(() => tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max)));
+                    this.Invoke((Action)(() => tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max)));
                 }
             }
             catch (TwitterAPIException ex) {
@@ -2480,7 +2534,7 @@ namespace StarlitTwit
                 return false;
             }
             finally {
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                 {
                     uctldisp.AddData(datalist.Where((td) => inbetween(td.Time)).ToArray());
                     tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
@@ -2598,7 +2652,7 @@ namespace StarlitTwit
         {
             try {
                 tssLabel.SetText(STR_POSTING);
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                 {
                     this.ActiveControl = null;
                     rtxtTwit.Enabled = false;
@@ -2636,11 +2690,11 @@ namespace StarlitTwit
             catch (TwitterAPIException ex) {
                 tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
-                this.Invoke(new Action(() => ConfigURLShorteningButtonEnable()));
+                this.Invoke((Action)(() => ConfigURLShorteningButtonEnable()));
                 return;
             }
             finally {
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                 {
                     rtxtTwit.Enabled = true;
                     btnTwit.Enabled = true;
@@ -2649,7 +2703,7 @@ namespace StarlitTwit
                 tssLabel.RemoveText(STR_POSTING);
             }
 
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 AddAndResetStatusHistory(rtxtTwit.Text);
                 ReSetStatusState();
@@ -3126,7 +3180,7 @@ namespace StarlitTwit
                 string labelText = string.Format(STR_FMT_GETTING, STR_PROFILE);
                 tssLabel.SetText(labelText);
                 UserProfile profile = Utilization.GetProfile(Twitter.ScreenName);
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                 {
                     if (profile != null) { SetProfileData(profile); }
                     else { tssLabel.SetText(STR_FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }

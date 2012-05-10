@@ -2365,7 +2365,7 @@ namespace StarlitTwit
         #region userstream_user
         //-------------------------------------------------------------------------------
         //
-        public CancellationTokenSource userstream_user(bool all_replies, Action<UserStreamItemType, object> action, Action endact = null)
+        public CancellationTokenSource userstream_user(bool all_replies, Action<UserStreamItemType, object> action, Action endact = null, Action<bool, int> erroract = null, int reconnect_wait_time = 0)
         {
             const string URL_SAMPLE = @"https://userstream.twitter.com/2/user.json";
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -2379,6 +2379,8 @@ namespace StarlitTwit
 
             ThreadStart ReadStreaming = () =>
             {
+                #region ストリーミングスレッド
+                //-----------------------------------------------------------------
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url); // User-Agent?
                 req.ReadWriteTimeout = 90000;
 
@@ -2394,8 +2396,11 @@ namespace StarlitTwit
                     // データ受信時コールバック
                     bool canceled = false;
                     AsyncCallback callback = null;
+
                     callback = ar =>
                     {
+                        #region データ受信時コールバック
+                        //-----------------------------------------------
                         Stream stream = (Stream)ar.AsyncState;
                         try {
                             int len = stream.EndRead(ar);
@@ -2429,6 +2434,8 @@ namespace StarlitTwit
                             //Message.ShowInfoMessage("IOException");
                             canceled = true;// TODO:切断された時
                         }
+                    //-----------------------------------------------
+                    #endregion データ受信時コールバック
                     };
 
                     Stream resStream = res.GetResponseStream();
@@ -2444,20 +2451,19 @@ namespace StarlitTwit
                         Thread.Sleep(10);
                     }
                 }
-                catch (WebException) {
-                    // TODO:既に接続が切れていた時
-                    //Message.ShowInfoMessage("WebException");
-
-                }
-                catch (IOException) {
-                    // TODO:既に接続が切れていた時
-                    //Message.ShowInfoMessage("IOException");
-                }
                 catch (Exception ex) {
-                    Log.DebugLog(ex);
-                    //Message.ShowInfoMessage("Exception");
+                    if (!(ex is WebException) && !(ex is IOException)) {
+                        Log.DebugLog(ex);
+                    }
+
+                    int reconnect_time = (reconnect_wait_time == 0) ? 1 : reconnect_wait_time * 2;
+                    erroract(all_replies, reconnect_time);
+                    return;
                 }
-                finally { endact(); }
+
+                endact();
+                //-----------------------------------------------------------------
+                #endregion ストリーミングスレッド
             };
 
             Thread thread = new Thread(ReadStreaming);
