@@ -36,7 +36,7 @@ namespace StarlitTwit
         private void btnFileDialog_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog()) {
-                ofd.Filter = "画像ファイル (*.jpg,*.jpeg,*.png,*.gif)|*.jpg;*.jpeg;*.png;*.gif";
+                ofd.Filter = Utilization.FILEFORMAT_IMAGES;
                 ofd.FileName = txtImagePath.Text;
 
                 if (ofd.ShowDialog() == DialogResult.OK) {

@@ -26,6 +26,8 @@ namespace StarlitTwit
 
         private const string SAVEFILE_NAME = @"Settings.dat";
 
+        public const string FILEFORMAT_IMAGES = "画像ファイル (*.jpg,*.jpeg,*.png,*.gif)|*.jpg;*.jpeg;*.png;*.gif";
+
         //-------------------------------------------------------------------------------
         #region +[static]ConvertKeysToKeyData
         //-------------------------------------------------------------------------------

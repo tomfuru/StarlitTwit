@@ -16,6 +16,8 @@ using System.Media;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace StarlitTwit
 {
@@ -108,10 +110,19 @@ namespace StarlitTwit
         private string _RecipiantName = "";
         //-------------------------------------------------------------------------------
         #endregion (発言状態関連)
+        // 履歴発言関連
         /// <summary>履歴発言リスト</summary>
         private List<string> _statusHistoryList = new List<string>("".AsEnumerable());
         /// <summary>現在の履歴発言の位置</summary>
         private int _nowStatusHistoryIndex = 0;
+        
+        // 画像添付関連
+        /// <summary>画像が添付されるかどうか</summary>
+        private bool _isAttached = false;
+        /// <summary>添付される画像</summary>
+        private Image _image_upload = null;
+        /// <summary>添付される画像のファイル名</summary>
+        private string _image_upload_filename_prev = "";
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -329,6 +340,8 @@ namespace StarlitTwit
                 return;
             }
 
+            if (_image_upload != null) { _image_upload.Dispose(); }
+
             // UserStream終了を待つ
             if (_usingUserStream && _userStreamCancellationTS != null) {
                 _userStreamCancellationTS.Cancel();
@@ -382,6 +395,51 @@ namespace StarlitTwit
             Utilization.InvokeTransaction(() => Update(text));
         }
         #endregion (btnTwit_Click)
+        //-------------------------------------------------------------------------------
+        #region btnAppendImage_Click 画像添付ボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnAppendImage_Click(object sender, EventArgs e)
+        {
+            if (_isAttached) {
+                picbUpload.Image = null;
+                _image_upload.Dispose();
+                _image_upload = null;
+                btnAppendImage.Text = "画像添付";
+                _isAttached = false;
+            }
+            else {
+                using (OpenFileDialog ofd = new OpenFileDialog()) {
+                    ofd.Filter = Utilization.FILEFORMAT_IMAGES;
+                    ofd.FileName = _image_upload_filename_prev;
+
+                    if (ofd.ShowDialog() == DialogResult.OK) {
+                        _image_upload_filename_prev = ofd.FileName;
+
+                        if (!File.Exists(_image_upload_filename_prev)) { Message.ShowWarningMessage("指定ファイルは存在しません。"); return; }
+                        Image img;
+                        try {
+                            img = Image.FromFile(_image_upload_filename_prev);
+                        }
+                        catch (ArgumentException) { Message.ShowWarningMessage("画像ファイルではありません。"); return; }
+                        Guid guid = img.RawFormat.Guid;
+                        if (!guid.Equals(ImageFormat.Jpeg.Guid) && !guid.Equals(ImageFormat.Png) && !guid.Equals(ImageFormat.Gif)) {
+                            Message.ShowWarningMessage("画像の形式が不適切です。");
+                            return;
+                        }
+
+                        Debug.Assert(_image_upload == null);
+                        _image_upload = (Image)img.Clone();
+                        img.Dispose();
+
+                        picbUpload.Image = _image_upload;
+                        btnAppendImage.Text = "添付解除";
+                        _isAttached = true;
+                    }
+                }
+            }
+        }
+        #endregion (btnAppendImage_Click)
         //-------------------------------------------------------------------------------
         #region rtxtTwit_TextChanged テキスト変更時
         //-------------------------------------------------------------------------------
@@ -2671,12 +2729,30 @@ namespace StarlitTwit
                     case StatusState.Normal:
                     case StatusState.Quote:
                     case StatusState.MultiReply:
-                        Twitter.statuses_update(text);
+                        if (_isAttached) {
+                            Twitter.statuses_update_with_media(text, _image_upload, _image_upload_filename_prev);
+
+                            picbUpload.Image = null;
+                            _image_upload.Dispose();
+                            _image_upload = null;
+                            this.Invoke((Action)(() => btnAppendImage.Text = "画像添付"));
+                            _isAttached = false;
+                        }
+                        else { Twitter.statuses_update(text); }
                         renewUctlDisp = uctlDispHome;
                         break;
                     case StatusState.QuoteReply:
                     case StatusState.Reply:
-                        Twitter.statuses_update(text, _statlID);
+                        if (_isAttached) {
+                            Twitter.statuses_update_with_media(text, _image_upload, _image_upload_filename_prev, in_reply_to_status_id: _statlID);
+
+                            picbUpload.Image = null;
+                            _image_upload.Dispose();
+                            _image_upload = null;
+                            this.Invoke((Action)(() => btnAppendImage.Text = "画像添付"));
+                            _isAttached = false;
+                        }
+                        else { Twitter.statuses_update(text, _statlID); }
                         renewUctlDisp = uctlDispHome;
                         break;
                     case StatusState.DirectMessage:
