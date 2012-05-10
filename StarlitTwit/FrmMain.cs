@@ -197,6 +197,7 @@ namespace StarlitTwit
 
         private const string STR_DONE_DELETE = "発言を削除しました。";
         private const string STR_DONE_RETWEET = "リツイートしました。";
+
         //-------------------------------------------------------------------------------
         #endregion (定数)
 
@@ -399,47 +400,55 @@ namespace StarlitTwit
         #region btnAppendImage_Click 画像添付ボタン
         //-------------------------------------------------------------------------------
         //
-        private void btnAppendImage_Click(object sender, EventArgs e)
+        private void btnAppendImage_ButtonClick(object sender, EventArgs e)
         {
-            if (_isAttached) {
-                picbUpload.Image = null;
-                _image_upload.Dispose();
-                _image_upload = null;
-                btnAppendImage.Text = "画像添付";
-                _isAttached = false;
-            }
-            else {
-                using (OpenFileDialog ofd = new OpenFileDialog()) {
-                    ofd.Filter = Utilization.FILEFORMAT_IMAGES;
-                    ofd.FileName = _image_upload_filename_prev;
+            using (OpenFileDialog ofd = new OpenFileDialog()) {
+                ofd.Filter = Utilization.FILEFORMAT_IMAGES;
+                ofd.FileName = _image_upload_filename_prev;
 
-                    if (ofd.ShowDialog() == DialogResult.OK) {
-                        _image_upload_filename_prev = ofd.FileName;
+                if (ofd.ShowDialog() == DialogResult.OK) {
+                    _image_upload_filename_prev = ofd.FileName;
 
-                        if (!File.Exists(_image_upload_filename_prev)) { Message.ShowWarningMessage("指定ファイルは存在しません。"); return; }
-                        Image img;
-                        try {
-                            img = Image.FromFile(_image_upload_filename_prev);
-                        }
-                        catch (ArgumentException) { Message.ShowWarningMessage("画像ファイルではありません。"); return; }
-                        Guid guid = img.RawFormat.Guid;
-                        if (!guid.Equals(ImageFormat.Jpeg.Guid) && !guid.Equals(ImageFormat.Png.Guid) && !guid.Equals(ImageFormat.Gif.Guid)) {
-                            Message.ShowWarningMessage("画像の形式が不適切です。");
-                            return;
-                        }
-
-                        Debug.Assert(_image_upload == null);
-                        _image_upload = (Image)img.Clone();
-                        img.Dispose();
-
-                        picbUpload.Image = _image_upload;
-                        btnAppendImage.Text = "添付解除";
-                        _isAttached = true;
+                    if (!File.Exists(_image_upload_filename_prev)) { Message.ShowWarningMessage("指定ファイルは存在しません。"); return; }
+                    Image img;
+                    try {
+                        img = Image.FromFile(_image_upload_filename_prev);
                     }
+                    catch (ArgumentException) { Message.ShowWarningMessage("画像ファイルではありません。"); return; }
+                    Guid guid = img.RawFormat.Guid;
+                    if (!guid.Equals(ImageFormat.Jpeg.Guid) && !guid.Equals(ImageFormat.Png.Guid) && !guid.Equals(ImageFormat.Gif.Guid)) {
+                        Message.ShowWarningMessage("画像の形式が不適切です。");
+                        return;
+                    }
+
+                    Debug.Assert(_image_upload == null);
+                    _image_upload = (Image)img.Clone();
+                    img.Dispose();
+
+                    picbUpload.Image = _image_upload;
+                    btnAppendImage.Visible = false;
+                    btnUnappend.Visible = true;
+                    _isAttached = true;
                 }
             }
         }
         #endregion (btnAppendImage_Click)
+        //-------------------------------------------------------------------------------
+        #region btnUnappend_Click 添付解除ボタン
+        //-------------------------------------------------------------------------------
+        //
+        private void btnUnappend_Click(object sender, EventArgs e)
+        {
+            picbUpload.Image = null;
+            _image_upload.Dispose();
+            _image_upload = null;
+
+            btnAppendImage.Visible = true;
+            btnUnappend.Visible = false;
+
+            _isAttached = false;
+        }
+        #endregion (btnUnappend_Click)
         //-------------------------------------------------------------------------------
         #region rtxtTwit_TextChanged テキスト変更時
         //-------------------------------------------------------------------------------
@@ -667,6 +676,26 @@ namespace StarlitTwit
             }
         }
         #endregion (splContainer_Panel2_MouseClick)
+        //-------------------------------------------------------------------------------
+        #region tsmiAppendImage_byClipboard_Click 画像添付ボタンメニュー_クリップボードから添付
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiAppendImage_byClipboard_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsImage()) {
+                _image_upload = Utilization.ConvertImage(Clipboard.GetImage(), ImageFormat.Png);
+                picbUpload.Image = _image_upload;
+                _image_upload_filename_prev = "";
+                _isAttached = true;
+
+                btnAppendImage.Visible = false;
+                btnUnappend.Visible = true;
+            }
+            else {
+                Message.ShowWarningMessage("クリップボード内のデータが画像ではありません。");
+            }
+        }
+        #endregion (tsmiAppendImage_byClipboard_Click)
         //-------------------------------------------------------------------------------
         #endregion (諸コントロール)
         //===============================================================================
@@ -2732,11 +2761,7 @@ namespace StarlitTwit
                         if (_isAttached) {
                             Twitter.statuses_update_with_media(text, _image_upload, _image_upload_filename_prev);
 
-                            picbUpload.Image = null;
-                            _image_upload.Dispose();
-                            _image_upload = null;
-                            this.Invoke((Action)(() => btnAppendImage.Text = "画像添付"));
-                            _isAttached = false;
+                            this.Invoke((Action)(() => btnUnappend.PerformClick()));
                         }
                         else { Twitter.statuses_update(text); }
                         renewUctlDisp = uctlDispHome;
@@ -2746,11 +2771,7 @@ namespace StarlitTwit
                         if (_isAttached) {
                             Twitter.statuses_update_with_media(text, _image_upload, _image_upload_filename_prev, in_reply_to_status_id: _statlID);
 
-                            picbUpload.Image = null;
-                            _image_upload.Dispose();
-                            _image_upload = null;
-                            this.Invoke((Action)(() => btnAppendImage.Text = "画像添付"));
-                            _isAttached = false;
+                            this.Invoke((Action)(() => btnUnappend.PerformClick()));
                         }
                         else { Twitter.statuses_update(text, _statlID); }
                         renewUctlDisp = uctlDispHome;

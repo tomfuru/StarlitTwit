@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Drawing.Imaging;
 
 namespace StarlitTwit
 {
@@ -794,6 +795,19 @@ namespace StarlitTwit
             }
         }
         #endregion (ExtractURL)
+
+        //-------------------------------------------------------------------------------
+        #region +[static]ConvertImage 画像を変換します
+        //-------------------------------------------------------------------------------
+        //
+        public static Image ConvertImage(Image img, ImageFormat format)
+        {
+            MemoryStream ms = new MemoryStream();
+            img.Save(ms, format);
+            Image new_img = Image.FromStream(ms);
+            return new_img;
+        }
+        #endregion (ConvertImage)
 
         //-------------------------------------------------------------------------------
         #region +[static]Swap 値を交換します。
