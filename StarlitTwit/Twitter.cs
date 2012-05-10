@@ -2420,6 +2420,7 @@ namespace StarlitTwit
                 Encoding enc = Encoding.UTF8;
 
                 HttpWebResponse res;
+                bool error_caused = false;
                 try {
                     res = (HttpWebResponse)req.GetResponse();
                     byte[] b = new byte[0x4000];            // 16KBの受信バッファ
@@ -2461,11 +2462,11 @@ namespace StarlitTwit
                         catch (WebException ex) {
                             if (ex.Status == WebExceptionStatus.RequestCanceled) { return; } // キャンセルした時
                             //Message.ShowInfoMessage("WebException");
-                            canceled = true;// TODO:切断された時
+                            error_caused = true;
                         }
                         catch (IOException) {
                             //Message.ShowInfoMessage("IOException");
-                            canceled = true;// TODO:切断された時
+                            error_caused = true;
                         }
                     //-----------------------------------------------
                     #endregion データ受信時コールバック
@@ -2480,21 +2481,23 @@ namespace StarlitTwit
                             canceled = true;
                             break;
                         }
-                        if (canceled) { break; }
+                        else if (canceled) { break; }
                         Thread.Sleep(10);
                     }
                 }
                 catch (Exception ex) {
+                    error_caused = true;
                     if (!(ex is WebException) && !(ex is IOException)) {
                         Log.DebugLog(ex);
                     }
+                }
 
+                if (error_caused) {
                     int reconnect_time = (reconnect_wait_time == 0) ? 1 : reconnect_wait_time * 2;
                     erroract(all_replies, reconnect_time);
                     return;
                 }
-
-                endact();
+                else { endact(); }
                 //-----------------------------------------------------------------
                 #endregion ストリーミングスレッド
             };
