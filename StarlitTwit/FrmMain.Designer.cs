@@ -709,7 +709,7 @@
             this.lblUserStreamInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.lblUserStreamInfo.Location = new System.Drawing.Point(272, 4);
             this.lblUserStreamInfo.Name = "lblUserStreamInfo";
-            this.lblUserStreamInfo.Size = new System.Drawing.Size(131, 10);
+            this.lblUserStreamInfo.Size = new System.Drawing.Size(131, 12);
             this.lblUserStreamInfo.TabIndex = 13;
             this.lblUserStreamInfo.Text = "...";
             this.lblUserStreamInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
