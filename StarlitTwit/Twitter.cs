@@ -58,6 +58,7 @@ namespace StarlitTwit
         private const string DELETE = "DELETE";
         public static readonly string URLtwi;
         public static readonly string URLapi;
+        public static readonly string URLapiUpload;
         public static readonly string URLapiSSL;
         public static readonly string URLapiSSLnoVer;
         public static readonly string URLsearch;
@@ -93,6 +94,7 @@ namespace StarlitTwit
         {
             URLtwi = @"http://twitter.com/";
             URLapi = @"http://api.twitter.com/" + API_VERSION.ToString() + '/';
+            URLapiUpload = @"https://upload.twitter.com/" + API_VERSION.ToString() + '/';
             URLapiSSL = @"https://api.twitter.com/" + API_VERSION.ToString() + '/';
             URLapiSSLnoVer = @"https://api.twitter.com/";
             URLsearch = @"http://search.twitter.com/";
@@ -515,6 +517,44 @@ namespace StarlitTwit
             return ConvertToTwitData(el);
         }
         #endregion (statuses_update)
+        //-------------------------------------------------------------------------------
+        #region +statuses_update_with_media
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/update_with_mediaメソッド</para>
+        /// <para>Updates the authenticating user's status and attaches media for upload.</para>
+        /// </summary>
+        /// <returns></returns>
+        public TwitData statuses_update_with_media(string status, Image image, string image_filename, bool possibly_sensitive = false, long in_reply_to_status_id = -1, 
+                                            double latitude = double.NaN, double longtitude = double.NaN, string place_id = "", bool display_coordinates = false)
+        {
+            string contentType;
+            Guid guid = image.RawFormat.Guid;
+            if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
+            else if (guid.Equals(ImageFormat.Png.Guid)) { contentType = "png"; }
+            else if (guid.Equals(ImageFormat.Gif.Guid)) { contentType = "gif"; }
+            else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
+
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("status", Utilization.UrlEncode(status));
+
+                if (in_reply_to_status_id > 0) { paramdic.Add("in_reply_to_status_id", in_reply_to_status_id.ToString()); }
+                if (possibly_sensitive) { paramdic.Add("possibly_sensitive", possibly_sensitive.ToString().ToLower()); }
+                if (!double.IsNaN(latitude) && !double.IsNaN(longtitude)) {
+                    paramdic.Add("lat", latitude.ToString());
+                    paramdic.Add("long", longtitude.ToString());
+                }
+                if (!string.IsNullOrEmpty(place_id)) { paramdic.Add("place_id", place_id); }
+                if (display_coordinates) { paramdic.Add("display_coordinates", display_coordinates.ToString().ToLower()); }
+            }
+
+            string url = GetUrlWithOAuthParameters(URLapiUpload + @"statuses/update_with_media.xml", POST, paramdic);
+
+            XElement el = PostImageToAPI(url, "media[]", image_filename, image, contentType);
+            return ConvertToTwitData(el);
+        }
+        #endregion (statuses_update_with_media)
         //-------------------------------------------------------------------------------
         #endregion (Tweets)
 
@@ -1969,8 +2009,8 @@ namespace StarlitTwit
             string contentType;
             Guid guid = image.RawFormat.Guid;
             if (guid.Equals(ImageFormat.Jpeg.Guid)) { contentType = "jpeg"; }
-            else if (guid.Equals(ImageFormat.Png)) { contentType = "png"; }
-            else if (guid.Equals(ImageFormat.Gif)) { contentType = "gif"; }
+            else if (guid.Equals(ImageFormat.Png.Guid)) { contentType = "png"; }
+            else if (guid.Equals(ImageFormat.Gif.Guid)) { contentType = "gif"; }
             else { throw new InvalidOperationException("画像がjpg,png,gif以外のフォーマットです"); }
 
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -1981,7 +2021,7 @@ namespace StarlitTwit
 
             string url = GetUrlWithOAuthParameters(URLapi + @"account/update_profile_image.xml", POST, paramdic);
 
-            return ConvertToUserProfile(PostImageToAPI(url, imgFileName, image, contentType));
+            return ConvertToUserProfile(PostImageToAPI(url, "image", imgFileName, image, contentType));
         }
         #endregion (account_update_profile_image)
         // account/totals
@@ -2668,7 +2708,7 @@ namespace StarlitTwit
         #region -PostImageToAPI 画像を投稿
         //-------------------------------------------------------------------------------
         //
-        private XElement PostImageToAPI(string uri, string filename, Image image, string imageContentType)
+        private XElement PostImageToAPI(string uri, string content_name, string filename, Image image, string imageContentType)
         {
             Encoding enc = Encoding.UTF8;
 
@@ -2684,10 +2724,11 @@ namespace StarlitTwit
                 StringBuilder startsb = new StringBuilder();
                 startsb.Append("--");
                 startsb.AppendLine(boundary);
-                startsb.AppendFormat("Content-Disposition: form-data; name=\"image\"; filename=\"{0}\"", filename);
+                startsb.AppendFormat("Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"", content_name ,filename);
                 startsb.AppendLine();
                 startsb.Append("Content-Type: image/");
                 startsb.AppendLine(imageContentType);
+                startsb.AppendLine("Content-Transfer-Encoding: binary");
                 startsb.AppendLine();
                 string startData = startsb.ToString();
 
