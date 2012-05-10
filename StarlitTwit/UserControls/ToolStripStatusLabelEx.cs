@@ -242,7 +242,7 @@ namespace StarlitTwit
         private void SetTextToLabel(string text)
         {
             if (this.Parent.InvokeRequired) {
-                this.Parent.Invoke(new Action(() => base.Text = text));
+                this.Parent.Invoke((Action)(() => base.Text = text));
             }
             else { base.Text = text; }
         }

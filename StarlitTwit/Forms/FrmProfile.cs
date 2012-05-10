@@ -384,18 +384,18 @@ namespace StarlitTwit
         {
             try {
                 if (!_gotProfile) {
-                    this.Invoke(new Action(() => tsslabel.Text = "プロフィール取得中..."));
+                    this.Invoke((Action)(() => tsslabel.Text = "プロフィール取得中..."));
                     _profile = FrmMain.Twitter.users_show(screen_name: ScreenName);
-                    this.Invoke(new Action(() => SetProfile(_profile)));
+                    this.Invoke((Action)(() => SetProfile(_profile)));
                     _gotProfile = true;
                 }
 
                 if (!FrmMain.Twitter.ScreenName.Equals(ScreenName)) {
-                    this.Invoke(new Action(() => tsslabel.Text = "関係データ取得中..."));
+                    this.Invoke((Action)(() => tsslabel.Text = "関係データ取得中..."));
                     _relation = FrmMain.Twitter.friendships_show(FrmMain.Twitter.ID, target_screen_name: ScreenName);
-                    this.Invoke(new Action(() => SetRelationshipData(_relation)));
+                    this.Invoke((Action)(() => SetRelationshipData(_relation)));
                 }
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                     {
                         btnRetry.Enabled = false;
                         btnImageChange.Enabled = btnRenew.Enabled = true;
@@ -403,7 +403,7 @@ namespace StarlitTwit
                     }));
             }
             catch (TwitterAPIException ex) {
-                this.Invoke(new Action(() =>
+                this.Invoke((Action)(() =>
                 {
                     tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
                     btnRetry.Enabled = true;

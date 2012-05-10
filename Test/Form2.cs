@@ -37,7 +37,7 @@ namespace Test
 
         private void f1_1()
         {
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 Thread.Sleep(2000);
                 i1 = 1;
@@ -47,7 +47,7 @@ namespace Test
         {
             Thread.Sleep(1000);
 
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 i2 = 1;
             }));

@@ -86,25 +86,25 @@ namespace StarlitTwit
 
             if (chb.Checked) {
                 try {
-                    this.Invoke(new Action(() => tssLabel.Text = "リストに追加中..."));
+                    this.Invoke((Action)(() => tssLabel.Text = "リストに追加中..."));
                     this.Refresh();
                     FrmMain.Twitter.list_members_create(listdata.ID, screen_name: _screen_name);
-                    this.Invoke(new Action(() => tssLabel.Text = "追加完了しました。"));
+                    this.Invoke((Action)(() => tssLabel.Text = "追加完了しました。"));
                 }
                 catch (TwitterAPIException) {
-                    this.Invoke(new Action(() => tssLabel.Text = "追加に失敗しました。"));
+                    this.Invoke((Action)(() => tssLabel.Text = "追加に失敗しました。"));
                     chb.Checked = false;
                 }
             }
             else {
                 try {
-                    this.Invoke(new Action(() => tssLabel.Text = "リストから削除中..."));
+                    this.Invoke((Action)(() => tssLabel.Text = "リストから削除中..."));
                     this.Refresh();
                     FrmMain.Twitter.list_members_destroy(listdata.ID, screen_name: _screen_name);
-                    this.Invoke(new Action(() => tssLabel.Text = "削除完了しました。"));
+                    this.Invoke((Action)(() => tssLabel.Text = "削除完了しました。"));
                 }
                 catch (TwitterAPIException) {
-                    this.Invoke(new Action(() => tssLabel.Text = "削除に失敗しました。"));
+                    this.Invoke((Action)(() => tssLabel.Text = "削除に失敗しました。"));
                     chb.Checked = true;
                 }
             }
@@ -121,10 +121,10 @@ namespace StarlitTwit
                 try {
                     if (_listdata == null) { GetLists(); }
                     GetMemberList();
-                    this.Invoke(new Action(() => tssLabel.Text = "取得完了しました。"));
+                    this.Invoke((Action)(() => tssLabel.Text = "取得完了しました。"));
                 }
                 catch (TwitterAPIException) {
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         tssLabel.Text = "取得に失敗しました。";
                         btnRetry.Visible = true;
@@ -142,7 +142,7 @@ namespace StarlitTwit
         //
         private void GetLists()
         {
-            this.Invoke(new Action(() => tssLabel.Text = "リスト一覧取得中..."));
+            this.Invoke((Action)(() => tssLabel.Text = "リスト一覧取得中..."));
 
             IEnumerable<ListData> lists = Utilization.EmptyIEnumerable<ListData>();
             do {
@@ -169,7 +169,7 @@ namespace StarlitTwit
                 _checkboxdic.Add(list.Slug, chb);
                 index++;
             }
-            this.Invoke(new Action(() =>_checkboxdic.Values.ForEach(chb => this.pnlCheckbox.Controls.Add(chb))));
+            this.Invoke((Action)(() =>_checkboxdic.Values.ForEach(chb => this.pnlCheckbox.Controls.Add(chb))));
         }
         #endregion (GetLists)
 
@@ -179,7 +179,7 @@ namespace StarlitTwit
         //
         private void GetMemberList()
         {
-            this.Invoke(new Action(() => tssLabel.Text = "リスト所属データ取得中..."));
+            this.Invoke((Action)(() => tssLabel.Text = "リスト所属データ取得中..."));
 
             IEnumerable<ListData> lists = Utilization.EmptyIEnumerable<ListData>();
             do {
@@ -188,7 +188,7 @@ namespace StarlitTwit
                 lists = lists.Concat(seqdata.Data);
             } while (_cursor != 0);
 
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 foreach (var list in lists) {
                     if (!_checkboxdic.Keys.Contains(list.Slug)) { Debug.Assert(false); continue; }

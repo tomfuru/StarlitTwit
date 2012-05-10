@@ -508,7 +508,7 @@ namespace StarlitTwit
             if (_dispControl != null) {
                 Point pC;
                 if (_dispControl.InvokeRequired) {
-                    _dispControl.Invoke(new Action(() =>
+                    _dispControl.Invoke((Action)(() =>
                     {
                         pC = _dispControl.PointToClient(Cursor.Position);
                         pDisp = _dispControl.PointToScreen(pC);

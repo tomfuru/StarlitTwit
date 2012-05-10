@@ -161,7 +161,7 @@ namespace StarlitTwit
                 }
 
                 if (DisplayForm.InvokeRequired) {
-                    DisplayForm.Invoke(new Action(() =>
+                    DisplayForm.Invoke((Action)(() =>
                     {
                         ConfigDispForm();
                         DisplayForm.Refresh();
@@ -350,7 +350,7 @@ namespace StarlitTwit
                         OnShowToolTip(e);
                         if (!e.Cancel) {
                             try {
-                                DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                                DisplayForm.Invoke((Action)(() => ConfigDispForm()));
                                 DisplayForm.Invalidate();
                             }
                             catch (NullReferenceException) { }
@@ -362,7 +362,7 @@ namespace StarlitTwit
                     lock (_lockimg) { _img = null; }
                     if (DisplayForm != null) {
                         Size = GetPreferSize(Properties.Resources.failed.Size);
-                        DisplayForm.Invoke(new Action(() => ConfigDispForm()));
+                        DisplayForm.Invoke((Action)(() => ConfigDispForm()));
                         DisplayForm.Invalidate();
                     }
                 }

@@ -134,7 +134,7 @@ namespace StarlitTwit
         private void Image_Animate(object sender, EventArgs e)
         {
             try {
-                this.Invoke(new Action(() => lstvList.Invalidate()));
+                this.Invoke((Action)(() => lstvList.Invalidate()));
             }
             catch (InvalidOperationException) { }
         }
@@ -439,7 +439,7 @@ namespace StarlitTwit
                         listdata = listseq.Data;
                         _next_cursor = listseq.NextCursor;
 
-                        this.Invoke(new Action(() =>
+                        this.Invoke((Action)(() =>
                         {
                             AddList(listdata);
                             lblCount.Text = string.Format("{0}個見つかりました", _listList.Count);
@@ -447,10 +447,10 @@ namespace StarlitTwit
                         }));
                     }
 
-                    this.Invoke(new Action(() => btnAppend.Enabled = (_next_cursor != 0)));
+                    this.Invoke((Action)(() => btnAppend.Enabled = (_next_cursor != 0)));
                 }
                 catch (TwitterAPIException/* e*/) {
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         tsslLabel.Text = "取得に失敗しました。";
                         btnAppend.Enabled = true;
@@ -506,7 +506,7 @@ namespace StarlitTwit
                     Image img = Utilization.GetImageFromURL(d.Item2);
                     if (img != null) {
                         _imageListWrapper.ImageAdd(d.Item2, img);
-                        this.Invoke(new Action(() => Refresh()));
+                        this.Invoke((Action)(() => Refresh()));
                     }
                     else {
                         d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;

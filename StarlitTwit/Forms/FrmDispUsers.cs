@@ -202,7 +202,7 @@ namespace StarlitTwit
         private void Image_Animate(object sender, EventArgs e)
         {
             try {
-                this.Invoke(new Action(() => lstvList.Invalidate()));
+                this.Invoke((Action)(() => lstvList.Invalidate()));
             }
             catch (InvalidOperationException) { }
         }
@@ -574,17 +574,17 @@ namespace StarlitTwit
                     if (FormType == EFormType.Retweeter) {
                         profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
                         _page++;
-                        this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Count() > 0)));
+                        this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Count() > 0)));
                     }
                     else if (FormType == EFormType.MyBlocking) {
                         profiles = FrmMain.Twitter.blocks_blocking(_page, 100);
                         _page++;
-                        this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
+                        this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                     }
                     else if (FormType == EFormType.UserSearch) {
                         profiles = FrmMain.Twitter.users_search(_strSearchWord, _page, 20);
                         _page++;
-                        this.Invoke(new Action(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
+                        this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                     }
                     else {
                         bool appendEnable = false;
@@ -670,11 +670,11 @@ namespace StarlitTwit
                                 }
                                 break;
                         }
-                        this.Invoke(new Action(() => btnAppend.Enabled = appendEnable));
+                        this.Invoke((Action)(() => btnAppend.Enabled = appendEnable));
                     }
 
                     if (profiles != null) {
-                        this.Invoke(new Action(() =>
+                        this.Invoke((Action)(() =>
                         {
                             AddList(profiles);
                             lblCount.Text = string.Format("{0}人見つかりました", _profileList.Count);
@@ -683,14 +683,14 @@ namespace StarlitTwit
                     }
                 }
                 catch (TwitterAPIException) {
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         tsslabel.Text = "取得に失敗しました。";
                         btnAppend.Enabled = true;
                     }));
                 }
                 finally {
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         if (btnSearch != null) {
                             btnSearch.Enabled = true;
@@ -741,7 +741,7 @@ namespace StarlitTwit
                     Image img = Utilization.GetImageFromURL(d.Item2);
                     if (img != null) {
                         _imageListWrapper.ImageAdd(d.Item2, img);
-                        this.Invoke(new Action(() => Refresh()));
+                        this.Invoke((Action)(() => Refresh()));
                     }
                     else {
                         d.Item1.ImageKey = FrmMain.STR_IMAGE_CROSS;

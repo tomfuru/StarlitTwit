@@ -4,15 +4,15 @@ IAsyncResult resGet = null;
 try {
     resGet = get.BeginInvoke(uctlDispHome, null, null);
 
-    this.Invoke(new Action(() => tssLabel.Text = "Home 取得中..."));
+    this.Invoke((Action)(() => tssLabel.Text = "Home 取得中..."));
     while (!resGet.IsCompleted) {
         Thread.Sleep(5);
         Application.DoEvents();
     }
-    this.Invoke(new Action(() => tssLabel.Text = ""));
+    this.Invoke((Action)(() => tssLabel.Text = ""));
 }
 catch (TwitterAPIException ex) {
-    this.Invoke(new Action(() => tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex)));
+    this.Invoke((Action)(() => tssLabel.Text = Utilization.SubTwitterAPIExceptionStr(ex)));
     SYSTEMSOUND.Play();
     return;
 }

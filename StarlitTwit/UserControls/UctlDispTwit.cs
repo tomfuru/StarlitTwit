@@ -1741,7 +1741,7 @@ namespace StarlitTwit
             foreach (var url in iconURLs) {
                 Image img = Utilization.GetImageFromURL(url);
                 if (img != null) {
-                    this.Invoke(new Action(() => ImageListWrapper.ImageAdd(url, img)));
+                    this.Invoke((Action)(() => ImageListWrapper.ImageAdd(url, img)));
                 }
             }
         }

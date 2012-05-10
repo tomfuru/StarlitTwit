@@ -196,7 +196,7 @@ namespace StarlitTwit
             bool disableAppend = false;
             try {
                 try {
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         tsslabel.Text = "発言取得中...";
                         btnAppend.Enabled = false;
@@ -220,7 +220,7 @@ namespace StarlitTwit
                                     disableAppend = false;
                                     break;
                                 }
-                                this.Invoke(new Action(() => uctlDispTwit.AddData(data.AsEnumerable(), true)));
+                                this.Invoke((Action)(() => uctlDispTwit.AddData(data.AsEnumerable(), true)));
                                 _last_status_id = data.Mention_StatusID;
                             }
                             d = new TwitData[0];
@@ -260,7 +260,7 @@ namespace StarlitTwit
                             return;
                     }
 
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         uctlDispTwit.AddData(d);
                         tsslabel.Text = (changedStatusText == null) ? "取得完了しました。" : changedStatusText;
@@ -268,7 +268,7 @@ namespace StarlitTwit
                     }));
                 }
                 catch (TwitterAPIException) {
-                    this.Invoke(new Action(() =>
+                    this.Invoke((Action)(() =>
                     {
                         tsslabel.Text = "取得に失敗しました。";
                         btnAppend.Enabled = !disableAppend;

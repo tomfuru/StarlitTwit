@@ -72,7 +72,7 @@ namespace UserStreamTest
             //    writer.Write(el.ToString());
             //}
 
-            //this.Invoke(new Action(() =>
+            //this.Invoke((Action)(() =>
             //{
             //    bool scr = richTextBox1.SelectionStart == richTextBox1.TextLength;
             //    richTextBox1.AppendText(str);
@@ -147,7 +147,7 @@ namespace UserStreamTest
                     break;
             }
 
-            this.Invoke(new Action(() =>
+            this.Invoke((Action)(() =>
             {
                 richTextBox1.AppendText(sb.ToString());
                 richTextBox1.AppendText("\n");
