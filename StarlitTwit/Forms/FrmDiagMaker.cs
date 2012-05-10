@@ -148,8 +148,8 @@ namespace StarlitTwit
             const string TITLE_BEGIN = "<title>";
             const string TITLE_END = "</title>";
             const string DESCRIPTION_BEGIN = @"<meta name=""description"" content=""";
-            const string DESCTIPTION_END = @"- 診断メーカー"" />";
-            const string INFO_REGEXPATTERN = "<b>(.+?)</b>人が診断 結果パターン <b>(.+?)</b>通り(.*?)）";
+            const string DESCTIPTION_END = @"- 診断メーカー"" \/>";
+            const string INFO_REGEXPATTERN = "<b>(.+?)</b>人が診断\\s*結果パターン <b>(.+?)</b>通り(.*?)\\s*）";
 
             WebRequest req = WebRequest.Create(llbllink.Text);
 
