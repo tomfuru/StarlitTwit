@@ -215,6 +215,7 @@
 
 ★DONE
 12/05/10
+・画像投稿をClipboardからできるように
 ・画像投稿(update_with_media)実装
 ・UserStreamの再接続処理追加
 12/01/21

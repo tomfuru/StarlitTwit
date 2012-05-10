@@ -580,7 +580,7 @@ namespace StarlitTwit
         /// <param name="result_type">[recent/popular/mixed]</param>
         /// <returns></returns>
         /// <remarks>API Documentationにはsince,max_id無</remarks>
-        public IEnumerable<TwitData> search(string q, string lang = "", string locale = "ja",
+        public IEnumerable<TwitData> search(string q, string lang = "ja", string locale = "ja",
             int rpp = -1, int page = -1, long max_id = -1, long since_id = -1, string since = "",
             string until = "", object geocode = null, bool show_user = false, string result_type = "", bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
@@ -2481,7 +2481,7 @@ namespace StarlitTwit
                             canceled = true;
                             break;
                         }
-                        else if (canceled) { break; }
+                        else if (canceled || error_caused) { break; }
                         Thread.Sleep(10);
                     }
                 }
