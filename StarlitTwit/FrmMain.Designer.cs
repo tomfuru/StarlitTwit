@@ -72,7 +72,6 @@
             this.tsSep子画面 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmi全小画面を消去 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsslRestAPI = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuTab = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -87,15 +86,12 @@
             this.menuContainer2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiCon2_MakeTab = new System.Windows.Forms.ToolStripMenuItem();
             this.menuShortenType = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.splContainer = new System.Windows.Forms.SplitContainer();
             this.picbUpload = new System.Windows.Forms.PictureBox();
             this.btnAppendImage = new System.Windows.Forms.Button();
             this.llblList = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.lblUserStreamInfo = new System.Windows.Forms.Label();
-            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.lblStatuses = new System.Windows.Forms.Label();
             this.lblStatusesl = new System.Windows.Forms.Label();
             this.llblFollower = new System.Windows.Forms.LinkLabel();
@@ -107,6 +103,7 @@
             this.lblTweetStatus = new System.Windows.Forms.Label();
             this.lblRest = new System.Windows.Forms.Label();
             this.btnTwit = new System.Windows.Forms.Button();
+            this.btnURLShorten = new StarlitTwit.SplitButton();
             this.rtxtTwit = new StarlitTwit.RichTextBoxEx();
             this.tabTwitDisp = new StarlitTwit.TabControlEx();
             this.tabpgHome = new StarlitTwit.TabPageEx();
@@ -117,6 +114,9 @@
             this.uctlDispHistory = new StarlitTwit.UctlDispTwit();
             this.tabpgDirect = new StarlitTwit.TabPageEx();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
+            this.tssLabel = new StarlitTwit.ToolStripStatusLabelEx();
+            this.tsmibit_ly = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmij_mp = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -489,14 +489,6 @@
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // tssLabel
-            // 
-            this.tssLabel.AutoSize = false;
-            this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(371, 18);
-            this.tssLabel.Spring = true;
-            this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -516,27 +508,27 @@
             this.tsmiTab_EditTab,
             this.tsmiTab_DeleteTab});
             this.menuTab.Name = "menuTab";
-            this.menuTab.Size = new System.Drawing.Size(139, 70);
+            this.menuTab.Size = new System.Drawing.Size(157, 70);
             this.menuTab.Opening += new System.ComponentModel.CancelEventHandler(this.menuTab_Opening);
             // 
             // tsmiTab_MakeTab
             // 
             this.tsmiTab_MakeTab.Name = "tsmiTab_MakeTab";
-            this.tsmiTab_MakeTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiTab_MakeTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiTab_MakeTab.Text = "タブの作成(&M)";
             this.tsmiTab_MakeTab.Click += new System.EventHandler(this.tsmiTab_MakeTab_Click);
             // 
             // tsmiTab_EditTab
             // 
             this.tsmiTab_EditTab.Name = "tsmiTab_EditTab";
-            this.tsmiTab_EditTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiTab_EditTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiTab_EditTab.Text = "タブの編集(&E)";
             this.tsmiTab_EditTab.Click += new System.EventHandler(this.tsmiTab_EditTab_Click);
             // 
             // tsmiTab_DeleteTab
             // 
             this.tsmiTab_DeleteTab.Name = "tsmiTab_DeleteTab";
-            this.tsmiTab_DeleteTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiTab_DeleteTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiTab_DeleteTab.Text = "タブの削除(&D)";
             this.tsmiTab_DeleteTab.Click += new System.EventHandler(this.tsmiTab_DeleteTab_Click);
             // 
@@ -554,24 +546,24 @@
             this.toolStripMenuItem1,
             this.tsmiTasktray_Exit});
             this.menuTasktray.Name = "menuTasktray";
-            this.menuTasktray.Size = new System.Drawing.Size(111, 54);
+            this.menuTasktray.Size = new System.Drawing.Size(120, 54);
             // 
             // tsmiTasktray_Display
             // 
             this.tsmiTasktray_Display.Name = "tsmiTasktray_Display";
-            this.tsmiTasktray_Display.Size = new System.Drawing.Size(110, 22);
+            this.tsmiTasktray_Display.Size = new System.Drawing.Size(119, 22);
             this.tsmiTasktray_Display.Text = "表示(&D)";
             this.tsmiTasktray_Display.Click += new System.EventHandler(this.tsmiTasktray_Display_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(116, 6);
             // 
             // tsmiTasktray_Exit
             // 
             this.tsmiTasktray_Exit.Name = "tsmiTasktray_Exit";
-            this.tsmiTasktray_Exit.Size = new System.Drawing.Size(110, 22);
+            this.tsmiTasktray_Exit.Size = new System.Drawing.Size(119, 22);
             this.tsmiTasktray_Exit.Text = "終了(&E)";
             this.tsmiTasktray_Exit.Click += new System.EventHandler(this.tsmiTasktray_Exit_Click);
             // 
@@ -580,12 +572,12 @@
             this.menuContainer2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiCon2_MakeTab});
             this.menuContainer2.Name = "menuContainer2";
-            this.menuContainer2.Size = new System.Drawing.Size(139, 26);
+            this.menuContainer2.Size = new System.Drawing.Size(157, 26);
             // 
             // tsmiCon2_MakeTab
             // 
             this.tsmiCon2_MakeTab.Name = "tsmiCon2_MakeTab";
-            this.tsmiCon2_MakeTab.Size = new System.Drawing.Size(138, 22);
+            this.tsmiCon2_MakeTab.Size = new System.Drawing.Size(156, 22);
             this.tsmiCon2_MakeTab.Text = "タブの作成(&M)";
             this.tsmiCon2_MakeTab.Click += new System.EventHandler(this.tsmiTab_MakeTab_Click);
             // 
@@ -597,24 +589,8 @@
             this.menuShortenType.Name = "menuShortenType";
             this.menuShortenType.ShowCheckMargin = true;
             this.menuShortenType.ShowImageMargin = false;
-            this.menuShortenType.Size = new System.Drawing.Size(95, 48);
+            this.menuShortenType.Size = new System.Drawing.Size(106, 48);
             this.menuShortenType.Opening += new System.ComponentModel.CancelEventHandler(this.menuShortenType_Opening);
-            // 
-            // tsmibit_ly
-            // 
-            this.tsmibit_ly.Name = "tsmibit_ly";
-            this.tsmibit_ly.Size = new System.Drawing.Size(94, 22);
-            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
-            this.tsmibit_ly.Text = "bit.ly";
-            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
-            // 
-            // tsmij_mp
-            // 
-            this.tsmij_mp.Name = "tsmij_mp";
-            this.tsmij_mp.Size = new System.Drawing.Size(94, 22);
-            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
-            this.tsmij_mp.Text = "j.mp";
-            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
             // 
             // splContainer
             // 
@@ -713,27 +689,6 @@
             this.lblUserStreamInfo.TabIndex = 13;
             this.lblUserStreamInfo.Text = "...";
             this.lblUserStreamInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // btnURLShorten
-            // 
-            this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnURLShorten.ClickedImage = "Clicked";
-            this.btnURLShorten.ContextMenuStrip = this.menuShortenType;
-            this.btnURLShorten.DisabledImage = "Disabled";
-            this.btnURLShorten.Enabled = false;
-            this.btnURLShorten.FocusedImage = "Focused";
-            this.btnURLShorten.HoverImage = "Hover";
-            this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnURLShorten.ImageKey = "Normal";
-            this.btnURLShorten.Location = new System.Drawing.Point(328, 80);
-            this.btnURLShorten.Name = "btnURLShorten";
-            this.btnURLShorten.NormalImage = "Normal";
-            this.btnURLShorten.Size = new System.Drawing.Size(75, 19);
-            this.btnURLShorten.TabIndex = 13;
-            this.btnURLShorten.Text = "URL短縮";
-            this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnURLShorten.UseVisualStyleBackColor = true;
-            this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
             // 
             // lblStatuses
             // 
@@ -856,6 +811,27 @@
             this.btnTwit.UseVisualStyleBackColor = true;
             this.btnTwit.Click += new System.EventHandler(this.btnTwit_Click);
             // 
+            // btnURLShorten
+            // 
+            this.btnURLShorten.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnURLShorten.ClickedImage = "Clicked";
+            this.btnURLShorten.ContextMenuStrip = this.menuShortenType;
+            this.btnURLShorten.DisabledImage = "Disabled";
+            this.btnURLShorten.Enabled = false;
+            this.btnURLShorten.FocusedImage = "Focused";
+            this.btnURLShorten.HoverImage = "Hover";
+            this.btnURLShorten.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnURLShorten.ImageKey = "Normal";
+            this.btnURLShorten.Location = new System.Drawing.Point(328, 80);
+            this.btnURLShorten.Name = "btnURLShorten";
+            this.btnURLShorten.NormalImage = "Normal";
+            this.btnURLShorten.Size = new System.Drawing.Size(75, 19);
+            this.btnURLShorten.TabIndex = 13;
+            this.btnURLShorten.Text = "URL短縮";
+            this.btnURLShorten.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnURLShorten.UseVisualStyleBackColor = true;
+            this.btnURLShorten.ButtonClick += new System.EventHandler(this.btnURLShorten_ButtonClick);
+            // 
             // rtxtTwit
             // 
             this.rtxtTwit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -867,7 +843,7 @@
             this.rtxtTwit.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.rtxtTwit.Size = new System.Drawing.Size(400, 43);
             this.rtxtTwit.TabIndex = 11;
-            this.rtxtTwit.Text = "ぬ\nる\nぽ";
+            this.rtxtTwit.Text = "";
             this.rtxtTwit.TextChanged += new System.EventHandler(this.rtxtTwit_TextChanged);
             this.rtxtTwit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rtxtTwit_KeyDown);
             // 
@@ -985,6 +961,30 @@
             this.uctlDispDirect.PopupAction = null;
             this.uctlDispDirect.Size = new System.Drawing.Size(480, 490);
             this.uctlDispDirect.TabIndex = 2;
+            // 
+            // tssLabel
+            // 
+            this.tssLabel.AutoSize = false;
+            this.tssLabel.Name = "tssLabel";
+            this.tssLabel.Size = new System.Drawing.Size(371, 18);
+            this.tssLabel.Spring = true;
+            this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tsmibit_ly
+            // 
+            this.tsmibit_ly.Name = "tsmibit_ly";
+            this.tsmibit_ly.Size = new System.Drawing.Size(105, 22);
+            this.tsmibit_ly.Tag = StarlitTwit.URLShortenType.bit_ly;
+            this.tsmibit_ly.Text = "bit.ly";
+            this.tsmibit_ly.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
+            // 
+            // tsmij_mp
+            // 
+            this.tsmij_mp.Name = "tsmij_mp";
+            this.tsmij_mp.Size = new System.Drawing.Size(105, 22);
+            this.tsmij_mp.Tag = StarlitTwit.URLShortenType.j_mp;
+            this.tsmij_mp.Text = "j.mp";
+            this.tsmij_mp.Click += new System.EventHandler(this.btnURLShorten_MenuClick);
             // 
             // imageListWrapper
             // 

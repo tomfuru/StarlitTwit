@@ -423,7 +423,7 @@ namespace StarlitTwit
                         }
                         catch (ArgumentException) { Message.ShowWarningMessage("画像ファイルではありません。"); return; }
                         Guid guid = img.RawFormat.Guid;
-                        if (!guid.Equals(ImageFormat.Jpeg.Guid) && !guid.Equals(ImageFormat.Png) && !guid.Equals(ImageFormat.Gif)) {
+                        if (!guid.Equals(ImageFormat.Jpeg.Guid) && !guid.Equals(ImageFormat.Png.Guid) && !guid.Equals(ImageFormat.Gif.Guid)) {
                             Message.ShowWarningMessage("画像の形式が不適切です。");
                             return;
                         }
