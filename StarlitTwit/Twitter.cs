@@ -3924,7 +3924,7 @@ namespace StarlitTwit
         //
         public static bool IsMention(TwitData twitdata)
         {
-            return (twitdata.Mention_StatusID >= 0);
+            return (twitdata.MainTwitData.Mention_StatusID >= 0);
         }
         #endregion (IsMention)
         //-------------------------------------------------------------------------------
