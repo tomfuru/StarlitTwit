@@ -120,7 +120,7 @@ namespace StarlitTwit
         /// <para>上限800</para>
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<TwitData> statuses_home_timeline(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_home_timeline(int count = -1, long since_id = -1, long max_id = -1,
                                                 bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
                                                 bool exclude_replies = false, bool contributor_details = false)
         {
@@ -129,7 +129,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -150,7 +149,7 @@ namespace StarlitTwit
         /// <para>Returns the 20 most recent mentions (status containing @username) for the authenticating user.</para>
         /// <para>上限800</para>
         /// </summary>
-        public IEnumerable<TwitData> statuses_mentions(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_mentions(int count = -1, long since_id = -1, long max_id = -1,
                                             bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
                                             bool contributor_details = false)
         {
@@ -159,7 +158,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -172,34 +170,13 @@ namespace StarlitTwit
         }
         #endregion (statuses_mentions)
         //-------------------------------------------------------------------------------
-        #region +statuses_public_timeline
-        //-------------------------------------------------------------------------------
-        /// <summary>
-        /// <para>statuses/public_timelineメソッド</para>
-        /// <para>Returns the 20 most recent statuses, including retweets if they exist, from non-protected users.</para>
-        /// <para>The public timeline is cached for 60 seconds</para>
-        /// </summary>
-        public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
-        {
-            Dictionary<string, string> paramdic = new Dictionary<string, string>();
-            {
-                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
-                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
-            }
-
-            string url = URLapi + @"statuses/public_timeline.xml";
-
-            return ConvertToTwitDataArray(GetByAPI(url));
-        }
-        #endregion (statuses_public_timeline)
-        //-------------------------------------------------------------------------------
         #region +statuses_retweeted_by_me
         //-------------------------------------------------------------------------------
         /// <summary>
         /// <para>statuses/retweeted_by_meメソッド</para>
         /// <para>Returns the 20 most recent retweets posted by the authenticating user.</para>
         /// </summary>
-        public IEnumerable<TwitData> statuses_retweeted_by_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_by_me(int count = -1, long since_id = -1, long max_id = -1,
                                                    bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -207,7 +184,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
@@ -224,7 +200,7 @@ namespace StarlitTwit
         /// <para>statuses/retweeted_to_meメソッド</para>
         /// <para>Returns the 20 most recent retweets posted by users the authenticating user follow.</para>
         /// </summary>
-        public IEnumerable<TwitData> statuses_retweeted_to_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_to_me(int count = -1, long since_id = -1, long max_id = -1,
                                                    bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -232,7 +208,6 @@ namespace StarlitTwit
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
@@ -249,7 +224,7 @@ namespace StarlitTwit
         /// <para>statuses/retweets_of_meメソッド</para>
         /// <para>Returns the 20 most recent tweets of the authenticated user that have been retweeted by others.</para>
         /// </summary>
-        public IEnumerable<TwitData> statuses_retweets_of_me(int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweets_of_me(int count = -1, long since_id = -1, long max_id = -1,
                                                   bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -257,7 +232,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
@@ -274,7 +248,7 @@ namespace StarlitTwit
         /// <para>statuses/user_timelineメソッド</para>
         /// <para> 	 Returns the 20 most recent statuses posted by the authenticating user.</para>
         /// </summary>
-        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_user_timeline(long user_id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1,
                                            bool trim_user = false, bool include_rts = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES,
                                            bool exclude_replies = false, bool contributor_details = false)
         {
@@ -285,7 +259,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_rts) { paramdic.Add("include_rts", include_rts.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
@@ -308,7 +281,7 @@ namespace StarlitTwit
         /// <param name="id">[select]</param>
         /// <param name="screen_name">[select]</param>
         /// <returns></returns>
-        public IEnumerable<TwitData> statuses_retweeted_to_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_to_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1,
                                            bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
@@ -320,7 +293,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
@@ -340,7 +312,7 @@ namespace StarlitTwit
         /// <param name="id">[select]</param>
         /// <param name="screen_name">[select]</param>
         /// <returns></returns>
-        public IEnumerable<TwitData> statuses_retweeted_by_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, int page = -1,
+        public IEnumerable<TwitData> statuses_retweeted_by_user(long id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1,
                                            bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (id == -1 && string.IsNullOrEmpty(screen_name)) { throw new ArgumentException("ユーザーIDかスクリーン名の少なくとも1つは必要です。"); }
@@ -352,7 +324,6 @@ namespace StarlitTwit
                 if (count > 0) { paramdic.Add("count", count.ToString()); }
                 if (since_id > 0) { paramdic.Add("since_id", since_id.ToString()); }
                 if (max_id > 0) { paramdic.Add("max_id", max_id.ToString()); }
-                if (page > 0) { paramdic.Add("page", page.ToString()); }
                 if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
                 if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
             }
@@ -2230,6 +2201,28 @@ namespace StarlitTwit
 
         //-------------------------------------------------------------------------------
         #region Deprecated Resources
+        //-------------------------------------------------------------------------------
+        #region +statuses_public_timeline
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// <para>statuses/public_timelineメソッド</para>
+        /// <para>Returns the 20 most recent statuses, including retweets if they exist, from non-protected users.</para>
+        /// <para>The public timeline is cached for 60 seconds</para>
+        /// </summary>
+        [Obsolete("streamingAPIを使用してください。")]
+        public IEnumerable<TwitData> statuses_public_timeline(bool trim_user = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (trim_user) { paramdic.Add("trim_user", trim_user.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+
+            string url = URLapi + @"statuses/public_timeline.xml";
+
+            return ConvertToTwitDataArray(GetByAPI(url));
+        }
+        #endregion (statuses_public_timeline)
         //-------------------------------------------------------------------------------
         #region +statuses_friends_timeline
         //-------------------------------------------------------------------------------

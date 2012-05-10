@@ -206,7 +206,7 @@ namespace StarlitTwit
                     string changedStatusText = null;
                     switch (FormType) {
                         case EFormType.UserStatus:
-                            d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id, count: GET_NUM, include_rts: true);
+                            d = FrmMain.Twitter.statuses_user_timeline(screen_name: UserScreenName, max_id: _last_status_id - 1, count: GET_NUM, include_rts: true);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;
@@ -226,22 +226,22 @@ namespace StarlitTwit
                             d = new TwitData[0];
                             break;
                         case EFormType.MyRetweet:
-                            d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id, count: GET_NUM);
+                            d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id - 1, count: GET_NUM);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;
                         case EFormType.FollowersRetweet:
-                            d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id, count: GET_NUM);
+                            d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id - 1, count: GET_NUM);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;
                         case EFormType.FollowersRetweetToMe:
-                            d = FrmMain.Twitter.statuses_retweets_of_me(max_id: _last_status_id, count: GET_NUM);
+                            d = FrmMain.Twitter.statuses_retweets_of_me(max_id: _last_status_id - 1, count: GET_NUM);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;
                         case EFormType.ListStatuses:
-                            d = FrmMain.Twitter.lists_statuses(-1, ListID, UserScreenName, max_id: _last_status_id, per_page: GET_NUM, include_rts: true);
+                            d = FrmMain.Twitter.lists_statuses(-1, ListID, UserScreenName, max_id: _last_status_id - 1, per_page: GET_NUM, include_rts: true);
                             if (d.Count() > 0) { _last_status_id = d.Last().StatusID; }
                             else { disableAppend = true; }
                             break;
