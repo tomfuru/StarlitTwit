@@ -110,6 +110,7 @@
             this.lblRest = new System.Windows.Forms.Label();
             this.btnTwit = new System.Windows.Forms.Button();
             this.rtxtTwit = new StarlitTwit.RichTextBoxEx();
+            this.btnUnappend = new System.Windows.Forms.Button();
             this.tabTwitDisp = new StarlitTwit.TabControlEx();
             this.tabpgHome = new StarlitTwit.TabPageEx();
             this.uctlDispHome = new StarlitTwit.UctlDispTwit();
@@ -120,7 +121,6 @@
             this.tabpgDirect = new StarlitTwit.TabPageEx();
             this.uctlDispDirect = new StarlitTwit.UctlDispTwit();
             this.imageListWrapper = new StarlitTwit.ImageListWrapper();
-            this.btnUnappend = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuTab.SuspendLayout();
@@ -735,9 +735,9 @@
             // 
             this.lblUserStreamInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblUserStreamInfo.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblUserStreamInfo.Location = new System.Drawing.Point(272, 4);
+            this.lblUserStreamInfo.Location = new System.Drawing.Point(264, 4);
             this.lblUserStreamInfo.Name = "lblUserStreamInfo";
-            this.lblUserStreamInfo.Size = new System.Drawing.Size(131, 12);
+            this.lblUserStreamInfo.Size = new System.Drawing.Size(139, 12);
             this.lblUserStreamInfo.TabIndex = 13;
             this.lblUserStreamInfo.Text = "...";
             this.lblUserStreamInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -899,6 +899,18 @@
             this.rtxtTwit.TextChanged += new System.EventHandler(this.rtxtTwit_TextChanged);
             this.rtxtTwit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rtxtTwit_KeyDown);
             // 
+            // btnUnappend
+            // 
+            this.btnUnappend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUnappend.Location = new System.Drawing.Point(410, 78);
+            this.btnUnappend.Name = "btnUnappend";
+            this.btnUnappend.Size = new System.Drawing.Size(75, 19);
+            this.btnUnappend.TabIndex = 25;
+            this.btnUnappend.Text = "添付解除";
+            this.btnUnappend.UseVisualStyleBackColor = true;
+            this.btnUnappend.Visible = false;
+            this.btnUnappend.Click += new System.EventHandler(this.btnUnappend_Click);
+            // 
             // tabTwitDisp
             // 
             this.tabTwitDisp.AllowDrop = true;
@@ -1022,18 +1034,6 @@
             this.imageListWrapper.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.imageListWrapper.ImageList.ImageSize = new System.Drawing.Size(48, 48);
             this.imageListWrapper.ImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // btnUnappend
-            // 
-            this.btnUnappend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUnappend.Location = new System.Drawing.Point(410, 78);
-            this.btnUnappend.Name = "btnUnappend";
-            this.btnUnappend.Size = new System.Drawing.Size(75, 19);
-            this.btnUnappend.TabIndex = 25;
-            this.btnUnappend.Text = "添付解除";
-            this.btnUnappend.UseVisualStyleBackColor = true;
-            this.btnUnappend.Visible = false;
-            this.btnUnappend.Click += new System.EventHandler(this.btnUnappend_Click);
             // 
             // FrmMain
             // 

@@ -115,7 +115,7 @@ namespace StarlitTwit
         private List<string> _statusHistoryList = new List<string>("".AsEnumerable());
         /// <summary>現在の履歴発言の位置</summary>
         private int _nowStatusHistoryIndex = 0;
-        
+
         // 画像添付関連
         /// <summary>画像が添付されるかどうか</summary>
         private bool _isAttached = false;
@@ -123,6 +123,9 @@ namespace StarlitTwit
         private Image _image_upload = null;
         /// <summary>添付される画像のファイル名</summary>
         private string _image_upload_filename_prev = "";
+
+        // 再接続関連
+        private CancellationTokenSource _cts_reconnect = new CancellationTokenSource();
         //-------------------------------------------------------------------------------
         #endregion (変数)
 
@@ -189,6 +192,7 @@ namespace StarlitTwit
         private const string STR_GETING_NEWERSTATUS = "より新しいデータ取得中...";
 
         private const string STR_USERSTREAM_STARTING = "UserStream開始中...";
+        private const string STR_USERSTREAM_RESTARTING = "UserStream再接続中...";
         private const string STR_USERSTREAM = "UserStream利用中";
         private const string STR_USERSTREAM_ENDING = "UserStream終了中...";
         private const string STR_USERSTERAM_RECONNECT_WAITING_FORMAT = "{0}秒後に再接続します";
@@ -344,9 +348,10 @@ namespace StarlitTwit
             if (_image_upload != null) { _image_upload.Dispose(); }
 
             // UserStream終了を待つ
-            if (_usingUserStream && _userStreamCancellationTS != null) {
-                _userStreamCancellationTS.Cancel();
-                while (_usingUserStream) { Thread.Sleep(10); }
+            if (_usingUserStream && (_userStreamCancellationTS != null) ) {
+                if (_userStreamCancellationTS != null) { _userStreamCancellationTS.Cancel(); }
+                _cts_reconnect.Cancel();
+                while (_usingUserStream) { Thread.Sleep(10); Application.DoEvents(); }
             }
             e.Cancel = false;
 
@@ -1929,16 +1934,10 @@ namespace StarlitTwit
             }));
             _usingUserStream = true;
             try {
-                this.Invoke((Action)(() =>
-                {
-                    lblUserStreamInfo.Text = STR_USERSTREAM;
-                    tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
-                }));
-                
-                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent, UserStreamErrorFinishEvent, 0);
-
                 _frmUserStreamWatch = new FrmUserStreamWatch();
-                if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
+
+                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction,
+                    UserStreamEndEvent, UserStreamConnectEvent, UserStreamErrorFinishEvent, 0);
 
                 // RESTによるデータ取り込み
                 Utilization.InvokeTransactionDoingEvents(() =>
@@ -1956,6 +1955,21 @@ namespace StarlitTwit
         }
         #endregion (StartUserStream)
         //-------------------------------------------------------------------------------
+        #region -UserStreamConnectEvent 接続時発生イベント
+        //-------------------------------------------------------------------------------
+        //
+        private void UserStreamConnectEvent()
+        {
+            if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
+
+            this.Invoke((Action)(() =>
+            {
+                lblUserStreamInfo.Text = STR_USERSTREAM;
+                tsmiUserStreamLog.Enabled = tsmiUserStreamEnd.Enabled = true;
+            }));
+        }
+        #endregion (UserStreamConnectEvent)
+        //-------------------------------------------------------------------------------
         #region -EndUserStream UserStreamを終了します。
         //-------------------------------------------------------------------------------
         //
@@ -1965,8 +1979,10 @@ namespace StarlitTwit
             tsmiUserStreamStart.Enabled = tsmiUserStreamLog.Enabled = false;
             _usingUserStream = false;
 
-            _frmUserStreamWatch.Hide();
-            _frmUserStreamWatch.Dispose();
+            if (_frmUserStreamWatch != null) {
+                _frmUserStreamWatch.Hide();
+                _frmUserStreamWatch.Dispose();
+            }
 
             _userStreamCancellationTS.Cancel();
         }
@@ -1992,13 +2008,14 @@ namespace StarlitTwit
         #region -UserStreamWaitRecoonectEvent UserStreamの接続が切れて再接続待機中に実行される
         //-------------------------------------------------------------------------------
         //
-        CancellationTokenSource _cts_reconnect = null;
         private void UserStreamErrorFinishEvent(bool all_replies, int reconnect_time)
         {
             const int MAX_RECONNECTION = 256;
             if (reconnect_time > MAX_RECONNECTION) {
-                _frmUserStreamWatch.Hide();
-                _frmUserStreamWatch.Dispose();
+                if (_frmUserStreamWatch != null) {
+                    _frmUserStreamWatch.Hide();
+                    _frmUserStreamWatch.Dispose();
+                }
 
                 EndUserStream();
                 UserStreamEndEvent();
@@ -2008,33 +2025,34 @@ namespace StarlitTwit
             // 再接続待機
             Utilization.InvokeTransaction(() =>
             {
-                try {
-                    _cts_reconnect = new CancellationTokenSource();
-                    CancellationToken token = _cts_reconnect.Token;
-                    int standard = Environment.TickCount;
-                    int elapsed_already = 0;
+                CancellationToken token = _cts_reconnect.Token;
+                int standard = Environment.TickCount;
+                int elapsed_already = -1;
 
-                    do {
-                        if (token.IsCancellationRequested) {
+                do {
+                    if (token.IsCancellationRequested) {
+                        if (_frmUserStreamWatch != null) {
                             _frmUserStreamWatch.Hide();
                             _frmUserStreamWatch.Dispose();
-
-                            UserStreamEndEvent();
-                            return;
                         }
 
-                        int elapsed = (Environment.TickCount - standard) / 1000;
-                        if (elapsed > elapsed_already) {
-                            elapsed_already = elapsed;
-                            if (reconnect_time > elapsed) {
-                                this.Invoke((Action)(() => lblUserStreamInfo.Text = string.Format(STR_USERSTERAM_RECONNECT_WAITING_FORMAT, reconnect_time - elapsed)));
-                            }
-                        }
-                    } while (reconnect_time - elapsed_already > 0);
+                        UserStreamEndEvent();
+                        return;
+                    }
 
-                    _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent, UserStreamErrorFinishEvent, reconnect_time);
-                }
-                finally { _cts_reconnect = null; }
+                    int elapsed = (Environment.TickCount - standard) / 1000;
+                    if (elapsed > elapsed_already) {
+                        elapsed_already = elapsed;
+                        if (reconnect_time > elapsed) {
+                            this.Invoke((Action)(() => lblUserStreamInfo.Text = string.Format(STR_USERSTERAM_RECONNECT_WAITING_FORMAT, reconnect_time - elapsed)));
+                        }
+                    }
+                } while (reconnect_time - elapsed_already > 0);
+
+                this.Invoke((Action)(() => lblUserStreamInfo.Text = STR_USERSTREAM_RESTARTING));
+
+                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent, UserStreamConnectEvent, UserStreamErrorFinishEvent, reconnect_time);
+                
             });
         }
         #endregion (UserStreamWaitRecoonectEvent)
@@ -3386,7 +3404,7 @@ namespace StarlitTwit
 
         }
         [Conditional("DEBUG")]
-        public void test() 
+        public void test()
         {
         }
     }

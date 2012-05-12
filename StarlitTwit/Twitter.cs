@@ -2398,7 +2398,7 @@ namespace StarlitTwit
         #region userstream_user
         //-------------------------------------------------------------------------------
         //
-        public CancellationTokenSource userstream_user(bool all_replies, Action<UserStreamItemType, object> action, Action endact = null, Action<bool, int> erroract = null, int reconnect_wait_time = 0)
+        public CancellationTokenSource userstream_user(bool all_replies, Action<UserStreamItemType, object> action, Action endact = null, Action connectdact = null, Action<bool, int> erroract = null, int reconnect_wait_time = 0)
         {
             const string URL_SAMPLE = @"https://userstream.twitter.com/2/user.json";
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
@@ -2423,6 +2423,9 @@ namespace StarlitTwit
                 bool error_caused = false;
                 try {
                     res = (HttpWebResponse)req.GetResponse();
+                    if (connectdact != null) { connectdact(); }
+                    reconnect_wait_time = 0; // 接続できたらwait_time <- 0
+
                     byte[] b = new byte[0x4000];            // 16KBの受信バッファ
                     StringBuilder sb = new StringBuilder(); // 受信文字列バッファ
 
@@ -2494,10 +2497,10 @@ namespace StarlitTwit
 
                 if (error_caused) {
                     int reconnect_time = (reconnect_wait_time == 0) ? 1 : reconnect_wait_time * 2;
-                    erroract(all_replies, reconnect_time);
+                    if (erroract != null) { erroract(all_replies, reconnect_time); }
                     return;
                 }
-                else { endact(); }
+                else if (endact != null) { endact(); }
                 //-----------------------------------------------------------------
                 #endregion ストリーミングスレッド
             };
