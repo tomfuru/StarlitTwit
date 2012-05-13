@@ -197,6 +197,9 @@ namespace StarlitTwit
         private const string STR_USERSTREAM_ENDING = "UserStream終了中...";
         private const string STR_USERSTERAM_RECONNECT_WAITING_FORMAT = "{0}秒後に再接続します";
 
+        private const string STR_USERSTREAM_CONNECTED = "***接続***";
+        private const string STR_USERSTREAM_DISCONNECTED = "***切断***";
+
         private const string STR_FAIL_GET_PROFILE = "プロフィールの取得に失敗しました。";
 
         private const string STR_DONE_DELETE = "発言を削除しました。";
@@ -1962,6 +1965,8 @@ namespace StarlitTwit
         {
             if (SettingsData.UserStreamAutoOpenLog) { _frmUserStreamWatch.Show(this); }
 
+            _frmUserStreamWatch.AddItem(STR_USERSTREAM_CONNECTED);
+
             this.Invoke((Action)(() =>
             {
                 lblUserStreamInfo.Text = STR_USERSTREAM;
@@ -2021,6 +2026,8 @@ namespace StarlitTwit
                 UserStreamEndEvent();
                 return;
             }
+
+            _frmUserStreamWatch.AddItem(STR_USERSTREAM_DISCONNECTED);
 
             // 再接続待機
             Utilization.InvokeTransaction(() =>
