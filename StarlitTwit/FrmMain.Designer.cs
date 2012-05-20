@@ -42,6 +42,7 @@
             this.tsmiClearTweets = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSearchUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUsersRelationships = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAPIRestriction = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi認証 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
@@ -207,6 +208,7 @@
             this.tsmiClearTweets,
             this.toolStripMenuItem2,
             this.tsmiSearchUser,
+            this.tsmiUsersRelationships,
             this.tsmiAPIRestriction,
             this.tsmi認証,
             this.toolStripMenuItem3,
@@ -252,6 +254,13 @@
             this.tsmiSearchUser.Size = new System.Drawing.Size(227, 22);
             this.tsmiSearchUser.Text = "ユーザー検索(&S)";
             this.tsmiSearchUser.Click += new System.EventHandler(this.tsmiSearchUser_Click);
+            // 
+            // tsmiUsersRelationships
+            // 
+            this.tsmiUsersRelationships.Name = "tsmiUsersRelationships";
+            this.tsmiUsersRelationships.Size = new System.Drawing.Size(227, 22);
+            this.tsmiUsersRelationships.Text = "ユーザー関係(&U)";
+            this.tsmiUsersRelationships.Click += new System.EventHandler(this.tsmiUsersRelationships_Click);
             // 
             // tsmiAPIRestriction
             // 
@@ -1167,6 +1176,7 @@
         private SplitButton btnAppendImage;
         private System.Windows.Forms.ToolStripMenuItem tsmiAppendImage_byClipboard;
         private System.Windows.Forms.Button btnUnappend;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUsersRelationships;
 
     }
 }

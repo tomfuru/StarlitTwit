@@ -1194,6 +1194,16 @@ namespace StarlitTwit
         }
         #endregion (tsmi更新_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiUsersRelationships_Click ユーザー関係
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUsersRelationships_Click(object sender, EventArgs e)
+        {
+            FrmUsersRelations frm = new FrmUsersRelations();
+            frm.Show(this);
+        }
+        #endregion (tsmiUsersRelationships_Click)
+        //-------------------------------------------------------------------------------
         #region tsComboTabAlignment_SelectedIndexChanged タブ位置コンボボックス
         //-------------------------------------------------------------------------------
         //

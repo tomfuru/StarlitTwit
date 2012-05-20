@@ -232,6 +232,34 @@ namespace StarlitTwit
         #endregion (GetProfile)
 
         //-------------------------------------------------------------------------------
+        #region +[static]SliceArray 配列を必要な部分だけスライスします
+        //-------------------------------------------------------------------------------
+        //
+        public static T[] SliceArray<T>(T[] userIDs, ref int index, int size)
+        {
+            int firstIndex = index;
+            index = Math.Min(userIDs.Length, index + size); // 次の開始index
+
+            T[] ids = new T[index - firstIndex];
+            Array.Copy(userIDs, firstIndex, ids, 0, index - firstIndex);
+            return ids;
+        }
+        #endregion (SliceUserID)
+        //-------------------------------------------------------------------------------
+        #region +[static]SortProfiles users/lookupで返ってきたデータをuserIDsの並びのとおりに返します。
+        //-------------------------------------------------------------------------------
+        //
+        public static IEnumerable<UserProfile> SortProfiles(IEnumerable<UserProfile> profiles, long[] ids)
+        {
+            UserProfile[] profs = profiles.ToArray();
+            foreach (long id in ids) {
+                UserProfile prof = profs.FirstOrDefault(p => p.UserID == id);
+                if (prof != null) { yield return prof; }
+            }
+        }
+        #endregion (SortProfiles)
+
+        //-------------------------------------------------------------------------------
         #region +[static]InterpretFormat フォーマットを解釈して返します。
         //-------------------------------------------------------------------------------
         #region (TwitData)

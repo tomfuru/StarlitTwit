@@ -126,6 +126,12 @@
     <Compile Include="Forms\FrmShortcutKeyEdit.Designer.cs">
       <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmUsersRelations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmUsersRelations.Designer.cs">
+      <DependentUpon>FrmUsersRelations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmUserStreamWatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +278,12 @@
     <Compile Include="UserControls\UctlDispTwitRow.Designer.cs">
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserSelector.Designer.cs">
+      <DependentUpon>UserSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilization.cs" />
     <EmbeddedResource Include="Forms\FrmConfig.resx">
       <DependentUpon>FrmConfig.cs</DependentUpon>
@@ -305,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmShortcutKeyEdit.resx">
       <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmUsersRelations.resx">
+      <DependentUpon>FrmUsersRelations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmUserStreamWatch.resx">
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
@@ -363,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UctlDispTwitRow.resx">
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserSelector.resx">
+      <DependentUpon>UserSelector.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

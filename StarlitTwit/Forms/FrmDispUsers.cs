@@ -45,6 +45,8 @@ namespace StarlitTwit
         private TextBox txtSearchWord = null;
         private Button btnSearch = null;
         private string _strSearchWord = "";
+
+        const int SIZE_PER_UPDATE = 100;
         //-------------------------------------------------------------------------------
         #endregion (Variables)
 
@@ -598,8 +600,8 @@ namespace StarlitTwit
                                         Thread.Sleep(100);
                                     }
                                     int index = _page;
-                                    long[] ids = SliceUserID(_userIDs, ref index);
-                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    long[] ids = Utilization.SliceArray(_userIDs, ref index, SIZE_PER_UPDATE);
+                                    profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
                                     _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_followers(cursor: _next_cursor);
@@ -614,8 +616,8 @@ namespace StarlitTwit
                                         Thread.Sleep(100);
                                     }
                                     int index = _page;
-                                    long[] ids = SliceUserID(_userIDs, ref index);
-                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    long[] ids = Utilization.SliceArray(_userIDs, ref index, SIZE_PER_UPDATE);
+                                    profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
                                     _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_friends(cursor: _next_cursor);
@@ -630,8 +632,8 @@ namespace StarlitTwit
                                         Thread.Sleep(100);
                                     }
                                     int index = _page;
-                                    long[] ids = SliceUserID(_userIDs, ref index);
-                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    long[] ids = Utilization.SliceArray(_userIDs, ref index, SIZE_PER_UPDATE);
+                                    profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
                                     _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_followers(screen_name: UserScreenName, cursor: _next_cursor);
@@ -646,8 +648,8 @@ namespace StarlitTwit
                                         Thread.Sleep(100);
                                     }
                                     int index = _page;
-                                    long[] ids = SliceUserID(_userIDs, ref index);
-                                    profiles = SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                                    long[] ids = Utilization.SliceArray(_userIDs, ref index, SIZE_PER_UPDATE);
+                                    profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
                                     _page = index;
                                     appendEnable = (_next_cursor != 0 || _page < _userIDs.Length);
                                     //proftpl = FrmMain.Twitter.statuses_friends(screen_name: UserScreenName, cursor: _next_cursor);
@@ -702,33 +704,7 @@ namespace StarlitTwit
             catch (InvalidOperationException) { }
         }
         #endregion (GetUsers)
-        //-------------------------------------------------------------------------------
-        #region -SliceUserID ユーザーIDを必要な部分だけスライスします
-        //-------------------------------------------------------------------------------
-        //
-        private long[] SliceUserID(long[] userIDs, ref int index)
-        {
-            int firstIndex = index;
-            index = Math.Min(userIDs.Length, index + 100); // 次の開始index
 
-            long[] ids = new long[index - firstIndex];
-            Array.Copy(userIDs, firstIndex, ids, 0, index - firstIndex);
-            return ids;
-        }
-        #endregion (SliceUserID)
-        //-------------------------------------------------------------------------------
-        #region -SortProfiles users/lookupで返ってきたデータをuserIDsの並びのとおりに返します。
-        //-------------------------------------------------------------------------------
-        //
-        private IEnumerable<UserProfile> SortProfiles(IEnumerable<UserProfile> profiles, long[] ids)
-        {
-            UserProfile[] profs = profiles.ToArray();
-            foreach (long id in ids) {
-                UserProfile prof = profs.FirstOrDefault(p => p.UserID == id);
-                if (prof != null) { yield return prof; }
-            }
-        }
-        #endregion (SortProfiles)
         //-------------------------------------------------------------------------------
         #region -GetImages 画像取得と追加 (別スレッド処理)
         //-------------------------------------------------------------------------------

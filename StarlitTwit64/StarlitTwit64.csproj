@@ -190,6 +190,13 @@
       <Link>Forms\FrmShortcutKeyEdit.designer.cs</Link>
       <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmUsersRelations.cs">
+      <Link>Forms\FrmUsersRelations.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmUsersRelations.designer.cs">
+      <Link>Forms\FrmUsersRelations.designer.cs</Link>
+      <DependentUpon>FrmUsersRelations.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmUserStreamWatch.cs">
       <Link>Forms\FrmUserStreamWatch.cs</Link>
       <SubType>Form</SubType>
@@ -377,6 +384,13 @@
       <Link>UserControls\UctlDispTwitRow.designer.cs</Link>
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UserSelector.cs">
+      <Link>UserControls\UserSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\UserControls\UserSelector.designer.cs">
+      <Link>UserControls\UserSelector.designer.cs</Link>
+      <DependentUpon>UserSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Utilization.cs">
       <Link>Utilization.cs</Link>
     </Compile>
@@ -437,6 +451,10 @@
       <Link>Forms\FrmShortcutKeyEdit.resx</Link>
       <DependentUpon>FrmShortcutKeyEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmUsersRelations.resx">
+      <Link>Forms\FrmUsersRelations.resx</Link>
+      <DependentUpon>FrmUsersRelations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmUserStreamWatch.resx">
       <Link>Forms\FrmUserStreamWatch.resx</Link>
       <DependentUpon>FrmUserStreamWatch.cs</DependentUpon>
@@ -488,6 +506,10 @@
     <EmbeddedResource Include="..\StarlitTwit\UserControls\UctlDispTwitRow.resx">
       <Link>UserControls\UctlDispTwitRow.resx</Link>
       <DependentUpon>UctlDispTwitRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\UserControls\UserSelector.resx">
+      <Link>UserControls\UserSelector.resx</Link>
+      <DependentUpon>UserSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
