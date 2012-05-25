@@ -31,7 +31,6 @@
             this.btnInputName = new System.Windows.Forms.Button();
             this.chlsbUsers = new System.Windows.Forms.CheckedListBox();
             this.btnAddFriends = new System.Windows.Forms.Button();
-            this.txtInputName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnAddFollowers
@@ -68,6 +67,7 @@
             this.chlsbUsers.Name = "chlsbUsers";
             this.chlsbUsers.Size = new System.Drawing.Size(215, 270);
             this.chlsbUsers.TabIndex = 2;
+            this.chlsbUsers.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.chlsbUsers_ItemCheck);
             // 
             // btnAddFriends
             // 
@@ -81,21 +81,10 @@
             this.btnAddFriends.UseVisualStyleBackColor = true;
             this.btnAddFriends.Click += new System.EventHandler(this.btnAddFriends_Click);
             // 
-            // txtInputName
-            // 
-            this.txtInputName.Location = new System.Drawing.Point(8, 249);
-            this.txtInputName.Name = "txtInputName";
-            this.txtInputName.Size = new System.Drawing.Size(100, 19);
-            this.txtInputName.TabIndex = 4;
-            this.txtInputName.Visible = false;
-            this.txtInputName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtInputName_KeyDown);
-            this.txtInputName.Leave += new System.EventHandler(this.txtInputName_Leave);
-            // 
             // UserSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.txtInputName);
             this.Controls.Add(this.btnAddFriends);
             this.Controls.Add(this.chlsbUsers);
             this.Controls.Add(this.btnInputName);
@@ -104,7 +93,6 @@
             this.Size = new System.Drawing.Size(222, 322);
             this.Resize += new System.EventHandler(this.UserSelector_Resize);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -114,6 +102,5 @@
         private System.Windows.Forms.Button btnInputName;
         private System.Windows.Forms.CheckedListBox chlsbUsers;
         private System.Windows.Forms.Button btnAddFriends;
-        private System.Windows.Forms.TextBox txtInputName;
     }
 }

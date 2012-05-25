@@ -142,6 +142,13 @@
       <Link>Forms\FrmGetTweet.designer.cs</Link>
       <DependentUpon>FrmGetTweet.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmInputName.cs">
+      <Link>Forms\FrmInputName.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmInputName.designer.cs">
+      <Link>Forms\FrmInputName.designer.cs</Link>
+      <DependentUpon>FrmInputName.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmInputRegex.cs">
       <Link>Forms\FrmInputRegex.cs</Link>
       <SubType>Form</SubType>
@@ -192,6 +199,7 @@
     </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmUsersRelations.cs">
       <Link>Forms\FrmUsersRelations.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmUsersRelations.designer.cs">
       <Link>Forms\FrmUsersRelations.designer.cs</Link>
@@ -386,6 +394,7 @@
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\UserSelector.cs">
       <Link>UserControls\UserSelector.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\StarlitTwit\UserControls\UserSelector.designer.cs">
       <Link>UserControls\UserSelector.designer.cs</Link>
@@ -426,6 +435,10 @@
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmGetTweet.resx">
       <Link>Forms\FrmGetTweet.resx</Link>
       <DependentUpon>FrmGetTweet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmInputName.resx">
+      <Link>Forms\FrmInputName.resx</Link>
+      <DependentUpon>FrmInputName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmInputRegex.resx">
       <Link>Forms\FrmInputRegex.resx</Link>

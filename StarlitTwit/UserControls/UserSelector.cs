@@ -11,19 +11,31 @@ namespace StarlitTwit
 {
     public partial class UserSelector : UserControl
     {
+        public event EventHandler<SelectedUserNamesChangingEventArgs> SelectedUserNamesChanging;
+
         //-------------------------------------------------------------------------------
-        #region コンストラクタ 
+        #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
         public UserSelector()
         {
             InitializeComponent();
+        }
+        #endregion (コンストラクタ)
 
-            if (!FrmMain.Twitter.IsAuthenticated()) {
+        //-------------------------------------------------------------------------------
+        #region #[override]OnLoad
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (FrmMain.Twitter != null && !FrmMain.Twitter.IsAuthenticated()) {
                 btnAddFollowers.Enabled = btnAddFriends.Enabled = false;
             }
         }
-        #endregion (コンストラクタ)
+        #endregion (#[override]OnLoad)
 
         //-------------------------------------------------------------------------------
         #region MyName プロパティ：
@@ -48,7 +60,19 @@ namespace StarlitTwit
         }
         #endregion (MyName)
 
-        public Action<Exception> ErrorHandler { get; private set; }
+        //-------------------------------------------------------------------------------
+        #region SelectedUserNames プロパティ：
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
+        public IEnumerable<string> SelectedUserNames
+        {
+            get { return chlsbUsers.CheckedItems.Cast<string>(); }
+        }
+        #endregion (SelectedUserNames)
+
+        public Action<string> Notifier { get; set; }
 
         //-------------------------------------------------------------------------------
         #region UserSelector_Resize
@@ -91,50 +115,47 @@ namespace StarlitTwit
         #endregion (btnAddFriends_Click)
 
         //-------------------------------------------------------------------------------
-        #region txtInputName_Leave
-        //-------------------------------------------------------------------------------
-        //
-        private void txtInputName_Leave(object sender, EventArgs e)
-        {
-            GetAndAddSpecifiedUserOfTextBox();
-        }
-        #endregion (txtInputName_Leave)
-        //-------------------------------------------------------------------------------
-        #region txtInputName_KeyDown
-        //-------------------------------------------------------------------------------
-        //
-        private void txtInputName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.Enter) {
-                txtInputName.Visible = false; // leaveイベント発生
-            }
-        }
-        #endregion (txtInputName_KeyDown)
-
-        //-------------------------------------------------------------------------------
         #region btnInputName_Click 名前入力
         //-------------------------------------------------------------------------------
         //
         private void btnInputName_Click(object sender, EventArgs e)
         {
-            int index = chlsbUsers.Items.Add("");
-            Rectangle r = chlsbUsers.GetItemRectangle(index);
-            
-            txtInputName.Location = new Point(r.X, r.Y + r.Height / 2 - txtInputName.Height / 2);
-            txtInputName.Width = r.Width;
-            txtInputName.Visible = true;
-            txtInputName.Focus();
+            using (FrmInputName frm = new FrmInputName()) {
+                if (frm.ShowDialog(this) == DialogResult.OK) {
+                    GetAndAddSpecifiedUserOfTextBox(frm.UserName);
+                }
+            }
         }
         #endregion (btnInputName_Click)
+
+        //-------------------------------------------------------------------------------
+        #region chlsbUsers_ItemCheck アイテムのチェックが変更された場合
+        //-------------------------------------------------------------------------------
+        //
+        private void chlsbUsers_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (SelectedUserNamesChanging != null) {
+                int num_selected = chlsbUsers.CheckedIndices.Count;
+                if (e.CurrentValue == CheckState.Checked && e.NewValue == CheckState.Unchecked) {
+                    num_selected--;
+                }
+                else if (e.CurrentValue == CheckState.Unchecked && e.NewValue == CheckState.Checked) {
+                    num_selected++;
+                }
+
+                SelectedUserNamesChanging(this, new SelectedUserNamesChangingEventArgs(num_selected));
+            }
+        }
+        #endregion (chlsbUsers_ItemCheck)
 
         //-------------------------------------------------------------------------------
         #region +AddSpecifiedUser ユーザー名を指定して追加
         //-------------------------------------------------------------------------------
         //
-        public void AddSpecifiedUser(string screen_name)
+        public bool AddSpecifiedUser(string screen_name)
         {
             UserProfile prof = FrmMain.Twitter.users_show(screen_name: screen_name);
-            AddUser(prof.ScreenName, true);
+            return AddUser(prof.ScreenName, true);
         }
         #endregion (AddSpecifiedUser)
         //-------------------------------------------------------------------------------
@@ -147,25 +168,35 @@ namespace StarlitTwit
         private int _followers_current_cursor = -1;
         private void GetFollowers()
         {
+            if (Notifier != null) { Notifier("フォロワー取得中..."); }
             lock (_objlock_followers) {
-                if (_followers == null || _followers_current_cursor == _followers.Length) {
-                    var followers_data = FrmMain.Twitter.followers_ids(true, cursor: _follower_next_cursor);
+                try {
+                    if (_followers == null || _followers_current_cursor == _followers.Length) {
+                        var followers_data = FrmMain.Twitter.followers_ids(true, cursor: _follower_next_cursor);
 
-                    _followers = followers_data.Data.ToArray();
-                    _follower_next_cursor = followers_data.NextCursor;
-                    _followers_current_cursor = 0;
+                        _followers = followers_data.Data.ToArray();
+                        _follower_next_cursor = followers_data.NextCursor;
+                        _followers_current_cursor = 0;
+                    }
+
+                    int index = _followers_current_cursor;
+                    long[] ids = Utilization.SliceArray(_followers, ref index, 100);
+                    var profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                    _followers_current_cursor = index;
+                    bool appendEnable = (_follower_next_cursor != 0 || _followers_current_cursor < _followers.Length);
+
+                    foreach (var prof in profiles) {
+                        AddUser(prof.ScreenName, false);
+                    }
+
+                    btnAddFollowers.Enabled = appendEnable;
+                    if (Notifier != null) { Notifier((appendEnable) ? "フォロワーを追加しました。" : "全てのフォロワーを追加しました。"); }
                 }
-
-                int index = _followers_current_cursor;
-                long[] ids = Utilization.SliceArray(_followers, ref index, 100);
-                var profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
-                _followers_current_cursor = index;
-                bool appendEnable = (_follower_next_cursor != 0 || _followers_current_cursor < _followers.Length);
-
-                foreach (var prof in profiles) {
-                    AddUser(prof.ScreenName, false);
+                catch (TwitterAPIException ex) {
+                    if (Notifier != null) { Notifier(Utilization.SubTwitterAPIExceptionStr(ex)); }
                 }
             }
+
         }
         #endregion (GetFollowers)
         //-------------------------------------------------------------------------------
@@ -178,68 +209,85 @@ namespace StarlitTwit
         private int _friends_current_cursor = -1;
         private void GetFriends()
         {
+            if (Notifier != null) { Notifier("フレンド取得中..."); }
             lock (_objlock_friends) {
-                if (_friends == null || _friends_current_cursor == _friends.Length) {
-                    var friends_data = FrmMain.Twitter.friends_ids(true, cursor: _follower_next_cursor);
+                try {
+                    if (_friends == null || _friends_current_cursor == _friends.Length) {
+                        var friends_data = FrmMain.Twitter.friends_ids(true, cursor: _friend_next_cursor);
 
-                    _friends = friends_data.Data.ToArray();
-                    _friend_next_cursor = friends_data.NextCursor;
-                    _friends_current_cursor = 0;
+                        _friends = friends_data.Data.ToArray();
+                        _friend_next_cursor = friends_data.NextCursor;
+                        _friends_current_cursor = 0;
+                    }
+
+                    int index = _friends_current_cursor;
+                    long[] ids = Utilization.SliceArray(_friends, ref index, 100);
+                    var profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
+                    _friends_current_cursor = index;
+                    bool appendEnable = (_friend_next_cursor != 0 || _friends_current_cursor < _friends.Length);
+
+                    foreach (var prof in profiles) {
+                        AddUser(prof.ScreenName, false);
+                    }
+                    btnAddFriends.Enabled = appendEnable;
+                    if (Notifier != null) { Notifier((appendEnable) ? "フレンドを追加しました。" : "全てのフレンドを追加しました。"); }
                 }
-
-                int index = _friends_current_cursor;
-                long[] ids = Utilization.SliceArray(_friends, ref index, 100);
-                var profiles = Utilization.SortProfiles(FrmMain.Twitter.users_lookup(ids), ids);
-                _friends_current_cursor = index;
-                bool appendEnable = (_friend_next_cursor != 0 || _friends_current_cursor < _friends.Length);
-
-                foreach (var prof in profiles) {
-                    AddUser(prof.ScreenName, false);
+                catch (TwitterAPIException ex) {
+                    if (Notifier != null) { Notifier(Utilization.SubTwitterAPIExceptionStr(ex)); }
                 }
             }
         }
-        #endregion (GetFriends)        
+        #endregion (GetFriends)
 
         //-------------------------------------------------------------------------------
         #region -AddUser ユーザー追加
         //-------------------------------------------------------------------------------
         //
-        private void AddUser(string user, bool warning_in_case_of_dup)
+        private bool AddUser(string user, bool warning_in_case_of_dup)
         {
             lock (this) {
-                if (warning_in_case_of_dup && chlsbUsers.Items.Contains(user)) {
-                    Message.ShowWarningMessage(string.Format("名前 {0} は既に存在します。", user));
-                    return;
+                if (chlsbUsers.Items.Contains(user)) {
+                    if (warning_in_case_of_dup) {
+                        Message.ShowWarningMessage(string.Format("名前 {0} は既に存在します。", user));
+                    }
+                    return false;
                 }
 
                 chlsbUsers.Items.Add(user);
+                return true;
             }
         }
         #endregion (AddUser)
 
         //-------------------------------------------------------------------------------
-        #region -GetAndAddSpecifiedUserOfTextBox 
+        #region -GetAndAddSpecifiedUserOfTextBox
         //-------------------------------------------------------------------------------
         //
-        private void GetAndAddSpecifiedUserOfTextBox()
+        private void GetAndAddSpecifiedUserOfTextBox(string name)
         {
-            txtInputName.Visible = false;
-            chlsbUsers.Items.RemoveAt(chlsbUsers.Items.Count - 1);
-            if (txtInputName.Text.Length > 0) {
-                try {
-                    AddSpecifiedUser(txtInputName.Text);
-                }
-                catch (TwitterAPIException ex) {
-                    if (ex.ErrorStatusCode == 404) { // Unknown User
-                        Message.ShowWarningMessage("存在しないユーザーです。");
-                    }
-                    else {
-                        if (ErrorHandler != null) { ErrorHandler(ex); }
-                    }
-                    return;
-                }
+            try {
+                bool successed = AddSpecifiedUser(name);
+                if (successed && Notifier != null) { Notifier("ユーザを追加しました"); }
             }
+            catch (TwitterAPIException ex) {
+                if (ex.ErrorStatusCode == 404) { // Unknown User
+                    Message.ShowWarningMessage("存在しないユーザーです。");
+                }
+                else {
+                    if (Notifier != null) { Notifier(Utilization.SubTwitterAPIExceptionStr(ex)); }
+                }
+                return;
+            }
+            
         }
         #endregion (GetAndAddSpecifiedUserOfTextBox)
+    }
+
+    public class SelectedUserNamesChangingEventArgs : EventArgs
+    {
+        public int SelectedItemsNum { get; private set; }
+        public SelectedUserNamesChangingEventArgs(int num_selected) {
+            SelectedItemsNum = num_selected;
+        }
     }
 }
