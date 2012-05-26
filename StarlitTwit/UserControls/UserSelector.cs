@@ -31,8 +31,13 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
 
-            if (FrmMain.Twitter != null && !FrmMain.Twitter.IsAuthenticated()) {
-                btnAddFollowers.Enabled = btnAddFriends.Enabled = false;
+            if (FrmMain.Twitter != null) {
+                if (!FrmMain.Twitter.IsAuthenticated()) {
+                    btnAddFollowers.Enabled = btnAddFriends.Enabled = false;
+                }
+                else {
+                    AddUser(FrmMain.Twitter.ScreenName, false);
+                }
             }
         }
         #endregion (#[override]OnLoad)
@@ -278,7 +283,7 @@ namespace StarlitTwit
                 }
                 return;
             }
-            
+
         }
         #endregion (GetAndAddSpecifiedUserOfTextBox)
     }
@@ -286,7 +291,8 @@ namespace StarlitTwit
     public class SelectedUserNamesChangingEventArgs : EventArgs
     {
         public int SelectedItemsNum { get; private set; }
-        public SelectedUserNamesChangingEventArgs(int num_selected) {
+        public SelectedUserNamesChangingEventArgs(int num_selected)
+        {
             SelectedItemsNum = num_selected;
         }
     }

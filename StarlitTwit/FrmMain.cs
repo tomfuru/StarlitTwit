@@ -1199,7 +1199,7 @@ namespace StarlitTwit
         //
         private void tsmiUsersRelationships_Click(object sender, EventArgs e)
         {
-            FrmUsersRelations frm = new FrmUsersRelations();
+            FrmUsersRelations frm = new FrmUsersRelations(imageListWrapper);
             frm.Show(this);
         }
         #endregion (tsmiUsersRelationships_Click)

@@ -421,6 +421,34 @@ namespace StarlitTwit
         #endregion (GetImageFromURL)
 
         //-------------------------------------------------------------------------------
+        #region +[static]GetProfileDescriptionString プロファイルを説明する文字列を生成しｍさう
+        //-------------------------------------------------------------------------------
+        //
+        public static string GetProfileDescriptionString(UserProfile p)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (p.Protected) { sb.AppendLine("◆非公開アカウント"); }
+            sb.Append("●ユーザー名：");
+            sb.AppendLine(p.ScreenName);
+            sb.Append("●名称：");
+            sb.AppendLine(p.UserName);
+            sb.AppendLine("●位置情報");
+            sb.AppendLine(p.Location);
+            sb.AppendLine("●自己紹介：");
+            sb.AppendLine(p.Description);
+            sb.Append("●フォロー数：");
+            sb.AppendLine(p.FriendNum.ToString());
+            sb.Append("●フォロワー数：");
+            sb.AppendLine(p.FollowerNum.ToString());
+            sb.Append("●発言数：");
+            sb.AppendLine(p.StatusNum.ToString());
+            sb.Append("●お気に入り数：");
+            sb.Append(p.FavoriteNum.ToString());
+
+            return sb.ToString();
+        }
+        #endregion (GetProfileDescriptionString)
+        //-------------------------------------------------------------------------------
         #region +[static]SubTwitterAPIExceptionStr TwitterAPI例外の文字列を返します。
         //-------------------------------------------------------------------------------
         //
