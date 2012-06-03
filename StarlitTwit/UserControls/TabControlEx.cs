@@ -400,6 +400,21 @@ namespace StarlitTwit
         #endregion (#[override]OnMouseDown)
 
         //-------------------------------------------------------------------------------
+        #region #[override]OnMouseWheel
+        //-------------------------------------------------------------------------------
+        //
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+
+            if (GetTabPageByPoint(e.Location) != null) {
+                int newIndex = (this.SelectedIndex - e.Delta / 120) % this.TabCount;
+                this.SelectedIndex = newIndex + ((newIndex < 0) ? this.TabCount : 0);
+            }
+        }
+        #endregion (#[override]OnMouseWheel)
+
+        //-------------------------------------------------------------------------------
         #region -ClearDragTarget
         //-------------------------------------------------------------------------------
         //
