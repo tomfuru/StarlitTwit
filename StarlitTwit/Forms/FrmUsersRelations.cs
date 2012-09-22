@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace StarlitTwit
 {
@@ -15,6 +16,7 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         #region Variables
         //-------------------------------------------------------------------------------
+        private readonly FrmMain _mainForm;
         private string[] _userNames = null;
 
         private long[] _follower_ids = null;
@@ -39,10 +41,11 @@ namespace StarlitTwit
         #region コンストラクタ
         //-------------------------------------------------------------------------------
         //
-        public FrmUsersRelations(ImageListWrapper imgListWrapper)
+        public FrmUsersRelations(FrmMain mainForm, ImageListWrapper imgListWrapper)
         {
             InitializeComponent();
 
+            _mainForm = mainForm;
             _imageListWrapper = imgListWrapper;
             lstvCommonFollower.SmallImageList = imgListWrapper.ImageList;
             lstvCommonFriend.SmallImageList = imgListWrapper.ImageList;
@@ -75,7 +78,8 @@ namespace StarlitTwit
         private void Image_Animate(object sender, EventArgs e)
         {
             try {
-                this.Invoke((Action)(() => {
+                this.Invoke((Action)(() =>
+                {
                     lstvCommonFollower.Invalidate();
                     lstvCommonFriend.Invalidate();
                 }));
@@ -167,13 +171,15 @@ namespace StarlitTwit
         //-------------------------------------------------------------------------------
         private void userSelector_SelectedUserNamesChanging(object sender, SelectedUserNamesChangingEventArgs e)
         {
-            btnDisplayRelations.Enabled = (e.SelectedItemsNum > 1);
+            if (btnDisplayRelations.Enabled = (e.SelectedItemsNum > 0)) {
+                btnDisplayRelations.Text = (e.SelectedItemsNum == 1) ? "片思い表示" : "関係表示";
+            }
         }
         //-------------------------------------------------------------------------------
         #endregion (userSelector_SelectedUserNamesChanging)
 
         //-------------------------------------------------------------------------------
-        #region btnDisplayRelations_Click 関係表示ボタン
+        #region btnDisplayRelations_Click 関係表示/片思い表示ボタン
         //-------------------------------------------------------------------------------
         //
         private void btnDisplayRelations_Click(object sender, EventArgs e)
@@ -188,32 +194,62 @@ namespace StarlitTwit
             _profile_friends.Clear();
             lstvCommonFollower.Items.Clear();
             lstvCommonFriend.Items.Clear();
-            
+
             _userNames = userSelector.SelectedUserNames.ToArray();
 
-            Utilization.InvokeTransaction(() =>
-                {
-                    try {
-                        this.Invoke((Action)(() => tsslabel.Text = "フォロワーデータ取得中..."));
-                        GetCommonFollowers();
-                        this.Invoke((Action)(() => lblCommonFollowerNum.Text = _follower_ids.Length.ToString()));
-                        AddFollowerProfiles();
-                        this.Invoke((Action)(() => tsslabel.Text = "フレンドデータ取得中..."));
-                        GetCommonFriends();
-                        this.Invoke((Action)(() => lblCommonFriendsNum.Text = _friend_ids.Length.ToString()));
-                        AddFriendProfiles();
-                        this.Invoke((Action)(() => 
+            if (_userNames.Length == 1) {
+                Utilization.InvokeTransaction(() =>
+                    {
+                        try {
+                            this.Invoke((Action)(() => tsslabel.Text = "データ取得中..."));
+                            GetOneSideUsers();
+
+                            this.Invoke((Action)(() =>
+                                {
+                                    lblCommonFollowerNum.Text = "片思われ数：" + _follower_ids.Length.ToString();
+                                    lblCommonFriendsNum.Text = "片思い数：" + _friend_ids.Length.ToString();
+                                }));
+
+                            AddFollowerProfiles();
+                            AddFriendProfiles();
+                            this.Invoke((Action)(() =>
                             {
-                                tsslabel.Text = "データ取得完了しました"; 
+                                tsslabel.Text = "データ取得完了しました";
                                 _all_read_follower = (_follower_ids.Length == _next_follower);
                                 btnAppendFollower.Enabled = !_all_read_follower;
-                                _all_read_friend = (_friend_ids.Length == _next_follower);
+                                _all_read_friend = (_friend_ids.Length == _next_friend);
                                 btnAppendFriends.Enabled = !_all_read_friend;
                                 btnDisplayRelations.Enabled = true;
                             }));
-                    }
-                    catch (InvalidOperationException) { }
-                });
+                        }
+                        catch (InvalidOperationException) { }
+                    });
+            }
+            else {
+                Utilization.InvokeTransaction(() =>
+                    {
+                        try {
+                            this.Invoke((Action)(() => tsslabel.Text = "フォロワーデータ取得中..."));
+                            GetCommonFollowers();
+                            this.Invoke((Action)(() => lblCommonFollowerNum.Text = "共通フォロワー数：" + _follower_ids.Length.ToString()));
+                            AddFollowerProfiles();
+                            this.Invoke((Action)(() => tsslabel.Text = "フレンドデータ取得中..."));
+                            GetCommonFriends();
+                            this.Invoke((Action)(() => lblCommonFriendsNum.Text = "共通フレンド数：" + _friend_ids.Length.ToString()));
+                            AddFriendProfiles();
+                            this.Invoke((Action)(() =>
+                                {
+                                    tsslabel.Text = "データ取得完了しました";
+                                    _all_read_follower = (_follower_ids.Length == _next_follower);
+                                    btnAppendFollower.Enabled = !_all_read_follower;
+                                    _all_read_friend = (_friend_ids.Length == _next_friend);
+                                    btnAppendFriends.Enabled = !_all_read_friend;
+                                    btnDisplayRelations.Enabled = true;
+                                }));
+                        }
+                        catch (InvalidOperationException) { }
+                    });
+            }
         }
         #endregion (btnDisplayRelations_Click)
 
@@ -234,7 +270,7 @@ namespace StarlitTwit
                         this.Invoke((Action)(() =>
                         {
                             tsslabel.Text = "データ取得完了しました";
-                            
+
                             lock (_lock_displayrelationbtn) {
                                 _all_read_follower = (_follower_ids.Length == _next_follower);
                                 btnAppendFollower.Enabled = !_all_read_follower;
@@ -279,6 +315,211 @@ namespace StarlitTwit
             });
         }
         #endregion (btnAppendFriends_Click)
+
+        //-------------------------------------------------------------------------------
+        #region menuRow_Opening メニューオープン時
+        //-------------------------------------------------------------------------------
+        //
+        private void menuRow_Opening(object sender, CancelEventArgs e)
+        {
+            ListView lstvList = (sender as ContextMenuStrip).SourceControl as ListView;
+
+            if (lstvList.SelectedItems.Count == 0) { e.Cancel = true; return; }
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+
+            bool isBlocking = false;
+            bool isMe = (prof.UserID == FrmMain.Twitter.ID);
+
+            tsmiFollow.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent && !prof.Following;
+            tsmiRemove.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent && prof.Following;
+
+            tsmiBlock.Visible = !isMe;
+            tsmiUnblock.Visible = !isMe && isBlocking;
+
+            tsSepUnderFollow.Visible = !isMe && !isBlocking && !prof.FolllowRequestSent;
+            tsSepOverBlock.Visible = !isMe && isBlocking;
+        }
+        #endregion (menuRow_Opening)
+        //-------------------------------------------------------------------------------
+        #region tsmiFollow_Click フォロークリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiFollow_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            if (!FrmMain.SettingsData.ConfirmDialogFollow
+             || Message.ShowQuestionMessage("フォローします。") == System.Windows.Forms.DialogResult.Yes) {
+                UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+                bool? ret = Utilization.Follow(prof.ScreenName);
+                if (!ret.HasValue) {
+                    lstvList.SelectedItems[0].SubItems[3].Text = "リクエスト済";
+                    ((UserProfile)lstvList.SelectedItems[0].Tag).FolllowRequestSent = true;
+                }
+                else if (ret.Value) {
+                    //Debug.Assert(FormType == FrmFollowType.Follower, "異常な値");
+                    lstvList.SelectedItems[0].SubItems[3].Text = "フォロー中";
+                    ((UserProfile)lstvList.SelectedItems[0].Tag).Following = true;
+                }
+            }
+        }
+        #endregion (tsmiFollow_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiRemove_Click フォロー解除クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiRemove_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            if (!FrmMain.SettingsData.ConfirmDialogFollow
+             || Message.ShowQuestionMessage("フォローを解除します。") == System.Windows.Forms.DialogResult.Yes) {
+                UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+                if (Utilization.RemoveFollow(prof.ScreenName)) {
+                    lstvList.SelectedItems[0].SubItems[3].Text = "";
+                    ((UserProfile)lstvList.SelectedItems[0].Tag).Following = false;
+                }
+            }
+        }
+        #endregion (tsmiRemove_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDispFriend_Click フレンドを見るクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispFriend_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, FrmDispUsers.EFormType.UserFriend,
+                                         ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
+        }
+        #endregion (tsmiDispFriend_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDispFollower_Click フォロワーを見るクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDispFollower_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            Utilization.ShowUsersForm(_mainForm, _imageListWrapper, FrmDispUsers.EFormType.UserFollower,
+                                         ((UserProfile)lstvList.SelectedItems[0].Tag).ScreenName);
+        }
+        #endregion (tsmiDispFollower_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplayUserProfile_Click プロフィール表示クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplayUserProfile_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowProfileForm(_mainForm, false, prof);
+        }
+        #endregion (tsmiDisplayUserProfile_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiDisplayUserTweet_Click 発言表示クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiDisplayUserTweet_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            Utilization.ShowStatusesForm(_mainForm, FrmDispStatuses.EFormType.UserStatus, prof.ScreenName);
+        }
+        #endregion (tsmiDisplayUserTweet_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiOpenBrowserUserHome_Click ホームをブラウザで開くクリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiOpenBrowserUserHome_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+
+            StringBuilder sbUrl = new StringBuilder();
+            sbUrl.Append(Twitter.URLtwi);
+            sbUrl.Append(prof.ScreenName);
+
+            Utilization.OpenBrowser(sbUrl.ToString(), FrmMain.SettingsData.UseInternalWebBrowser);
+        }
+        #endregion (tsmiOpenBrowserUserHome_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiBlock_Click ブロッククリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiBlock_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            if (!FrmMain.SettingsData.ConfirmDialogBlock
+             || Message.ShowQuestionMessage("ブロックします。") == System.Windows.Forms.DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.blocks_create(screen_name: prof.ScreenName);
+                }
+                catch (TwitterAPIException) { tsslabel.Text = "ブロックに失敗しました。"; return; }
+                tsslabel.Text = "ブロックを行いました。";
+            }
+        }
+        #endregion (tsmiBlock_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiUnblock_Click ブロック解除クリック時
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiUnblock_Click(object sender, EventArgs e)
+        {
+            ListView lstvList = ((sender as ToolStripMenuItem).Owner as ContextMenuStrip).SourceControl as ListView;
+
+            UserProfile prof = (UserProfile)lstvList.SelectedItems[0].Tag;
+            if (!FrmMain.SettingsData.ConfirmDialogBlock
+             || Message.ShowQuestionMessage("ブロック解除します。") == System.Windows.Forms.DialogResult.Yes) {
+                try {
+                    FrmMain.Twitter.blocks_destroy(screen_name: prof.ScreenName);
+                }
+                catch (TwitterAPIException) { tsslabel.Text = "ブロック解除に失敗しました。"; return; }
+            }
+        }
+        #endregion (tsmiUnblock_Click)
+
+        //-------------------------------------------------------------------------------
+        #region -GetOneSideUsers 片思いデータリスト取得
+        //-------------------------------------------------------------------------------
+        //
+        private void GetOneSideUsers()
+        {
+            Debug.Assert(_userNames.Length == 1);
+
+            IEnumerable<long> followers = null;
+            IEnumerable<long> friends = null;
+            // Followers
+            {
+                long cursor = -1;
+                do {
+                    var users = FrmMain.Twitter.followers_ids(FrmMain.Twitter.IsAuthenticated(), screen_name: _userNames[0], cursor: cursor);
+                    cursor = users.NextCursor;
+                    if (followers == null) { followers = users.Data; }
+                    else { followers = followers.Concat(users.Data); }
+                } while (cursor != 0);
+            }
+            // Friends
+            {
+                long cursor = -1;
+                do {
+                    var users = FrmMain.Twitter.friends_ids(FrmMain.Twitter.IsAuthenticated(), screen_name: _userNames[0], cursor: cursor);
+                    cursor = users.NextCursor;
+                    if (friends == null) { friends = users.Data; }
+                    else { friends = friends.Concat(users.Data); }
+                } while (cursor != 0);
+            }
+
+            _follower_ids = followers.Except(friends).ToArray();
+            _friend_ids = friends.Except(followers).ToArray();
+        }
+        #endregion (GetOneSideUsers)
 
         //-------------------------------------------------------------------------------
         #region -GetCommonFollowers 共通フォロワーリスト取得

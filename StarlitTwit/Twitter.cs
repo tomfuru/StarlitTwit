@@ -2545,12 +2545,17 @@ namespace StarlitTwit
             }
 
             using (Stream resStream = res.GetResponseStream()) {
-                using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
+                using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8)) {
+                    string s = "";
                     try {
-                        return XElement.Load(reader);
+                        s = reader.ReadToEnd();
+
+                        MemoryStream m = new MemoryStream(Encoding.UTF8.GetBytes(s));
+                        return XElement.Load(m);
                     }
                     catch (XmlException ex) {
-                       // Log.DebugLog(ex);
+                        Log.DebugLog(ex);
+                        Log.DebugLog(s);
                         throw new TwitterAPIException(1000, ex.Message);
                     }
                     catch (WebException ex) {

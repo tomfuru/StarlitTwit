@@ -77,6 +77,18 @@ namespace StarlitTwit
         }
         #endregion (SelectedUserNames)
 
+        //-------------------------------------------------------------------------------
+        #region SelectedUserNum プロパティ：
+        //-------------------------------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
+        public int SelectedUserNum
+        {
+            get { return chlsbUsers.SelectedIndices.Count; }
+        }
+        #endregion (SelectedUserNum)
+
         public Action<string> Notifier { get; set; }
 
         //-------------------------------------------------------------------------------
