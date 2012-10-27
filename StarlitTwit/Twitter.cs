@@ -2688,6 +2688,7 @@ namespace StarlitTwit
             req.Method = method;
             req.ContentType = "application/x-www-form-urlencoded";
             req.Timeout = 10000;
+            req.ContentLength = 0;
 
             WebResponse res;
             try {
