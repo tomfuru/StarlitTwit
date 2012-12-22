@@ -571,6 +571,14 @@ namespace StarlitTwit
         }
         #endregion (tsmiDispRetweeter_Click)
         //-------------------------------------------------------------------------------
+        #region tsmiReGetTweet_Click ツイートの再取得メニュークリック時
+        //-------------------------------------------------------------------------------
+        private void tsmiReGetTweet_Click(object sender, EventArgs e)
+        {
+            OnRowContextMenu_Click(new TwitRowMenuEventArgs(RowEventType.ReGetTweet, SelectedTwitData));
+        }
+        //-------------------------------------------------------------------------------
+        #endregion (tsmiReGetTweet_Click)
         #region tsmiOlderData_Click より古いデータメニュークリック時
         //-------------------------------------------------------------------------------
         //
@@ -1954,6 +1962,8 @@ namespace StarlitTwit
         Delete,
         /// <summary>Retweetしたユーザー メニュー</summary>
         Retweeter,
+        /// <summary>ツイートの再取得 メニュー</summary>
+        ReGetTweet,
         /// <summary>より古い発言取得 メニュー</summary>
         OlderTweetRequest,
         /// <summary>より新しい発言取得 メニュー</summary>

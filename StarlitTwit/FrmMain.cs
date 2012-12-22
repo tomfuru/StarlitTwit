@@ -750,6 +750,9 @@ namespace StarlitTwit
                     TwitMenu_Retweeter_Click(sender, e);
                     break;
                 //-------------------------------------------------------------------------------
+                case RowEventType.ReGetTweet:
+                    TwitMenu_ReGetTweet(sender, e);
+                    break;
                 case RowEventType.OlderTweetRequest:
                     TwitMenu_OlderDataRequest_Click(sender, e);
                     break;
@@ -900,6 +903,32 @@ namespace StarlitTwit
             Utilization.ShowUsersForm(this, imageListWrapper, FrmDispUsers.EFormType.Retweeter, retweet_id: e.TwitData.MainTwitData.StatusID);
         }
         #endregion (TwitMenu_Retweeter_Click)
+        //-------------------------------------------------------------------------------
+        #region TwitMenu_ReGetTweet ツイートの再取得
+        //-------------------------------------------------------------------------------
+        //
+        private void TwitMenu_ReGetTweet(object sender, TwitRowMenuEventArgs e)
+        {
+            UctlDispTwit uctldisp = (UctlDispTwit)sender;
+            // 1つを別スレッドで取得
+            InvokeTweetGet(
+                (uctldisp_, status_id) =>
+                {
+                    TwitData tw;
+                    bool res = Utilization.GetTwitDataFromID(status_id, out tw);
+
+                    this.Invoke((Action)(() =>
+                    {
+                        uctldisp.AddData(tw.AsEnumerable());
+                        tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                    }));
+
+                    return res;
+                },
+                e.TwitData.StatusID, uctldisp, STR_GETTING_STATUS
+            );
+        }
+        #endregion (TwitMenu_ReGetTweet)
         //-------------------------------------------------------------------------------
         #region TwitMenu_OlderDataRequest_Click より古い発言取得
         //-------------------------------------------------------------------------------
