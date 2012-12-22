@@ -3011,6 +3011,7 @@ namespace StarlitTwit
                     IconURL = el.Element("user").Element("profile_image_url").Value,
                     UserScreenName = el.Element("user").Element("screen_name").Value,
                     UserProtected = bool.Parse(el.Element("user").Element("protected").Value),
+                    RetweetedCount = int.Parse(el.Element("retweet_count").Value),
                     RTTwitData = (notRT) ? null
                         : new TwitData() {
                             TwitType = StarlitTwit.TwitType.Normal,
@@ -3902,6 +3903,8 @@ namespace StarlitTwit
         public EntityData[] Entities;
         /// <summary>URLデータ</summary>
         public URLData[] UrlData;
+        /// <summary>RTされた数</summary>
+        public int RetweetedCount;
 
         // 発言ユーザー情報
         /// <summary>ユーザーID</summary>

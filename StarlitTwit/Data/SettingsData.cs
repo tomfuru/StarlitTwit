@@ -19,9 +19,9 @@ namespace StarlitTwit
         #region 定数
         //-------------------------------------------------------------------------------
         /// <summary>名前のデフォルトフォーマット</summary>
-        public const string DEFAULT_NAMEFORMAT = @"$Locked$$ScreenName$/$Name$ [$DateTime(MM/dd HH:mm:ss)$] (from $Source$)$Favorited$";
+        public const string DEFAULT_NAMEFORMAT = @"$Locked$$ScreenName$/$Name$ [$DateTime(MM/dd HH:mm:ss)$] (from $Source$)$Favorited$%(Retweeted by $RTCount$ people)%";
         /// <summary>名前のリツイート時デフォルトフォーマット</summary>
-        public const string DEFAULT_NAMEFOEMAT_RETWEET = @"$ScreenName$/$Name$(RT:$Retweeter$[$DateTime(HH:mm:ss)$])[$RTDateTime(MM/dd HH:mm:ss)$] (from $Source$)$Favorited$";
+        public const string DEFAULT_NAMEFOEMAT_RETWEET = @"$ScreenName$/$Name$(RT:$Retweeter$[$DateTime(HH:mm:ss)$])[$RTDateTime(MM/dd HH:mm:ss)$] (from $Source$)$Favorited$%(Retweeted by $RTCount$ people)%";
         /// <summary>名前のダイレクトメッセージ時デフォルトフォーマット</summary>
         public const string DEFAULT_NAMEFOEMAT_DM = @"$ScreenName$/$Name$ [$DateTime(yyyy/MM/dd HH:mm:ss)$] (to $Recipient$)";
         /// <summary>名前のデフォルトフォーマット</summary>

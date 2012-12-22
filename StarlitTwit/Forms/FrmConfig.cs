@@ -442,7 +442,8 @@ namespace StarlitTwit
                 UserName = "つい",
                 UserScreenName = "twi",
                 Time = dt,
-                Source = "web"
+                Source = "web",
+                RetweetedCount = 2
             };
             lblNameFormatRTSample.Tag = new TwitData() {
                 TwitType = TwitType.Retweet,
@@ -453,7 +454,8 @@ namespace StarlitTwit
                     UserName = "つい",
                     UserScreenName = "twi",
                     Source = "web"
-                }
+                },
+                RetweetedCount = 2
             };
             lblNameFormatDMSample.Tag = new TwitData() {
                 TwitType = TwitType.DirectMessage,
@@ -461,13 +463,15 @@ namespace StarlitTwit
                 UserScreenName = "twi",
                 DMScreenName = "twiapi",
                 Time = dt,
-                Source = "web"
+                Source = "web",
+                RetweetedCount = 2
             };
             lblNameFormatSearchSample.Tag = new TwitData() {
                 TwitType = TwitType.Search,
                 UserScreenName = "twi",
                 Time = dt,
-                Source = "web"
+                Source = "web",
+                RetweetedCount = 2
             };
 
             //-------------------------------------------------------------------------------

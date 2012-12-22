@@ -295,15 +295,10 @@ namespace StarlitTwit
         #endregion ((TwitData))
         #region (TwitData, string)
         //-------------------------------------------------------------------------------
-        /// <summary>
-        /// フォーマットを解釈して返します。
-        /// </summary>
-        /// <param name="twitdata">発言データ</param>
-        /// <param name="format">フォーマット</param>
-        /// <returns></returns>
         public static string InterpretFormat(TwitData twitdata, string format)
         {
             const char DOLLER = '$';
+            const char PERCENT = '%';
             const char PARENTHESIS_START = '(';
             const char PARENTHESIS_END = ')';
             const string LOCKED = "Locked";
@@ -311,6 +306,7 @@ namespace StarlitTwit
             const string NAME = "Name";
             const string SCREENNAME = "ScreenName";
             const string SOURCE = "Source";
+            const string RTCOUNT = "RTCount";
             const string DATETIME = "DateTime";
             const string RTDATETIME = "RTDateTime";
             const string RETWEETER = "Retweeter";
@@ -320,58 +316,79 @@ namespace StarlitTwit
             bool bIsRT = TwitData.IsRT(twitdata),
                  bIsDM = TwitData.IsDM(twitdata),
                  bIsSt = (twitdata.TwitType == TwitType.Search);
-            int iStart, iEnd, iBase = 0;
+            int iBase = 0;
             StringBuilder sb = new StringBuilder();
 
             while (true) {
-                iStart = formatRep.IndexOf(DOLLER, iBase);
-                iEnd = (iStart == formatRep.Length) ? -1 : formatRep.IndexOf(DOLLER, iStart + 1);
-                if (iStart == -1 || iEnd == -1) {
-                    sb.Append(formatRep.Substring(iBase));
-                    break;
-                }
-                sb.Append(formatRep.Substring(iBase, iStart - iBase));
+                bool endOfWhile = false;
+                int iEnd;
+                switch (formatRep[iBase])
+	            {
+                    case DOLLER: 
+                        iEnd = (iBase == formatRep.Length) ? -1 : formatRep.IndexOf(DOLLER, iBase + 1);
+                        if (iBase == -1 || iEnd == -1) { endOfWhile = true; break; }
 
-                string key = formatRep.Substring(iStart + 1, iEnd - iStart - 1);
-                if (!bIsSt && !bIsDM && !bIsRT && key.Equals(LOCKED)) {
-                    if (twitdata.UserProtected) { sb.Append(CHR_LOCKED); }
-                }
-                else if (!bIsSt && !bIsDM && key.Equals(FAVORITED)) {
-                    if (twitdata.Favorited) { sb.Append(CHR_FAVORITED); }
-                }
-                else if (!bIsSt && key.Equals(NAME)) {
-                    sb.Append(twitdata.MainTwitData.UserName);
-                }
-                else if (key.Equals(SCREENNAME)) {
-                    sb.Append(twitdata.MainTwitData.UserScreenName);
-                }
-                else if (!bIsDM && key.Equals(SOURCE)) {
-                    sb.Append(twitdata.MainTwitData.Source);
-                }
-                else if (bIsRT && key.Equals(RETWEETER)) {
-                    sb.Append(twitdata.UserScreenName);
-                }
-                else if (bIsDM && key.Equals(RECIPIENT)) {
-                    sb.Append(twitdata.DMScreenName);
-                }
-                else if (key.StartsWith(DATETIME)) {
-                    int ikStart = key.IndexOf(PARENTHESIS_START),
-                        ikEnd = key.IndexOf(PARENTHESIS_END);
-                    if (ikStart == DATETIME.Length && ikEnd == key.Length - 1) {
-                        string dateFormat = key.Substring(ikStart + 1, ikEnd - ikStart - 1);
-                        sb.Append(twitdata.Time.ToString(dateFormat));
-                    }
-                }
-                else if (bIsRT && key.StartsWith(RTDATETIME)) {
-                    int ikStart = key.IndexOf(PARENTHESIS_START),
-                        ikEnd = key.IndexOf(PARENTHESIS_END);
-                    if (ikStart == RTDATETIME.Length && ikEnd == key.Length - 1) {
-                        string dateFormat = key.Substring(ikStart + 1, ikEnd - ikStart - 1);
-                        sb.Append(twitdata.RTTwitData.Time.ToString(dateFormat));
-                    }
-                }
+                        string key = formatRep.Substring(iBase + 1, iEnd - iBase - 1);
+                        if (!bIsSt && !bIsDM && !bIsRT && key.Equals(LOCKED)) {
+                            if (twitdata.UserProtected) { sb.Append(CHR_LOCKED); }
+                        }
+                        else if (!bIsSt && !bIsDM && key.Equals(FAVORITED)) {
+                            if (twitdata.Favorited) { sb.Append(CHR_FAVORITED); }
+                        }
+                        else if (!bIsSt && key.Equals(NAME)) {
+                            sb.Append(twitdata.MainTwitData.UserName);
+                        }
+                        else if (key.Equals(SCREENNAME)) {
+                            sb.Append(twitdata.MainTwitData.UserScreenName);
+                        }
+                        else if (!bIsDM && key.Equals(SOURCE)) {
+                            sb.Append(twitdata.MainTwitData.Source);
+                        }
+                        else if (bIsRT && key.Equals(RETWEETER)) {
+                            sb.Append(twitdata.UserScreenName);
+                        }
+                        else if (bIsDM && key.Equals(RECIPIENT)) {
+                            sb.Append(twitdata.DMScreenName);
+                        }
+                        else if (key.StartsWith(RTCOUNT)) {
+                            sb.Append(twitdata.RetweetedCount);
+                        }
+                        else if (key.StartsWith(DATETIME)) {
+                            int ikStart = key.IndexOf(PARENTHESIS_START),
+                                ikEnd = key.IndexOf(PARENTHESIS_END);
+                            if (ikStart == DATETIME.Length && ikEnd == key.Length - 1) {
+                                string dateFormat = key.Substring(ikStart + 1, ikEnd - ikStart - 1);
+                                sb.Append(twitdata.Time.ToString(dateFormat));
+                            }
+                        }
+                        else if (bIsRT && key.StartsWith(RTDATETIME)) {
+                            int ikStart = key.IndexOf(PARENTHESIS_START),
+                                ikEnd = key.IndexOf(PARENTHESIS_END);
+                            if (ikStart == RTDATETIME.Length && ikEnd == key.Length - 1) {
+                                string dateFormat = key.Substring(ikStart + 1, ikEnd - ikStart - 1);
+                                sb.Append(twitdata.RTTwitData.Time.ToString(dateFormat));
+                            }
+                        }
+                        break;
+                    case PERCENT:
+                        iEnd = (iBase == formatRep.Length) ? -1 : formatRep.IndexOf(PERCENT, iBase + 1);
+                        if (iBase == -1 || iEnd == -1) { endOfWhile = true; break; }
+
+                        if (iEnd - iBase > 1 &&  twitdata.RetweetedCount > 0) {
+                            string sentence = formatRep.Substring(iBase + 1, iEnd - iBase - 1);
+                            sb.Append(InterpretFormat(twitdata, sentence));
+                        }
+                        break;
+		            default:
+                        iEnd = iBase;
+                        sb.Append(formatRep[iBase]);
+                        break;
+	            }
 
                 iBase = iEnd + 1;
+                if (iBase == formatRep.Length) { endOfWhile = true; }
+
+                if (endOfWhile) { break; }
             }
             return sb.ToString();
         }
