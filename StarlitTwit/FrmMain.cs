@@ -2523,7 +2523,7 @@ namespace StarlitTwit
             }
             this.Invoke((Action)(() =>
             {
-                uctldisp.AddData(d);
+                uctldisp.AddData(d, true);
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
             }));
 
@@ -2586,7 +2586,7 @@ namespace StarlitTwit
             }
             this.Invoke((Action)(() =>
             {
-                uctldisp.AddData(d);
+                uctldisp.AddData(d, true);
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
             }));
 
