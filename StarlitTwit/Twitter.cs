@@ -56,6 +56,7 @@ namespace StarlitTwit
         private const string GET = "GET";
         private const string POST = "POST";
         private const string DELETE = "DELETE";
+        private const string XML = "xml";
         public static readonly string URLtwi;
         public static readonly string URLapi;
         public static readonly string URLapiUpload;
@@ -2544,6 +2545,11 @@ namespace StarlitTwit
                 API_Rest = int.Parse(tmp[tmp.Length - 1]);
             }
 
+            // XML以外が帰ってきた時はエラー
+            if (!res.ContentType.Contains(XML)) {
+                throw new TwitterAPIException(1000, "Xmlデータ以外のデータを受信しました。");
+            }
+
             using (Stream resStream = res.GetResponseStream()) {
                 using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8)) {
                     string s = "";
@@ -2576,6 +2582,11 @@ namespace StarlitTwit
         private XElement GetByAPIJson(string uri)
         {
             WebResponse res = RequestWeb(uri, GET, false);
+
+            // XML以外が帰ってきた時はエラー
+            if (!res.ContentType.Contains(XML)) {
+                throw new TwitterAPIException(1000, "Xmlデータ以外のデータを受信しました。");
+            }
 
             using (Stream resStream = res.GetResponseStream()) {
                 using (XmlDictionaryReader xmldreader = JsonReaderWriterFactory.CreateJsonReader(resStream, XmlDictionaryReaderQuotas.Max)) {
@@ -2629,6 +2640,11 @@ namespace StarlitTwit
         {
             WebResponse res = RequestWeb(uri, POST, false);
 
+            // XML以外が帰ってきた時はエラー
+            if (!res.ContentType.Contains(XML)) {
+                throw new TwitterAPIException(1000, "Xmlデータ以外のデータを受信しました。");
+            }
+
             using (Stream resStream = res.GetResponseStream()) {
                 using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
                     //string s = reader.ReadToEnd();
@@ -2657,6 +2673,11 @@ namespace StarlitTwit
         private XElement DeleteToAPI(string uri)
         {
             WebResponse res = RequestWeb(uri, DELETE, false);
+
+            // XML以外が帰ってきた時はエラー
+            if (!res.ContentType.Contains(XML)) {
+                throw new TwitterAPIException(1000, "Xmlデータ以外のデータを受信しました。");
+            }
 
             using (Stream resStream = res.GetResponseStream()) {
                 using (StreamReader reader = new StreamReader(resStream, Encoding.ASCII)) {
