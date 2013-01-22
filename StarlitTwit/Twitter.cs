@@ -57,6 +57,7 @@ namespace StarlitTwit
         private const string POST = "POST";
         private const string DELETE = "DELETE";
         private const string XML = "xml";
+        private const string JSON = "json";
         public static readonly string URLtwi;
         public static readonly string URLapi;
         public static readonly string URLapiUpload;
@@ -2583,9 +2584,9 @@ namespace StarlitTwit
         {
             WebResponse res = RequestWeb(uri, GET, false);
 
-            // XML以外が帰ってきた時はエラー
-            if (!res.ContentType.Contains(XML)) {
-                throw new TwitterAPIException(1000, "Xmlデータ以外のデータを受信しました。");
+            // JSON以外が帰ってきた時はエラー
+            if (!res.ContentType.Contains(JSON)) {
+                throw new TwitterAPIException(1000, "Jsonデータ以外のデータを受信しました。");
             }
 
             using (Stream resStream = res.GetResponseStream()) {
