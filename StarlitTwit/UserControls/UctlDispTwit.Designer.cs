@@ -63,18 +63,23 @@
             this.tsmiURL_Clipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsComboURL = new System.Windows.Forms.ToolStripComboBox();
+            this.tsmiImages = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiImages_OpenWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiImages_Clipboard = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsComboImages = new System.Windows.Forms.ToolStripComboBox();
             this.tsmiOpenBrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowser_ThisTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOpenBrowser_ReplyTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDispRetweeter = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSepMoreTweet = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiReGetTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiMoreRecently = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOlder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSpecifyTime = new System.Windows.Forms.ToolStripMenuItem();
             this.vscrbar = new System.Windows.Forms.VScrollBar();
             this.pnlTweets = new StarlitTwit.PanelEx();
-            this.tsmiReGetTweet = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRow.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,6 +102,7 @@
             this.tsmiUser,
             this.tsmiHashtag,
             this.tsmiURL,
+            this.tsmiImages,
             this.tsmiOpenBrowser,
             this.toolStripMenuItem1,
             this.tsmiDispRetweeter,
@@ -106,7 +112,7 @@
             this.tsmiOlder,
             this.tsmiSpecifyTime});
             this.menuRow.Name = "menuRow";
-            this.menuRow.Size = new System.Drawing.Size(264, 458);
+            this.menuRow.Size = new System.Drawing.Size(264, 480);
             this.menuRow.Opening += new System.ComponentModel.CancelEventHandler(this.menuRow_Opening);
             // 
             // tsmiReply
@@ -359,6 +365,43 @@
             this.tsComboURL.Name = "tsComboURL";
             this.tsComboURL.Size = new System.Drawing.Size(121, 26);
             // 
+            // tsmiImages
+            // 
+            this.tsmiImages.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiImages_OpenWindow,
+            this.tsmiImages_Clipboard,
+            this.toolStripMenuItem2,
+            this.tsComboImages});
+            this.tsmiImages.Name = "tsmiImages";
+            this.tsmiImages.Size = new System.Drawing.Size(263, 22);
+            this.tsmiImages.Text = "画像(&I)";
+            // 
+            // tsmiImages_OpenWindow
+            // 
+            this.tsmiImages_OpenWindow.Name = "tsmiImages_OpenWindow";
+            this.tsmiImages_OpenWindow.Size = new System.Drawing.Size(226, 22);
+            this.tsmiImages_OpenWindow.Text = "別画面で表示(&W)";
+            this.tsmiImages_OpenWindow.Click += new System.EventHandler(this.tsmiImages_OpenWindow_Click);
+            // 
+            // tsmiImages_Clipboard
+            // 
+            this.tsmiImages_Clipboard.Name = "tsmiImages_Clipboard";
+            this.tsmiImages_Clipboard.Size = new System.Drawing.Size(226, 22);
+            this.tsmiImages_Clipboard.Text = "クリップボードにコピー(&C)";
+            this.tsmiImages_Clipboard.Visible = false;
+            this.tsmiImages_Clipboard.Click += new System.EventHandler(this.tsmiImages_Clipboard_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 6);
+            // 
+            // tsComboImages
+            // 
+            this.tsComboImages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tsComboImages.Name = "tsComboImages";
+            this.tsComboImages.Size = new System.Drawing.Size(121, 26);
+            // 
             // tsmiOpenBrowser
             // 
             this.tsmiOpenBrowser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -398,6 +441,13 @@
             // 
             this.tsmiSepMoreTweet.Name = "tsmiSepMoreTweet";
             this.tsmiSepMoreTweet.Size = new System.Drawing.Size(260, 6);
+            // 
+            // tsmiReGetTweet
+            // 
+            this.tsmiReGetTweet.Name = "tsmiReGetTweet";
+            this.tsmiReGetTweet.Size = new System.Drawing.Size(263, 22);
+            this.tsmiReGetTweet.Text = "ツイートの再取得";
+            this.tsmiReGetTweet.Click += new System.EventHandler(this.tsmiReGetTweet_Click);
             // 
             // tsmiMoreRecently
             // 
@@ -452,13 +502,6 @@
             this.pnlTweets.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseMove);
             this.pnlTweets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseUp);
             this.pnlTweets.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.pnlflow_MouseWheel);
-            // 
-            // tsmiReGetTweet
-            // 
-            this.tsmiReGetTweet.Name = "tsmiReGetTweet";
-            this.tsmiReGetTweet.Size = new System.Drawing.Size(263, 22);
-            this.tsmiReGetTweet.Text = "ツイートの再取得";
-            this.tsmiReGetTweet.Click += new System.EventHandler(this.tsmiReGetTweet_Click);
             // 
             // UctlDispTwit
             // 
@@ -526,5 +569,10 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiQuoteReply;
         private System.Windows.Forms.ToolStripMenuItem tsmiUser_MakeUserSearchTab;
         private System.Windows.Forms.ToolStripMenuItem tsmiReGetTweet;
+        private System.Windows.Forms.ToolStripMenuItem tsmiImages;
+        private System.Windows.Forms.ToolStripMenuItem tsmiImages_OpenWindow;
+        private System.Windows.Forms.ToolStripMenuItem tsmiImages_Clipboard;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripComboBox tsComboImages;
     }
 }

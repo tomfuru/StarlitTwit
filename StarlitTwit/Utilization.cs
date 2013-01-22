@@ -504,7 +504,7 @@ namespace StarlitTwit
                     return "Twitterが高負荷によりダウンしています。";
                 case 1000:
                     // Faliure XmlLoad
-                    return "予期しないデータを取得しました。";
+                    return "予期しないデータを取得しました。(ブラウザ等でログインが必要？)";
                 case 1001:
                     // Unexpected Xml
                     return "予期しないXmlデータを取得しました。";

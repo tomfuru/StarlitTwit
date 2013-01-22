@@ -31,7 +31,7 @@ namespace StarlitTwit
             /// URLをThumbnailURLに変換できるかどうか
             /// </summary>
             /// <returns>できるかどうか</returns>
-            bool IsEffectiveURL(string url);
+            bool IsValidURL(string url);
 
             /// <summary>
             /// URLをThumbailのURLに変換します。
@@ -70,7 +70,7 @@ namespace StarlitTwit
             const string CHECKPATTERN = @"^http://(www.youtube.com/watch\?v\=|youtu.be/)([\w-]+)";
             const string THUMBFORMAT = @"http://i.ytimg.com/vi/{0}/{1}.jpg";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -104,7 +104,7 @@ namespace StarlitTwit
             const string CHECKPATTERN = @"^http://(www.nicovideo.jp/watch|nico.ms)/(sm|nm|so)(\d+)"; // スレッドIDは未対応
             const string THUMBFORMAT = @"http://tn-skr{0}.smilevideo.jp/smile?i={1}";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -128,7 +128,7 @@ namespace StarlitTwit
             const string CHECKPATTERN = @"^http://twitpic.com/[a-z0-9]+$";
             const string THUMBFORMAT = @"http://twitpic.com/show/{0}/{1}";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
 
@@ -168,7 +168,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN = @"^http://photozou.jp/photo/show/[0-9]+/[0-9]+$";
             private const string INFOAPI_URL = @"http://api.photozou.jp/rest/photo_info";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -200,7 +200,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN = @"^http://yfrog.com/[a-z0-9]+$";
             private const string THUMBNAIL = ".th.jpg";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -221,7 +221,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN = @"^http://img.ly/[0-9a-zA-Z]+$";
             private const string THUMBFORMAT = @"http://img.ly/show/{0}/{1}";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -254,7 +254,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN = @"^http://movapic.com/pic/[0-9]{15}[0-9a-z]+$";
             private const string THUMBFORMAT = @"http://image.movapic.com/pic/{0}_{1}.jpeg";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -287,7 +287,7 @@ namespace StarlitTwit
             private const string PATTERN = @"^http://(tweetphoto.com|plixi.com/p|lockerz.com/s)/[0-9]+$";
             private const string THUMBURLFORMAT = @"http://api.plixi.com/api/TPAPI.svc/imagefromurl?size={0}&url={1}";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, PATTERN);
             }
@@ -323,7 +323,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN = @"^http://ow.ly/i/[0-9a-zA-Z]+$";
             private const string THUMBFORMAT = @"http://static.ow.ly/photos/thumb/{0}.jpg";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -344,7 +344,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN = @"^http://p.twipple.jp/[0-9a-zA-Z]+$";
             private const string THUMBFORMAT = @"http://p.twipple.jp/show/{0}/{1}";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN);
             }
@@ -379,7 +379,7 @@ namespace StarlitTwit
             private const string CHECKPATTERN2 = @"http://instagram.com/p/[0-9a-zA-Z]+/$";
             private const string THUMBFORMAT = @"http://instagr.am/p/{0}/media/?size={1}";
 
-            bool IThumbnailConverter.IsEffectiveURL(string url)
+            bool IThumbnailConverter.IsValidURL(string url)
             {
                 return Regex.IsMatch(url, CHECKPATTERN) || Regex.IsMatch(url,CHECKPATTERN2);
             }
@@ -444,8 +444,8 @@ namespace StarlitTwit
         /// <returns></returns>
         public static bool IsPictureURL(string url)
         {
-            return IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention))
-                || CONVERTERS.Any(converter => converter.IsEffectiveURL(url));
+            return IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention, StringComparison.OrdinalIgnoreCase))
+                || CONVERTERS.Any(converter => converter.IsValidURL(url));
         }
         #endregion (IsPictureURL)
 
@@ -462,7 +462,7 @@ namespace StarlitTwit
             if (IMAGE_EXTENSIONS.Any(extention => url.EndsWith(extention, StringComparison.OrdinalIgnoreCase))) { return url; }
             else {
                 foreach (var converter in CONVERTERS) {
-                    if (converter.IsEffectiveURL(url)) {
+                    if (converter.IsValidURL(url)) {
                         return converter.ConvertToThumbnailURL(url);
                     }
                 }

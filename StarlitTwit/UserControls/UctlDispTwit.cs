@@ -336,21 +336,27 @@ namespace StarlitTwit
                 }
                 else { // URL
                     tsComboURL.Items.AddAvoidDup(entity.str);
+
+                    if (PictureGetter.IsPictureURL(entity.str)) {
+                        tsComboImages.Items.AddAvoidDup(entity.str);
+                    }
                 }
             }
             tsComboUser.SelectedIndex = 0;
             if (tsmiHashtag.Visible = (tsComboHashtag.Items.Count > 0)) {
                 tsComboHashtag.SelectedIndex = 0;
             }
-            if (tsmiURL.Visible = (tsComboURL.Items.Count > 0)) {
-                tsComboURL.SelectedIndex = 0;
-                // DropDownの横幅設定
-                int maxwidth = 0;
-                foreach (object o in tsComboURL.Items) {
-                    maxwidth = Math.Max(maxwidth, TextRenderer.MeasureText((string)o, tsComboURL.Font).Width);
+
+            Action<ToolStripMenuItem, ToolStripComboBox> setVisibleAndWidth = (tsmi, tscmb) =>
+            {
+                if (tsmi.Visible = (tscmb.Items.Count > 0)) {
+                    tscmb.SelectedIndex = 0;
+                    tscmb.DropDownWidth = tsComboURL.Items.OfType<string>().Max(str => TextRenderer.MeasureText(str, tscmb.Font).Width) + 20;
                 }
-                tsComboURL.DropDownWidth = maxwidth + 20;
-            }
+            };
+
+            setVisibleAndWidth(tsmiURL, tsComboURL);
+            setVisibleAndWidth(tsmiImages, tsComboImages);
         }
         #endregion (menuRow_Opening)
         #region ↓tsmi- メニュー項目イベント
@@ -561,6 +567,25 @@ namespace StarlitTwit
             Clipboard.SetText((string)tsComboURL.SelectedItem);
         }
         #endregion (tsmiURL_Clipboard_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiImages_OpenWindow_Click 画像：別ウィンドウで開くクリック
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiImages_OpenWindow_Click(object sender, EventArgs e)
+        {
+            FrmDispImage frm = new FrmDispImage((string)tsComboImages.SelectedItem);
+            frm.Show();
+        }
+        #endregion (tsmiImages_OpenWindow_Click)
+        //-------------------------------------------------------------------------------
+        #region tsmiImages_Clipboard_Click 画像：クリップボードにコピークリック　// 未実装
+        //-------------------------------------------------------------------------------
+        //
+        private void tsmiImages_Clipboard_Click(object sender, EventArgs e)
+        {
+            // TODO?
+        }
+        #endregion (tsmiImages_Clipboard_Click)
         //-------------------------------------------------------------------------------
         #region tsmiDispRetweeter_Click Retweetしたユーザーを見るクリック
         //-------------------------------------------------------------------------------

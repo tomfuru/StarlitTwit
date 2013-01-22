@@ -102,6 +102,14 @@
       <Link>Forms\FrmDiagMaker.designer.cs</Link>
       <DependentUpon>FrmDiagMaker.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispImage.cs">
+      <Link>Forms\FrmDispImage.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\StarlitTwit\Forms\FrmDispImage.designer.cs">
+      <Link>Forms\FrmDispImage.designer.cs</Link>
+      <DependentUpon>FrmDispImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\StarlitTwit\Forms\FrmDispLists.cs">
       <Link>Forms\FrmDispLists.cs</Link>
       <SubType>Form</SubType>
@@ -416,6 +424,10 @@
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDiagMaker.resx">
       <Link>Forms\FrmDiagMaker.resx</Link>
       <DependentUpon>FrmDiagMaker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispImage.resx">
+      <Link>Forms\FrmDispImage.resx</Link>
+      <DependentUpon>FrmDispImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\StarlitTwit\Forms\FrmDispLists.resx">
       <Link>Forms\FrmDispLists.resx</Link>
