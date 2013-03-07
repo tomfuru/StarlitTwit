@@ -3267,7 +3267,7 @@ namespace StarlitTwit
                         Time = StringToDateTime(xel.Element("created_at").Value),
                         Favorited = false,
                         Mention_StatusID = -1,
-                        Mention_UserID = TryParseLong(xel.Element("to_user_id").Value),
+                        Mention_UserID = -1, // TryParseLong(xel.Element("to_user_id").Value),
                         Text = ConvertSpecialChar(xel.Element("text").Value),
                         Source = CutSourceString(ConvertSpecialChar(xel.Element("source").Value)),
                         UserID = long.Parse(xel.Element("from_user_id").Value),
