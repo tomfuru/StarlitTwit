@@ -351,7 +351,10 @@ namespace StarlitTwit
             {
                 if (tsmi.Visible = (tscmb.Items.Count > 0)) {
                     tscmb.SelectedIndex = 0;
-                    tscmb.DropDownWidth = tsComboURL.Items.OfType<string>().Max(str => TextRenderer.MeasureText(str, tscmb.Font).Width) + 20;
+                    try {
+                        tscmb.DropDownWidth = tscmb.Items.OfType<string>().Max(str => TextRenderer.MeasureText(str, tscmb.Font).Width) + 20;
+                    }
+                    catch (InvalidOperationException ex) { }
                 }
             };
 

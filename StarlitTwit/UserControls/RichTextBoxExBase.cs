@@ -317,7 +317,7 @@ namespace StarlitTwit
         {
             if (this.SelectionLength > 0) {
                 base.Cut();
-                Clipboard.SetText(Clipboard.GetText(TextDataFormat.Text));
+                Clipboard.SetText(Clipboard.GetText(TextDataFormat.UnicodeText));
             }
         }
         #endregion (Cut)
@@ -331,7 +331,7 @@ namespace StarlitTwit
         {
             if (this.SelectionLength > 0) {
                 base.Copy();
-                Clipboard.SetText(Clipboard.GetText(TextDataFormat.Text));
+                Clipboard.SetText(Clipboard.GetText(TextDataFormat.UnicodeText));
             }
         }
         #endregion (Copy)
@@ -343,7 +343,7 @@ namespace StarlitTwit
         /// </summary>
         public new void Paste()
         {
-            this.Paste(DataFormats.GetFormat(DataFormats.Text));
+            this.Paste(DataFormats.GetFormat(DataFormats.UnicodeText));
         }
         #endregion (Paste)
         //-------------------------------------------------------------------------------
