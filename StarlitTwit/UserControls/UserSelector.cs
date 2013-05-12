@@ -32,7 +32,7 @@ namespace StarlitTwit
             base.OnLoad(e);
 
             if (FrmMain.Twitter != null) {
-                if (!FrmMain.Twitter.IsAuthenticated()) {
+                if (!FrmMain.Twitter.IsAuthenticated) {
                     btnAddFollowers.Enabled = btnAddFriends.Enabled = false;
                 }
                 else {
@@ -189,7 +189,7 @@ namespace StarlitTwit
             lock (_objlock_followers) {
                 try {
                     if (_followers == null || _followers_current_cursor == _followers.Length) {
-                        var followers_data = FrmMain.Twitter.followers_ids(true, cursor: _follower_next_cursor);
+                        var followers_data = FrmMain.Twitter.followers_ids(cursor: _follower_next_cursor);
 
                         _followers = followers_data.Data.ToArray();
                         _follower_next_cursor = followers_data.NextCursor;
@@ -230,7 +230,7 @@ namespace StarlitTwit
             lock (_objlock_friends) {
                 try {
                     if (_friends == null || _friends_current_cursor == _friends.Length) {
-                        var friends_data = FrmMain.Twitter.friends_ids(true, cursor: _friend_next_cursor);
+                        var friends_data = FrmMain.Twitter.friends_ids(cursor: _friend_next_cursor);
 
                         _friends = friends_data.Data.ToArray();
                         _friend_next_cursor = friends_data.NextCursor;

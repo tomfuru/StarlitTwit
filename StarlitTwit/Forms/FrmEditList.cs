@@ -131,7 +131,7 @@ namespace StarlitTwit
         private bool UpdateList()
         {
             try {
-                ListData = FrmMain.Twitter.lists_update(slug: _list_id, name: txtListName.Text, isPrivate: rdbUnPublic.Checked, description: txtDescription.Text);
+                ListData = FrmMain.Twitter.lists_update(slug: _list_id, name: txtListName.Text, isPrivate: rdbUnPublic.Checked, description: txtDescription.Text, owner_id: FrmMain.Twitter.ID);
             }
             catch (TwitterAPIException) { return false; }
             return true;

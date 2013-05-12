@@ -56,7 +56,7 @@ namespace StarlitTwit
             Debug.Assert(_image != null);
 
             try {
-                FrmMain.Twitter.account_update_profile_image(Path.GetFileName(txtImagePath.Text), _image);
+                FrmMain.Twitter.account_update_profile_image(_image, Path.GetFileName(txtImagePath.Text));
                 Message.ShowInfoMessage("更新しました。");
                 ProfileImageChanged = true;
             }

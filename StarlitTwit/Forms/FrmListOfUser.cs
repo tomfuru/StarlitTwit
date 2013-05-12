@@ -88,7 +88,7 @@ namespace StarlitTwit
                 try {
                     this.Invoke((Action)(() => tssLabel.Text = "リストに追加中..."));
                     this.Refresh();
-                    FrmMain.Twitter.list_members_create(listdata.ID, screen_name: _screen_name);
+                    FrmMain.Twitter.lists_members_create(list_id: listdata.ID, screen_name: _screen_name);
                     this.Invoke((Action)(() => tssLabel.Text = "追加完了しました。"));
                 }
                 catch (TwitterAPIException) {
@@ -100,7 +100,7 @@ namespace StarlitTwit
                 try {
                     this.Invoke((Action)(() => tssLabel.Text = "リストから削除中..."));
                     this.Refresh();
-                    FrmMain.Twitter.list_members_destroy(listdata.ID, screen_name: _screen_name);
+                    FrmMain.Twitter.lists_members_destroy(list_id: listdata.ID, screen_name: _screen_name);
                     this.Invoke((Action)(() => tssLabel.Text = "削除完了しました。"));
                 }
                 catch (TwitterAPIException) {
@@ -144,12 +144,14 @@ namespace StarlitTwit
         {
             this.Invoke((Action)(() => tssLabel.Text = "リスト一覧取得中..."));
 
-            IEnumerable<ListData> lists = Utilization.EmptyIEnumerable<ListData>();
-            do {
-                var seqdata = FrmMain.Twitter.lists();
-                _cursor = seqdata.NextCursor;
-                lists = lists.Concat(seqdata.Data);
-            } while (_cursor != 0);
+            //IEnumerable<ListData> lists = Utilization.EmptyIEnumerable<ListData>();
+            //do {
+            //    var seqdata = FrmMain.Twitter.lists_list();
+            //    _cursor = seqdata.NextCursor;
+            //    lists = lists.Concat(seqdata.Data);
+            //} while (_cursor != 0);
+
+            IEnumerable<ListData> lists = FrmMain.Twitter.lists_list();
 
             _cursor = -1;
             _listdata = lists.ToArray();
@@ -169,7 +171,7 @@ namespace StarlitTwit
                 _checkboxdic.Add(list.Slug, chb);
                 index++;
             }
-            this.Invoke((Action)(() =>_checkboxdic.Values.ForEach(chb => this.pnlCheckbox.Controls.Add(chb))));
+            this.Invoke((Action)(() => _checkboxdic.Values.ForEach(chb => this.pnlCheckbox.Controls.Add(chb))));
         }
         #endregion (GetLists)
 
@@ -183,7 +185,7 @@ namespace StarlitTwit
 
             IEnumerable<ListData> lists = Utilization.EmptyIEnumerable<ListData>();
             do {
-                var seqdata = FrmMain.Twitter.lists_memberships(screen_name: _screen_name, cursor: _cursor, filter_to_owner_lists: true);
+                var seqdata = FrmMain.Twitter.lists_memberships(screen_name: _screen_name, cursor: _cursor, filter_to_owned_lists: true);
                 _cursor = seqdata.NextCursor;
                 lists = lists.Concat(seqdata.Data);
             } while (_cursor != 0);

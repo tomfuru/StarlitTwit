@@ -17,7 +17,7 @@ namespace UserStreamTest
     public partial class Form1 : Form
     {
         SettingsData data;
-        Twitter twitter;
+        Twitter10 twitter;
 
         CancellationTokenSource cts = null;
 
@@ -26,7 +26,7 @@ namespace UserStreamTest
             InitializeComponent();
 
             data = SettingsData.Restore("Settings.dat");
-            twitter = new Twitter();
+            twitter = new Twitter10();
             if (data.UserInfoList.Count > 0) {
                 twitter.AccessToken = data.UserInfoList[0].AccessToken;
                 twitter.AccessTokenSecret = data.UserInfoList[0].AccessTokenSecret;

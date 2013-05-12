@@ -46,7 +46,14 @@ namespace StarlitTwit
             //System.Net.WebRequest.DefaultWebProxy = new System.Net.WebProxy("localhost",8888); // HttpDebug用
 
             DEFAULT_TABPAGES = new TabPageEx[] { tabpgHome, tabpgReply, tabpgHistory, tabpgDirect, /* tabpgPublic */ };
+            //Twitter = new Twitter();
             Twitter = new Twitter();
+
+            Twitter.DelegateInfo_UserStream.Main = UserStreamTransaction;
+            Twitter.DelegateInfo_UserStream.End = UserStreamEndEvent;
+            Twitter.DelegateInfo_UserStream.Connected = UserStreamConnectEvent;
+            Twitter.DelegateInfo_UserStream.Error = UserStreamErrorFinishEvent;
+            Twitter.DelegateInfo_UserStream.Reconnect_WaitTime = 0;
         }
         //-------------------------------------------------------------------------------
         #endregion (コンストラクタ)
@@ -55,6 +62,7 @@ namespace StarlitTwit
         #region 変数
         //-------------------------------------------------------------------------------
         /// <summary>TwitterAPI呼び出しクラス</summary>
+        //public static Twitter Twitter { get; private set; }
         public static Twitter Twitter { get; private set; }
         /// <summary>設定データ</summary>
         public static SettingsData SettingsData { get; private set; }
@@ -310,10 +318,10 @@ namespace StarlitTwit
             foreach (TabData tabdata in SettingsData.TabDataDic.Values) { MakeTab(tabdata, false); }
 
             if (SettingsData.UserInfoList.Count > 0) {
-                Twitter.AccessToken = SettingsData.UserInfoList[0].AccessToken;
-                Twitter.AccessTokenSecret = SettingsData.UserInfoList[0].AccessTokenSecret;
-                Twitter.ScreenName = SettingsData.UserInfoList[0].ScreenName;
-                Twitter.ID = SettingsData.UserInfoList[0].ID;
+                Twitter.SetUser(SettingsData.UserInfoList[0].AccessToken,
+                                SettingsData.UserInfoList[0].AccessTokenSecret,
+                                SettingsData.UserInfoList[0].ScreenName,
+                                SettingsData.UserInfoList[0].ID);
 
                 TransitToAuthenticatedMode();
             }
@@ -917,11 +925,13 @@ namespace StarlitTwit
                     TwitData tw;
                     bool res = Utilization.GetTwitDataFromID(status_id, out tw);
 
+                    /*
                     this.Invoke((Action)(() =>
                     {
                         uctldisp.AddData(tw.AsEnumerable());
                         tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
                     }));
+                    */
 
                     return res;
                 },
@@ -1153,10 +1163,12 @@ namespace StarlitTwit
         //
         private void tsmiAPIRestriction_Click(object sender, EventArgs e)
         {
-            APILimitData? data = GetAPILimitData(Twitter.IsAuthenticated());
+            APILimitData? data = GetAPILimitData(Twitter.IsAuthenticated);
             if (data.HasValue) {
                 APILimitData d = data.Value;
+                /*
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                */
                 Message.ShowInfoMessage(string.Format("API使用回数情報\n{0}/{1}\n{2}に更新", d.Remaining, d.HourlyLimit, d.ResetTime.ToString(Utilization.STR_DATETIMEFORMAT)));
             }
             else {
@@ -1177,10 +1189,10 @@ namespace StarlitTwit
                 UserAuthInfo userdata;
                 if (OAuth_Authenticate(out userdata)) {
 
-                    Twitter.AccessToken = userdata.AccessToken;
-                    Twitter.AccessTokenSecret = userdata.AccessTokenSecret;
-                    Twitter.ScreenName = userdata.ScreenName;
-                    Twitter.ID = userdata.ID;
+                    Twitter.SetUser(userdata.AccessToken,
+                                    userdata.AccessTokenSecret,
+                                    userdata.ScreenName,
+                                    userdata.ID);
 
                     _profileRenew_IsForce = true;
 
@@ -1978,8 +1990,7 @@ namespace StarlitTwit
             try {
                 _frmUserStreamWatch = new FrmUserStreamWatch();
 
-                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction,
-                    UserStreamEndEvent, UserStreamConnectEvent, UserStreamErrorFinishEvent, 0);
+                _userStreamCancellationTS = Twitter.streaming_user((all_replies) ? "all" : "");
 
                 // RESTによるデータ取り込み
                 Utilization.InvokeTransactionDoingEvents(() =>
@@ -2097,7 +2108,8 @@ namespace StarlitTwit
 
                 this.Invoke((Action)(() => lblUserStreamInfo.Text = STR_USERSTREAM_RESTARTING));
 
-                _userStreamCancellationTS = Twitter.userstream_user(all_replies, UserStreamTransaction, UserStreamEndEvent, UserStreamConnectEvent, UserStreamErrorFinishEvent, reconnect_time);
+                Twitter.DelegateInfo_UserStream.Reconnect_WaitTime = reconnect_time;
+                _userStreamCancellationTS = Twitter.streaming_user((all_replies) ? "all" : "");
                 
             });
         }
@@ -2258,7 +2270,14 @@ namespace StarlitTwit
                             #endregion
                         }
                         break;
+                    case UserStreamItemType.disconnect:
+                        var code_and_reason = (Tuple<int, string>)data;
+
+                        break;
                     case UserStreamItemType.tracklimit:
+                    case UserStreamItemType.location_dalelete:
+                    case UserStreamItemType.status_withheld:
+                    case UserStreamItemType.user_withheld:
                         break;
                 }
 
@@ -2411,7 +2430,7 @@ namespace StarlitTwit
                 }
                 else if (uctldisp == uctlDispReply) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_Reply : SettingsData.RenewGetNum_Reply;
-                    d = Twitter.statuses_mentions(count: iCount, include_rts: true);
+                    d = Twitter.statuses_mentions_timeline(count: iCount);
                 }
                 else if (uctldisp == uctlDispHistory) {
                     int iCount = (isFirst) ? SettingsData.FirstGetNum_History : SettingsData.RenewGetNum_History;
@@ -2429,13 +2448,14 @@ namespace StarlitTwit
                     int iCount = (isFirst) ? tabdata.FirstGetNum : tabdata.RenewGetNum;
                     switch (tabdata.SearchType) {
                         case TabSearchType.Keyword:
-                            d = Twitter.search(q: tabdata.SearchWord, rpp: iCount);
+                            var ret = Twitter.search_tweets(q: tabdata.SearchWord, count: iCount);
+                            d = ret.Item1;
                             break;
                         case TabSearchType.User:
                             d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: iCount, include_rts: true);
                             break;
                         case TabSearchType.List:
-                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: iCount, include_rts: true);
+                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, count: iCount, include_rts: true);
                             break;
                         default:
                             Debug.Assert(false, "異常な検索タイプ");
@@ -2452,8 +2472,9 @@ namespace StarlitTwit
             this.Invoke((Action)(() =>
             {
                 string baloontext = uctldisp.AddData(d);
+                /*
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
-
+                */
                 // バルーン設定
                 if (!isFirst) {
                     if (uctldisp == uctlDispReply && SettingsData.DisplayReplyBaloon) {
@@ -2486,7 +2507,7 @@ namespace StarlitTwit
                     }
                 }
                 else if (uctldisp == uctlDispReply) {
-                    d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, since_id: since_id, include_rts: true);
+                    d = Twitter.statuses_mentions_timeline(count: SettingsData.RenewGetNum_Reply, since_id: since_id);
                 }
                 else if (uctldisp == uctlDispHistory) {
                     d = Twitter.statuses_user_timeline(count: SettingsData.RenewGetNum_History, since_id: since_id, include_rts: true);
@@ -2501,13 +2522,14 @@ namespace StarlitTwit
                     lock (SettingsData.TabDataDic) { tabdata = SettingsData.TabDataDic[(string)uctldisp.Tag]; }
                     switch (tabdata.SearchType) {
                         case TabSearchType.Keyword:
-                            d = Twitter.search(q: tabdata.SearchWord, rpp: tabdata.RenewGetNum, since_id: since_id);
+                            var ret = Twitter.search_tweets(q: tabdata.SearchWord, count: tabdata.RenewGetNum, since_id: since_id);
+                            d = ret.Item1;
                             break;
                         case TabSearchType.User:
                             d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, since_id: since_id, include_rts: true);
                             break;
                         case TabSearchType.List:
-                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: tabdata.RenewGetNum, since_id: since_id, include_rts: true);
+                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, count: tabdata.RenewGetNum, since_id: since_id, include_rts: true);
                             break;
                         default:
                             Debug.Assert(false, "異常な検索タイプ");
@@ -2524,7 +2546,9 @@ namespace StarlitTwit
             this.Invoke((Action)(() =>
             {
                 uctldisp.AddData(d, true);
+                /*
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                */
             }));
 
             return true;
@@ -2549,7 +2573,7 @@ namespace StarlitTwit
                     }
                 }
                 else if (uctldisp == uctlDispReply) {
-                    d = Twitter.statuses_mentions(count: SettingsData.RenewGetNum_Reply, max_id: max_id - 1, include_rts: true);
+                    d = Twitter.statuses_mentions_timeline(count: SettingsData.RenewGetNum_Reply, max_id: max_id - 1);
                 }
                 else if (uctldisp == uctlDispHistory) {
                     d = Twitter.statuses_user_timeline(count: SettingsData.RenewGetNum_History, max_id: max_id - 1, include_rts: true);
@@ -2564,13 +2588,14 @@ namespace StarlitTwit
                     lock (SettingsData.TabDataDic) { tabdata = SettingsData.TabDataDic[(string)uctldisp.Tag]; }
                     switch (tabdata.SearchType) {
                         case TabSearchType.Keyword:
-                            d = Twitter.search(q: tabdata.SearchWord, rpp: tabdata.RenewGetNum, max_id: max_id - 1);
+                            var ret = Twitter.search_tweets(q: tabdata.SearchWord, count: tabdata.RenewGetNum, max_id: max_id - 1);
+                            d = ret.Item1;
                             break;
                         case TabSearchType.User:
                             d = Twitter.statuses_user_timeline(screen_name: tabdata.SearchWord, count: tabdata.RenewGetNum, max_id: max_id - 1, include_rts: true);
                             break;
                         case TabSearchType.List:
-                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: tabdata.RenewGetNum, max_id: max_id - 1, include_rts: true);
+                            d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, count: tabdata.RenewGetNum, max_id: max_id - 1, include_rts: true);
                             break;
                         default:
                             Debug.Assert(false, "異常な検索タイプ");
@@ -2587,7 +2612,9 @@ namespace StarlitTwit
             this.Invoke((Action)(() =>
             {
                 uctldisp.AddData(d, true);
+                /*
                 tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                */
             }));
 
             return true;
@@ -2624,6 +2651,7 @@ namespace StarlitTwit
                 bool findStart = false;
                 int i = 1;
                 long max_id = -1;
+                long max_id2 = -1;
                 while (true) {
                     IEnumerable<TwitData> d = null;
                     if (uctldisp == uctlDispHome) {
@@ -2636,7 +2664,7 @@ namespace StarlitTwit
                     }
                     else if (uctldisp == uctlDispReply) {
                         if (i == MAX_MENTION / 200 + 1) { break; } // 800まで
-                        d = Twitter.statuses_mentions(count: 200, max_id: max_id - 1, include_rts: true);
+                        d = Twitter.statuses_mentions_timeline(count: 200, max_id: max_id - 1);
                         max_id = d.Min(td => td.StatusID);
                     }
                     else if (uctldisp == uctlDispHistory) {
@@ -2646,9 +2674,13 @@ namespace StarlitTwit
                     }
                     else if (uctldisp == uctlDispDirect) {
                         // ?まで(暫定200)
-                        d = Twitter.direct_messages(count: 200, page: i)
-                           .Concat(Twitter.direct_messages_sent(count: 200, page: i))
-                           .OrderByDescending(twdata => twdata.StatusID);
+                        var d1 = Twitter.direct_messages(count: 200, max_id: max_id - 1);
+                        max_id = d1.Min(td => td.StatusID);
+                        var d2 = Twitter.direct_messages_sent(count: 200, max_id: max_id2 - 1);
+                        max_id2 = d2.Min(td => td.StatusID);
+
+                        d = d1.Concat(d2)
+                              .OrderByDescending(twdata => twdata.StatusID);
                         break;
                     }
                     else {
@@ -2658,7 +2690,9 @@ namespace StarlitTwit
                         switch (tabdata.SearchType) {
                             case TabSearchType.Keyword:
                                 if (i == MAX_SEARCH / 100 + 1) { isBreak = true; break; }// 1500まで
-                                d = Twitter.search(q: tabdata.SearchWord, rpp: 100, page: i);
+                                var ret = Twitter.search_tweets(q: tabdata.SearchWord, count: 100, max_id: max_id - 1);
+                                d = ret.Item1;
+                                max_id = d.Min(td => td.StatusID);
                                 break;
                             case TabSearchType.User:
                                 if (i == MAX_USER / 200 + 1) { isBreak = true; break; }// 3200まで
@@ -2667,7 +2701,8 @@ namespace StarlitTwit
                                 break;
                             case TabSearchType.List:
                                 if (i == MAX_LIST / 200 + 1) { isBreak = true; break; }// 800まで
-                                d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, per_page: 200, page: i, include_rts: true);
+                                d = Twitter.lists_statuses(slug: tabdata.SearchWord, owner_screen_name: tabdata.ListOwner, count: 200, max_id: max_id - 1, include_rts: true);
+                                max_id = d.Min(td => td.StatusID);
                                 break;
                             default:
                                 Debug.Assert(false, "異常な検索タイプ");
@@ -2681,7 +2716,9 @@ namespace StarlitTwit
                     datalist.AddRange(d);
                     if (findStart && useFromDateTime && dtbetween(dtFrom, d.Last().Time, d.First().Time)) { break; }
                     i++;
+                    /*
                     this.Invoke((Action)(() => tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max)));
+                    */
                 }
             }
             catch (TwitterAPIException ex) {
@@ -2693,7 +2730,9 @@ namespace StarlitTwit
                 this.Invoke((Action)(() =>
                 {
                     uctldisp.AddData(datalist.Where((td) => inbetween(td.Time)).ToArray());
+                    /* 
                     tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                    */
                 }));
             }
             return true;
@@ -2734,7 +2773,7 @@ namespace StarlitTwit
             try {
                 HashSet<long> set = new HashSet<long>();
                 while (cursor != 0) {
-                    var idstup = Twitter.followers_ids(true, Twitter.ID, null, cursor);
+                    var idstup = Twitter.followers_ids(user_id: Twitter.ID, cursor: cursor);
                     cursor = idstup.NextCursor;
                     set.UnionWith(idstup.Data);
                 }
@@ -2757,7 +2796,7 @@ namespace StarlitTwit
             try {
                 HashSet<long> set = new HashSet<long>();
                 while (cursor != 0) {
-                    var idstup = Twitter.friends_ids(true, Twitter.ID, null, cursor);
+                    var idstup = Twitter.friends_ids(user_id: Twitter.ID, cursor: cursor);
                     cursor = idstup.NextCursor;
                     set.UnionWith(idstup.Data);
                 }
@@ -2887,7 +2926,7 @@ namespace StarlitTwit
                 if (isDirectMessage) {
                     Twitter.direct_messages_destroy(statusid);
                 }
-                else { Twitter.statuses_destroy(statusid); }
+                else { Twitter.statuses_destroy_id(statusid); }
             }
             catch (TwitterAPIException ex) {
                 tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
@@ -2907,7 +2946,7 @@ namespace StarlitTwit
         private void Retweet(long id)
         {
             try {
-                Twitter.statuses_retweet(id);
+                Twitter.statuses_retweet_id(id);
             }
             catch (TwitterAPIException ex) {
                 tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
@@ -2977,8 +3016,9 @@ namespace StarlitTwit
         private APILimitData? GetAPILimitData(bool authenticateddata)
         {
             try {
-                APILimitData data = Twitter.account_rate_limit_status(authenticateddata);
-                return data;
+                throw new TwitterAPIException(-1, "未実装です");
+                //APILimitData data = Twitter.account_rate_limit_status(authenticateddata);
+                //return data;
             }
             catch (TwitterAPIException) { return null; }
         }
@@ -3350,7 +3390,9 @@ namespace StarlitTwit
                 {
                     if (profile != null) { SetProfileData(profile); }
                     else { tssLabel.SetText(STR_FAIL_GET_PROFILE, ERROR_STATUSBAR_DISP_TIMES); }
+                    /*
                     tsslRestAPI.Text = string.Format(REST_API_FORMAT, Twitter.API_Rest, Twitter.API_Max);
+                    */
                 }));
                 _profileRenew_IsForce = false;
                 _profileRenew_Standard = dt;

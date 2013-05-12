@@ -190,19 +190,9 @@ namespace StarlitTwit
         public static bool GetTwitDataFromID(long id, out TwitData twitData)
         {
             try {
-                twitData = FrmMain.Twitter.statuses_show(false, id);
+                twitData = FrmMain.Twitter.statuses_show_id(id);
             }
-            catch (TwitterAPIException ex) {
-                if (ex.ErrorStatusCode == 403) {
-                    try {
-                        twitData = FrmMain.Twitter.statuses_show(true, id);
-                    }
-                    catch (TwitterAPIException) {
-                        twitData = default(TwitData);
-                        return false;
-                    }
-                    return true;
-                }
+            catch (TwitterAPIException) {
                 twitData = default(TwitData);
                 return false;
             }

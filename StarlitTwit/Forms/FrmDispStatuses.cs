@@ -226,14 +226,16 @@ namespace StarlitTwit
                             d = new TwitData[0];
                             break;
                         case EFormType.MyRetweet:
-                            d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id - 1, count: GET_NUM);
-                            if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
-                            else { disableAppend = true; }
+                            // TODO 消去
+                            //d = FrmMain.Twitter.statuses_retweeted_by_me(max_id: _last_status_id - 1, count: GET_NUM);
+                            //if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
+                            //else { disableAppend = true; }
                             break;
                         case EFormType.FollowersRetweet:
-                            d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id - 1, count: GET_NUM);
-                            if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
-                            else { disableAppend = true; }
+                            // TODO 消去
+                            //d = FrmMain.Twitter.statuses_retweeted_to_me(max_id: _last_status_id - 1, count: GET_NUM);
+                            //if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
+                            //else { disableAppend = true; }
                             break;
                         case EFormType.FollowersRetweetToMe:
                             d = FrmMain.Twitter.statuses_retweets_of_me(max_id: _last_status_id - 1, count: GET_NUM);
@@ -241,18 +243,18 @@ namespace StarlitTwit
                             else { disableAppend = true; }
                             break;
                         case EFormType.ListStatuses:
-                            d = FrmMain.Twitter.lists_statuses(-1, ListID, UserScreenName, max_id: _last_status_id - 1, per_page: GET_NUM, include_rts: true);
+                            d = FrmMain.Twitter.lists_statuses(slug: ListID, owner_screen_name: UserScreenName, max_id: _last_status_id - 1, count: GET_NUM, include_rts: true);
                             if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
                             else { disableAppend = true; }
                             break;
                         case EFormType.MyFavorite:
-                            d = FrmMain.Twitter.favorites(page: _page);
-                            _page++;
+                            d = FrmMain.Twitter.favorites_list(max_id: _last_status_id);
+                            if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
                             disableAppend = (d.Count() == 0);
                             break;
                         case EFormType.UserFavorite:
-                            d = FrmMain.Twitter.favorites(UserScreenName, page: _page);
-                            _page++;
+                            d = FrmMain.Twitter.favorites_list(max_id: _last_status_id);
+                            if (d.Count() > 0) { _last_status_id = d.Min(td => td.StatusID); }
                             disableAppend = (d.Count() == 0);
                             break;
                         default:

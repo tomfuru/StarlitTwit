@@ -279,6 +279,12 @@
     <Compile Include="..\StarlitTwit\Twitter.cs">
       <Link>Twitter.cs</Link>
     </Compile>
+    <Compile Include="..\StarlitTwit\TwitterAPI11.cs">
+      <Link>TwitterAPI11.cs</Link>
+    </Compile>
+    <Compile Include="..\StarlitTwit\TwitterData.cs">
+      <Link>TwitterData.cs</Link>
+    </Compile>
     <Compile Include="..\StarlitTwit\UserControls\ImageListWrapper.cs">
       <Link>UserControls\ImageListWrapper.cs</Link>
       <SubType>Component</SubType>

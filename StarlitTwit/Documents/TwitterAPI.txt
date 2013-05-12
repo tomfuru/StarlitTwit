@@ -451,3 +451,41 @@ Deprecated
     <size>7</size>
   </category>
 </suggestions>
+
+●search内 search_metadata
+  <search_metadata type="object">
+    <completed_in type="number">0.019</completed_in>
+    <max_id type="number">333123744107216896</max_id>
+    <max_id_str type="string">333123744107216896</max_id_str>
+    <query type="string">%23segapsu</query>
+    <refresh_url type="string">?since_id=333123744107216896&amp;q=%23segapsu&amp;lang=ja&amp;result_type=recent&amp;include_entities=1</refresh_url>
+    <count type="number">20</count>
+    <since_id type="number">0</since_id>
+    <since_id_str type="string">0</since_id_str>
+  </search_metadata>
+
+ ●friendships/show
+ <root type="object">
+  <relationship type="object">
+    <source type="object">
+      <marked_spam type="boolean">false</marked_spam>
+      <want_retweets type="boolean">true</want_retweets>
+      <screen_name type="string">star_TF</screen_name>
+      <followed_by type="boolean">true</followed_by>
+      <can_dm type="boolean">true</can_dm>
+      <id_str type="string">16285524</id_str>
+      <id type="number">16285524</id>
+      <blocking type="boolean">false</blocking>
+      <notifications_enabled type="boolean">false</notifications_enabled>
+      <following type="boolean">true</following>
+      <all_replies type="boolean">false</all_replies>
+    </source>
+    <target type="object">
+      <screen_name type="string">getsus</screen_name>
+      <followed_by type="boolean">true</followed_by>
+      <id_str type="string">121708508</id_str>
+      <id type="number">121708508</id>
+      <following type="boolean">true</following>
+    </target>
+  </relationship>
+</root>

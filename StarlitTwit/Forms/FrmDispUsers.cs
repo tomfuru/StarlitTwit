@@ -555,17 +555,13 @@ namespace StarlitTwit
                 try {
                     IEnumerable<UserProfile> profiles = null;
                     if (FormType == EFormType.Retweeter) {
-                        profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
-                        _page++;
-                        this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Count() > 0)));
-                    }
-                    else if (FormType == EFormType.MyBlocking) {
-                        profiles = FrmMain.Twitter.blocks_blocking(_page, 100);
-                        _page++;
-                        this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
+                        // TODO 消去
+                        //profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
+                        //_page++;
+                        //this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Count() > 0)));
                     }
                     else if (FormType == EFormType.UserSearch) {
-                        profiles = FrmMain.Twitter.users_search(_strSearchWord, _page, 20);
+                        profiles = FrmMain.Twitter.users_search(_strSearchWord, count: 20, page: _page);
                         _page++;
                         this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
                     }
@@ -574,7 +570,7 @@ namespace StarlitTwit
                         switch (FormType) {
                             case EFormType.MyFollower: {
                                     if (_userIDs == null || _page == _userIDs.Length) {
-                                        var data = FrmMain.Twitter.followers_ids(true, cursor: _next_cursor);
+                                        var data = FrmMain.Twitter.followers_ids(user_id: FrmMain.Twitter.ID, cursor: _next_cursor);
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
@@ -590,7 +586,7 @@ namespace StarlitTwit
                                 break;
                             case EFormType.MyFriend: {
                                     if (_userIDs == null || _page == _userIDs.Length) {
-                                        var data = FrmMain.Twitter.friends_ids(true, cursor: _next_cursor);
+                                        var data = FrmMain.Twitter.friends_ids(user_id: FrmMain.Twitter.ID, cursor: _next_cursor);
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
@@ -606,7 +602,7 @@ namespace StarlitTwit
                                 break;
                             case EFormType.UserFollower: {
                                     if (_userIDs == null || _page == _userIDs.Length) {
-                                        var data = FrmMain.Twitter.followers_ids(true, screen_name: UserScreenName, cursor: _next_cursor);
+                                        var data = FrmMain.Twitter.followers_ids(screen_name: UserScreenName, cursor: _next_cursor);
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
@@ -622,7 +618,7 @@ namespace StarlitTwit
                                 break;
                             case EFormType.UserFriend: {
                                     if (_userIDs == null || _page == _userIDs.Length) {
-                                        var data = FrmMain.Twitter.friends_ids(true, screen_name: UserScreenName, cursor: _next_cursor);
+                                        var data = FrmMain.Twitter.friends_ids(screen_name: UserScreenName, cursor: _next_cursor);
                                         _next_cursor = data.NextCursor;
                                         _userIDs = data.Data.ToArray();
                                         _page = 0;
@@ -638,7 +634,7 @@ namespace StarlitTwit
                                 break;
                             case EFormType.ListMember: {
                                     SequentData<UserProfile> proftpl;
-                                    proftpl = FrmMain.Twitter.list_members(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                                    proftpl = FrmMain.Twitter.lists_members(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
                                     profiles = proftpl.Data;
                                     _next_cursor = proftpl.NextCursor;
                                     appendEnable = (_next_cursor != 0);
@@ -646,7 +642,15 @@ namespace StarlitTwit
                                 break;
                             case EFormType.ListSubscriber: {
                                     SequentData<UserProfile> proftpl;
-                                    proftpl = FrmMain.Twitter.list_subscribers(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                                    proftpl = FrmMain.Twitter.lists_subscribers(slug: ListID, owner_screen_name: UserScreenName, cursor: _next_cursor);
+                                    profiles = proftpl.Data;
+                                    _next_cursor = proftpl.NextCursor;
+                                    appendEnable = (_next_cursor != 0);
+                                }
+                                break;
+                            case EFormType.MyBlocking: {
+                                SequentData<UserProfile> proftpl;
+                                    proftpl = FrmMain.Twitter.blocks_list(cursor: _next_cursor);
                                     profiles = proftpl.Data;
                                     _next_cursor = proftpl.NextCursor;
                                     appendEnable = (_next_cursor != 0);

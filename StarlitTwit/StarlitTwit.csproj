@@ -200,6 +200,9 @@
     <Compile Include="SerializableClass\SerializableFont.cs" />
     <Compile Include="SerializableClass\SerializableDictionary.cs" />
     <Compile Include="Data\SettingsData.cs" />
+    <Compile Include="Twitter.cs" />
+    <Compile Include="TwitterAPI11.cs" />
+    <Compile Include="TwitterData.cs" />
     <Compile Include="UserControls\ImageListWrapper.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -262,7 +265,7 @@
     <Compile Include="UserControls\ToolStripStatusLabelEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Twitter.cs" />
+    <Compile Include="Twitter10.cs" />
     <Compile Include="UserControls\NumericUpDownExtended.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -297,6 +300,7 @@
       <DependentUpon>UserSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilization.cs" />
+    <Compile Include="Twitter11_.cs" />
     <EmbeddedResource Include="Forms\FrmConfig.resx">
       <DependentUpon>FrmConfig.cs</DependentUpon>
     </EmbeddedResource>

@@ -499,7 +499,7 @@ namespace StarlitTwit
             {
                 long cursor = -1;
                 do {
-                    var users = FrmMain.Twitter.followers_ids(FrmMain.Twitter.IsAuthenticated(), screen_name: _userNames[0], cursor: cursor);
+                    var users = FrmMain.Twitter.followers_ids(screen_name: _userNames[0], cursor: cursor);
                     cursor = users.NextCursor;
                     if (followers == null) { followers = users.Data; }
                     else { followers = followers.Concat(users.Data); }
@@ -509,7 +509,7 @@ namespace StarlitTwit
             {
                 long cursor = -1;
                 do {
-                    var users = FrmMain.Twitter.friends_ids(FrmMain.Twitter.IsAuthenticated(), screen_name: _userNames[0], cursor: cursor);
+                    var users = FrmMain.Twitter.friends_ids(screen_name: _userNames[0], cursor: cursor);
                     cursor = users.NextCursor;
                     if (friends == null) { friends = users.Data; }
                     else { friends = friends.Concat(users.Data); }
@@ -532,7 +532,7 @@ namespace StarlitTwit
                 IEnumerable<long> followers = null;
                 long cursor = -1;
                 do {
-                    var users = FrmMain.Twitter.followers_ids(FrmMain.Twitter.IsAuthenticated(), screen_name: user, cursor: cursor);
+                    var users = FrmMain.Twitter.followers_ids(screen_name: user, cursor: cursor);
                     cursor = users.NextCursor;
                     if (followers == null) { followers = users.Data; }
                     else { followers = followers.Concat(users.Data); }
@@ -557,7 +557,7 @@ namespace StarlitTwit
                 IEnumerable<long> friends = null;
                 long cursor = -1;
                 do {
-                    var users = FrmMain.Twitter.friends_ids(FrmMain.Twitter.IsAuthenticated(), screen_name: user, cursor: cursor);
+                    var users = FrmMain.Twitter.friends_ids(screen_name: user, cursor: cursor);
                     cursor = users.NextCursor;
                     if (friends == null) { friends = users.Data; }
                     else { friends = friends.Concat(users.Data); }

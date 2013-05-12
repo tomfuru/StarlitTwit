@@ -41,11 +41,11 @@ namespace Test
 
             using (StringReader reader = new StringReader(str)) {
                 XElement el = XElement.Load(reader);
-                Type type = typeof(StarlitTwit.Twitter);
+                Type type = typeof(StarlitTwit.Twitter10);
                 //type.InvokeMember("ConvertToUserProfile", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance, null, StarlitTwit.FrmMain.Twitter, new object[] { el });
                 //MethodInfo[] info = type.GetMethods(BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
                 MethodInfo minfo = type.GetMethod("ConvertToUserProfile", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
-                minfo.Invoke(new StarlitTwit.Twitter(), new object[] { el });
+                minfo.Invoke(new StarlitTwit.Twitter10(), new object[] { el });
             }
         }
     }

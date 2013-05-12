@@ -372,7 +372,7 @@ namespace StarlitTwit
         private bool DeleteList(string list_id)
         {
             try {
-                FrmMain.Twitter.lists_destroy(slug: list_id);
+                FrmMain.Twitter.lists_destroy(slug: list_id, owner_id: FrmMain.Twitter.ID);
             }
             catch (TwitterAPIException) { return false; }
             return true;
@@ -385,7 +385,7 @@ namespace StarlitTwit
         private bool SubscribeList(string listID, string listOwner)
         {
             try {
-                FrmMain.Twitter.list_subscribers_create(slug: listID, owner_screen_name: listOwner);
+                FrmMain.Twitter.lists_subscribers_create(slug: listID, owner_screen_name: listOwner);
             }
             catch (TwitterAPIException) { return false; }
             return true;
@@ -398,7 +398,7 @@ namespace StarlitTwit
         private bool UnsubscribeList(string listID, string listOwner)
         {
             try {
-                FrmMain.Twitter.list_subscribers_destroy(slug: listID, owner_screen_name: listOwner);
+                FrmMain.Twitter.lists_subscribers_destroy(slug: listID, owner_screen_name: listOwner);
             }
             catch (TwitterAPIException) { return false; }
             return true;
@@ -417,7 +417,9 @@ namespace StarlitTwit
                     SequentData<ListData> listseq = null;
                     switch (FormType) {
                         case EFormType.MyList:
-                            listseq = FrmMain.Twitter.lists(cursor: _next_cursor);
+                            //listseq = FrmMain.Twitter.lists(cursor: _next_cursor);
+                            listdata = FrmMain.Twitter.lists_list();
+                            _next_cursor = 0;
                             break;
                         case EFormType.MyBelongedList:
                             listseq = FrmMain.Twitter.lists_memberships(cursor: _next_cursor);
@@ -426,7 +428,9 @@ namespace StarlitTwit
                             listseq = FrmMain.Twitter.lists_subscriptions(cursor: _next_cursor);
                             break;
                         case EFormType.UserList:
-                            listseq = FrmMain.Twitter.lists(screen_name: UserScreenName, cursor: _next_cursor);
+                            //listseq = FrmMain.Twitter.lists(screen_name: UserScreenName, cursor: _next_cursor);
+                            listdata = FrmMain.Twitter.lists_list(screen_name: UserScreenName);
+                            _next_cursor = 0;
                             break;
                         case EFormType.UserBelongedList:
                             listseq = FrmMain.Twitter.lists_memberships(screen_name: UserScreenName, cursor: _next_cursor);
@@ -438,7 +442,9 @@ namespace StarlitTwit
                     if (listseq != null) {
                         listdata = listseq.Data;
                         _next_cursor = listseq.NextCursor;
+                    }
 
+                    if (listdata != null) {
                         this.Invoke((Action)(() =>
                         {
                             AddList(listdata);

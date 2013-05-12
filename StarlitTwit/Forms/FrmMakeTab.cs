@@ -54,7 +54,7 @@ namespace StarlitTwit
         {
             base.OnLoad(e);
 
-            bool isAuthenticated = FrmMain.Twitter.IsAuthenticated();
+            bool isAuthenticated = FrmMain.Twitter.IsAuthenticated;
 
             object[] items = (isAuthenticated) ? 
                 new object[] {
@@ -230,18 +230,22 @@ namespace StarlitTwit
                     Debug.Assert(!string.IsNullOrEmpty(_listOwner));
 
                     lblListOwner.Text = "ユーザー:" + _listOwner;
+                                        
+                    //long next_cursor = -1;
+                    //IEnumerable<ListData> lists = Utilization.EmptyIEnumerable<ListData>();
+                    //do {
+                    //    var seqdata = FrmMain.Twitter.lists_list();
+                    //    next_cursor = seqdata.NextCursor;
+                    //    lists = lists.Concat(seqdata.Data);
+                    //} while (next_cursor != 0);
 
-                    long next_cursor = -1;
-                    do {
-                        var lsttpl = FrmMain.Twitter.lists(screen_name: _listOwner, cursor: next_cursor);
-                        _listData = lsttpl.Data;
-                        next_cursor = lsttpl.NextCursor;
-                        if (_listData.Count() > 0) {
-                            cmbList.Items.AddRange(_listData.Select((data) => (object)data.Slug).ToArray());
-                            cmbList.SelectedIndex = 0;
-                        }
+                    IEnumerable<ListData> lists = FrmMain.Twitter.lists_list();
+
+                    _listData = lists.ToArray();
+                    if (_listData.Count() > 0) {
+                        cmbList.Items.AddRange(_listData.Select((data) => (object)data.Slug).ToArray());
+                        cmbList.SelectedIndex = 0;
                     }
-                    while (next_cursor != 0);
                 }
                 catch (TwitterAPIException ex) {
                     Message.ShowErrorMessage(Utilization.SubTwitterAPIExceptionStr(ex));
