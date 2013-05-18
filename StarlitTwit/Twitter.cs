@@ -123,7 +123,7 @@ namespace StarlitTwit
         }
         #endregion (CallUpdateWithMedia)
         //-------------------------------------------------------------------------------
-        #region RunStreaming
+        #region -RunStreaming
         //-------------------------------------------------------------------------------
         //
         private CancellationTokenSource RunStreaming(string url, Dictionary<string, string> paramdic)
@@ -201,6 +201,9 @@ namespace StarlitTwit
                         catch (IOException) {
                             //Message.ShowInfoMessage("IOException");
                             error_caused = true;
+                        }
+                        catch (Exception ex) {
+                            Log.DebugLog(ex);
                         }
                         //-----------------------------------------------
                         #endregion データ受信時コールバック
@@ -1655,6 +1658,83 @@ namespace StarlitTwit
         #endregion (AssertAuthenticated)
         //-------------------------------------------------------------------------------
         #endregion (Private Util Methods)
+
+        //-------------------------------------------------------------------------------
+        #region Static Methods
+        //-------------------------------------------------------------------------------
+        #region +[static]MakeTwitterAPIExceptionStr TwitterAPI例外の文字列を返します。
+        //-------------------------------------------------------------------------------
+        //
+        public static string MakeTwitterAPIExceptionStr(TwitterAPIException ex)
+        {
+            switch (ex.ErrorStatusCode) {
+                case 0:
+                    // Connection Failure
+                    return "ネットワークに接続されていない可能性があります。";
+                case 1:
+                    // Disconnected
+                    return "接続が切断されました。";
+                case 400:
+                    // Bad Request
+                    return "APIの実行制限の可能性があります。";
+                case 401:
+                    // Not Authorized
+                    return "認証に失敗しました。";
+                case 403:
+                    // Forbidden
+                    return "使用できないAPIです。";
+                case 404:
+                    // Not Found
+                    return "見つからないAPIです。";
+                case 408:
+                    // Request Timeout
+                    return "要求がタイムアウトしました";
+                case 500:
+                    // Internal Server Error
+                    return "Twitterのサーバーに問題があります。";
+                case 502:
+                    // Bad Gateway
+                    return "Twitterのサーバーが停止しています。";
+                case 503:
+                    // Service Unavailable
+                    return "Twitterが高負荷によりダウンしています。";
+                case 1000:
+                    // Faliure XmlLoad
+                    return "予期しないデータを取得しました。(ブラウザ等でログインが必要？)";
+                case 1001:
+                    // Unexpected Xml
+                    return "予期しないXmlデータを取得しました。";
+                default:
+                    Log.DebugLog(ex);
+                    return "不明なエラーです。";
+            }
+        }
+        #endregion (SubTwitterAPIExceptionStr)
+        //-------------------------------------------------------------------------------
+        #region +[static]MakeStreamDisconnectEventStr Stream APIのDisconnectイベントのコードを説明する文字列を返します。
+        //-------------------------------------------------------------------------------
+        //
+        public static string MakeStreamDisconnectEventStr(int code)
+        {
+            switch (code) {
+                case 1: return "Shutdown";          // The feed was shutdown
+                case 2: return "Duplicate stream";  // Too many streams used
+                case 3: return "Control request";   // Control (only sitestream)
+                case 4: return "Stall";             // The client was reading too slow
+                case 5: return "Normal";            // The client appeared to have initiated a disconnect.
+                case 6: return "Token Revoked";     // An oauth token was revoked for a user
+                case 7: return "Admin logout";      // The same credentials were used to connect a new stream and the oldest was disconnected.
+                case 8: return "(For internal use)";// Reserved for internal use. Will not be delivered to external clients
+                case 9: return "Max message limit"; // The stream connected with a negative count parameter and was disconnected after all backfill was delivered.
+                case 10: return "Stream exception"; // An internal issue disconnected the stream.
+                case 11: return "Broker stall";     // 	An internal issue disconnected the stream.
+                case 12: return "Shed load";     // The host the stream was connected to became overloaded and streams were disconnected to balance load. Reconnect as usual.
+                default: return "不明なエラーコードです。";
+            }
+        }
+        #endregion (MakeStreamDisconnectEventStr)
+        //-------------------------------------------------------------------------------
+        #endregion (Static Methods)
     }
 
     //-------------------------------------------------------------------------------

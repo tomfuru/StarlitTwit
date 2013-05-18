@@ -455,55 +455,7 @@ namespace StarlitTwit
             return sb.ToString();
         }
         #endregion (GetProfileDescriptionString)
-        //-------------------------------------------------------------------------------
-        #region +[static]SubTwitterAPIExceptionStr TwitterAPI例外の文字列を返します。
-        //-------------------------------------------------------------------------------
-        //
-        public static string SubTwitterAPIExceptionStr(TwitterAPIException ex)
-        {
-            switch (ex.ErrorStatusCode) {
-                case 0:
-                    // Connection Failure
-                    return "ネットワークに接続されていない可能性があります。";
-                case 1:
-                    // Disconnected
-                    return "接続が切断されました。";
-                case 400:
-                    // Bad Request
-                    return "APIの実行制限の可能性があります。";
-                case 401:
-                    // Not Authorized
-                    return "認証に失敗しました。";
-                case 403:
-                    // Forbidden
-                    return "使用できないAPIです。";
-                case 404:
-                    // Not Found
-                    return "見つからないAPIです。";
-                case 408:
-                    // Request Timeout
-                    return "要求がタイムアウトしました";
-                case 500:
-                    // Internal Server Error
-                    return "Twitterのサーバーに問題があります。";
-                case 502:
-                    // Bad Gateway
-                    return "Twitterのサーバーが停止しています。";
-                case 503:
-                    // Service Unavailable
-                    return "Twitterが高負荷によりダウンしています。";
-                case 1000:
-                    // Faliure XmlLoad
-                    return "予期しないデータを取得しました。(ブラウザ等でログインが必要？)";
-                case 1001:
-                    // Unexpected Xml
-                    return "予期しないXmlデータを取得しました。";
-                default:
-                    Log.DebugLog(ex);
-                    return "不明なエラーです。";
-            }
-        }
-        #endregion (SubTwitterAPIExceptionStr)
+
 
         //-------------------------------------------------------------------------------
         #region +[static]GetHostName URLからホスト名を取得します。

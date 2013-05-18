@@ -2465,7 +2465,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -2539,7 +2539,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -2605,7 +2605,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -2722,7 +2722,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return false;
             }
@@ -2780,7 +2780,7 @@ namespace StarlitTwit
                 _followerIDSet = set;
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 return false;
             }
             return true;
@@ -2803,7 +2803,7 @@ namespace StarlitTwit
                 _friendIDSet = set;
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 return false;
             }
             return true;
@@ -2893,7 +2893,7 @@ namespace StarlitTwit
                 }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 this.Invoke((Action)(() => ConfigURLShorteningButtonEnable()));
                 return;
@@ -2929,7 +2929,7 @@ namespace StarlitTwit
                 else { Twitter.statuses_destroy_id(statusid); }
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return;
             }
@@ -2949,7 +2949,7 @@ namespace StarlitTwit
                 Twitter.statuses_retweet_id(id);
             }
             catch (TwitterAPIException ex) {
-                tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                 SYSTEMSOUND.Play();
                 return;
             }
@@ -2974,7 +2974,7 @@ namespace StarlitTwit
                     Twitter.favorites_create(id);
                 }
                 catch (TwitterAPIException ex) {
-                    tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                    tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                     SYSTEMSOUND.Play();
                     return false;
                 }
@@ -2999,7 +2999,7 @@ namespace StarlitTwit
                     Twitter.favorites_destroy(id);
                 }
                 catch (TwitterAPIException ex) {
-                    tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                    tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                     SYSTEMSOUND.Play();
                     return false;
                 }
@@ -3331,7 +3331,7 @@ namespace StarlitTwit
                         getFunc(uctlDisp, standard_id);
                     }
                     catch (TwitterAPIException ex) {
-                        tssLabel.SetText(Utilization.SubTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
+                        tssLabel.SetText(Twitter.MakeTwitterAPIExceptionStr(ex), ERROR_STATUSBAR_DISP_TIMES);
                         SYSTEMSOUND.Play();
                         return;
                     }

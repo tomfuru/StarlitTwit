@@ -257,7 +257,7 @@ Content-Disposition: form-data; name=""from""
                 tsslabel.Text = "発言を投稿しました。";
             }
             catch (TwitterAPIException ex) {
-                tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                tsslabel.Text = Twitter.MakeTwitterAPIExceptionStr(ex);
             }
         }
         #endregion (Status_update)

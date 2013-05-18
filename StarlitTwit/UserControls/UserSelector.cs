@@ -210,7 +210,7 @@ namespace StarlitTwit
                     if (Notifier != null) { Notifier((appendEnable) ? "フォロワーを追加しました。" : "全てのフォロワーを追加しました。"); }
                 }
                 catch (TwitterAPIException ex) {
-                    if (Notifier != null) { Notifier(Utilization.SubTwitterAPIExceptionStr(ex)); }
+                    if (Notifier != null) { Notifier(Twitter.MakeTwitterAPIExceptionStr(ex)); }
                 }
             }
 
@@ -250,7 +250,7 @@ namespace StarlitTwit
                     if (Notifier != null) { Notifier((appendEnable) ? "フレンドを追加しました。" : "全てのフレンドを追加しました。"); }
                 }
                 catch (TwitterAPIException ex) {
-                    if (Notifier != null) { Notifier(Utilization.SubTwitterAPIExceptionStr(ex)); }
+                    if (Notifier != null) { Notifier(Twitter.MakeTwitterAPIExceptionStr(ex)); }
                 }
             }
         }
@@ -291,7 +291,7 @@ namespace StarlitTwit
                     Message.ShowWarningMessage("存在しないユーザーです。");
                 }
                 else {
-                    if (Notifier != null) { Notifier(Utilization.SubTwitterAPIExceptionStr(ex)); }
+                    if (Notifier != null) { Notifier(Twitter.MakeTwitterAPIExceptionStr(ex)); }
                 }
                 return;
             }

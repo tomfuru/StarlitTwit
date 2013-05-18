@@ -587,7 +587,7 @@ namespace StarlitTwit
                 _next_follower = cursor;
             }
             catch (TwitterAPIException ex) {
-                tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                tsslabel.Text = Twitter.MakeTwitterAPIExceptionStr(ex);
             }
         }
         #endregion (AddFollowerProfiles)
@@ -607,7 +607,7 @@ namespace StarlitTwit
                 _next_friend = cursor;
             }
             catch (TwitterAPIException ex) {
-                tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                tsslabel.Text = Twitter.MakeTwitterAPIExceptionStr(ex);
             }
         }
         #endregion (AddFriendProfiles)

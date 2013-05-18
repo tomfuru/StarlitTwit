@@ -248,7 +248,7 @@ namespace StarlitTwit
                     }
                 }
                 catch (TwitterAPIException ex) {
-                    Message.ShowErrorMessage(Utilization.SubTwitterAPIExceptionStr(ex));
+                    Message.ShowErrorMessage(Twitter.MakeTwitterAPIExceptionStr(ex));
                 }
             }
         }

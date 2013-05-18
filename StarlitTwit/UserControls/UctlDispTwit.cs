@@ -354,7 +354,7 @@ namespace StarlitTwit
                     try {
                         tscmb.DropDownWidth = tscmb.Items.OfType<string>().Max(str => TextRenderer.MeasureText(str, tscmb.Font).Width) + 20;
                     }
-                    catch (InvalidOperationException ex) { }
+                    catch (InvalidOperationException) { }
                 }
             };
 

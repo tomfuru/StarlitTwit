@@ -61,7 +61,7 @@ namespace StarlitTwit
                 ProfileImageChanged = true;
             }
             catch (TwitterAPIException ex) {
-                Message.ShowWarningMessage("更新に失敗しました。", Utilization.SubTwitterAPIExceptionStr(ex));
+                Message.ShowWarningMessage("更新に失敗しました。", Twitter.MakeTwitterAPIExceptionStr(ex));
             }
         }
         #endregion (btnUpdateImage_Click)

@@ -26,8 +26,6 @@ namespace StarlitTwit
         public string ListID { get; set; }
         /// <summary>最後の発言のStatusID</summary>
         private long _last_status_id = -1;
-        /// <summary>ページ</summary>
-        private int _page = 1;
 
         private const int GET_NUM = 50;
         //-------------------------------------------------------------------------------

@@ -405,7 +405,7 @@ namespace StarlitTwit
             catch (TwitterAPIException ex) {
                 this.Invoke((Action)(() =>
                 {
-                    tsslabel.Text = Utilization.SubTwitterAPIExceptionStr(ex);
+                    tsslabel.Text = Twitter.MakeTwitterAPIExceptionStr(ex);
                     btnRetry.Enabled = true;
                 }));
             }
