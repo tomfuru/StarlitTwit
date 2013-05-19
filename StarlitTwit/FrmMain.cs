@@ -49,7 +49,7 @@ namespace StarlitTwit
             //Twitter = new Twitter();
             Twitter = new Twitter();
 
-            Twitter.DelegateInfo_UserStream.Main = UserStreamTransaction;
+            Twitter.DelegateInfo_UserStream.Main = UserStreamMainProcess;
             Twitter.DelegateInfo_UserStream.End = UserStreamEndEvent;
             Twitter.DelegateInfo_UserStream.Connected = UserStreamConnectEvent;
             Twitter.DelegateInfo_UserStream.Error = UserStreamErrorFinishEvent;
@@ -1990,7 +1990,7 @@ namespace StarlitTwit
             try {
                 _frmUserStreamWatch = new FrmUserStreamWatch();
 
-                _userStreamCancellationTS = Twitter.streaming_user((all_replies) ? "all" : "");
+                _userStreamCancellationTS = Twitter.streaming_user(replies: (all_replies) ? "all" : "");
 
                 // RESTによるデータ取り込み
                 Utilization.InvokeTransactionDoingEvents(() =>
@@ -2109,16 +2109,16 @@ namespace StarlitTwit
                 this.Invoke((Action)(() => lblUserStreamInfo.Text = STR_USERSTREAM_RESTARTING));
 
                 Twitter.DelegateInfo_UserStream.Reconnect_WaitTime = reconnect_time;
-                _userStreamCancellationTS = Twitter.streaming_user((all_replies) ? "all" : "");
+                _userStreamCancellationTS = Twitter.streaming_user(replies: (all_replies) ? "all" : "");
                 
             });
         }
         #endregion (UserStreamWaitRecoonectEvent)
         //-------------------------------------------------------------------------------
-        #region -UserStreamTransaction UserStreamのメイン処理
+        #region -UserStreamMainProcess UserStreamのメイン処理
         //-------------------------------------------------------------------------------
         //
-        private void UserStreamTransaction(UserStreamItemType type, object data)
+        private void UserStreamMainProcess(UserStreamItemType type, object data)
         {
             try {
                 switch (type) {
@@ -2329,6 +2329,14 @@ namespace StarlitTwit
                     break;
                 case UserStreamItemType.directmessage_delete:
                     sb.Append(string.Format("Delete DirectMessage id:{0}", (long)data));
+                    break;
+                case UserStreamItemType.disconnect:
+                    var disc = data as Tuple<int, string>;
+                    sb.Append(string.Format("Disconnect code:{0}, reason:{1}", disc.Item1, disc.Item2));
+                    break;
+                case UserStreamItemType.warning:
+                    var warn = data as Tuple<string, string, int>;
+                    sb.Append(string.Format("Warning: code:{0}, message:{1}, percent_full:{2}", warn.Item1, warn.Item2, warn.Item3));
                     break;
                 case UserStreamItemType.eventdata:
                     UserStreamEventData d = (UserStreamEventData)data;

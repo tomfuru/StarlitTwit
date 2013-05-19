@@ -173,10 +173,11 @@ namespace StarlitTwit
             return ConvertToSearchReturnData(GetByAPIJson(url_api));
         }
 
-        public CancellationTokenSource streaming_user(string with = "user", string replies = "")
+        public CancellationTokenSource streaming_user(bool stall_warnings = true, string with = "followings", string replies = "")
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
+                if (stall_warnings) { paramdic.Add("stall_warnings", stall_warnings.ToString().ToLower()); }
                 if (with.Length > 0) { paramdic.Add("with", with); }
                 if (replies.Length > 0) { paramdic.Add("replies", replies); }
             }

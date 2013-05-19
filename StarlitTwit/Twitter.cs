@@ -1380,6 +1380,7 @@ namespace StarlitTwit
         {
             Func<string> Logging = () =>
             {
+                if (!Directory.Exists("Xml")) { Directory.CreateDirectory("Xml"); }
                 string filename = string.Format("Xml/{0}.xml", DateTime.Now.ToString("yyMMddHHmmssffff"));
                 using (StreamWriter writer = new StreamWriter(filename)) {
                     writer.Write(el.ToString());
@@ -1446,14 +1447,20 @@ namespace StarlitTwit
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.location_dalelete, value);
                 }
                 else if (el.Element("status_withheld") != null) {
+                    // TODO:?
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.status_withheld, null);
                 }
                 else if (el.Element("user_withheld") != null) {
+                    // TODO:?
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.user_withheld, null);
                 }
                 else if (el.Element("disconnect") != null) {
                     var value = Tuple.Create(int.Parse(el.Element("disconnect").Element("code").Value), el.Element("disconnect").Element("reason").Value);
                     return new Tuple<UserStreamItemType, object>(UserStreamItemType.disconnect, value);
+                }
+                else if (el.Element("warning") != null) {
+                    var value = Tuple.Create(el.Element("warning").Element("code").Value, el.Element("warning").Element("message").Value, int.Parse(el.Element("warning").Element("percent_full").Value));
+                    return new Tuple<UserStreamItemType, object>(UserStreamItemType.warning, value);
                 }
                 else {
                     // status

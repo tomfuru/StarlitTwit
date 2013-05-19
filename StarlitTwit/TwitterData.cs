@@ -673,6 +673,8 @@ namespace StarlitTwit
         status_withheld,
         /// <summary>TODO:Unimplemented(object:null)</summary>
         user_withheld,
+        /// <summary>Warning(object:tuple(string, string, int)</summary>
+        warning,
         /// <summary>Disconnection(object:tuple(int[code],string[reason])</summary>
         disconnect
         
