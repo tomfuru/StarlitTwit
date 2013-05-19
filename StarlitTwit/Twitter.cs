@@ -161,6 +161,7 @@ namespace StarlitTwit
                     const string NEWLINE = "\r\n";
                     // データ受信時コールバック
                     bool canceled = false;
+                    /*
                     AsyncCallback callback = null;
 
                     callback = ar =>
@@ -170,26 +171,12 @@ namespace StarlitTwit
                         Stream stream = (Stream)ar.AsyncState;
                         try {
                             int len = stream.EndRead(ar);
-                            if (len > 0) {
-                                sb.Append(enc.GetString(b, 0, len));
-                                stream.BeginRead(b, 0, b.Length, callback, stream);
-                                // 受信文字列解析
-                                while (true) {
-                                    string str = sb.ToString();
-                                    int newline = str.IndexOf(NEWLINE);
-                                    if (newline == 0) {
-                                        sb.Remove(0, NEWLINE.Length);
-                                    }
-                                    else if (newline > 0) {
-                                        string line = sb.ToString(0, newline);
-                                        sb.Remove(0, newline + NEWLINE.Length);
-                                        var item = ConvertToStreamItem(JsonToXElement(line));　// XElement取得
-                                        action(item.Item1, item.Item2); // イベント
 
-                                        if (item.Item1 == UserStreamItemType.disconnect) { break; }
-                                    }
-                                    else { break; }
+                            if (len > 0) {
+                                lock (sb) {
+                                    sb.Append(enc.GetString(b, 0, len));
                                 }
+                                stream.BeginRead(b, 0, b.Length, callback, stream);
                             }
                             else { canceled = true; }　// 接続きれた
                         }
@@ -208,17 +195,66 @@ namespace StarlitTwit
                         //-----------------------------------------------
                         #endregion データ受信時コールバック
                     };
+                    */
 
                     Stream resStream = res.GetResponseStream();
-                    resStream.BeginRead(b, 0, b.Length, callback, resStream);
+                    //resStream.BeginRead(b, 0, b.Length, callback, resStream);
+
+                    Utilization.InvokeTransaction(() =>
+                    {
+                        try {
+                            while (true) {
+                                int len = resStream.Read(b, 0, b.Length);
+
+                                if (len > 0) {
+                                    lock (sb) {
+                                        sb.Append(enc.GetString(b, 0, len));
+                                    }
+                                }
+                                else { canceled = true; }　// 接続きれた
+                            }
+                        }
+                        catch (WebException ex) {
+                            if (ex.Status == WebExceptionStatus.RequestCanceled) { return; } // キャンセルした時
+                            //Message.ShowInfoMessage("WebException");
+                            error_caused = true;
+                        }
+                        catch (IOException) {
+                            //Message.ShowInfoMessage("IOException");
+                            error_caused = true;
+                        }
+                        catch (Exception ex) {
+                            Log.DebugLog(ex);
+                        }
+                    });
+                    
 
                     while (true) { // キャンセル確認ループ
+                        // キャンセル確認
                         if (token.IsCancellationRequested) {
                             req.Abort();
                             canceled = true;
                             break;
                         }
                         else if (canceled || error_caused) { break; }
+
+                        // 文字処理
+                        lock (sb) {
+                            string str = sb.ToString();
+                            int newline = str.IndexOf(NEWLINE);
+                            if (newline == 0) {
+                                sb.Remove(0, NEWLINE.Length);
+                            }
+                            else if (newline > 0) {
+                                string line = sb.ToString(0, newline);
+                                sb.Remove(0, newline + NEWLINE.Length);
+                                var item = ConvertToStreamItem(JsonToXElement(line));　// XElement取得
+                                action(item.Item1, item.Item2); // イベント
+
+                                if (item.Item1 == UserStreamItemType.disconnect) { break; }
+                            }
+                        }
+
                         Thread.Sleep(10);
                     }
                 }
