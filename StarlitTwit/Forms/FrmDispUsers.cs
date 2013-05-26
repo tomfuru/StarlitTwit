@@ -554,13 +554,7 @@ namespace StarlitTwit
             try {
                 try {
                     IEnumerable<UserProfile> profiles = null;
-                    if (FormType == EFormType.Retweeter) {
-                        // TODO 消去
-                        //profiles = FrmMain.Twitter.statuses_id_retweeted_by(RetweetStatusID, 100, _page);
-                        //_page++;
-                        //this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Count() > 0)));
-                    }
-                    else if (FormType == EFormType.UserSearch) {
+                    if (FormType == EFormType.UserSearch) {
                         profiles = FrmMain.Twitter.users_search(_strSearchWord, count: 20, page: _page);
                         _page++;
                         this.Invoke((Action)(() => btnAppend.Enabled = (profiles.Any(prof => _profileList.All(lprof => lprof.UserID != prof.UserID)))));
@@ -649,10 +643,20 @@ namespace StarlitTwit
                                 }
                                 break;
                             case EFormType.MyBlocking: {
-                                SequentData<UserProfile> proftpl;
+                                    SequentData<UserProfile> proftpl;
                                     proftpl = FrmMain.Twitter.blocks_list(cursor: _next_cursor);
                                     profiles = proftpl.Data;
                                     _next_cursor = proftpl.NextCursor;
+                                    appendEnable = (_next_cursor != 0);
+                                }
+                                break;
+                            case EFormType.Retweeter: {
+                                    var ids = FrmMain.Twitter.statuses_retweeters_ids(RetweetStatusID, cursor: _next_cursor);
+                                    var ids_data = ids.Data.ToArray();
+                                    if (ids_data.Length > 0) {
+                                        profiles = FrmMain.Twitter.users_lookup(user_id: ids_data);
+                                    }
+                                    _next_cursor = ids.NextCursor;
                                     appendEnable = (_next_cursor != 0);
                                 }
                                 break;

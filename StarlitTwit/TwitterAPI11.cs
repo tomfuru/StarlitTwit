@@ -154,6 +154,18 @@ namespace StarlitTwit
             return ConvertToTwitData(el);
         }
 
+        public SequentData<long> statuses_retweeters_ids(long id, long cursor = -1)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                paramdic.Add("id", id.ToString());
+                paramdic.Add("cursor", cursor.ToString());
+            }
+            string url_api = GetUrlWithOAuthParameters(URLapi + @"statuses/retweeters/ids" + EXT_JSON, GET, paramdic);
+            XElement el = GetByAPIJson(url_api);
+            return new SequentData<long>(ConvertToIDArray(el.Element("ids")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+
         public Tuple<IEnumerable<TwitData>, SearchMetaData> search_tweets(string q, string geocode = "", string lang = "ja", string locale = "ja", string result_type = "recent", int count = -1, string until = "", long since_id = -1, long max_id = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
