@@ -573,6 +573,32 @@ namespace StarlitTwit
             return ConvertToUserProfileArray(GetByAPIJson(url_api));
         }
 
+        public IEnumerable<UserProfile> users_contributees(long user_id = -1, string screen_name = "", bool skip_status = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (screen_name.Length > 0) { paramdic.Add("screen_name", screen_name); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+            string url_api = GetUrlWithOAuthParameters(URLapi + @"users/contributees" + EXT_JSON, GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPIJson(url_api));
+        }
+
+        public IEnumerable<UserProfile> users_contributors(long user_id = -1, string screen_name = "", bool skip_status = false, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
+        {
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (screen_name.Length > 0) { paramdic.Add("screen_name", screen_name); }
+                if (skip_status) { paramdic.Add("skip_status", skip_status.ToString().ToLower()); }
+                if (include_entities) { paramdic.Add("include_entities", include_entities.ToString().ToLower()); }
+            }
+            string url_api = GetUrlWithOAuthParameters(URLapi + @"users/contributors" + EXT_JSON, GET, paramdic);
+            return ConvertToUserProfileArray(GetByAPIJson(url_api));
+        }
+
         public IEnumerable<TwitData> favorites_list(long user_id = -1, string screen_name = "", int count = -1, long since_id = -1, long max_id = -1, bool include_entities = DEFAULT_INCLUDE_ENTITIES)
         {
             if (screen_name.Length == 0) {
@@ -903,9 +929,6 @@ namespace StarlitTwit
 
         public SequentData<ListData> lists_subscriptions(long user_id = -1, string screen_name = "", long cursor = -1, bool filter_to_owned_lists = false)
         {
-            if (user_id <= 0 && screen_name.Length == 0) {
-                throw new ArgumentException("user_id or screen_name is required argument");
-            }
             Dictionary<string, string> paramdic = new Dictionary<string, string>();
             {
                 if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
@@ -951,6 +974,20 @@ namespace StarlitTwit
             string url_api = GetUrlWithOAuthParameters(URLapi + @"lists/ownerships" + EXT_JSON, GET, paramdic);
             XElement el = GetByAPIJson(url_api);
             return new SequentData<ListData>(ConvertToListDataArray(el.Element("lists")), long.Parse(el.Element("next_cursor").Value), long.Parse(el.Element("previous_cursor").Value));
+        }
+
+        public UserProfile users_report_spam(long user_id = -1, string screen_name = "")
+        {
+            if (user_id <= 0 && screen_name.Length == 0) {
+                throw new ArgumentException("user_id or screen_name is required argument");
+            }
+            Dictionary<string, string> paramdic = new Dictionary<string, string>();
+            {
+                if (user_id > 0) { paramdic.Add("user_id", user_id.ToString()); }
+                if (screen_name.Length > 0) { paramdic.Add("screen_name", screen_name); }
+            }
+            string url_api = GetUrlWithOAuthParameters(URLapi + @"users/report_spam" + EXT_JSON, POST, paramdic);
+            return ConvertToUserProfile(PostToAPIJson(url_api));
         }
 
     }
